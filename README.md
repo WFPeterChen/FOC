@@ -10,6 +10,10 @@
 - `.claude/`：原目录工具配置与示波器技能，原样归档。`settings.local.json` 含本机权限设置，迁移时应自行审阅。
 - `UPLOAD_MANIFEST.json`：归档前逐文件SHA-256、大小、权限和空目录清单。
 
+## 上位机适配审查
+
+参见 [KV76上位机与固件适配问题清单](FalconFoc-main/host/KV76_COMPATIBILITY_AUDIT.md)，包含协议量程、单位、掉线保护、默认目标、标定与实机验收要求。
+
 ## 当前固件
 
 当前适配LJW8115 KV76（21极对），为原FalconFOC板的24V/4A初次调试配置，不是48V/12A验证版本。首次无有效标定启动时会自动标定并带动转子。详细配置及实机验证限制见 `FalconFoc-main/2.Firmware/FalconFoc/LJW8115_KV76_BRINGUP.md`。
