@@ -1,0 +1,414 @@
+ARM GAS  /tmp/ccXecYYf.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"bsp_log.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c"
+  20              		.section	.text.LogInit,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	LogInit
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	LogInit:
+  29              	.LVL0:
+  30              	.LFB332:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c **** /********************************************************************************
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  * @file        : log.c
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  * @author      : Zhang jia ming
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  * @brief       : ¸ÃÎÄ¼þÊµÏÖÁËÈÕÖ¾¼ÇÂ¼¹¦ÄÜ£¬°üÀ¨ÈÕÖ¾³õÊ¼»¯¡¢²»Í¬¼¶±ðÈÕÖ¾Êä³öµÈ¹¦ÄÜ¡£
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  * @version     : V1.0
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  * @date        : 2025 - 1 - 11
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  *
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  * @details:
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  *  - ±¾ÎÄ¼þ¶¨ÒåÁËÈÕÖ¾¼ÇÂ¼Ïà¹ØµÄº¯Êý£¬Í¨¹ý `LogInit` º¯Êý³õÊ¼»¯ÈÕÖ¾ÏµÍ³£¬Ê¹ÆäÓëÌØ¶¨µÄ´®¿ÚÊµÀýÏà¹ØÁª
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  *  - `LOG_PROTO` º¯ÊýÊÇºËÐÄµÄÈÕÖ¾Êä³öº¯Êý£¬Ëü¸ù¾Ý´«ÈëµÄÈÕÖ¾¼¶±ð£¨Èç `LOG_DEBUG`¡¢`LOG_INFO`¡¢`LOG_
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  *    ¸ñÊ½»¯ÈÕÖ¾ÐÅÏ¢£¬²¢Í¨¹ý´®¿ÚÒÔDMAÄ£Ê½·¢ËÍ³öÈ¥¡£
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  *  - Í¬Ê±£¬Í¨¹ýºê¶¨Òå `LOGDEBUG`¡¢`LOGINFO`¡¢`LOGWARNING` ºÍ `LOGERROR` Îª²»Í¬¼¶±ðµÄÈÕÖ¾Êä³öÌá¹©ÁË
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  *
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  * @note:
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  *  - ÔÚÊ¹ÓÃ±¾ÈÕÖ¾Ä£¿éÇ°£¬ÐèÈ·±£Ïà¹Ø´®¿ÚÇý¶¯¼°ÅäÖÃÒÑÕýÈ·³õÊ¼»¯£¬ÌØ±ðÊÇÓë `log_usart_instance` Ïà¹Øµ
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  *  - ÈÕÖ¾»º³åÇø´óÐ¡ÓÉ `LOG_BUFFER_SIZE` ºê¶¨Òå£¬µ±Ç°ÉèÖÃÎª1024×Ö½Ú¡£ÈôÈÕÖ¾ÐÅÏ¢¹ý³¤£¬¿ÉÄÜ»áµ¼ÖÂÊý¾Ý
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  *  - ¶ÔÓÚ `USARTSend` º¯Êý£¬¼ÙÉèÆäÒÑÕýÈ·ÊµÏÖÇÒÔÚDMAÄ£Ê½ÏÂÄÜ¿É¿¿µØ·¢ËÍÊý¾Ý¡£Èô¸Ãº¯Êý·µ»Ø´íÎó£¬µ±Ç°´
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  *    Êµ¼ÊÓ¦ÓÃÖÐÐè¸ù¾ÝÐèÇóÍêÉÆ´íÎó´¦ÀíÂß¼­¡£
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  *
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  * @history:
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  *  V1.0:
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  *    - ÐÞ¸Ä×¢ÊÍ£¬ÍêÉÆ¹¦ÄÜ¡£¶Ôº¯Êý¹¦ÄÜ¡¢Ê¹ÓÃ×¢ÒâÊÂÏîµÈ½øÐÐÁËÏêÏ¸ËµÃ÷£¬Ìá¸ß´úÂëµÄ¿É¶ÁÐÔºÍ¿ÉÎ¬»¤ÐÔ¡£
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  *
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  * Copyright (c) 2025 Zhang jia ming. All rights reserved.
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  ********************************************************************************/
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c **** 
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c **** #include "bsp_log.h"
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c **** #include <stdarg.h>
+ARM GAS  /tmp/ccXecYYf.s 			page 2
+
+
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c **** #include <stdio.h>
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c **** #include <string.h>
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c **** 
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c **** static USARTInstance *log_usart_instance;
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c **** 
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c **** /**
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  * @brief          ×¢²áLOGÊµÀý
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  * @param[in]      log_config: LOGÊµÀýÅäÖÃ
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  * @retval         LOGÊµÀý
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  */
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c **** void LogInit(UART_HandleTypeDef *log_config)
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c **** {
+  31              		.loc 1 40 1 view -0
+  32              		.cfi_startproc
+  33              		@ args = 0, pretend = 0, frame = 16
+  34              		@ frame_needed = 0, uses_anonymous_args = 0
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   USART_Init_Config_s config;
+  35              		.loc 1 41 3 view .LVU1
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   config.usart_handle = log_config;
+  36              		.loc 1 42 3 view .LVU2
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   USART_Init_Config_s config;
+  37              		.loc 1 40 1 is_stmt 0 view .LVU3
+  38 0000 00B5     		push	{lr}
+  39              	.LCFI0:
+  40              		.cfi_def_cfa_offset 4
+  41              		.cfi_offset 14, -4
+  42 0002 85B0     		sub	sp, sp, #20
+  43              	.LCFI1:
+  44              		.cfi_def_cfa_offset 24
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   USART_Init_Config_s config;
+  45              		.loc 1 40 1 view .LVU4
+  46 0004 0346     		mov	r3, r0
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   log_usart_instance = USARTRegister(&config);
+  47              		.loc 1 43 24 view .LVU5
+  48 0006 01A8     		add	r0, sp, #4
+  49              	.LVL1:
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   config.usart_handle = log_config;
+  50              		.loc 1 42 23 view .LVU6
+  51 0008 CDF80530 		str	r3, [sp, #5]	@ unaligned
+  52              		.loc 1 43 3 is_stmt 1 view .LVU7
+  53              		.loc 1 43 24 is_stmt 0 view .LVU8
+  54 000c FFF7FEFF 		bl	USARTRegister
+  55              	.LVL2:
+  56              		.loc 1 43 22 discriminator 1 view .LVU9
+  57 0010 024B     		ldr	r3, .L4
+  58 0012 1860     		str	r0, [r3]
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c **** }
+  59              		.loc 1 44 1 view .LVU10
+  60 0014 05B0     		add	sp, sp, #20
+  61              	.LCFI2:
+  62              		.cfi_def_cfa_offset 4
+  63              		@ sp needed
+  64 0016 5DF804FB 		ldr	pc, [sp], #4
+  65              	.L5:
+  66 001a 00BF     		.align	2
+  67              	.L4:
+  68 001c 00000000 		.word	log_usart_instance
+ARM GAS  /tmp/ccXecYYf.s 			page 3
+
+
+  69              		.cfi_endproc
+  70              	.LFE332:
+  72              		.section	.rodata.LOG_PROTO.str1.4,"aMS",%progbits,1
+  73              		.align	2
+  74              	.LC0:
+  75 0000 5B444542 		.ascii	"[DEBUG] <%s> | <%d> | <%s>: %s\015\012\000"
+  75      55475D20 
+  75      3C25733E 
+  75      207C203C 
+  75      25643E20 
+  76 0021 000000   		.align	2
+  77              	.LC1:
+  78 0024 5B494E46 		.ascii	"[INFO] <%s> | <%d> | <%s>: %s\015\012\000"
+  78      4F5D203C 
+  78      25733E20 
+  78      7C203C25 
+  78      643E207C 
+  79              		.align	2
+  80              	.LC2:
+  81 0044 5B574152 		.ascii	"[WARN] <%s> | <%d> | <%s>: %s\015\012\000"
+  81      4E5D203C 
+  81      25733E20 
+  81      7C203C25 
+  81      643E207C 
+  82              		.align	2
+  83              	.LC3:
+  84 0064 5B455252 		.ascii	"[ERROR] <%s> | <%d> | <%s>: %s\015\012\000"
+  84      4F525D20 
+  84      3C25733E 
+  84      207C203C 
+  84      25643E20 
+  85              		.section	.text.LOG_PROTO,"ax",%progbits
+  86              		.align	1
+  87              		.p2align 2,,3
+  88              		.global	LOG_PROTO
+  89              		.syntax unified
+  90              		.thumb
+  91              		.thumb_func
+  93              	LOG_PROTO:
+  94              	.LVL3:
+  95              	.LFB333:
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c **** 
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c **** /**
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  * @brief          ÈÕÖ¾Êä³öº¯Êý
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  *
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  * @param[in]      fmt:          ´ý·¢ËÍµÄÊý¾Ý¸ñÊ½
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  * @param[in]      level:        ´ý·¢ËÍµÄÈÕÖ¾¼¶±ð
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  * @param[in]      file:         ´ý·¢ËÍµÄÊý¾ÝÎÄ¼þÃû
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  * @param[in]      line:         ´ý·¢ËÍµÄÊý¾ÝÐÐºÅ
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  * @param[in]      func:         ´ý·¢ËÍµÄÊý¾Ýº¯ÊýÃû
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  *
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  * @retval         note
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****  */
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c **** void LOG_PROTO(const char *fmt, LOG_LEVEL level, const char *file,
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****                int line, const char *func, ...)
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c **** {
+  96              		.loc 1 59 1 is_stmt 1 view -0
+ARM GAS  /tmp/ccXecYYf.s 			page 4
+
+
+  97              		.cfi_startproc
+  98              		@ args = 4, pretend = 0, frame = 520
+  99              		@ frame_needed = 0, uses_anonymous_args = 1
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   char tmp[LOG_BUFFER_SIZE];
+ 100              		.loc 1 60 3 view .LVU12
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   char buf[LOG_BUFFER_SIZE];
+ 101              		.loc 1 61 3 view .LVU13
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   memset(tmp, 0, sizeof(tmp));
+ 102              		.loc 1 62 3 view .LVU14
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   char tmp[LOG_BUFFER_SIZE];
+ 103              		.loc 1 59 1 is_stmt 0 view .LVU15
+ 104 0000 2DE9F043 		push	{r4, r5, r6, r7, r8, r9, lr}
+ 105              	.LCFI3:
+ 106              		.cfi_def_cfa_offset 28
+ 107              		.cfi_offset 4, -28
+ 108              		.cfi_offset 5, -24
+ 109              		.cfi_offset 6, -20
+ 110              		.cfi_offset 7, -16
+ 111              		.cfi_offset 8, -12
+ 112              		.cfi_offset 9, -8
+ 113              		.cfi_offset 14, -4
+ 114 0004 ADF5077D 		sub	sp, sp, #540
+ 115              	.LCFI4:
+ 116              		.cfi_def_cfa_offset 568
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   char tmp[LOG_BUFFER_SIZE];
+ 117              		.loc 1 59 1 view .LVU16
+ 118 0008 8EAF     		add	r7, sp, #568
+ 119              	.LVL4:
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   char tmp[LOG_BUFFER_SIZE];
+ 120              		.loc 1 59 1 view .LVU17
+ 121 000a 8046     		mov	r8, r0
+ 122 000c 57F8049B 		ldr	r9, [r7], #4
+ 123              	.LVL5:
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   char tmp[LOG_BUFFER_SIZE];
+ 124              		.loc 1 59 1 view .LVU18
+ 125 0010 0C46     		mov	r4, r1
+ 126 0012 1546     		mov	r5, r2
+ 127              		.loc 1 62 3 view .LVU19
+ 128 0014 0021     		movs	r1, #0
+ 129              	.LVL6:
+ 130              		.loc 1 62 3 view .LVU20
+ 131 0016 4FF48072 		mov	r2, #256
+ 132              	.LVL7:
+ 133              		.loc 1 62 3 view .LVU21
+ 134 001a 06A8     		add	r0, sp, #24
+ 135              	.LVL8:
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   char tmp[LOG_BUFFER_SIZE];
+ 136              		.loc 1 59 1 view .LVU22
+ 137 001c 1E46     		mov	r6, r3
+ 138              		.loc 1 62 3 view .LVU23
+ 139 001e FFF7FEFF 		bl	memset
+ 140              	.LVL9:
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   memset(buf, 0, sizeof(buf));
+ 141              		.loc 1 63 3 is_stmt 1 view .LVU24
+ 142 0022 4FF48072 		mov	r2, #256
+ 143 0026 0021     		movs	r1, #0
+ 144 0028 46A8     		add	r0, sp, #280
+ARM GAS  /tmp/ccXecYYf.s 			page 5
+
+
+ 145 002a FFF7FEFF 		bl	memset
+ 146              	.LVL10:
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c **** 
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   va_list args;
+ 147              		.loc 1 65 3 view .LVU25
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   va_start(args, func);
+ 148              		.loc 1 66 3 view .LVU26
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   vsnprintf(tmp, sizeof(tmp) - 1, fmt, args);
+ 149              		.loc 1 67 3 is_stmt 0 view .LVU27
+ 150 002e 4246     		mov	r2, r8
+ 151 0030 3B46     		mov	r3, r7
+ 152 0032 FF21     		movs	r1, #255
+ 153 0034 06A8     		add	r0, sp, #24
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   va_start(args, func);
+ 154              		.loc 1 66 3 view .LVU28
+ 155 0036 0597     		str	r7, [sp, #20]
+ 156              		.loc 1 67 3 is_stmt 1 view .LVU29
+ 157 0038 FFF7FEFF 		bl	vsnprintf
+ 158              	.LVL11:
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   va_end(args);
+ 159              		.loc 1 68 3 view .LVU30
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c **** 
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   switch (level)
+ 160              		.loc 1 70 3 view .LVU31
+ 161 003c 032C     		cmp	r4, #3
+ 162 003e 19D8     		bhi	.L6
+ 163 0040 DFE804F0 		tbb	[pc, r4]
+ 164              	.L9:
+ 165 0044 24       		.byte	(.L12-.L9)/2
+ 166 0045 20       		.byte	(.L11-.L9)/2
+ 167 0046 1C       		.byte	(.L10-.L9)/2
+ 168 0047 02       		.byte	(.L8-.L9)/2
+ 169              		.p2align 1
+ 170              	.L8:
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   {
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   case LOG_DEBUG:
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****     snprintf(buf, sizeof(buf), "[DEBUG] <%s> | <%d> | <%s>: %s\r\n", file, line, func, tmp);
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****     break;
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   case LOG_INFO:
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****     snprintf(buf, sizeof(buf), "[INFO] <%s> | <%d> | <%s>: %s\r\n", file, line, func, tmp);
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****     break;
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   case LOG_WARNING:
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****     snprintf(buf, sizeof(buf), "[WARN] <%s> | <%d> | <%s>: %s\r\n", file, line, func, tmp);
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****     break;
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   case LOG_ERROR:
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****     snprintf(buf, sizeof(buf), "[ERROR] <%s> | <%d> | <%s>: %s\r\n", file, line, func, tmp);
+ 171              		.loc 1 82 5 view .LVU32
+ 172 0048 06AB     		add	r3, sp, #24
+ 173 004a 124A     		ldr	r2, .L17
+ 174 004c 0293     		str	r3, [sp, #8]
+ 175              	.L16:
+ 176 004e 2B46     		mov	r3, r5
+ 177 0050 4FF48071 		mov	r1, #256
+ 178 0054 CDE90069 		strd	r6, r9, [sp]
+ 179 0058 46A8     		add	r0, sp, #280
+ 180 005a FFF7FEFF 		bl	snprintf
+ 181              	.LVL12:
+ARM GAS  /tmp/ccXecYYf.s 			page 6
+
+
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****     break;
+ 182              		.loc 1 83 5 view .LVU33
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   default:
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****     return;
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   }
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c **** 
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****   USARTSend(log_usart_instance, (uint8_t *)buf, strlen(buf), USART_TRANSFER_IT);
+ 183              		.loc 1 88 3 view .LVU34
+ 184              		.loc 1 88 49 is_stmt 0 view .LVU35
+ 185 005e 46A8     		add	r0, sp, #280
+ 186 0060 FFF7FEFF 		bl	strlen
+ 187              	.LVL13:
+ 188              		.loc 1 88 3 view .LVU36
+ 189 0064 0C49     		ldr	r1, .L17+4
+ 190              		.loc 1 88 49 view .LVU37
+ 191 0066 0246     		mov	r2, r0
+ 192              		.loc 1 88 3 discriminator 1 view .LVU38
+ 193 0068 0223     		movs	r3, #2
+ 194 006a 0868     		ldr	r0, [r1]
+ 195 006c 92B2     		uxth	r2, r2
+ 196 006e 46A9     		add	r1, sp, #280
+ 197 0070 FFF7FEFF 		bl	USARTSend
+ 198              	.LVL14:
+ 199              	.L6:
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c **** }
+ 200              		.loc 1 89 1 view .LVU39
+ 201 0074 0DF5077D 		add	sp, sp, #540
+ 202              	.LCFI5:
+ 203              		.cfi_remember_state
+ 204              		.cfi_def_cfa_offset 28
+ 205              		@ sp needed
+ 206 0078 BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ 207              	.LVL15:
+ 208              	.L10:
+ 209              	.LCFI6:
+ 210              		.cfi_restore_state
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****     break;
+ 211              		.loc 1 79 5 is_stmt 1 view .LVU40
+ 212 007c 06AB     		add	r3, sp, #24
+ 213 007e 074A     		ldr	r2, .L17+8
+ 214 0080 0293     		str	r3, [sp, #8]
+ 215 0082 E4E7     		b	.L16
+ 216              	.L11:
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****     break;
+ 217              		.loc 1 76 5 view .LVU41
+ 218 0084 06AB     		add	r3, sp, #24
+ 219 0086 064A     		ldr	r2, .L17+12
+ 220 0088 0293     		str	r3, [sp, #8]
+ 221 008a E0E7     		b	.L16
+ 222              	.L12:
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.c ****     break;
+ 223              		.loc 1 73 5 view .LVU42
+ 224 008c 06AB     		add	r3, sp, #24
+ 225 008e 054A     		ldr	r2, .L17+16
+ 226 0090 0293     		str	r3, [sp, #8]
+ 227 0092 DCE7     		b	.L16
+ 228              	.L18:
+ARM GAS  /tmp/ccXecYYf.s 			page 7
+
+
+ 229              		.align	2
+ 230              	.L17:
+ 231 0094 64000000 		.word	.LC3
+ 232 0098 00000000 		.word	log_usart_instance
+ 233 009c 44000000 		.word	.LC2
+ 234 00a0 24000000 		.word	.LC1
+ 235 00a4 00000000 		.word	.LC0
+ 236              		.cfi_endproc
+ 237              	.LFE333:
+ 239              		.section	.bss.log_usart_instance,"aw",%nobits
+ 240              		.align	2
+ 243              	log_usart_instance:
+ 244 0000 00000000 		.space	4
+ 245              		.text
+ 246              	.Letext0:
+ 247              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdarg.h"
+ 248              		.file 3 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 249              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 250              		.file 5 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stddef.h"
+ 251              		.file 6 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 252              		.file 7 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 253              		.file 8 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 254              		.file 9 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/usart/bsp_usart.h"
+ 255              		.file 10 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.h"
+ 256              		.file 11 "/usr/include/newlib/string.h"
+ 257              		.file 12 "/usr/include/newlib/stdio.h"
+ 258              		.file 13 "<built-in>"
+ARM GAS  /tmp/ccXecYYf.s 			page 8
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 bsp_log.c
+     /tmp/ccXecYYf.s:21     .text.LogInit:00000000 $t
+     /tmp/ccXecYYf.s:28     .text.LogInit:00000000 LogInit
+     /tmp/ccXecYYf.s:68     .text.LogInit:0000001c $d
+     /tmp/ccXecYYf.s:243    .bss.log_usart_instance:00000000 log_usart_instance
+     /tmp/ccXecYYf.s:73     .rodata.LOG_PROTO.str1.4:00000000 $d
+     /tmp/ccXecYYf.s:86     .text.LOG_PROTO:00000000 $t
+     /tmp/ccXecYYf.s:93     .text.LOG_PROTO:00000000 LOG_PROTO
+     /tmp/ccXecYYf.s:165    .text.LOG_PROTO:00000044 $d
+     /tmp/ccXecYYf.s:169    .text.LOG_PROTO:00000048 $t
+     /tmp/ccXecYYf.s:231    .text.LOG_PROTO:00000094 $d
+     /tmp/ccXecYYf.s:240    .bss.log_usart_instance:00000000 $d
+
+UNDEFINED SYMBOLS
+USARTRegister
+memset
+vsnprintf
+snprintf
+strlen
+USARTSend

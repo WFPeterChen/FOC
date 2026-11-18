@@ -1,0 +1,621 @@
+ARM GAS  /tmp/ccUf99ol.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"pid.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c"
+  20              		.section	.text.PID_Init,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	PID_Init
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	PID_Init:
+  29              	.LVL0:
+  30              	.LFB348:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** #include "pid.h"
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** 
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** #define LimitMax(input, max)   \
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     {                          \
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         if (input > max)       \
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         {                      \
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****             input = max;       \
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         }                      \
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         else if (input < -max) \
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         {                      \
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****             input = -max;      \
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         }                      \
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     }
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** 
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** /**
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @brief          pid struct data init
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @param[out]     pid: PID struct data point
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @param[in]      mode: PID_POSITION: normal pid
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  *                 PID_DELTA: delta pid
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @param[in]      PID: 0: kp, 1: ki, 2:kd
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @param[in]      max_out: pid max out
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @param[in]      max_iout: pid max iout
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @retval         none
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  */
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** /**
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @brief          pid struct data init
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @param[out]     pid: PID结构数据指针
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @param[in]      mode: PID_POSITION:普通PID
+ARM GAS  /tmp/ccUf99ol.s 			page 2
+
+
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  *                 PID_DELTA: 差分PID
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @param[in]      PID: 0: kp, 1: ki, 2:kd
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @param[in]      max_out: pid最大输出
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @param[in]      max_iout: pid最大积分输出
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @retval         none
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  */
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** void PID_Init(PidTypeDef *pid, uint8_t mode, const float PID[3], float max_out, float max_iout)
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** {
+  31              		.loc 1 36 1 view -0
+  32              		.cfi_startproc
+  33              		@ args = 0, pretend = 0, frame = 0
+  34              		@ frame_needed = 0, uses_anonymous_args = 0
+  35              		@ link register save eliminated.
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     if (pid == NULL || PID == NULL)
+  36              		.loc 1 37 5 view .LVU1
+  37              		.loc 1 37 8 is_stmt 0 view .LVU2
+  38 0000 B0B1     		cbz	r0, .L1
+  39              		.loc 1 37 21 discriminator 1 view .LVU3
+  40 0002 AAB1     		cbz	r2, .L1
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     {
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         return;
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     }
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->mode = mode;
+  41              		.loc 1 41 5 is_stmt 1 view .LVU4
+  42              		.loc 1 41 15 is_stmt 0 view .LVU5
+  43 0004 0170     		strb	r1, [r0]
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->Kp = PID[0];
+  44              		.loc 1 42 5 is_stmt 1 view .LVU6
+  45              		.loc 1 42 18 is_stmt 0 view .LVU7
+  46 0006 1168     		ldr	r1, [r2]	@ float
+  47              	.LVL1:
+  48              		.loc 1 42 13 view .LVU8
+  49 0008 4160     		str	r1, [r0, #4]	@ float
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->Ki = PID[1];
+  50              		.loc 1 43 5 is_stmt 1 view .LVU9
+  51              		.loc 1 43 18 is_stmt 0 view .LVU10
+  52 000a 5168     		ldr	r1, [r2, #4]	@ float
+  53              		.loc 1 43 13 view .LVU11
+  54 000c 8160     		str	r1, [r0, #8]	@ float
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->Kd = PID[2];
+  55              		.loc 1 44 5 is_stmt 1 view .LVU12
+  56              		.loc 1 44 18 is_stmt 0 view .LVU13
+  57 000e 9268     		ldr	r2, [r2, #8]	@ float
+  58              	.LVL2:
+  59              		.loc 1 44 13 view .LVU14
+  60 0010 C260     		str	r2, [r0, #12]	@ float
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->max_out = max_out;
+  61              		.loc 1 45 5 is_stmt 1 view .LVU15
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->max_iout = max_iout;
+  62              		.loc 1 46 5 view .LVU16
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->Dbuf[0] = pid->Dbuf[1] = pid->Dbuf[2] = 0.0f;
+  63              		.loc 1 47 48 is_stmt 0 view .LVU17
+  64 0012 0023     		movs	r3, #0
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->max_out = max_out;
+  65              		.loc 1 45 18 view .LVU18
+  66 0014 80ED040A 		vstr.32	s0, [r0, #16]
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->max_iout = max_iout;
+ARM GAS  /tmp/ccUf99ol.s 			page 3
+
+
+  67              		.loc 1 46 19 view .LVU19
+  68 0018 C0ED050A 		vstr.32	s1, [r0, #20]
+  69              		.loc 1 47 5 is_stmt 1 view .LVU20
+  70              		.loc 1 47 48 is_stmt 0 view .LVU21
+  71 001c 8363     		str	r3, [r0, #56]	@ float
+  72              		.loc 1 47 33 view .LVU22
+  73 001e 4363     		str	r3, [r0, #52]	@ float
+  74              		.loc 1 47 18 view .LVU23
+  75 0020 0363     		str	r3, [r0, #48]	@ float
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->error[0] = pid->error[1] = pid->error[2] = pid->Pout = pid->Iout = pid->Dout = pid->out = 
+  76              		.loc 1 48 5 is_stmt 1 view .LVU24
+  77              		.loc 1 48 98 is_stmt 0 view .LVU25
+  78 0022 0362     		str	r3, [r0, #32]	@ float
+  79              		.loc 1 48 87 view .LVU26
+  80 0024 C362     		str	r3, [r0, #44]	@ float
+  81              		.loc 1 48 75 view .LVU27
+  82 0026 8362     		str	r3, [r0, #40]	@ float
+  83              		.loc 1 48 63 view .LVU28
+  84 0028 4362     		str	r3, [r0, #36]	@ float
+  85              		.loc 1 48 51 view .LVU29
+  86 002a 4364     		str	r3, [r0, #68]	@ float
+  87              		.loc 1 48 35 view .LVU30
+  88 002c 0364     		str	r3, [r0, #64]	@ float
+  89              		.loc 1 48 19 view .LVU31
+  90 002e C363     		str	r3, [r0, #60]	@ float
+  91              	.LVL3:
+  92              	.L1:
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** }
+  93              		.loc 1 49 1 view .LVU32
+  94 0030 7047     		bx	lr
+  95              		.cfi_endproc
+  96              	.LFE348:
+  98 0032 00BF     		.section	.text.PID_Calc,"ax",%progbits
+  99              		.align	1
+ 100              		.p2align 2,,3
+ 101              		.global	PID_Calc
+ 102              		.syntax unified
+ 103              		.thumb
+ 104              		.thumb_func
+ 106              	PID_Calc:
+ 107              	.LVL4:
+ 108              	.LFB349:
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** 
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** /**
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @brief          pid calculate
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @param[out]     pid: PID struct data point
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @param[in]      ref: feedback data
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @param[in]      set: set point
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @retval         pid out
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  */
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** /**
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @brief          pid计算
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @param[out]     pid: PID结构数据指针
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @param[in]      ref: 反馈数据
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @param[in]      set: 设定值
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @retval         pid输出
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  */
+ARM GAS  /tmp/ccUf99ol.s 			page 4
+
+
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** float PID_Calc(PidTypeDef *pid, float ref, float set)
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** {
+ 109              		.loc 1 66 1 is_stmt 1 view -0
+ 110              		.cfi_startproc
+ 111              		@ args = 0, pretend = 0, frame = 0
+ 112              		@ frame_needed = 0, uses_anonymous_args = 0
+ 113              		@ link register save eliminated.
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     if (pid == NULL)
+ 114              		.loc 1 67 5 view .LVU34
+ 115              		.loc 1 67 8 is_stmt 0 view .LVU35
+ 116 0000 0028     		cmp	r0, #0
+ 117 0002 60D0     		beq	.L24
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     {
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         return 0.0f;
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     }
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** 
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->error[2] = pid->error[1];
+ 118              		.loc 1 72 5 is_stmt 1 view .LVU36
+ 119              		.loc 1 72 31 is_stmt 0 view .LVU37
+ 120 0004 D0ED106A 		vldr.32	s13, [r0, #64]
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->error[1] = pid->error[0];
+ 121              		.loc 1 73 31 view .LVU38
+ 122 0008 90ED0F7A 		vldr.32	s14, [r0, #60]
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->set = set;
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->fdb = ref;
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->error[0] = set - ref;
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     if (pid->mode == PID_POSITION)
+ 123              		.loc 1 77 12 view .LVU39
+ 124 000c 0378     		ldrb	r3, [r0]	@ zero_extendqisi2
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->error[1] = pid->error[0];
+ 125              		.loc 1 72 19 view .LVU40
+ 126 000e C0ED116A 		vstr.32	s13, [r0, #68]
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->error[1] = pid->error[0];
+ 127              		.loc 1 73 5 is_stmt 1 view .LVU41
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     if (pid->mode == PID_POSITION)
+ 128              		.loc 1 76 25 is_stmt 0 view .LVU42
+ 129 0012 70EEC07A 		vsub.f32	s15, s1, s0
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->set = set;
+ 130              		.loc 1 73 19 view .LVU43
+ 131 0016 80ED107A 		vstr.32	s14, [r0, #64]
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->fdb = ref;
+ 132              		.loc 1 74 5 is_stmt 1 view .LVU44
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->fdb = ref;
+ 133              		.loc 1 74 14 is_stmt 0 view .LVU45
+ 134 001a C0ED060A 		vstr.32	s1, [r0, #24]
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->error[0] = set - ref;
+ 135              		.loc 1 75 5 is_stmt 1 view .LVU46
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->error[0] = set - ref;
+ 136              		.loc 1 75 14 is_stmt 0 view .LVU47
+ 137 001e 80ED070A 		vstr.32	s0, [r0, #28]
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     if (pid->mode == PID_POSITION)
+ 138              		.loc 1 76 5 is_stmt 1 view .LVU48
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     if (pid->mode == PID_POSITION)
+ 139              		.loc 1 76 19 is_stmt 0 view .LVU49
+ 140 0022 C0ED0F7A 		vstr.32	s15, [r0, #60]
+ 141              		.loc 1 77 5 is_stmt 1 view .LVU50
+ 142              		.loc 1 77 8 is_stmt 0 view .LVU51
+ARM GAS  /tmp/ccUf99ol.s 			page 5
+
+
+ 143 0026 002B     		cmp	r3, #0
+ 144 0028 42D1     		bne	.L12
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     {
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Pout = pid->Kp * pid->error[0];
+ 145              		.loc 1 79 9 is_stmt 1 view .LVU52
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Iout += pid->Ki * pid->error[0];
+ 146              		.loc 1 80 19 is_stmt 0 view .LVU53
+ 147 002a D0ED0A6A 		vldr.32	s13, [r0, #40]
+ 148 002e 90ED026A 		vldr.32	s12, [r0, #8]
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[2] = pid->Dbuf[1];
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[1] = pid->Dbuf[0];
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[0] = (pid->error[0] - pid->error[1]);
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dout = pid->Kd * pid->Dbuf[0];
+ 149              		.loc 1 84 29 view .LVU54
+ 150 0032 D0ED035A 		vldr.32	s11, [r0, #12]
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[2] = pid->Dbuf[1];
+ 151              		.loc 1 81 22 view .LVU55
+ 152 0036 426B     		ldr	r2, [r0, #52]	@ float
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[0] = (pid->error[0] - pid->error[1]);
+ 153              		.loc 1 82 22 view .LVU56
+ 154 0038 036B     		ldr	r3, [r0, #48]	@ float
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[2] = pid->Dbuf[1];
+ 155              		.loc 1 81 22 view .LVU57
+ 156 003a 8263     		str	r2, [r0, #56]	@ float
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Iout += pid->Ki * pid->error[0];
+ 157              		.loc 1 80 19 view .LVU58
+ 158 003c E7EE866A 		vfma.f32	s13, s15, s12
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[0] = (pid->error[0] - pid->error[1]);
+ 159              		.loc 1 82 22 view .LVU59
+ 160 0040 4363     		str	r3, [r0, #52]	@ float
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Iout += pid->Ki * pid->error[0];
+ 161              		.loc 1 79 29 view .LVU60
+ 162 0042 90ED016A 		vldr.32	s12, [r0, #4]
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[2] = pid->Dbuf[1];
+ 163              		.loc 1 80 19 view .LVU61
+ 164 0046 C0ED0A6A 		vstr.32	s13, [r0, #40]
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dout = pid->Kd * pid->Dbuf[0];
+ 165              		.loc 1 83 39 view .LVU62
+ 166 004a 37EEC77A 		vsub.f32	s14, s15, s14
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Iout += pid->Ki * pid->error[0];
+ 167              		.loc 1 79 29 view .LVU63
+ 168 004e 67EE867A 		vmul.f32	s15, s15, s12
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         LimitMax(pid->Iout, pid->max_iout);
+ 169              		.loc 1 85 9 view .LVU64
+ 170 0052 90ED056A 		vldr.32	s12, [r0, #20]
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Iout += pid->Ki * pid->error[0];
+ 171              		.loc 1 79 19 view .LVU65
+ 172 0056 C0ED097A 		vstr.32	s15, [r0, #36]
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[2] = pid->Dbuf[1];
+ 173              		.loc 1 80 9 is_stmt 1 view .LVU66
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[1] = pid->Dbuf[0];
+ 174              		.loc 1 81 9 view .LVU67
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[0] = (pid->error[0] - pid->error[1]);
+ 175              		.loc 1 82 9 view .LVU68
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dout = pid->Kd * pid->Dbuf[0];
+ 176              		.loc 1 83 9 view .LVU69
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         LimitMax(pid->Iout, pid->max_iout);
+ARM GAS  /tmp/ccUf99ol.s 			page 6
+
+
+ 177              		.loc 1 84 29 is_stmt 0 view .LVU70
+ 178 005a 67EE255A 		vmul.f32	s11, s14, s11
+ 179              		.loc 1 85 9 view .LVU71
+ 180 005e F4EEC66A 		vcmpe.f32	s13, s12
+ 181 0062 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dout = pid->Kd * pid->Dbuf[0];
+ 182              		.loc 1 83 22 view .LVU72
+ 183 0066 80ED0C7A 		vstr.32	s14, [r0, #48]
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         LimitMax(pid->Iout, pid->max_iout);
+ 184              		.loc 1 84 9 is_stmt 1 view .LVU73
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         LimitMax(pid->Iout, pid->max_iout);
+ 185              		.loc 1 84 19 is_stmt 0 view .LVU74
+ 186 006a C0ED0B5A 		vstr.32	s11, [r0, #44]
+ 187              		.loc 1 85 9 is_stmt 1 view .LVU75
+ 188 006e 06DC     		bgt	.L40
+ 189              		.loc 1 85 9 discriminator 2 view .LVU76
+ 190 0070 B1EE466A 		vneg.f32	s12, s12
+ 191 0074 F4EEC66A 		vcmpe.f32	s13, s12
+ 192 0078 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 193 007c 20D5     		bpl	.L35
+ 194              	.L40:
+ 195              		.loc 1 85 9 discriminator 4 view .LVU77
+ 196 007e 80ED0A6A 		vstr.32	s12, [r0, #40]
+ 197              	.L15:
+ 198              		.loc 1 85 43 discriminator 6 view .LVU78
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->out = pid->Pout + pid->Iout + pid->Dout;
+ 199              		.loc 1 86 9 view .LVU79
+ 200              		.loc 1 86 30 is_stmt 0 view .LVU80
+ 201 0082 77EE867A 		vadd.f32	s15, s15, s12
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         LimitMax(pid->out, pid->max_out);
+ 202              		.loc 1 87 9 view .LVU81
+ 203 0086 90ED040A 		vldr.32	s0, [r0, #16]
+ 204              	.LVL5:
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->out = pid->Pout + pid->Iout + pid->Dout;
+ 205              		.loc 1 86 42 view .LVU82
+ 206 008a 77EEA57A 		vadd.f32	s15, s15, s11
+ 207              		.loc 1 87 9 view .LVU83
+ 208 008e F4EEC07A 		vcmpe.f32	s15, s0
+ 209 0092 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->out = pid->Pout + pid->Iout + pid->Dout;
+ 210              		.loc 1 86 18 view .LVU84
+ 211 0096 C0ED087A 		vstr.32	s15, [r0, #32]
+ 212              		.loc 1 87 9 is_stmt 1 view .LVU85
+ 213 009a 06DC     		bgt	.L43
+ 214              		.loc 1 87 9 discriminator 2 view .LVU86
+ 215 009c B1EE400A 		vneg.f32	s0, s0
+ 216 00a0 F4EEC07A 		vcmpe.f32	s15, s0
+ 217 00a4 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 218 00a8 07D5     		bpl	.L37
+ 219              	.L43:
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     }
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     else if (pid->mode == PID_DELTA)
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     {
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Pout = pid->Kp * (pid->error[0] - pid->error[1]);
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Iout = pid->Ki * pid->error[0];
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[2] = pid->Dbuf[1];
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[1] = pid->Dbuf[0];
+ARM GAS  /tmp/ccUf99ol.s 			page 7
+
+
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[0] = (pid->error[0] - 2.0f * pid->error[1] + pid->error[2]);
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dout = pid->Kd * pid->Dbuf[0];
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->out += pid->Pout + pid->Iout + pid->Dout;
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         LimitMax(pid->out, pid->max_out);
+ 220              		.loc 1 98 9 discriminator 4 view .LVU87
+ 221 00aa 80ED080A 		vstr.32	s0, [r0, #32]
+ 222 00ae 7047     		bx	lr
+ 223              	.LVL6:
+ 224              	.L12:
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     {
+ 225              		.loc 1 89 10 view .LVU88
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     {
+ 226              		.loc 1 89 13 is_stmt 0 view .LVU89
+ 227 00b0 012B     		cmp	r3, #1
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         LimitMax(pid->out, pid->max_out);
+ 228              		.loc 1 97 12 view .LVU90
+ 229 00b2 90ED080A 		vldr.32	s0, [r0, #32]
+ 230              	.LVL7:
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     {
+ 231              		.loc 1 89 13 view .LVU91
+ 232 00b6 09D0     		beq	.L44
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     }
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     return pid->out;
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** }
+ 233              		.loc 1 101 1 view .LVU92
+ 234 00b8 7047     		bx	lr
+ 235              	.L37:
+ 236              		.loc 1 101 1 view .LVU93
+ 237 00ba B0EE670A 		vmov.f32	s0, s15
+ 238 00be 7047     		bx	lr
+ 239              	.LVL8:
+ 240              	.L35:
+ 241              		.loc 1 101 1 view .LVU94
+ 242 00c0 B0EE666A 		vmov.f32	s12, s13
+ 243 00c4 DDE7     		b	.L15
+ 244              	.L24:
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     }
+ 245              		.loc 1 69 16 view .LVU95
+ 246 00c6 9FED1F0A 		vldr.32	s0, .L45
+ 247              	.LVL9:
+ 248              		.loc 1 101 1 view .LVU96
+ 249 00ca 7047     		bx	lr
+ 250              	.LVL10:
+ 251              	.L44:
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Iout = pid->Ki * pid->error[0];
+ 252              		.loc 1 91 9 is_stmt 1 view .LVU97
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dout = pid->Kd * pid->Dbuf[0];
+ 253              		.loc 1 95 39 is_stmt 0 view .LVU98
+ 254 00cc F0EE005A 		vmov.f32	s11, #2.0e+0
+ 255 00d0 B0EE676A 		vmov.f32	s12, s15
+ 256 00d4 A7EE656A 		vfms.f32	s12, s14, s11
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[1] = pid->Dbuf[0];
+ 257              		.loc 1 93 22 view .LVU99
+ 258 00d8 426B     		ldr	r2, [r0, #52]	@ float
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[0] = (pid->error[0] - 2.0f * pid->error[1] + pid->error[2]);
+ 259              		.loc 1 94 22 view .LVU100
+ 260 00da 036B     		ldr	r3, [r0, #48]	@ float
+ARM GAS  /tmp/ccUf99ol.s 			page 8
+
+
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[2] = pid->Dbuf[1];
+ 261              		.loc 1 92 29 view .LVU101
+ 262 00dc D0ED025A 		vldr.32	s11, [r0, #8]
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Iout = pid->Ki * pid->error[0];
+ 263              		.loc 1 91 29 view .LVU102
+ 264 00e0 90ED015A 		vldr.32	s10, [r0, #4]
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[1] = pid->Dbuf[0];
+ 265              		.loc 1 93 22 view .LVU103
+ 266 00e4 8263     		str	r2, [r0, #56]	@ float
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Iout = pid->Ki * pid->error[0];
+ 267              		.loc 1 91 46 view .LVU104
+ 268 00e6 37EEC77A 		vsub.f32	s14, s15, s14
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dout = pid->Kd * pid->Dbuf[0];
+ 269              		.loc 1 95 62 view .LVU105
+ 270 00ea 76EE866A 		vadd.f32	s13, s13, s12
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[2] = pid->Dbuf[1];
+ 271              		.loc 1 92 29 view .LVU106
+ 272 00ee 67EEA57A 		vmul.f32	s15, s15, s11
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Iout = pid->Ki * pid->error[0];
+ 273              		.loc 1 91 29 view .LVU107
+ 274 00f2 27EE057A 		vmul.f32	s14, s14, s10
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->out += pid->Pout + pid->Iout + pid->Dout;
+ 275              		.loc 1 96 29 view .LVU108
+ 276 00f6 D0ED035A 		vldr.32	s11, [r0, #12]
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Iout = pid->Ki * pid->error[0];
+ 277              		.loc 1 91 19 view .LVU109
+ 278 00fa 80ED097A 		vstr.32	s14, [r0, #36]
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[2] = pid->Dbuf[1];
+ 279              		.loc 1 92 9 is_stmt 1 view .LVU110
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->out += pid->Pout + pid->Iout + pid->Dout;
+ 280              		.loc 1 96 29 is_stmt 0 view .LVU111
+ 281 00fe 66EEA55A 		vmul.f32	s11, s13, s11
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         LimitMax(pid->out, pid->max_out);
+ 282              		.loc 1 97 31 view .LVU112
+ 283 0102 37EE276A 		vadd.f32	s12, s14, s15
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[2] = pid->Dbuf[1];
+ 284              		.loc 1 92 19 view .LVU113
+ 285 0106 C0ED0A7A 		vstr.32	s15, [r0, #40]
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[1] = pid->Dbuf[0];
+ 286              		.loc 1 93 9 is_stmt 1 view .LVU114
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[0] = (pid->error[0] - 2.0f * pid->error[1] + pid->error[2]);
+ 287              		.loc 1 94 9 view .LVU115
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         LimitMax(pid->out, pid->max_out);
+ 288              		.loc 1 97 43 is_stmt 0 view .LVU116
+ 289 010a 36EE256A 		vadd.f32	s12, s12, s11
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dbuf[0] = (pid->error[0] - 2.0f * pid->error[1] + pid->error[2]);
+ 290              		.loc 1 94 22 view .LVU117
+ 291 010e 4363     		str	r3, [r0, #52]	@ float
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dout = pid->Kd * pid->Dbuf[0];
+ 292              		.loc 1 95 9 is_stmt 1 view .LVU118
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         LimitMax(pid->out, pid->max_out);
+ 293              		.loc 1 97 18 is_stmt 0 view .LVU119
+ 294 0110 36EE006A 		vadd.f32	s12, s12, s0
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     }
+ 295              		.loc 1 98 9 view .LVU120
+ 296 0114 90ED040A 		vldr.32	s0, [r0, #16]
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->Dout = pid->Kd * pid->Dbuf[0];
+ARM GAS  /tmp/ccUf99ol.s 			page 9
+
+
+ 297              		.loc 1 95 22 view .LVU121
+ 298 0118 C0ED0C6A 		vstr.32	s13, [r0, #48]
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->out += pid->Pout + pid->Iout + pid->Dout;
+ 299              		.loc 1 96 9 is_stmt 1 view .LVU122
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     }
+ 300              		.loc 1 98 9 is_stmt 0 view .LVU123
+ 301 011c B4EEC06A 		vcmpe.f32	s12, s0
+ 302 0120 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         pid->out += pid->Pout + pid->Iout + pid->Dout;
+ 303              		.loc 1 96 19 view .LVU124
+ 304 0124 C0ED0B5A 		vstr.32	s11, [r0, #44]
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         LimitMax(pid->out, pid->max_out);
+ 305              		.loc 1 97 9 is_stmt 1 view .LVU125
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         LimitMax(pid->out, pid->max_out);
+ 306              		.loc 1 97 18 is_stmt 0 view .LVU126
+ 307 0128 80ED086A 		vstr.32	s12, [r0, #32]
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     }
+ 308              		.loc 1 98 9 is_stmt 1 view .LVU127
+ 309 012c BDDC     		bgt	.L43
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     }
+ 310              		.loc 1 98 9 discriminator 2 view .LVU128
+ 311 012e B1EE400A 		vneg.f32	s0, s0
+ 312 0132 B4EEC06A 		vcmpe.f32	s12, s0
+ 313 0136 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 314 013a B6D4     		bmi	.L43
+ 315 013c B0EE460A 		vmov.f32	s0, s12
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     }
+ 316              		.loc 1 98 41 discriminator 6 view .LVU129
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** }
+ 317              		.loc 1 100 5 view .LVU130
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** }
+ 318              		.loc 1 100 15 is_stmt 0 view .LVU131
+ 319 0140 7047     		bx	lr
+ 320              	.L46:
+ 321 0142 00BF     		.align	2
+ 322              	.L45:
+ 323 0144 00000000 		.word	0
+ 324              		.cfi_endproc
+ 325              	.LFE349:
+ 327              		.section	.text.PID_clear,"ax",%progbits
+ 328              		.align	1
+ 329              		.p2align 2,,3
+ 330              		.global	PID_clear
+ 331              		.syntax unified
+ 332              		.thumb
+ 333              		.thumb_func
+ 335              	PID_clear:
+ 336              	.LVL11:
+ 337              	.LFB350:
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** 
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** /**
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @brief          pid out clear
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @param[out]     pid: PID struct data point
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @retval         none
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  */
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** /**
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @brief          pid 输出清除
+ARM GAS  /tmp/ccUf99ol.s 			page 10
+
+
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @param[out]     pid: PID结构数据指针
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  * @retval         none
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****  */
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** void PID_clear(PidTypeDef *pid)
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** {
+ 338              		.loc 1 114 1 is_stmt 1 view -0
+ 339              		.cfi_startproc
+ 340              		@ args = 0, pretend = 0, frame = 0
+ 341              		@ frame_needed = 0, uses_anonymous_args = 0
+ 342              		@ link register save eliminated.
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     if (pid == NULL)
+ 343              		.loc 1 115 5 view .LVU133
+ 344              		.loc 1 115 8 is_stmt 0 view .LVU134
+ 345 0000 60B1     		cbz	r0, .L47
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     {
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****         return;
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     }
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** 
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->error[0] = pid->error[1] = pid->error[2] = 0.0f;
+ 346              		.loc 1 120 5 is_stmt 1 view .LVU135
+ 347              		.loc 1 120 51 is_stmt 0 view .LVU136
+ 348 0002 0023     		movs	r3, #0
+ 349 0004 4364     		str	r3, [r0, #68]	@ float
+ 350              		.loc 1 120 35 view .LVU137
+ 351 0006 0364     		str	r3, [r0, #64]	@ float
+ 352              		.loc 1 120 19 view .LVU138
+ 353 0008 C363     		str	r3, [r0, #60]	@ float
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->Dbuf[0] = pid->Dbuf[1] = pid->Dbuf[2] = 0.0f;
+ 354              		.loc 1 121 5 is_stmt 1 view .LVU139
+ 355              		.loc 1 121 48 is_stmt 0 view .LVU140
+ 356 000a 8363     		str	r3, [r0, #56]	@ float
+ 357              		.loc 1 121 33 view .LVU141
+ 358 000c 4363     		str	r3, [r0, #52]	@ float
+ 359              		.loc 1 121 18 view .LVU142
+ 360 000e 0363     		str	r3, [r0, #48]	@ float
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->out = pid->Pout = pid->Iout = pid->Dout = 0.0f;
+ 361              		.loc 1 122 5 is_stmt 1 view .LVU143
+ 362              		.loc 1 122 50 is_stmt 0 view .LVU144
+ 363 0010 C362     		str	r3, [r0, #44]	@ float
+ 364              		.loc 1 122 38 view .LVU145
+ 365 0012 8362     		str	r3, [r0, #40]	@ float
+ 366              		.loc 1 122 26 view .LVU146
+ 367 0014 4362     		str	r3, [r0, #36]	@ float
+ 368              		.loc 1 122 14 view .LVU147
+ 369 0016 0362     		str	r3, [r0, #32]	@ float
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c ****     pid->fdb = pid->set = 0.0f;
+ 370              		.loc 1 123 5 is_stmt 1 view .LVU148
+ 371              		.loc 1 123 25 is_stmt 0 view .LVU149
+ 372 0018 8361     		str	r3, [r0, #24]	@ float
+ 373              		.loc 1 123 14 view .LVU150
+ 374 001a C361     		str	r3, [r0, #28]	@ float
+ 375              	.L47:
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.c **** }
+ 376              		.loc 1 124 1 view .LVU151
+ 377 001c 7047     		bx	lr
+ 378              		.cfi_endproc
+ 379              	.LFE350:
+ARM GAS  /tmp/ccUf99ol.s 			page 11
+
+
+ 381 001e 00BF     		.text
+ 382              	.Letext0:
+ 383              		.file 2 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.h"
+ 384              		.file 3 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ARM GAS  /tmp/ccUf99ol.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 pid.c
+     /tmp/ccUf99ol.s:21     .text.PID_Init:00000000 $t
+     /tmp/ccUf99ol.s:28     .text.PID_Init:00000000 PID_Init
+     /tmp/ccUf99ol.s:99     .text.PID_Calc:00000000 $t
+     /tmp/ccUf99ol.s:106    .text.PID_Calc:00000000 PID_Calc
+     /tmp/ccUf99ol.s:323    .text.PID_Calc:00000144 $d
+     /tmp/ccUf99ol.s:328    .text.PID_clear:00000000 $t
+     /tmp/ccUf99ol.s:335    .text.PID_clear:00000000 PID_clear
+
+NO UNDEFINED SYMBOLS

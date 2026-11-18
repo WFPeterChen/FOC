@@ -1,0 +1,3 @@
+/home/peter/FOC/FalconFoc-main/host/falconfoc_studio/build/CMakeFiles/falconfoc_studio.dir
+/home/peter/FOC/FalconFoc-main/host/falconfoc_studio/build/CMakeFiles/edit_cache.dir
+/home/peter/FOC/FalconFoc-main/host/falconfoc_studio/build/CMakeFiles/rebuild_cache.dir

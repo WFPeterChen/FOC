@@ -1,0 +1,1197 @@
+ARM GAS  /tmp/ccUZ0I1X.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"bsp_dwt.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c"
+  20              		.section	.text.DWT_Init,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	DWT_Init
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	DWT_Init:
+  29              	.LVL0:
+  30              	.LFB329:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** /**
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****  ******************************************************************************
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****  * @file	bsp_dwt.c
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****  * @author  Wang Hongxi
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****  * @version V1.1.0
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****  * @date    2022/3/8
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****  * @brief
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****  ******************************************************************************
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****  * @attention
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****  *
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****  ******************************************************************************
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****  */
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** #include "bsp_dwt.h"
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** DWT_Time_t SysTime;
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** static uint32_t CPU_FREQ_Hz, CPU_FREQ_Hz_ms, CPU_FREQ_Hz_us;
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** static uint32_t CYCCNT_RountCount;
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** static uint32_t CYCCNT_LAST;
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** uint64_t CYCCNT64;
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** static void DWT_CNT_Update(void);
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** void DWT_Init(uint32_t CPU_Freq_mHz)
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** {
+  31              		.loc 1 23 1 view -0
+  32              		.cfi_startproc
+  33              		@ args = 0, pretend = 0, frame = 0
+  34              		@ frame_needed = 0, uses_anonymous_args = 0
+  35              		@ link register save eliminated.
+ARM GAS  /tmp/ccUZ0I1X.s 			page 2
+
+
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     /* 使能DWT外设 */
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+  36              		.loc 1 25 5 view .LVU1
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     /* 使能DWT外设 */
+  37              		.loc 1 23 1 is_stmt 0 view .LVU2
+  38 0000 10B4     		push	{r4}
+  39              	.LCFI0:
+  40              		.cfi_def_cfa_offset 4
+  41              		.cfi_offset 4, -4
+  42              		.loc 1 25 14 view .LVU3
+  43 0002 124C     		ldr	r4, .L4
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     /* DWT CYCCNT寄存器计数清0 */
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     DWT->CYCCNT       = (uint32_t)0u;
+  44              		.loc 1 28 23 view .LVU4
+  45 0004 124B     		ldr	r3, .L4+4
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  46              		.loc 1 25 14 view .LVU5
+  47 0006 D4F8FC20 		ldr	r2, [r4, #252]
+  48              		.loc 1 28 23 view .LVU6
+  49 000a 0021     		movs	r1, #0
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  50              		.loc 1 25 22 view .LVU7
+  51 000c 42F08072 		orr	r2, r2, #16777216
+  52 0010 C4F8FC20 		str	r2, [r4, #252]
+  53              		.loc 1 28 5 is_stmt 1 view .LVU8
+  54              		.loc 1 28 23 is_stmt 0 view .LVU9
+  55 0014 5960     		str	r1, [r3, #4]
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     /* 使能Cortex-M DWT CYCCNT寄存器 */
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     DWT->CTRL        |= DWT_CTRL_CYCCNTENA_Msk;
+  56              		.loc 1 31 5 is_stmt 1 view .LVU10
+  57              		.loc 1 31 8 is_stmt 0 view .LVU11
+  58 0016 1A68     		ldr	r2, [r3]
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CPU_FREQ_Hz       = CPU_Freq_mHz * 1000000;
+  59              		.loc 1 32 38 view .LVU12
+  60 0018 0E4C     		ldr	r4, .L4+8
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CPU_FREQ_Hz       = CPU_Freq_mHz * 1000000;
+  61              		.loc 1 31 22 view .LVU13
+  62 001a 42F00102 		orr	r2, r2, #1
+  63 001e 1A60     		str	r2, [r3]
+  64              		.loc 1 32 5 is_stmt 1 view .LVU14
+  65              		.loc 1 32 38 is_stmt 0 view .LVU15
+  66 0020 04FB00F0 		mul	r0, r4, r0
+  67              	.LVL1:
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CPU_FREQ_Hz_ms    = CPU_FREQ_Hz / 1000;
+  68              		.loc 1 33 37 view .LVU16
+  69 0024 0C4B     		ldr	r3, .L4+12
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CPU_FREQ_Hz       = CPU_Freq_mHz * 1000000;
+  70              		.loc 1 32 23 view .LVU17
+  71 0026 0D4C     		ldr	r4, .L4+16
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CPU_FREQ_Hz_us    = CPU_FREQ_Hz / 1000000;
+  72              		.loc 1 34 37 view .LVU18
+  73 0028 0D4A     		ldr	r2, .L4+20
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CPU_FREQ_Hz_ms    = CPU_FREQ_Hz / 1000;
+  74              		.loc 1 32 23 view .LVU19
+  75 002a 2060     		str	r0, [r4]
+ARM GAS  /tmp/ccUZ0I1X.s 			page 3
+
+
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CPU_FREQ_Hz_ms    = CPU_FREQ_Hz / 1000;
+  76              		.loc 1 33 5 is_stmt 1 view .LVU20
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CPU_FREQ_Hz_ms    = CPU_FREQ_Hz / 1000;
+  77              		.loc 1 33 37 is_stmt 0 view .LVU21
+  78 002c A3FB00C3 		umull	ip, r3, r3, r0
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CPU_FREQ_Hz_ms    = CPU_FREQ_Hz / 1000;
+  79              		.loc 1 33 23 view .LVU22
+  80 0030 0C4C     		ldr	r4, .L4+24
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CPU_FREQ_Hz_ms    = CPU_FREQ_Hz / 1000;
+  81              		.loc 1 33 37 view .LVU23
+  82 0032 9B09     		lsrs	r3, r3, #6
+  83              		.loc 1 34 37 view .LVU24
+  84 0034 A2FB0020 		umull	r2, r0, r2, r0
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CPU_FREQ_Hz_ms    = CPU_FREQ_Hz / 1000;
+  85              		.loc 1 33 23 view .LVU25
+  86 0038 2360     		str	r3, [r4]
+  87              		.loc 1 34 5 is_stmt 1 view .LVU26
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CYCCNT_RountCount = 0;
+  88              		.loc 1 35 23 is_stmt 0 view .LVU27
+  89 003a 0B4A     		ldr	r2, .L4+28
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CPU_FREQ_Hz_us    = CPU_FREQ_Hz / 1000000;
+  90              		.loc 1 34 23 view .LVU28
+  91 003c 0B4B     		ldr	r3, .L4+32
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** }
+  92              		.loc 1 36 1 view .LVU29
+  93 003e 5DF8044B 		ldr	r4, [sp], #4
+  94              	.LCFI1:
+  95              		.cfi_restore 4
+  96              		.cfi_def_cfa_offset 0
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CYCCNT_RountCount = 0;
+  97              		.loc 1 35 23 view .LVU30
+  98 0042 1160     		str	r1, [r2]
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CYCCNT_RountCount = 0;
+  99              		.loc 1 34 37 view .LVU31
+ 100 0044 800C     		lsrs	r0, r0, #18
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CYCCNT_RountCount = 0;
+ 101              		.loc 1 34 23 view .LVU32
+ 102 0046 1860     		str	r0, [r3]
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CYCCNT_RountCount = 0;
+ 103              		.loc 1 35 5 is_stmt 1 view .LVU33
+ 104              		.loc 1 36 1 is_stmt 0 view .LVU34
+ 105 0048 7047     		bx	lr
+ 106              	.L5:
+ 107 004a 00BF     		.align	2
+ 108              	.L4:
+ 109 004c 00ED00E0 		.word	-536810240
+ 110 0050 001000E0 		.word	-536866816
+ 111 0054 40420F00 		.word	1000000
+ 112 0058 D34D6210 		.word	274877907
+ 113 005c 00000000 		.word	CPU_FREQ_Hz
+ 114 0060 83DE1B43 		.word	1125899907
+ 115 0064 00000000 		.word	CPU_FREQ_Hz_ms
+ 116 0068 00000000 		.word	CYCCNT_RountCount
+ 117 006c 00000000 		.word	CPU_FREQ_Hz_us
+ 118              		.cfi_endproc
+ 119              	.LFE329:
+ 121              		.section	.text.DWT_GetDeltaT,"ax",%progbits
+ARM GAS  /tmp/ccUZ0I1X.s 			page 4
+
+
+ 122              		.align	1
+ 123              		.p2align 2,,3
+ 124              		.global	DWT_GetDeltaT
+ 125              		.syntax unified
+ 126              		.thumb
+ 127              		.thumb_func
+ 129              	DWT_GetDeltaT:
+ 130              	.LVL2:
+ 131              	.LFB330:
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** float DWT_GetDeltaT(uint32_t *cnt_last)
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** {
+ 132              		.loc 1 39 1 is_stmt 1 view -0
+ 133              		.cfi_startproc
+ 134              		@ args = 0, pretend = 0, frame = 8
+ 135              		@ frame_needed = 0, uses_anonymous_args = 0
+ 136              		@ link register save eliminated.
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     volatile uint32_t cnt_now = DWT->CYCCNT;
+ 137              		.loc 1 40 5 view .LVU36
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     volatile uint32_t cnt_now = DWT->CYCCNT;
+ 138              		.loc 1 39 1 is_stmt 0 view .LVU37
+ 139 0000 30B4     		push	{r4, r5}
+ 140              	.LCFI2:
+ 141              		.cfi_def_cfa_offset 8
+ 142              		.cfi_offset 4, -8
+ 143              		.cfi_offset 5, -4
+ 144              		.loc 1 40 36 view .LVU38
+ 145 0002 124A     		ldr	r2, .L9
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     float dt = ((uint32_t)(cnt_now - *cnt_last)) / ((float)(CPU_FREQ_Hz));
+ 146              		.loc 1 41 36 view .LVU39
+ 147 0004 0168     		ldr	r1, [r0]
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     volatile uint32_t cnt_now = DWT->CYCCNT;
+ 148              		.loc 1 40 36 view .LVU40
+ 149 0006 5368     		ldr	r3, [r2, #4]
+ 150              		.loc 1 41 53 view .LVU41
+ 151 0008 114C     		ldr	r4, .L9+4
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     volatile uint32_t cnt_now = DWT->CYCCNT;
+ 152              		.loc 1 39 1 view .LVU42
+ 153 000a 82B0     		sub	sp, sp, #8
+ 154              	.LCFI3:
+ 155              		.cfi_def_cfa_offset 16
+ 156              		.loc 1 41 53 view .LVU43
+ 157 000c 94ED007A 		vldr.32	s14, [r4]	@ int
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     volatile uint32_t cnt_now = DWT->CYCCNT;
+ 158              		.loc 1 40 23 view .LVU44
+ 159 0010 0093     		str	r3, [sp]
+ 160              		.loc 1 41 5 is_stmt 1 view .LVU45
+ 161              		.loc 1 41 36 is_stmt 0 view .LVU46
+ 162 0012 009B     		ldr	r3, [sp]
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     *cnt_last = cnt_now;
+ 163              		.loc 1 42 15 view .LVU47
+ 164 0014 009D     		ldr	r5, [sp]
+ 165 0016 0560     		str	r5, [r0]
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     float dt = ((uint32_t)(cnt_now - *cnt_last)) / ((float)(CPU_FREQ_Hz));
+ 166              		.loc 1 41 36 view .LVU48
+ 167 0018 5B1A     		subs	r3, r3, r1
+ 168              	.LBB4:
+ARM GAS  /tmp/ccUZ0I1X.s 			page 5
+
+
+ 169              	.LBB5:
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     DWT_CNT_Update();
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     return dt;
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** }
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** double DWT_GetDeltaT64(uint32_t *cnt_last)
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** {
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     volatile uint32_t cnt_now = DWT->CYCCNT;
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     double dt = ((uint32_t)(cnt_now - *cnt_last)) / ((double)(CPU_FREQ_Hz));
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     *cnt_last = cnt_now;
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     DWT_CNT_Update();
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     return dt;
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** }
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** void DWT_SysTimeUpdate(void)
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** {
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     volatile uint32_t cnt_now = DWT->CYCCNT;
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     static uint64_t CNT_TEMP1, CNT_TEMP2, CNT_TEMP3;
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     DWT_CNT_Update();
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CYCCNT64   = (uint64_t)CYCCNT_RountCount * (uint64_t)UINT32_MAX + (uint64_t)cnt_now;
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CNT_TEMP1  = CYCCNT64 / CPU_FREQ_Hz;
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CNT_TEMP2  = CYCCNT64 - CNT_TEMP1 * CPU_FREQ_Hz;
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     SysTime.s  = CNT_TEMP1;
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     SysTime.ms = CNT_TEMP2 / CPU_FREQ_Hz_ms;
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CNT_TEMP3  = CNT_TEMP2 - SysTime.ms * CPU_FREQ_Hz_ms;
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     SysTime.us = CNT_TEMP3 / CPU_FREQ_Hz_us;
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** }
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** float DWT_GetTimeline_s(void)
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** {
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     DWT_SysTimeUpdate();
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     float DWT_Timelinef32 = SysTime.s + SysTime.ms * 0.001f + SysTime.us * 0.000001f;
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     return DWT_Timelinef32;
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** }
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** float DWT_GetTimeline_ms(void)
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** {
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     DWT_SysTimeUpdate();
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     float DWT_Timelinef32 = SysTime.s * 1000 + SysTime.ms + SysTime.us * 0.001f;
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     return DWT_Timelinef32;
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** }
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** uint64_t DWT_GetTimeline_us(void)
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** {
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     DWT_SysTimeUpdate();
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     uint64_t DWT_Timelinef32 = SysTime.s * 1000000 + SysTime.ms * 1000 + SysTime.us;
+ARM GAS  /tmp/ccUZ0I1X.s 			page 6
+
+
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     return DWT_Timelinef32;
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** }
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** static void DWT_CNT_Update(void)
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** {
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     volatile uint32_t cnt_now = DWT->CYCCNT;
+ 170              		.loc 1 105 36 view .LVU49
+ 171 001a 5168     		ldr	r1, [r2, #4]
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     if (cnt_now < CYCCNT_LAST)
+ 172              		.loc 1 107 17 view .LVU50
+ 173 001c 0D4A     		ldr	r2, .L9+8
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 174              		.loc 1 105 23 view .LVU51
+ 175 001e 0191     		str	r1, [sp, #4]
+ 176              	.LBE5:
+ 177              	.LBE4:
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     *cnt_last = cnt_now;
+ 178              		.loc 1 41 50 view .LVU52
+ 179 0020 07EE903A 		vmov	s15, r3	@ int
+ 180              	.LBB9:
+ 181              	.LBB6:
+ 182              		.loc 1 107 17 view .LVU53
+ 183 0024 0199     		ldr	r1, [sp, #4]
+ 184              		.loc 1 107 8 view .LVU54
+ 185 0026 1368     		ldr	r3, [r2]
+ 186              	.LBE6:
+ 187              	.LBE9:
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     *cnt_last = cnt_now;
+ 188              		.loc 1 41 50 view .LVU55
+ 189 0028 F8EE677A 		vcvt.f32.u32	s15, s15
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     *cnt_last = cnt_now;
+ 190              		.loc 1 41 53 view .LVU56
+ 191 002c B8EE477A 		vcvt.f32.u32	s14, s14
+ 192              	.LBB10:
+ 193              	.LBB7:
+ 194              		.loc 1 107 8 view .LVU57
+ 195 0030 9942     		cmp	r1, r3
+ 196              	.LBE7:
+ 197              	.LBE10:
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     *cnt_last = cnt_now;
+ 198              		.loc 1 41 11 view .LVU58
+ 199 0032 87EE870A 		vdiv.f32	s0, s15, s14
+ 200              	.LVL3:
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 201              		.loc 1 42 5 is_stmt 1 view .LVU59
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 202              		.loc 1 44 5 view .LVU60
+ 203              	.LBB11:
+ 204              	.LBI4:
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** {
+ 205              		.loc 1 103 13 view .LVU61
+ 206              	.LBB8:
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 207              		.loc 1 105 5 view .LVU62
+ 208              		.loc 1 107 5 view .LVU63
+ARM GAS  /tmp/ccUZ0I1X.s 			page 7
+
+
+ 209              		.loc 1 107 8 is_stmt 0 view .LVU64
+ 210 0036 03D2     		bcs	.L7
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****         CYCCNT_RountCount++;//溢出
+ 211              		.loc 1 108 9 is_stmt 1 view .LVU65
+ 212              		.loc 1 108 26 is_stmt 0 view .LVU66
+ 213 0038 0749     		ldr	r1, .L9+12
+ 214 003a 0B68     		ldr	r3, [r1]
+ 215 003c 0133     		adds	r3, r3, #1
+ 216 003e 0B60     		str	r3, [r1]
+ 217              	.L7:
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CYCCNT_LAST = cnt_now;
+ 218              		.loc 1 110 5 is_stmt 1 view .LVU67
+ 219              		.loc 1 110 17 is_stmt 0 view .LVU68
+ 220 0040 019B     		ldr	r3, [sp, #4]
+ 221 0042 1360     		str	r3, [r2]
+ 222              	.LBE8:
+ 223              	.LBE11:
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** }
+ 224              		.loc 1 46 5 is_stmt 1 view .LVU69
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 225              		.loc 1 47 1 is_stmt 0 view .LVU70
+ 226 0044 02B0     		add	sp, sp, #8
+ 227              	.LCFI4:
+ 228              		.cfi_def_cfa_offset 8
+ 229              		@ sp needed
+ 230 0046 30BC     		pop	{r4, r5}
+ 231              	.LCFI5:
+ 232              		.cfi_restore 5
+ 233              		.cfi_restore 4
+ 234              		.cfi_def_cfa_offset 0
+ 235 0048 7047     		bx	lr
+ 236              	.L10:
+ 237 004a 00BF     		.align	2
+ 238              	.L9:
+ 239 004c 001000E0 		.word	-536866816
+ 240 0050 00000000 		.word	CPU_FREQ_Hz
+ 241 0054 00000000 		.word	CYCCNT_LAST
+ 242 0058 00000000 		.word	CYCCNT_RountCount
+ 243              		.cfi_endproc
+ 244              	.LFE330:
+ 246              		.global	__aeabi_ui2d
+ 247              		.global	__aeabi_ddiv
+ 248              		.section	.text.DWT_GetDeltaT64,"ax",%progbits
+ 249              		.align	1
+ 250              		.p2align 2,,3
+ 251              		.global	DWT_GetDeltaT64
+ 252              		.syntax unified
+ 253              		.thumb
+ 254              		.thumb_func
+ 256              	DWT_GetDeltaT64:
+ 257              	.LVL4:
+ 258              	.LFB331:
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     volatile uint32_t cnt_now = DWT->CYCCNT;
+ 259              		.loc 1 50 1 is_stmt 1 view -0
+ 260              		.cfi_startproc
+ 261              		@ args = 0, pretend = 0, frame = 8
+ARM GAS  /tmp/ccUZ0I1X.s 			page 8
+
+
+ 262              		@ frame_needed = 0, uses_anonymous_args = 0
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     double dt = ((uint32_t)(cnt_now - *cnt_last)) / ((double)(CPU_FREQ_Hz));
+ 263              		.loc 1 51 5 view .LVU72
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     volatile uint32_t cnt_now = DWT->CYCCNT;
+ 264              		.loc 1 50 1 is_stmt 0 view .LVU73
+ 265 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 266              	.LCFI6:
+ 267              		.cfi_def_cfa_offset 20
+ 268              		.cfi_offset 4, -20
+ 269              		.cfi_offset 5, -16
+ 270              		.cfi_offset 6, -12
+ 271              		.cfi_offset 7, -8
+ 272              		.cfi_offset 14, -4
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     double dt = ((uint32_t)(cnt_now - *cnt_last)) / ((double)(CPU_FREQ_Hz));
+ 273              		.loc 1 51 36 view .LVU74
+ 274 0002 144D     		ldr	r5, .L14
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     volatile uint32_t cnt_now = DWT->CYCCNT;
+ 275              		.loc 1 50 1 view .LVU75
+ 276 0004 83B0     		sub	sp, sp, #12
+ 277              	.LCFI7:
+ 278              		.cfi_def_cfa_offset 32
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     double dt = ((uint32_t)(cnt_now - *cnt_last)) / ((double)(CPU_FREQ_Hz));
+ 279              		.loc 1 51 36 view .LVU76
+ 280 0006 6B68     		ldr	r3, [r5, #4]
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     double dt = ((uint32_t)(cnt_now - *cnt_last)) / ((double)(CPU_FREQ_Hz));
+ 281              		.loc 1 51 23 view .LVU77
+ 282 0008 0093     		str	r3, [sp]
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     *cnt_last = cnt_now;
+ 283              		.loc 1 52 5 is_stmt 1 view .LVU78
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     volatile uint32_t cnt_now = DWT->CYCCNT;
+ 284              		.loc 1 50 1 is_stmt 0 view .LVU79
+ 285 000a 0446     		mov	r4, r0
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     *cnt_last = cnt_now;
+ 286              		.loc 1 52 37 view .LVU80
+ 287 000c 0098     		ldr	r0, [sp]
+ 288              	.LVL5:
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     *cnt_last = cnt_now;
+ 289              		.loc 1 52 37 view .LVU81
+ 290 000e 2368     		ldr	r3, [r4]
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     *cnt_last = cnt_now;
+ 291              		.loc 1 52 51 view .LVU82
+ 292 0010 C01A     		subs	r0, r0, r3
+ 293 0012 FFF7FEFF 		bl	__aeabi_ui2d
+ 294              	.LVL6:
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     *cnt_last = cnt_now;
+ 295              		.loc 1 52 54 view .LVU83
+ 296 0016 104B     		ldr	r3, .L14+4
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     *cnt_last = cnt_now;
+ 297              		.loc 1 52 51 view .LVU84
+ 298 0018 0646     		mov	r6, r0
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     *cnt_last = cnt_now;
+ 299              		.loc 1 52 54 view .LVU85
+ 300 001a 1868     		ldr	r0, [r3]
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     *cnt_last = cnt_now;
+ 301              		.loc 1 52 51 view .LVU86
+ 302 001c 0F46     		mov	r7, r1
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     *cnt_last = cnt_now;
+ARM GAS  /tmp/ccUZ0I1X.s 			page 9
+
+
+ 303              		.loc 1 52 54 view .LVU87
+ 304 001e FFF7FEFF 		bl	__aeabi_ui2d
+ 305              	.LVL7:
+ 306 0022 0246     		mov	r2, r0
+ 307 0024 0B46     		mov	r3, r1
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     *cnt_last = cnt_now;
+ 308              		.loc 1 52 12 view .LVU88
+ 309 0026 3046     		mov	r0, r6
+ 310 0028 3946     		mov	r1, r7
+ 311 002a FFF7FEFF 		bl	__aeabi_ddiv
+ 312              	.LVL8:
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 313              		.loc 1 53 15 view .LVU89
+ 314 002e 009A     		ldr	r2, [sp]
+ 315 0030 2260     		str	r2, [r4]
+ 316              	.LBB14:
+ 317              	.LBB15:
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 318              		.loc 1 105 36 view .LVU90
+ 319 0032 6A68     		ldr	r2, [r5, #4]
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****         CYCCNT_RountCount++;//溢出
+ 320              		.loc 1 107 17 view .LVU91
+ 321 0034 094B     		ldr	r3, .L14+8
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 322              		.loc 1 105 23 view .LVU92
+ 323 0036 0192     		str	r2, [sp, #4]
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****         CYCCNT_RountCount++;//溢出
+ 324              		.loc 1 107 17 view .LVU93
+ 325 0038 019C     		ldr	r4, [sp, #4]
+ 326              	.LVL9:
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****         CYCCNT_RountCount++;//溢出
+ 327              		.loc 1 107 8 view .LVU94
+ 328 003a 1A68     		ldr	r2, [r3]
+ 329 003c 9442     		cmp	r4, r2
+ 330              	.LBE15:
+ 331              	.LBE14:
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     *cnt_last = cnt_now;
+ 332              		.loc 1 52 12 view .LVU95
+ 333 003e 41EC100B 		vmov	d0, r0, r1
+ 334              	.LVL10:
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 335              		.loc 1 53 5 is_stmt 1 view .LVU96
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 336              		.loc 1 55 5 view .LVU97
+ 337              	.LBB17:
+ 338              	.LBI14:
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** {
+ 339              		.loc 1 103 13 view .LVU98
+ 340              	.LBB16:
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 341              		.loc 1 105 5 view .LVU99
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****         CYCCNT_RountCount++;//溢出
+ 342              		.loc 1 107 5 view .LVU100
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****         CYCCNT_RountCount++;//溢出
+ 343              		.loc 1 107 8 is_stmt 0 view .LVU101
+ 344 0042 03D2     		bcs	.L12
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ARM GAS  /tmp/ccUZ0I1X.s 			page 10
+
+
+ 345              		.loc 1 108 9 is_stmt 1 view .LVU102
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 346              		.loc 1 108 26 is_stmt 0 view .LVU103
+ 347 0044 0649     		ldr	r1, .L14+12
+ 348 0046 0A68     		ldr	r2, [r1]
+ 349 0048 0132     		adds	r2, r2, #1
+ 350 004a 0A60     		str	r2, [r1]
+ 351              	.L12:
+ 352              		.loc 1 110 5 is_stmt 1 view .LVU104
+ 353              		.loc 1 110 17 is_stmt 0 view .LVU105
+ 354 004c 019A     		ldr	r2, [sp, #4]
+ 355 004e 1A60     		str	r2, [r3]
+ 356              	.LBE16:
+ 357              	.LBE17:
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** }
+ 358              		.loc 1 57 5 is_stmt 1 view .LVU106
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 359              		.loc 1 58 1 is_stmt 0 view .LVU107
+ 360 0050 03B0     		add	sp, sp, #12
+ 361              	.LCFI8:
+ 362              		.cfi_def_cfa_offset 20
+ 363              		@ sp needed
+ 364 0052 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 365              	.L15:
+ 366              		.align	2
+ 367              	.L14:
+ 368 0054 001000E0 		.word	-536866816
+ 369 0058 00000000 		.word	CPU_FREQ_Hz
+ 370 005c 00000000 		.word	CYCCNT_LAST
+ 371 0060 00000000 		.word	CYCCNT_RountCount
+ 372              		.cfi_endproc
+ 373              	.LFE331:
+ 375              		.global	__aeabi_uldivmod
+ 376              		.global	__aeabi_ldivmod
+ 377              		.section	.text.DWT_SysTimeUpdate,"ax",%progbits
+ 378              		.align	1
+ 379              		.p2align 2,,3
+ 380              		.global	DWT_SysTimeUpdate
+ 381              		.syntax unified
+ 382              		.thumb
+ 383              		.thumb_func
+ 385              	DWT_SysTimeUpdate:
+ 386              	.LFB332:
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     volatile uint32_t cnt_now = DWT->CYCCNT;
+ 387              		.loc 1 61 1 is_stmt 1 view -0
+ 388              		.cfi_startproc
+ 389              		@ args = 0, pretend = 0, frame = 8
+ 390              		@ frame_needed = 0, uses_anonymous_args = 0
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     static uint64_t CNT_TEMP1, CNT_TEMP2, CNT_TEMP3;
+ 391              		.loc 1 62 5 view .LVU109
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     volatile uint32_t cnt_now = DWT->CYCCNT;
+ 392              		.loc 1 61 1 is_stmt 0 view .LVU110
+ 393 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 394              	.LCFI9:
+ 395              		.cfi_def_cfa_offset 24
+ 396              		.cfi_offset 4, -24
+ 397              		.cfi_offset 5, -20
+ARM GAS  /tmp/ccUZ0I1X.s 			page 11
+
+
+ 398              		.cfi_offset 6, -16
+ 399              		.cfi_offset 7, -12
+ 400              		.cfi_offset 8, -8
+ 401              		.cfi_offset 14, -4
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     static uint64_t CNT_TEMP1, CNT_TEMP2, CNT_TEMP3;
+ 402              		.loc 1 62 36 view .LVU111
+ 403 0004 1F4A     		ldr	r2, .L19
+ 404              	.LBB20:
+ 405              	.LBB21:
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****         CYCCNT_RountCount++;//溢出
+ 406              		.loc 1 107 17 view .LVU112
+ 407 0006 204B     		ldr	r3, .L19+4
+ 408              	.LBE21:
+ 409              	.LBE20:
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     static uint64_t CNT_TEMP1, CNT_TEMP2, CNT_TEMP3;
+ 410              		.loc 1 62 36 view .LVU113
+ 411 0008 5168     		ldr	r1, [r2, #4]
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     SysTime.ms = CNT_TEMP2 / CPU_FREQ_Hz_ms;
+ 412              		.loc 1 70 16 view .LVU114
+ 413 000a DFF89480 		ldr	r8, .L19+28
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     volatile uint32_t cnt_now = DWT->CYCCNT;
+ 414              		.loc 1 61 1 view .LVU115
+ 415 000e 82B0     		sub	sp, sp, #8
+ 416              	.LCFI10:
+ 417              		.cfi_def_cfa_offset 32
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CNT_TEMP1  = CYCCNT64 / CPU_FREQ_Hz;
+ 418              		.loc 1 67 69 view .LVU116
+ 419 0010 0026     		movs	r6, #0
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     static uint64_t CNT_TEMP1, CNT_TEMP2, CNT_TEMP3;
+ 420              		.loc 1 62 23 view .LVU117
+ 421 0012 0091     		str	r1, [sp]
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 422              		.loc 1 63 5 is_stmt 1 view .LVU118
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 423              		.loc 1 65 5 view .LVU119
+ 424              	.LBB24:
+ 425              	.LBI20:
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** {
+ 426              		.loc 1 103 13 view .LVU120
+ 427              	.LBB22:
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 428              		.loc 1 105 5 view .LVU121
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 429              		.loc 1 105 36 is_stmt 0 view .LVU122
+ 430 0014 5268     		ldr	r2, [r2, #4]
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 431              		.loc 1 105 23 view .LVU123
+ 432 0016 0192     		str	r2, [sp, #4]
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****         CYCCNT_RountCount++;//溢出
+ 433              		.loc 1 107 5 is_stmt 1 view .LVU124
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 434              		.loc 1 108 26 is_stmt 0 view .LVU125
+ 435 0018 1C4A     		ldr	r2, .L19+8
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****         CYCCNT_RountCount++;//溢出
+ 436              		.loc 1 107 8 view .LVU126
+ 437 001a 1968     		ldr	r1, [r3]
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****         CYCCNT_RountCount++;//溢出
+ARM GAS  /tmp/ccUZ0I1X.s 			page 12
+
+
+ 438              		.loc 1 107 17 view .LVU127
+ 439 001c 0198     		ldr	r0, [sp, #4]
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 440              		.loc 1 108 26 view .LVU128
+ 441 001e 1468     		ldr	r4, [r2]
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****         CYCCNT_RountCount++;//溢出
+ 442              		.loc 1 107 8 view .LVU129
+ 443 0020 8842     		cmp	r0, r1
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 444              		.loc 1 108 9 is_stmt 1 view .LVU130
+ 445              		.loc 1 110 5 view .LVU131
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 446              		.loc 1 108 26 is_stmt 0 view .LVU132
+ 447 0022 3CBF     		itt	cc
+ 448 0024 0134     		addcc	r4, r4, #1
+ 449 0026 1460     		strcc	r4, [r2]
+ 450              		.loc 1 110 17 view .LVU133
+ 451 0028 019A     		ldr	r2, [sp, #4]
+ 452              	.LBE22:
+ 453              	.LBE24:
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CNT_TEMP1  = CYCCNT64 / CPU_FREQ_Hz;
+ 454              		.loc 1 67 71 view .LVU134
+ 455 002a 0098     		ldr	r0, [sp]
+ 456              	.LBB25:
+ 457              	.LBB23:
+ 458              		.loc 1 110 17 view .LVU135
+ 459 002c 1A60     		str	r2, [r3]
+ 460              	.LBE23:
+ 461              	.LBE25:
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CNT_TEMP1  = CYCCNT64 / CPU_FREQ_Hz;
+ 462              		.loc 1 67 5 is_stmt 1 view .LVU136
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CNT_TEMP1  = CYCCNT64 / CPU_FREQ_Hz;
+ 463              		.loc 1 67 69 is_stmt 0 view .LVU137
+ 464 002e 4FF0FF35 		mov	r5, #-1
+ 465 0032 3146     		mov	r1, r6
+ 466 0034 E4FB0501 		umlal	r0, r1, r4, r5
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CNT_TEMP2  = CYCCNT64 - CNT_TEMP1 * CPU_FREQ_Hz;
+ 467              		.loc 1 68 27 view .LVU138
+ 468 0038 154A     		ldr	r2, .L19+12
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CNT_TEMP1  = CYCCNT64 / CPU_FREQ_Hz;
+ 469              		.loc 1 67 16 view .LVU139
+ 470 003a 164C     		ldr	r4, .L19+16
+ 471 003c 1268     		ldr	r2, [r2]
+ 472 003e C4E90001 		strd	r0, r1, [r4]
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CNT_TEMP2  = CYCCNT64 - CNT_TEMP1 * CPU_FREQ_Hz;
+ 473              		.loc 1 68 5 is_stmt 1 view .LVU140
+ 474 0042 3346     		mov	r3, r6
+ 475 0044 FFF7FEFF 		bl	__aeabi_uldivmod
+ 476              	.LVL11:
+ 477 0048 1F46     		mov	r7, r3
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     SysTime.s  = CNT_TEMP1;
+ 478              		.loc 1 69 5 view .LVU141
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CNT_TEMP3  = CNT_TEMP2 - SysTime.ms * CPU_FREQ_Hz_ms;
+ 479              		.loc 1 71 28 is_stmt 0 view .LVU142
+ 480 004a 134B     		ldr	r3, .L19+20
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     SysTime.ms = CNT_TEMP2 / CPU_FREQ_Hz_ms;
+ 481              		.loc 1 70 16 view .LVU143
+ARM GAS  /tmp/ccUZ0I1X.s 			page 13
+
+
+ 482 004c C8F80000 		str	r0, [r8]
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CNT_TEMP3  = CNT_TEMP2 - SysTime.ms * CPU_FREQ_Hz_ms;
+ 483              		.loc 1 71 28 view .LVU144
+ 484 0050 1D68     		ldr	r5, [r3]
+ 485 0052 1446     		mov	r4, r2
+ 486 0054 3346     		mov	r3, r6
+ 487 0056 2A46     		mov	r2, r5
+ 488 0058 2046     		mov	r0, r4
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     SysTime.ms = CNT_TEMP2 / CPU_FREQ_Hz_ms;
+ 489              		.loc 1 70 5 is_stmt 1 view .LVU145
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CNT_TEMP3  = CNT_TEMP2 - SysTime.ms * CPU_FREQ_Hz_ms;
+ 490              		.loc 1 71 5 view .LVU146
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CNT_TEMP3  = CNT_TEMP2 - SysTime.ms * CPU_FREQ_Hz_ms;
+ 491              		.loc 1 71 28 is_stmt 0 view .LVU147
+ 492 005a 3946     		mov	r1, r7
+ 493 005c FFF7FEFF 		bl	__aeabi_uldivmod
+ 494              	.LVL12:
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CNT_TEMP3  = CNT_TEMP2 - SysTime.ms * CPU_FREQ_Hz_ms;
+ 495              		.loc 1 71 16 view .LVU148
+ 496 0060 83B2     		uxth	r3, r0
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     SysTime.us = CNT_TEMP3 / CPU_FREQ_Hz_us;
+ 497              		.loc 1 72 41 view .LVU149
+ 498 0062 03FB05F5 		mul	r5, r3, r5
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** }
+ 499              		.loc 1 73 28 view .LVU150
+ 500 0066 0D4A     		ldr	r2, .L19+24
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     CNT_TEMP3  = CNT_TEMP2 - SysTime.ms * CPU_FREQ_Hz_ms;
+ 501              		.loc 1 71 16 view .LVU151
+ 502 0068 A8F80430 		strh	r3, [r8, #4]	@ movhi
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     SysTime.us = CNT_TEMP3 / CPU_FREQ_Hz_us;
+ 503              		.loc 1 72 5 is_stmt 1 view .LVU152
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** }
+ 504              		.loc 1 73 5 view .LVU153
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     SysTime.us = CNT_TEMP3 / CPU_FREQ_Hz_us;
+ 505              		.loc 1 72 28 is_stmt 0 view .LVU154
+ 506 006c 601B     		subs	r0, r4, r5
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** }
+ 507              		.loc 1 73 28 view .LVU155
+ 508 006e 1268     		ldr	r2, [r2]
+ 509 0070 3346     		mov	r3, r6
+ 510 0072 67F10001 		sbc	r1, r7, #0
+ 511 0076 FFF7FEFF 		bl	__aeabi_uldivmod
+ 512              	.LVL13:
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** }
+ 513              		.loc 1 73 16 view .LVU156
+ 514 007a A8F80600 		strh	r0, [r8, #6]	@ movhi
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 515              		.loc 1 74 1 view .LVU157
+ 516 007e 02B0     		add	sp, sp, #8
+ 517              	.LCFI11:
+ 518              		.cfi_def_cfa_offset 24
+ 519              		@ sp needed
+ 520 0080 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 521              	.L20:
+ 522              		.align	2
+ 523              	.L19:
+ 524 0084 001000E0 		.word	-536866816
+ARM GAS  /tmp/ccUZ0I1X.s 			page 14
+
+
+ 525 0088 00000000 		.word	CYCCNT_LAST
+ 526 008c 00000000 		.word	CYCCNT_RountCount
+ 527 0090 00000000 		.word	CPU_FREQ_Hz
+ 528 0094 00000000 		.word	CYCCNT64
+ 529 0098 00000000 		.word	CPU_FREQ_Hz_ms
+ 530 009c 00000000 		.word	CPU_FREQ_Hz_us
+ 531 00a0 00000000 		.word	SysTime
+ 532              		.cfi_endproc
+ 533              	.LFE332:
+ 535              		.section	.text.DWT_GetTimeline_s,"ax",%progbits
+ 536              		.align	1
+ 537              		.p2align 2,,3
+ 538              		.global	DWT_GetTimeline_s
+ 539              		.syntax unified
+ 540              		.thumb
+ 541              		.thumb_func
+ 543              	DWT_GetTimeline_s:
+ 544              	.LFB333:
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     DWT_SysTimeUpdate();
+ 545              		.loc 1 77 1 is_stmt 1 view -0
+ 546              		.cfi_startproc
+ 547              		@ args = 0, pretend = 0, frame = 0
+ 548              		@ frame_needed = 0, uses_anonymous_args = 0
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 549              		.loc 1 78 5 view .LVU159
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     DWT_SysTimeUpdate();
+ 550              		.loc 1 77 1 is_stmt 0 view .LVU160
+ 551 0000 08B5     		push	{r3, lr}
+ 552              	.LCFI12:
+ 553              		.cfi_def_cfa_offset 8
+ 554              		.cfi_offset 3, -8
+ 555              		.cfi_offset 14, -4
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 556              		.loc 1 78 5 view .LVU161
+ 557 0002 FFF7FEFF 		bl	DWT_SysTimeUpdate
+ 558              	.LVL14:
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 559              		.loc 1 80 5 is_stmt 1 view .LVU162
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 560              		.loc 1 80 48 is_stmt 0 view .LVU163
+ 561 0006 0C4B     		ldr	r3, .L23
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 562              		.loc 1 80 39 view .LVU164
+ 563 0008 DFED0C6A 		vldr.32	s13, .L23+4
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 564              		.loc 1 80 48 view .LVU165
+ 565 000c 9A88     		ldrh	r2, [r3, #4]
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 566              		.loc 1 80 39 view .LVU166
+ 567 000e D3ED007A 		vldr.32	s15, [r3]	@ int
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 568              		.loc 1 80 70 view .LVU167
+ 569 0012 DB88     		ldrh	r3, [r3, #6]
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 570              		.loc 1 80 48 view .LVU168
+ 571 0014 07EE102A 		vmov	s14, r2	@ int
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ARM GAS  /tmp/ccUZ0I1X.s 			page 15
+
+
+ 572              		.loc 1 80 39 view .LVU169
+ 573 0018 B8EE670A 		vcvt.f32.u32	s0, s15
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 574              		.loc 1 80 52 view .LVU170
+ 575 001c B8EEC77A 		vcvt.f32.s32	s14, s14
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 576              		.loc 1 80 70 view .LVU171
+ 577 0020 07EE903A 		vmov	s15, r3	@ int
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 578              		.loc 1 80 39 view .LVU172
+ 579 0024 A7EE260A 		vfma.f32	s0, s14, s13
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 580              		.loc 1 80 74 view .LVU173
+ 581 0028 F8EEE77A 		vcvt.f32.s32	s15, s15
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 582              		.loc 1 80 11 view .LVU174
+ 583 002c 9FED047A 		vldr.32	s14, .L23+8
+ 584              	.LVL15:
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** }
+ 585              		.loc 1 82 5 is_stmt 1 view .LVU175
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 586              		.loc 1 83 1 is_stmt 0 view .LVU176
+ 587 0030 A7EE870A 		vfma.f32	s0, s15, s14
+ 588              	.LVL16:
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 589              		.loc 1 83 1 view .LVU177
+ 590 0034 08BD     		pop	{r3, pc}
+ 591              	.L24:
+ 592 0036 00BF     		.align	2
+ 593              	.L23:
+ 594 0038 00000000 		.word	SysTime
+ 595 003c 6F12833A 		.word	981668463
+ 596 0040 BD378635 		.word	897988541
+ 597              		.cfi_endproc
+ 598              	.LFE333:
+ 600              		.section	.text.DWT_GetTimeline_ms,"ax",%progbits
+ 601              		.align	1
+ 602              		.p2align 2,,3
+ 603              		.global	DWT_GetTimeline_ms
+ 604              		.syntax unified
+ 605              		.thumb
+ 606              		.thumb_func
+ 608              	DWT_GetTimeline_ms:
+ 609              	.LFB334:
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     DWT_SysTimeUpdate();
+ 610              		.loc 1 86 1 is_stmt 1 view -0
+ 611              		.cfi_startproc
+ 612              		@ args = 0, pretend = 0, frame = 0
+ 613              		@ frame_needed = 0, uses_anonymous_args = 0
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 614              		.loc 1 87 5 view .LVU179
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     DWT_SysTimeUpdate();
+ 615              		.loc 1 86 1 is_stmt 0 view .LVU180
+ 616 0000 08B5     		push	{r3, lr}
+ 617              	.LCFI13:
+ 618              		.cfi_def_cfa_offset 8
+ 619              		.cfi_offset 3, -8
+ARM GAS  /tmp/ccUZ0I1X.s 			page 16
+
+
+ 620              		.cfi_offset 14, -4
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 621              		.loc 1 87 5 view .LVU181
+ 622 0002 FFF7FEFF 		bl	DWT_SysTimeUpdate
+ 623              	.LVL17:
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 624              		.loc 1 89 5 is_stmt 1 view .LVU182
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 625              		.loc 1 89 68 is_stmt 0 view .LVU183
+ 626 0006 0A4A     		ldr	r2, .L27
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 627              		.loc 1 89 11 view .LVU184
+ 628 0008 9FED0A7A 		vldr.32	s14, .L27+4
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 629              		.loc 1 89 39 view .LVU185
+ 630 000c 1168     		ldr	r1, [r2]
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 631              		.loc 1 89 55 view .LVU186
+ 632 000e 9388     		ldrh	r3, [r2, #4]
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 633              		.loc 1 89 68 view .LVU187
+ 634 0010 D288     		ldrh	r2, [r2, #6]
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 635              		.loc 1 89 39 view .LVU188
+ 636 0012 4FF47A70 		mov	r0, #1000
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 637              		.loc 1 89 46 view .LVU189
+ 638 0016 00FB0133 		mla	r3, r0, r1, r3
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 639              		.loc 1 89 68 view .LVU190
+ 640 001a 07EE902A 		vmov	s15, r2	@ int
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 641              		.loc 1 89 46 view .LVU191
+ 642 001e 00EE103A 		vmov	s0, r3	@ int
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 643              		.loc 1 89 72 view .LVU192
+ 644 0022 F8EEE77A 		vcvt.f32.s32	s15, s15
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 645              		.loc 1 89 59 view .LVU193
+ 646 0026 B8EE400A 		vcvt.f32.u32	s0, s0
+ 647              	.LVL18:
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** }
+ 648              		.loc 1 91 5 is_stmt 1 view .LVU194
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 649              		.loc 1 92 1 is_stmt 0 view .LVU195
+ 650 002a A7EE870A 		vfma.f32	s0, s15, s14
+ 651              	.LVL19:
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 652              		.loc 1 92 1 view .LVU196
+ 653 002e 08BD     		pop	{r3, pc}
+ 654              	.L28:
+ 655              		.align	2
+ 656              	.L27:
+ 657 0030 00000000 		.word	SysTime
+ 658 0034 6F12833A 		.word	981668463
+ 659              		.cfi_endproc
+ 660              	.LFE334:
+ARM GAS  /tmp/ccUZ0I1X.s 			page 17
+
+
+ 662              		.section	.text.DWT_GetTimeline_us,"ax",%progbits
+ 663              		.align	1
+ 664              		.p2align 2,,3
+ 665              		.global	DWT_GetTimeline_us
+ 666              		.syntax unified
+ 667              		.thumb
+ 668              		.thumb_func
+ 670              	DWT_GetTimeline_us:
+ 671              	.LFB335:
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     DWT_SysTimeUpdate();
+ 672              		.loc 1 95 1 is_stmt 1 view -0
+ 673              		.cfi_startproc
+ 674              		@ args = 0, pretend = 0, frame = 0
+ 675              		@ frame_needed = 0, uses_anonymous_args = 0
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 676              		.loc 1 96 5 view .LVU198
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     DWT_SysTimeUpdate();
+ 677              		.loc 1 95 1 is_stmt 0 view .LVU199
+ 678 0000 08B5     		push	{r3, lr}
+ 679              	.LCFI14:
+ 680              		.cfi_def_cfa_offset 8
+ 681              		.cfi_offset 3, -8
+ 682              		.cfi_offset 14, -4
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 683              		.loc 1 96 5 view .LVU200
+ 684 0002 FFF7FEFF 		bl	DWT_SysTimeUpdate
+ 685              	.LVL20:
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 686              		.loc 1 98 5 is_stmt 1 view .LVU201
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** }
+ 687              		.loc 1 100 5 view .LVU202
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 688              		.loc 1 98 39 is_stmt 0 view .LVU203
+ 689 0006 064A     		ldr	r2, .L31
+ 690              	.LVL21:
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 691              		.loc 1 98 42 view .LVU204
+ 692 0008 0648     		ldr	r0, .L31+4
+ 693 000a 1168     		ldr	r1, [r2]
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 694              		.loc 1 98 81 view .LVU205
+ 695 000c D388     		ldrh	r3, [r2, #6]
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 696              		.loc 1 98 61 view .LVU206
+ 697 000e 9288     		ldrh	r2, [r2, #4]
+ 698              	.LVL22:
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 699              		.loc 1 98 72 view .LVU207
+ 700 0010 00FB0133 		mla	r3, r0, r1, r3
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 701              		.loc 1 98 65 view .LVU208
+ 702 0014 4FF47A70 		mov	r0, #1000
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 703              		.loc 1 101 1 view .LVU209
+ 704 0018 00FB0230 		mla	r0, r0, r2, r3
+ 705 001c 0021     		movs	r1, #0
+ 706              	.LVL23:
+ARM GAS  /tmp/ccUZ0I1X.s 			page 18
+
+
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 707              		.loc 1 101 1 view .LVU210
+ 708 001e 08BD     		pop	{r3, pc}
+ 709              	.L32:
+ 710              		.align	2
+ 711              	.L31:
+ 712 0020 00000000 		.word	SysTime
+ 713 0024 40420F00 		.word	1000000
+ 714              		.cfi_endproc
+ 715              	.LFE335:
+ 717              		.section	.text.DWT_Delay,"ax",%progbits
+ 718              		.align	1
+ 719              		.p2align 2,,3
+ 720              		.global	DWT_Delay
+ 721              		.syntax unified
+ 722              		.thumb
+ 723              		.thumb_func
+ 725              	DWT_Delay:
+ 726              	.LVL24:
+ 727              	.LFB337:
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** }
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** void DWT_Delay(float Delay)
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** {
+ 728              		.loc 1 114 1 is_stmt 1 view -0
+ 729              		.cfi_startproc
+ 730              		@ args = 0, pretend = 0, frame = 0
+ 731              		@ frame_needed = 0, uses_anonymous_args = 0
+ 732              		@ link register save eliminated.
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     uint32_t tickstart = DWT->CYCCNT;
+ 733              		.loc 1 115 5 view .LVU212
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     float wait = Delay;
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** 
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     while ((DWT->CYCCNT - tickstart) < wait * (float)CPU_FREQ_Hz)
+ 734              		.loc 1 118 47 is_stmt 0 discriminator 1 view .LVU213
+ 735 0000 0A4B     		ldr	r3, .L36
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     uint32_t tickstart = DWT->CYCCNT;
+ 736              		.loc 1 115 14 view .LVU214
+ 737 0002 0B4A     		ldr	r2, .L36+4
+ 738              		.loc 1 118 47 discriminator 1 view .LVU215
+ 739 0004 D3ED007A 		vldr.32	s15, [r3]	@ int
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     uint32_t tickstart = DWT->CYCCNT;
+ 740              		.loc 1 115 14 view .LVU216
+ 741 0008 5168     		ldr	r1, [r2, #4]
+ 742              	.LVL25:
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     float wait = Delay;
+ 743              		.loc 1 116 5 is_stmt 1 view .LVU217
+ 744              		.loc 1 118 5 view .LVU218
+ 745              		.loc 1 118 47 is_stmt 0 discriminator 1 view .LVU219
+ 746 000a F8EE677A 		vcvt.f32.u32	s15, s15
+ 747              		.loc 1 118 45 discriminator 1 view .LVU220
+ 748 000e 27EE800A 		vmul.f32	s0, s15, s0
+ 749              	.LVL26:
+ 750              	.L34:
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     {
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     }
+ 751              		.loc 1 120 5 is_stmt 1 view .LVU221
+ARM GAS  /tmp/ccUZ0I1X.s 			page 19
+
+
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     {
+ 752              		.loc 1 118 38 discriminator 1 view .LVU222
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     {
+ 753              		.loc 1 118 16 is_stmt 0 discriminator 1 view .LVU223
+ 754 0012 5368     		ldr	r3, [r2, #4]
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     {
+ 755              		.loc 1 118 25 discriminator 1 view .LVU224
+ 756 0014 5B1A     		subs	r3, r3, r1
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c ****     {
+ 757              		.loc 1 118 38 discriminator 1 view .LVU225
+ 758 0016 07EE903A 		vmov	s15, r3	@ int
+ 759 001a F8EE677A 		vcvt.f32.u32	s15, s15
+ 760 001e F4EEC07A 		vcmpe.f32	s15, s0
+ 761 0022 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 762 0026 F4D4     		bmi	.L34
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.c **** }
+ 763              		.loc 1 121 1 view .LVU226
+ 764 0028 7047     		bx	lr
+ 765              	.L37:
+ 766 002a 00BF     		.align	2
+ 767              	.L36:
+ 768 002c 00000000 		.word	CPU_FREQ_Hz
+ 769 0030 001000E0 		.word	-536866816
+ 770              		.cfi_endproc
+ 771              	.LFE337:
+ 773              		.global	CYCCNT64
+ 774              		.section	.bss.CYCCNT64,"aw",%nobits
+ 775              		.align	3
+ 778              	CYCCNT64:
+ 779 0000 00000000 		.space	8
+ 779      00000000 
+ 780              		.section	.bss.CYCCNT_LAST,"aw",%nobits
+ 781              		.align	2
+ 784              	CYCCNT_LAST:
+ 785 0000 00000000 		.space	4
+ 786              		.section	.bss.CYCCNT_RountCount,"aw",%nobits
+ 787              		.align	2
+ 790              	CYCCNT_RountCount:
+ 791 0000 00000000 		.space	4
+ 792              		.section	.bss.CPU_FREQ_Hz_us,"aw",%nobits
+ 793              		.align	2
+ 796              	CPU_FREQ_Hz_us:
+ 797 0000 00000000 		.space	4
+ 798              		.section	.bss.CPU_FREQ_Hz_ms,"aw",%nobits
+ 799              		.align	2
+ 802              	CPU_FREQ_Hz_ms:
+ 803 0000 00000000 		.space	4
+ 804              		.section	.bss.CPU_FREQ_Hz,"aw",%nobits
+ 805              		.align	2
+ 808              	CPU_FREQ_Hz:
+ 809 0000 00000000 		.space	4
+ 810              		.global	SysTime
+ 811              		.section	.bss.SysTime,"aw",%nobits
+ 812              		.align	2
+ 815              	SysTime:
+ 816 0000 00000000 		.space	8
+ 816      00000000 
+ARM GAS  /tmp/ccUZ0I1X.s 			page 20
+
+
+ 817              		.text
+ 818              	.Letext0:
+ 819              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 820              		.file 3 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/core_cm4.h"
+ 821              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.h"
+ARM GAS  /tmp/ccUZ0I1X.s 			page 21
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 bsp_dwt.c
+     /tmp/ccUZ0I1X.s:21     .text.DWT_Init:00000000 $t
+     /tmp/ccUZ0I1X.s:28     .text.DWT_Init:00000000 DWT_Init
+     /tmp/ccUZ0I1X.s:109    .text.DWT_Init:0000004c $d
+     /tmp/ccUZ0I1X.s:808    .bss.CPU_FREQ_Hz:00000000 CPU_FREQ_Hz
+     /tmp/ccUZ0I1X.s:802    .bss.CPU_FREQ_Hz_ms:00000000 CPU_FREQ_Hz_ms
+     /tmp/ccUZ0I1X.s:790    .bss.CYCCNT_RountCount:00000000 CYCCNT_RountCount
+     /tmp/ccUZ0I1X.s:796    .bss.CPU_FREQ_Hz_us:00000000 CPU_FREQ_Hz_us
+     /tmp/ccUZ0I1X.s:122    .text.DWT_GetDeltaT:00000000 $t
+     /tmp/ccUZ0I1X.s:129    .text.DWT_GetDeltaT:00000000 DWT_GetDeltaT
+     /tmp/ccUZ0I1X.s:239    .text.DWT_GetDeltaT:0000004c $d
+     /tmp/ccUZ0I1X.s:784    .bss.CYCCNT_LAST:00000000 CYCCNT_LAST
+     /tmp/ccUZ0I1X.s:249    .text.DWT_GetDeltaT64:00000000 $t
+     /tmp/ccUZ0I1X.s:256    .text.DWT_GetDeltaT64:00000000 DWT_GetDeltaT64
+     /tmp/ccUZ0I1X.s:368    .text.DWT_GetDeltaT64:00000054 $d
+     /tmp/ccUZ0I1X.s:378    .text.DWT_SysTimeUpdate:00000000 $t
+     /tmp/ccUZ0I1X.s:385    .text.DWT_SysTimeUpdate:00000000 DWT_SysTimeUpdate
+     /tmp/ccUZ0I1X.s:524    .text.DWT_SysTimeUpdate:00000084 $d
+     /tmp/ccUZ0I1X.s:778    .bss.CYCCNT64:00000000 CYCCNT64
+     /tmp/ccUZ0I1X.s:815    .bss.SysTime:00000000 SysTime
+     /tmp/ccUZ0I1X.s:536    .text.DWT_GetTimeline_s:00000000 $t
+     /tmp/ccUZ0I1X.s:543    .text.DWT_GetTimeline_s:00000000 DWT_GetTimeline_s
+     /tmp/ccUZ0I1X.s:594    .text.DWT_GetTimeline_s:00000038 $d
+     /tmp/ccUZ0I1X.s:601    .text.DWT_GetTimeline_ms:00000000 $t
+     /tmp/ccUZ0I1X.s:608    .text.DWT_GetTimeline_ms:00000000 DWT_GetTimeline_ms
+     /tmp/ccUZ0I1X.s:657    .text.DWT_GetTimeline_ms:00000030 $d
+     /tmp/ccUZ0I1X.s:663    .text.DWT_GetTimeline_us:00000000 $t
+     /tmp/ccUZ0I1X.s:670    .text.DWT_GetTimeline_us:00000000 DWT_GetTimeline_us
+     /tmp/ccUZ0I1X.s:712    .text.DWT_GetTimeline_us:00000020 $d
+     /tmp/ccUZ0I1X.s:718    .text.DWT_Delay:00000000 $t
+     /tmp/ccUZ0I1X.s:725    .text.DWT_Delay:00000000 DWT_Delay
+     /tmp/ccUZ0I1X.s:768    .text.DWT_Delay:0000002c $d
+     /tmp/ccUZ0I1X.s:775    .bss.CYCCNT64:00000000 $d
+     /tmp/ccUZ0I1X.s:781    .bss.CYCCNT_LAST:00000000 $d
+     /tmp/ccUZ0I1X.s:787    .bss.CYCCNT_RountCount:00000000 $d
+     /tmp/ccUZ0I1X.s:793    .bss.CPU_FREQ_Hz_us:00000000 $d
+     /tmp/ccUZ0I1X.s:799    .bss.CPU_FREQ_Hz_ms:00000000 $d
+     /tmp/ccUZ0I1X.s:805    .bss.CPU_FREQ_Hz:00000000 $d
+     /tmp/ccUZ0I1X.s:812    .bss.SysTime:00000000 $d
+
+UNDEFINED SYMBOLS
+__aeabi_ui2d
+__aeabi_ddiv
+__aeabi_uldivmod
+__aeabi_ldivmod

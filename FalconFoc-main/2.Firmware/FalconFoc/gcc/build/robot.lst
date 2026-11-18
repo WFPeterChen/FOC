@@ -1,0 +1,869 @@
+ARM GAS  /tmp/cc3iKNqP.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"robot.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c"
+  20              		.section	.text.BSPInit,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	BSPInit
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	BSPInit:
+  29              	.LFB329:
+  30              		.file 2 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/bsp_init.h"
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/bsp_init.h **** #ifndef BSP_INIT_h
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/bsp_init.h **** #define BSP_INIT_h
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/bsp_init.h **** 
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/bsp_init.h **** #include "bsp_init.h"
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/bsp_init.h **** #include "bsp_dwt.h"
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/bsp_init.h **** 
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/bsp_init.h **** /**
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/bsp_init.h ****  * @brief bsp层初始化统一入口,这里仅初始化必须的bsp组件,其他组件的初始化
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/bsp_init.h ****  *        需在实时系统启动前调用,目前由RobotoInit()调用
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/bsp_init.h ****  *
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/bsp_init.h ****  * @note 其他实例型的外设如CAN和串口会在注册实例的时候自动初始化,不注�
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/bsp_init.h ****  */
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/bsp_init.h **** //
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/bsp_init.h **** void BSPInit()
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/bsp_init.h **** {
+  31              		.loc 2 15 1 view -0
+  32              		.cfi_startproc
+  33              		@ args = 0, pretend = 0, frame = 0
+  34              		@ frame_needed = 0, uses_anonymous_args = 0
+  35              		@ link register save eliminated.
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/bsp_init.h ****   DWT_Init(168);
+  36              		.loc 2 16 3 view .LVU1
+  37 0000 A820     		movs	r0, #168
+  38 0002 FFF7FEBF 		b	DWT_Init
+  39              	.LVL0:
+  40              		.cfi_endproc
+  41              	.LFE329:
+  43 0006 00BF     		.section	.text.StartDefaultTask,"ax",%progbits
+ARM GAS  /tmp/cc3iKNqP.s 			page 2
+
+
+  44              		.align	1
+  45              		.p2align 2,,3
+  46              		.global	StartDefaultTask
+  47              		.syntax unified
+  48              		.thumb
+  49              		.thumb_func
+  51              	StartDefaultTask:
+  52              	.LVL1:
+  53              	.LFB399:
+  54              		.file 3 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h"
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** /* 注意该文件应只用于任务初始化,只能被robot.c包含*/
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** #pragma once
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** 
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** // 系统库
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** #include "FreeRTOS.h"
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** #include "cmsis_os.h"
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** #include "task.h"
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** #include "main.h"
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** #include "spi.h"
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** #include "gpio.h"
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** #include "tim.h"
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** #include "bsp_dwt.h"
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** #include "bsp_log.h"
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** #include "usb_device.h"
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** 
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** // 用户库
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** #include "robot.h"
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** #include "motor_task.h"
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** #include "cmd_task.h"
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** #include "led.h"
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** #include "vofa.h"
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** 
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** void StartDefaultTask(void const *argument);
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** void StartGuardTask(void const *argument);
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** void StartCustomTask(void const *argument);
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** 
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** /**
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****  * @brief 调试线程
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****  */
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** __attribute__((noreturn)) void StartDefaultTask(void const *argument)
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** {
+  55              		.loc 3 31 1 view -0
+  56              		.cfi_startproc
+  57              		@ Volatile: function does not return.
+  58              		@ args = 0, pretend = 0, frame = 0
+  59              		@ frame_needed = 0, uses_anonymous_args = 0
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     static float default_start;
+  60              		.loc 3 32 5 view .LVU3
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     static float default_dt;
+  61              		.loc 3 33 5 view .LVU4
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     MX_USB_Device_Init();
+  62              		.loc 3 34 5 view .LVU5
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     static float default_start;
+  63              		.loc 3 31 1 is_stmt 0 view .LVU6
+  64 0000 08B5     		push	{r3, lr}
+  65              	.LCFI0:
+  66              		.cfi_def_cfa_offset 8
+ARM GAS  /tmp/cc3iKNqP.s 			page 3
+
+
+  67              		.cfi_offset 3, -8
+  68              		.cfi_offset 14, -4
+  69              		.loc 3 34 5 view .LVU7
+  70 0002 FFF7FEFF 		bl	MX_USB_Device_Init
+  71              	.LVL2:
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     FocDbgPin_Init(); // PA7 调试脚: 20kHz ISR 时序输出(采样点验证/ISR耗时, 2026-07-1
+  72              		.loc 3 35 5 is_stmt 1 view .LVU8
+  73 0006 FFF7FEFF 		bl	FocDbgPin_Init
+  74              	.LVL3:
+  75 000a 064C     		ldr	r4, .L6
+  76              	.L4:
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     for (;;)
+  77              		.loc 3 36 5 view .LVU9
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     {
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****         default_start = DWT_GetTimeline_ms();
+  78              		.loc 3 38 9 view .LVU10
+  79              		.loc 3 38 25 is_stmt 0 view .LVU11
+  80 000c FFF7FEFF 		bl	DWT_GetTimeline_ms
+  81              	.LVL4:
+  82              		.loc 3 38 23 discriminator 1 view .LVU12
+  83 0010 84ED000A 		vstr.32	s0, [r4]
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****         vofa_start(); // USB-CDC 遥测(12通道 JustFloat @1kHz)
+  84              		.loc 3 39 9 is_stmt 1 view .LVU13
+  85 0014 FFF7FEFF 		bl	vofa_start
+  86              	.LVL5:
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****         default_dt = DWT_GetTimeline_ms() - default_start;
+  87              		.loc 3 40 9 view .LVU14
+  88              		.loc 3 40 22 is_stmt 0 view .LVU15
+  89 0018 FFF7FEFF 		bl	DWT_GetTimeline_ms
+  90              	.LVL6:
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** //        if (default_dt > 1)
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** //            LOGERROR("[freeRTOS] DEFAULT Task is being DELAY! dt = [%f]", default_dt);
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****         osDelay(1);
+  91              		.loc 3 43 9 is_stmt 1 discriminator 1 view .LVU16
+  92 001c 0120     		movs	r0, #1
+  93 001e FFF7FEFF 		bl	osDelay
+  94              	.LVL7:
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     {
+  95              		.loc 3 36 5 view .LVU17
+  96 0022 F3E7     		b	.L4
+  97              	.L7:
+  98              		.align	2
+  99              	.L6:
+ 100 0024 00000000 		.word	default_start.5
+ 101              		.cfi_endproc
+ 102              	.LFE399:
+ 104              		.section	.text.StartGuardTask,"ax",%progbits
+ 105              		.align	1
+ 106              		.p2align 2,,3
+ 107              		.global	StartGuardTask
+ 108              		.syntax unified
+ 109              		.thumb
+ 110              		.thumb_func
+ 112              	StartGuardTask:
+ 113              	.LVL8:
+ 114              	.LFB400:
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     }
+ARM GAS  /tmp/cc3iKNqP.s 			page 4
+
+
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** }
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** 
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** /**
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****  * @brief 守护线程
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****  *
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****  * LED蓝灯代表无错误正常运行
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****  * LED紫灯代表正在校准
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****  * LED红灯代表故障
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****  *
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****  */
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** __attribute__((noreturn)) void StartGuardTask(void const *argument)
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** {
+ 115              		.loc 3 56 1 view -0
+ 116              		.cfi_startproc
+ 117              		@ Volatile: function does not return.
+ 118              		@ args = 0, pretend = 0, frame = 0
+ 119              		@ frame_needed = 0, uses_anonymous_args = 0
+ 120              		.loc 3 56 1 is_stmt 0 view .LVU19
+ 121 0000 80B5     		push	{r7, lr}
+ 122              	.LCFI1:
+ 123              		.cfi_def_cfa_offset 8
+ 124              		.cfi_offset 7, -8
+ 125              		.cfi_offset 14, -4
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     static float guard_start;
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     static float guard_dt;
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     for (;;)
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     {
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****         guard_start = DWT_GetTimeline_ms();
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****         MotorGuardTask(&motor_data);
+ 126              		.loc 3 62 9 view .LVU20
+ 127 0002 0B4C     		ldr	r4, .L11
+ 128 0004 0B4F     		ldr	r7, .L11+4
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****         TempResultTask(&motor_data);
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****         IWDG->KR = 0xAAAA; // 喂狗: 本健康循环(5ms)还在跑=系统正常; 挂死则250ms后
+ 129              		.loc 3 64 18 view .LVU21
+ 130 0006 0C4E     		ldr	r6, .L11+8
+ 131 0008 4AF6AA25 		movw	r5, #43690
+ 132              	.LVL9:
+ 133              	.L9:
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     static float guard_start;
+ 134              		.loc 3 57 5 is_stmt 1 view .LVU22
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     for (;;)
+ 135              		.loc 3 58 5 view .LVU23
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     {
+ 136              		.loc 3 59 5 view .LVU24
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****         MotorGuardTask(&motor_data);
+ 137              		.loc 3 61 9 view .LVU25
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****         MotorGuardTask(&motor_data);
+ 138              		.loc 3 61 23 is_stmt 0 view .LVU26
+ 139 000c FFF7FEFF 		bl	DWT_GetTimeline_ms
+ 140              	.LVL10:
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****         TempResultTask(&motor_data);
+ 141              		.loc 3 62 9 view .LVU27
+ 142 0010 2046     		mov	r0, r4
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****         MotorGuardTask(&motor_data);
+ 143              		.loc 3 61 21 discriminator 1 view .LVU28
+ 144 0012 87ED000A 		vstr.32	s0, [r7]
+ARM GAS  /tmp/cc3iKNqP.s 			page 5
+
+
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****         TempResultTask(&motor_data);
+ 145              		.loc 3 62 9 is_stmt 1 view .LVU29
+ 146 0016 FFF7FEFF 		bl	MotorGuardTask
+ 147              	.LVL11:
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****         IWDG->KR = 0xAAAA; // 喂狗: 本健康循环(5ms)还在跑=系统正常; 挂死则250ms后
+ 148              		.loc 3 63 9 view .LVU30
+ 149 001a 2046     		mov	r0, r4
+ 150 001c FFF7FEFF 		bl	TempResultTask
+ 151              	.LVL12:
+ 152              		.loc 3 64 9 view .LVU31
+ 153              		.loc 3 64 18 is_stmt 0 view .LVU32
+ 154 0020 3560     		str	r5, [r6]
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****         guard_dt = DWT_GetTimeline_ms() - guard_start;
+ 155              		.loc 3 65 9 is_stmt 1 view .LVU33
+ 156              		.loc 3 65 20 is_stmt 0 view .LVU34
+ 157 0022 FFF7FEFF 		bl	DWT_GetTimeline_ms
+ 158              	.LVL13:
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** //        if (guard_dt > 5)
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** //            LOGERROR("[freeRTOS] DEFAULT Task is being DELAY! dt = [%f]", guard_dt);
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****         osDelay(5);
+ 159              		.loc 3 68 9 is_stmt 1 discriminator 1 view .LVU35
+ 160 0026 0520     		movs	r0, #5
+ 161 0028 FFF7FEFF 		bl	osDelay
+ 162              	.LVL14:
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     {
+ 163              		.loc 3 59 5 view .LVU36
+ 164 002c EEE7     		b	.L9
+ 165              	.L12:
+ 166 002e 00BF     		.align	2
+ 167              	.L11:
+ 168 0030 00000000 		.word	motor_data
+ 169 0034 00000000 		.word	guard_start.3
+ 170 0038 00300040 		.word	1073754112
+ 171              		.cfi_endproc
+ 172              	.LFE400:
+ 174              		.section	.text.StartCustomTask,"ax",%progbits
+ 175              		.align	1
+ 176              		.p2align 2,,3
+ 177              		.global	StartCustomTask
+ 178              		.syntax unified
+ 179              		.thumb
+ 180              		.thumb_func
+ 182              	StartCustomTask:
+ 183              	.LVL15:
+ 184              	.LFB401:
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     }
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** }
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** 
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** /**
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****  * @brief 自定义功能线程（can之类的）
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****  */
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** __attribute__((noreturn)) void StartCustomTask(void const *argument)
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** {
+ 185              		.loc 3 76 1 view -0
+ 186              		.cfi_startproc
+ 187              		@ Volatile: function does not return.
+ 188              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /tmp/cc3iKNqP.s 			page 6
+
+
+ 189              		@ frame_needed = 0, uses_anonymous_args = 0
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     static float custom_start;
+ 190              		.loc 3 77 5 view .LVU38
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     static float custom_dt;
+ 191              		.loc 3 78 5 view .LVU39
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** 	RobotCMDInit();    // 初始化FDCAN
+ 192              		.loc 3 79 2 view .LVU40
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     static float custom_start;
+ 193              		.loc 3 76 1 is_stmt 0 view .LVU41
+ 194 0000 08B5     		push	{r3, lr}
+ 195              	.LCFI2:
+ 196              		.cfi_def_cfa_offset 8
+ 197              		.cfi_offset 3, -8
+ 198              		.cfi_offset 14, -4
+ 199              		.loc 3 79 2 view .LVU42
+ 200 0002 FFF7FEFF 		bl	RobotCMDInit
+ 201              	.LVL16:
+ 202              		.loc 3 79 2 view .LVU43
+ 203 0006 064C     		ldr	r4, .L16
+ 204              	.L14:
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     for (;;)
+ 205              		.loc 3 80 5 is_stmt 1 view .LVU44
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     {
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****         custom_start = DWT_GetTimeline_ms();
+ 206              		.loc 3 82 9 view .LVU45
+ 207              		.loc 3 82 24 is_stmt 0 view .LVU46
+ 208 0008 FFF7FEFF 		bl	DWT_GetTimeline_ms
+ 209              	.LVL17:
+ 210              		.loc 3 82 22 discriminator 1 view .LVU47
+ 211 000c 84ED000A 		vstr.32	s0, [r4]
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****         RobotCMDTask();
+ 212              		.loc 3 83 9 is_stmt 1 view .LVU48
+ 213 0010 FFF7FEFF 		bl	RobotCMDTask
+ 214              	.LVL18:
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****         custom_dt = DWT_GetTimeline_ms() - custom_start;
+ 215              		.loc 3 84 9 view .LVU49
+ 216              		.loc 3 84 21 is_stmt 0 view .LVU50
+ 217 0014 FFF7FEFF 		bl	DWT_GetTimeline_ms
+ 218              	.LVL19:
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** //        if (custom_dt > 2)
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h **** //            LOGERROR("[freeRTOS] DEFAULT Task is being DELAY! dt = [%f]", custom_dt);
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****         osDelay(2);
+ 219              		.loc 3 87 9 is_stmt 1 discriminator 1 view .LVU51
+ 220 0018 0220     		movs	r0, #2
+ 221 001a FFF7FEFF 		bl	osDelay
+ 222              	.LVL20:
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot_task.h ****     {
+ 223              		.loc 3 80 5 view .LVU52
+ 224 001e F3E7     		b	.L14
+ 225              	.L17:
+ 226              		.align	2
+ 227              	.L16:
+ 228 0020 00000000 		.word	custom_start.1
+ 229              		.cfi_endproc
+ 230              	.LFE401:
+ 232              		.section	.text.RobotInit,"ax",%progbits
+ 233              		.align	1
+ARM GAS  /tmp/cc3iKNqP.s 			page 7
+
+
+ 234              		.p2align 2,,3
+ 235              		.global	RobotInit
+ 236              		.syntax unified
+ 237              		.thumb
+ 238              		.thumb_func
+ 240              	RobotInit:
+ 241              	.LFB402:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c **** #include "bsp_init.h"
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c **** #include "robot.h"
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c **** #include "robot_def.h"
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c **** #include "robot_task.h"
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c **** #include "cmd_task.h"
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c **** #include "bsp_log.h"
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c **** 
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c **** void RobotInit(void)
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c **** {
+ 242              		.loc 1 9 1 view -0
+ 243              		.cfi_startproc
+ 244              		@ args = 0, pretend = 0, frame = 0
+ 245              		@ frame_needed = 0, uses_anonymous_args = 0
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     // 关闭中断,防止在初始化过程中发生中断
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     // 请不要在初始化过程中使用中断和延时函数！
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     // 若必须,则只允许使用DWT_Delay()
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     __disable_irq();
+ 246              		.loc 1 13 5 view .LVU54
+ 247              	.LBB12:
+ 248              	.LBI12:
+ 249              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h"
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /**************************************************************************//**
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * @file     cmsis_gcc.h
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * @brief    CMSIS compiler GCC header file
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * @version  V5.2.0
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * @date     08. May 2019
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  ******************************************************************************/
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /*
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * Copyright (c) 2009-2019 Arm Limited. All rights reserved.
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  *
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * SPDX-License-Identifier: Apache-2.0
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  *
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * Licensed under the Apache License, Version 2.0 (the License); you may
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * not use this file except in compliance with the License.
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * You may obtain a copy of the License at
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  *
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * www.apache.org/licenses/LICENSE-2.0
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  *
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * Unless required by applicable law or agreed to in writing, software
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * See the License for the specific language governing permissions and
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * limitations under the License.
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __CMSIS_GCC_H
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #define __CMSIS_GCC_H
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /* ignore some GCC warnings */
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic push
+ARM GAS  /tmp/cc3iKNqP.s 			page 8
+
+
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wsign-conversion"
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wconversion"
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wunused-parameter"
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /* Fallback for __has_builtin */
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __has_builtin
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __has_builtin(x) (0)
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /* CMSIS compiler specific defines */
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __ASM
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __ASM                                  __asm
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __INLINE
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __INLINE                               inline
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __STATIC_INLINE
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __STATIC_INLINE                        static inline
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __STATIC_FORCEINLINE                 
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __STATIC_FORCEINLINE                   __attribute__((always_inline)) static inline
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif                                           
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __NO_RETURN
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __NO_RETURN                            __attribute__((__noreturn__))
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __USED
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __USED                                 __attribute__((used))
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __WEAK
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __WEAK                                 __attribute__((weak))
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __PACKED
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __PACKED                               __attribute__((packed, aligned(1)))
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __PACKED_STRUCT
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __PACKED_STRUCT                        struct __attribute__((packed, aligned(1)))
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __PACKED_UNION
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __PACKED_UNION                         union __attribute__((packed, aligned(1)))
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT32        /* deprecated */
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   struct __attribute__((packed)) T_UINT32 { uint32_t v; };
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT32(x)                  (((struct T_UINT32 *)(x))->v)
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT16_WRITE
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT16_WRITE { uint16_t v; };
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT16_WRITE(addr, val)    (void)((((struct T_UINT16_WRITE *)(void *)(addr))-
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT16_READ
+ARM GAS  /tmp/cc3iKNqP.s 			page 9
+
+
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT16_READ { uint16_t v; };
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT16_READ(addr)          (((const struct T_UINT16_READ *)(const void *)(add
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT32_WRITE
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT32_WRITE { uint32_t v; };
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT32_WRITE(addr, val)    (void)((((struct T_UINT32_WRITE *)(void *)(addr))-
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT32_READ
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT32_READ { uint32_t v; };
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT32_READ(addr)          (((const struct T_UINT32_READ *)(const void *)(add
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __ALIGNED
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __ALIGNED(x)                           __attribute__((aligned(x)))
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __RESTRICT
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __RESTRICT                             __restrict
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __COMPILER_BARRIER
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __COMPILER_BARRIER()                   __ASM volatile("":::"memory")
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /* #########################  Startup and Lowlevel Init  ######################## */
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __PROGRAM_START
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Initializes data and bss sections
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   \details This default implementations initialized all data and additional bss
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****            sections relying on .copy.table and .zero.table specified properly
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****            in the used linker script.
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE __NO_RETURN void __cmsis_start(void)
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   extern void _start(void) __NO_RETURN;
+ 134:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   typedef struct {
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****     uint32_t const* src;
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****     uint32_t* dest;
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****     uint32_t  wlen;
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   } __copy_table_t;
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   typedef struct {
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****     uint32_t* dest;
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****     uint32_t  wlen;
+ARM GAS  /tmp/cc3iKNqP.s 			page 10
+
+
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   } __zero_table_t;
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   extern const __copy_table_t __copy_table_start__;
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   extern const __copy_table_t __copy_table_end__;
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   extern const __zero_table_t __zero_table_start__;
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   extern const __zero_table_t __zero_table_end__;
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   for (__copy_table_t const* pTable = &__copy_table_start__; pTable < &__copy_table_end__; ++pTable
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****     for(uint32_t i=0u; i<pTable->wlen; ++i) {
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****       pTable->dest[i] = pTable->src[i];
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****     }
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   }
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   for (__zero_table_t const* pTable = &__zero_table_start__; pTable < &__zero_table_end__; ++pTable
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****     for(uint32_t i=0u; i<pTable->wlen; ++i) {
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****       pTable->dest[i] = 0u;
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****     }
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   }
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  
+ 163:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   _start();
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #define __PROGRAM_START           __cmsis_start
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __INITIAL_SP
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #define __INITIAL_SP              __StackTop
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __STACK_LIMIT
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #define __STACK_LIMIT             __StackLimit
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __VECTOR_TABLE
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #define __VECTOR_TABLE            __Vectors
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 181:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __VECTOR_TABLE_ATTRIBUTE
+ 182:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #define __VECTOR_TABLE_ATTRIBUTE  __attribute((used, section(".vectors")))
+ 183:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /* ###########################  Core Function Access  ########################### */
+ 186:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /** \ingroup  CMSIS_Core_FunctionInterface
+ 187:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****     \defgroup CMSIS_Core_RegAccFunctions CMSIS Core Register Access Functions
+ 188:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   @{
+ 189:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 190:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 191:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 192:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Enable IRQ Interrupts
+ 193:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Enables IRQ interrupts by clearing the I-bit in the CPSR.
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****            Can only be executed in Privileged modes.
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE void __enable_irq(void)
+ 197:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("cpsie i" : : : "memory");
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ARM GAS  /tmp/cc3iKNqP.s 			page 11
+
+
+ 201:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 203:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Disable IRQ Interrupts
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Disables IRQ interrupts by setting the I-bit in the CPSR.
+ 205:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****            Can only be executed in Privileged modes.
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 207:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE void __disable_irq(void)
+ 250              		.loc 4 207 27 view .LVU55
+ 251              	.LBB13:
+ 208:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("cpsid i" : : : "memory");
+ 252              		.loc 4 209 3 view .LVU56
+ 253              	.LBE13:
+ 254              	.LBE12:
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     // 关闭中断,防止在初始化过程中发生中断
+ 255              		.loc 1 9 1 is_stmt 0 view .LVU57
+ 256 0000 10B5     		push	{r4, lr}
+ 257              	.LCFI3:
+ 258              		.cfi_def_cfa_offset 8
+ 259              		.cfi_offset 4, -8
+ 260              		.cfi_offset 14, -4
+ 261              	.LBB15:
+ 262              	.LBB14:
+ 263              		.loc 4 209 3 view .LVU58
+ 264              		.syntax unified
+ 265              	@ 209 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h" 1
+ 266 0002 72B6     		cpsid i
+ 267              	@ 0 "" 2
+ 268              		.thumb
+ 269              		.syntax unified
+ 270              	.LBE14:
+ 271              	.LBE15:
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c **** 
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     DWT_Delay(0.016f); // MT6816上电的16ms无输出数据
+ 272              		.loc 1 15 5 is_stmt 1 view .LVU59
+ 273 0004 9FED120A 		vldr.32	s0, .L20
+ 274 0008 FFF7FEFF 		bl	DWT_Delay
+ 275              	.LVL21:
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     BSPInit();         // 初始化DWT
+ 276              		.loc 1 16 5 view .LVU60
+ 277              	.LBB16:
+ 278              	.LBI16:
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/bsp_init.h **** {
+ 279              		.loc 2 14 6 view .LVU61
+ 280              	.LBB17:
+ 281              		.loc 2 16 3 view .LVU62
+ 282 000c A820     		movs	r0, #168
+ 283 000e FFF7FEFF 		bl	DWT_Init
+ 284              	.LVL22:
+ 285              	.LBE17:
+ 286              	.LBE16:
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     LogInit(&huart1);  // 初始化日志
+ 287              		.loc 1 17 5 view .LVU63
+ 288 0012 1048     		ldr	r0, .L20+4
+ 289 0014 FFF7FEFF 		bl	LogInit
+ 290              	.LVL23:
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     adc_bsp_init();    // 初始化ADC，配置ADC硬件
+ARM GAS  /tmp/cc3iKNqP.s 			page 12
+
+
+ 291              		.loc 1 18 5 view .LVU64
+ 292 0018 FFF7FEFF 		bl	adc_bsp_init
+ 293              	.LVL24:
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     Foc_Pwm_Start();   // foc启动PWM
+ 294              		.loc 1 19 5 view .LVU65
+ 295 001c FFF7FEFF 		bl	Foc_Pwm_Start
+ 296              	.LVL25:
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     RGB_DisplayColorById(0);
+ 297              		.loc 1 20 5 view .LVU66
+ 298 0020 0020     		movs	r0, #0
+ 299 0022 FFF7FEFF 		bl	RGB_DisplayColorById
+ 300              	.LVL26:
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c **** 
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     __enable_irq(); // 初始化完成,开启中断
+ 301              		.loc 1 22 5 view .LVU67
+ 302              	.LBB18:
+ 303              	.LBI18:
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 304              		.loc 4 196 27 view .LVU68
+ 305              	.LBB19:
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 306              		.loc 4 198 3 view .LVU69
+ 307              		.syntax unified
+ 308              	@ 198 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h" 1
+ 309 0026 62B6     		cpsie i
+ 310              	@ 0 "" 2
+ 311              		.thumb
+ 312              		.syntax unified
+ 313              	.LBE19:
+ 314              	.LBE18:
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c **** 
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     // 独立看门狗 IWDG (~250ms): 固件挂死/hardfault(其handler已关PWM)时兜底复位MCU
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     // 由 StartGuardTask(5ms健康循环)喂狗; 寄存器级配置, 不依赖HAL模块。
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     DBGMCU->APB1FZR1 |= DBGMCU_APB1FZR1_DBG_IWDG_STOP; // 调试halt时冻结IWDG, 否则每次SWD 
+ 315              		.loc 1 26 5 view .LVU70
+ 316              		.loc 1 26 11 is_stmt 0 view .LVU71
+ 317 0028 0B49     		ldr	r1, .L20+8
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     IWDG->KR  = 0x5555; // 使能PR/RLR写
+ 318              		.loc 1 27 15 view .LVU72
+ 319 002a 0C4B     		ldr	r3, .L20+12
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     IWDG->KR  = 0x5555; // 使能PR/RLR写
+ 320              		.loc 1 26 11 view .LVU73
+ 321 002c 8A68     		ldr	r2, [r1, #8]
+ 322              		.loc 1 27 15 view .LVU74
+ 323 002e 45F25550 		movw	r0, #21845
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     IWDG->KR  = 0x5555; // 使能PR/RLR写
+ 324              		.loc 1 26 22 view .LVU75
+ 325 0032 42F48052 		orr	r2, r2, #4096
+ 326 0036 8A60     		str	r2, [r1, #8]
+ 327              		.loc 1 27 5 is_stmt 1 view .LVU76
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     IWDG->PR  = 4;      // LSI32kHz /64 ≈ 500Hz
+ 328              		.loc 1 28 15 is_stmt 0 view .LVU77
+ 329 0038 0424     		movs	r4, #4
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     IWDG->KR  = 0x5555; // 使能PR/RLR写
+ 330              		.loc 1 27 15 view .LVU78
+ 331 003a 1860     		str	r0, [r3]
+ 332              		.loc 1 28 5 is_stmt 1 view .LVU79
+ARM GAS  /tmp/cc3iKNqP.s 			page 13
+
+
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     IWDG->RLR = 125;    // 重载125 ≈ 250ms 超时
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     IWDG->KR  = 0xAAAA; // 刷新
+ 333              		.loc 1 30 15 is_stmt 0 view .LVU80
+ 334 003c 4AF6AA21 		movw	r1, #43690
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     IWDG->RLR = 125;    // 重载125 ≈ 250ms 超时
+ 335              		.loc 1 29 15 view .LVU81
+ 336 0040 7D20     		movs	r0, #125
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     IWDG->KR  = 0xCCCC; // 启动(启动后LSI强制ON)
+ 337              		.loc 1 31 15 view .LVU82
+ 338 0042 4CF6CC42 		movw	r2, #52428
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     IWDG->PR  = 4;      // LSI32kHz /64 ≈ 500Hz
+ 339              		.loc 1 28 15 view .LVU83
+ 340 0046 5C60     		str	r4, [r3, #4]
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     IWDG->RLR = 125;    // 重载125 ≈ 250ms 超时
+ 341              		.loc 1 29 5 is_stmt 1 view .LVU84
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     IWDG->RLR = 125;    // 重载125 ≈ 250ms 超时
+ 342              		.loc 1 29 15 is_stmt 0 view .LVU85
+ 343 0048 9860     		str	r0, [r3, #8]
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     IWDG->KR  = 0xCCCC; // 启动(启动后LSI强制ON)
+ 344              		.loc 1 30 5 is_stmt 1 view .LVU86
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c ****     IWDG->KR  = 0xCCCC; // 启动(启动后LSI强制ON)
+ 345              		.loc 1 30 15 is_stmt 0 view .LVU87
+ 346 004a 1960     		str	r1, [r3]
+ 347              		.loc 1 31 5 is_stmt 1 view .LVU88
+ 348              		.loc 1 31 15 is_stmt 0 view .LVU89
+ 349 004c 1A60     		str	r2, [r3]
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c **** }
+ 350              		.loc 1 32 1 view .LVU90
+ 351 004e 10BD     		pop	{r4, pc}
+ 352              	.L21:
+ 353              		.align	2
+ 354              	.L20:
+ 355 0050 6F12833C 		.word	1015222895
+ 356 0054 00000000 		.word	huart1
+ 357 0058 002004E0 		.word	-536600576
+ 358 005c 00300040 		.word	1073754112
+ 359              		.cfi_endproc
+ 360              	.LFE402:
+ 362              		.section	.text.RobotTask,"ax",%progbits
+ 363              		.align	1
+ 364              		.p2align 2,,3
+ 365              		.global	RobotTask
+ 366              		.syntax unified
+ 367              		.thumb
+ 368              		.thumb_func
+ 370              	RobotTask:
+ 371              	.LFB403:
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c **** 
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c **** void RobotTask(void)
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c **** {
+ 372              		.loc 1 35 1 is_stmt 1 view -0
+ 373              		.cfi_startproc
+ 374              		@ args = 0, pretend = 0, frame = 0
+ 375              		@ frame_needed = 0, uses_anonymous_args = 0
+ 376              		@ link register save eliminated.
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.c **** }
+ 377              		.loc 1 36 1 view .LVU92
+ARM GAS  /tmp/cc3iKNqP.s 			page 14
+
+
+ 378 0000 7047     		bx	lr
+ 379              		.cfi_endproc
+ 380              	.LFE403:
+ 382 0002 00BF     		.section	.bss.custom_start.1,"aw",%nobits
+ 383              		.align	2
+ 386              	custom_start.1:
+ 387 0000 00000000 		.space	4
+ 388              		.section	.bss.guard_start.3,"aw",%nobits
+ 389              		.align	2
+ 392              	guard_start.3:
+ 393 0000 00000000 		.space	4
+ 394              		.section	.bss.default_start.5,"aw",%nobits
+ 395              		.align	2
+ 398              	default_start.5:
+ 399 0000 00000000 		.space	4
+ 400              		.text
+ 401              	.Letext0:
+ 402              		.file 5 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 403              		.file 6 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 404              		.file 7 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 405              		.file 8 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 406              		.file 9 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 407              		.file 10 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm
+ 408              		.file 11 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm
+ 409              		.file 12 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm
+ 410              		.file 13 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/Third_Party/FreeRTOS/Sou
+ 411              		.file 14 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.h"
+ 412              		.file 15 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/encoder/MT6816/mt6816_encode
+ 413              		.file 16 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/BLDCMotor.h"
+ 414              		.file 17 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.h"
+ 415              		.file 18 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/FOCMotor.h"
+ 416              		.file 19 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/usart.h"
+ 417              		.file 20 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.h"
+ 418              		.file 21 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/led/led.h"
+ 419              		.file 22 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.h"
+ 420              		.file 23 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.h"
+ 421              		.file 24 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.h"
+ 422              		.file 25 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/vofa/vofa.h"
+ 423              		.file 26 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.h"
+ 424              		.file 27 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usb_device.h"
+ARM GAS  /tmp/cc3iKNqP.s 			page 15
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 robot.c
+     /tmp/cc3iKNqP.s:21     .text.BSPInit:00000000 $t
+     /tmp/cc3iKNqP.s:28     .text.BSPInit:00000000 BSPInit
+     /tmp/cc3iKNqP.s:44     .text.StartDefaultTask:00000000 $t
+     /tmp/cc3iKNqP.s:51     .text.StartDefaultTask:00000000 StartDefaultTask
+     /tmp/cc3iKNqP.s:100    .text.StartDefaultTask:00000024 $d
+     /tmp/cc3iKNqP.s:398    .bss.default_start.5:00000000 default_start.5
+     /tmp/cc3iKNqP.s:105    .text.StartGuardTask:00000000 $t
+     /tmp/cc3iKNqP.s:112    .text.StartGuardTask:00000000 StartGuardTask
+     /tmp/cc3iKNqP.s:168    .text.StartGuardTask:00000030 $d
+     /tmp/cc3iKNqP.s:392    .bss.guard_start.3:00000000 guard_start.3
+     /tmp/cc3iKNqP.s:175    .text.StartCustomTask:00000000 $t
+     /tmp/cc3iKNqP.s:182    .text.StartCustomTask:00000000 StartCustomTask
+     /tmp/cc3iKNqP.s:228    .text.StartCustomTask:00000020 $d
+     /tmp/cc3iKNqP.s:386    .bss.custom_start.1:00000000 custom_start.1
+     /tmp/cc3iKNqP.s:233    .text.RobotInit:00000000 $t
+     /tmp/cc3iKNqP.s:240    .text.RobotInit:00000000 RobotInit
+     /tmp/cc3iKNqP.s:355    .text.RobotInit:00000050 $d
+     /tmp/cc3iKNqP.s:363    .text.RobotTask:00000000 $t
+     /tmp/cc3iKNqP.s:370    .text.RobotTask:00000000 RobotTask
+     /tmp/cc3iKNqP.s:383    .bss.custom_start.1:00000000 $d
+     /tmp/cc3iKNqP.s:389    .bss.guard_start.3:00000000 $d
+     /tmp/cc3iKNqP.s:395    .bss.default_start.5:00000000 $d
+
+UNDEFINED SYMBOLS
+DWT_Init
+MX_USB_Device_Init
+FocDbgPin_Init
+DWT_GetTimeline_ms
+vofa_start
+osDelay
+MotorGuardTask
+TempResultTask
+motor_data
+RobotCMDInit
+RobotCMDTask
+DWT_Delay
+LogInit
+adc_bsp_init
+Foc_Pwm_Start
+RGB_DisplayColorById
+huart1

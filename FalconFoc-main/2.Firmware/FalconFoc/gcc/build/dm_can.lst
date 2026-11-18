@@ -1,0 +1,2224 @@
+ARM GAS  /tmp/ccKOOhfX.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"dm_can.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c"
+  20              		.section	.text.DM_RxCallback,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	DM_RxCallback:
+  28              	.LVL0:
+  29              	.LFB400:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** /********************************************************************************
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****  * dm_can.c —— 达妙(DM)电机 CAN 协议实现
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****  * 规格见同目录 DM_CAN_PROTOCOL.md。基于 bsp_can 的 FDCANInstance(绕开 can_driver 多�
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****  * 线上单位 SI(rad/rad·s⁻¹/N·m)，固件内部 turn/turn·s⁻¹ —— 在本文件边界
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****  ********************************************************************************/
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** #include "dm_can.h"
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** #include "bsp_can.h"
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** #include "FOCMotor.h"
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** #include "cogging.h"
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** #include "general_def.h"
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** #include "string.h"
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** extern MOTOR_DATA motor_data;
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** extern volatile uint8_t g_sing_on; // FOCMotor.c: 唱歌开关
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** // 通信看门狗: 每收到一帧合法指令就刷新(ms)。控制端(FOCMotor)据此判掉线�
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** volatile uint32_t g_can_last_rx_ms = 0;
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** // #2 FDCAN 总线关闭(bus-off)自恢复计数: 收发器抖动/总线故障使 TEC>255 → FDCAN
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** //    无自动恢复。健康检查检测到 bus-off/意外 INIT 就清 CCCR.INIT 触发总线恢�
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** volatile uint32_t g_can_recover_cnt = 0;
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** static FDCANInstance *dm_mit;    // rx=DM_ID_MIT, tx=DM_MASTER_ID(反馈也用它发)
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** static FDCANInstance *dm_posvel; // rx=DM_ID_POSVEL
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** static FDCANInstance *dm_vel;    // rx=DM_ID_VEL
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** /* ---------------- 量化 float <-> 定点 ---------------- */
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** static uint32_t float_to_uint(float x, float xmin, float xmax, uint8_t bits)
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ARM GAS  /tmp/ccKOOhfX.s 			page 2
+
+
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float span = xmax - xmin;
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     if (x < xmin) x = xmin;
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     else if (x > xmax) x = xmax;
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     return (uint32_t)((x - xmin) * (((float)((1u << bits) - 1u)) / span));
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** static float uint_to_float(uint32_t xi, float xmin, float xmax, uint8_t bits)
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float span = xmax - xmin;
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     return ((float)xi) * span / ((float)((1u << bits) - 1u)) + xmin;
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** /* ---------------- 反馈帧 ---------------- */
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** static uint8_t dm_error_nibble(void)
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     if (motor_data.state.Fault_State == FAULT_STATE_NORMAL)
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         return (motor_data.state.State_Mode == STATE_MODE_RUNNING) ? 1u : 0u;
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     switch (motor_data.state.Fault_State)
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     {
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     case FAULT_STATE_OVER_VOLTAGE:     return 8u;
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     case FAULT_STATE_UNDER_VOLTAGE:    return 9u;
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     case FAULT_STATE_OVER_CURRENT:     return 0xAu;
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     case FAULT_STATE_OVER_TEMPERATURE: return 0xBu;
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     case FAULT_STATE_SPEEDING:         return 0xEu;
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     default:                           return 1u;
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     }
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** static void DM_SendFeedback(void)
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float pos_rad = motor_data.components.encoder->pos_estimate_ * M_2PI;
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float vel_rad = motor_data.components.encoder->vel_estimate_ * M_2PI;
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float torque  = motor_data.components.foc->i_q * motor_data.Controller.torque_const;
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint16_t p_int = (uint16_t)float_to_uint(pos_rad, -DM_P_MAX, DM_P_MAX, 16);
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint16_t v_int = (uint16_t)float_to_uint(vel_rad, -DM_V_MAX, DM_V_MAX, 12);
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint16_t t_int = (uint16_t)float_to_uint(torque, -DM_T_MAX, DM_T_MAX, 12);
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float tmp = motor_data.components.current->Temp_Result;
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     if (tmp < 0.0f) tmp = 0.0f; else if (tmp > 255.0f) tmp = 255.0f;
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint8_t temp8 = (uint8_t)tmp; // 仅一颗 NTC，T_mos 与 T_rotor 暂用同一值
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint8_t *tx = dm_mit->tx_buff;
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[0] = (uint8_t)((dm_error_nibble() << 4) | (DM_MOTOR_ID & 0x0F));
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[1] = (uint8_t)(p_int >> 8);
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[2] = (uint8_t)(p_int & 0xFF);
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[3] = (uint8_t)(v_int >> 4);
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[4] = (uint8_t)(((v_int & 0xF) << 4) | (t_int >> 8));
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[5] = (uint8_t)(t_int & 0xFF);
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[6] = temp8;
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[7] = temp8;
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     FDCANTransmit(dm_mit, 0.0f); // 非阻塞: 在 CAN RX 中断里发, TX FIFO 满则丢弃当帧�
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** /* ---------------- 各模式解包 ---------------- */
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** static void DM_HandleMIT(const uint8_t *rx)
+ARM GAS  /tmp/ccKOOhfX.s 			page 3
+
+
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint16_t p_int  = (uint16_t)((rx[0] << 8) | rx[1]);
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint16_t v_int  = (uint16_t)((rx[2] << 4) | (rx[3] >> 4));
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint16_t kp_int = (uint16_t)(((rx[3] & 0xF) << 8) | rx[4]);
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint16_t kd_int = (uint16_t)((rx[5] << 4) | (rx[6] >> 4));
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint16_t t_int  = (uint16_t)(((rx[6] & 0xF) << 8) | rx[7]);
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float p_des = uint_to_float(p_int, -DM_P_MAX, DM_P_MAX, 16); // rad
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float v_des = uint_to_float(v_int, -DM_V_MAX, DM_V_MAX, 12); // rad/s
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float kp    = uint_to_float(kp_int, DM_KP_MIN, DM_KP_MAX, 12);
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float kd    = uint_to_float(kd_int, DM_KD_MIN, DM_KD_MAX, 12);
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float t_ff  = uint_to_float(t_int, -DM_T_MAX, DM_T_MAX, 12); // N·m
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     // rad -> turn；kp/kd 由 (·/rad) 转 (·/turn)，乘 2π 使 kp_turn·Δturn == kp_rad·Δra
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.Controller.input_position = p_des / M_2PI;
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.Controller.input_velocity = v_des / M_2PI;
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.Controller.input_kp       = kp * M_2PI;
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     // MIT Kd 上限: 4010 Kt≈0.0265 → Kd/Kt≈38× 放大, SWD 实测稳定上限 CAN Kd≈0.0
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     // (=input_kd≈0.1)。再高会自激剧烈振动(见 falconfoc-mit-kd-limit)。这里硬钳�
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     // 上正经低齿槽/高 Kt 力矩电机时按该电机重新标定该上限。
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     {
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         float kd_turn = kd * M_2PI;
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         if (kd_turn > MIT_KD_TURN_MAX) kd_turn = MIT_KD_TURN_MAX;
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_kd   = kd_turn;
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     }
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.Controller.input_torque   = t_ff;
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.state.Control_Mode        = CONTROL_MODE_MIT; // 最后设模式，避免半更新
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** static void DM_HandlePosVel(const uint8_t *rx)
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float p, v;
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     memcpy(&p, rx, 4);     // float32 小端
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     memcpy(&v, rx + 4, 4);
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float new_pos = p / M_2PI; // turn
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     // 只在目标位置真正变化(或刚切入位置模式)时才置 input_updated → 重规�
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     // 否则以 100Hz 连发同一目标会每帧重规划, Traj.t 永远卡在起点、走不到�
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     if (motor_data.state.Control_Mode != CONTROL_MODE_POSITION_RAMP ||
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         fabsf(new_pos - motor_data.Controller.input_position) > 1e-4f)
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_updated = true;
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.Controller.input_position = new_pos;
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.Controller.input_velocity = v / M_2PI; // turn/s (作梯度限速)
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.state.Control_Mode        = CONTROL_MODE_POSITION_RAMP;
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** static void DM_HandleVel(const uint8_t *rx)
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 134:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float v;
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     memcpy(&v, rx, 4);
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.Controller.input_velocity = v / M_2PI; // turn/s
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.state.Control_Mode        = CONTROL_MODE_VELOCITY_RAMP;
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** static void DM_HandleSpecial(const uint8_t *rx)
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     switch (rx[7])
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     {
+ARM GAS  /tmp/ccKOOhfX.s 			page 4
+
+
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     case DM_CMD_ENABLE:
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.state.State_Mode = STATE_MODE_RUNNING;
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     case DM_CMD_DISABLE:
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         Foc_Pwm_LowSides();
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.state.State_Mode = STATE_MODE_GUARD;
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     case DM_CMD_SET_ZERO:
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         // 把当前物理位置设为新零点(软件偏移, 不动flash编码器零位); 同时�
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.components.encoder->pos_zero_offset += motor_data.components.encoder->pos_estima
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_position = 0.0f;
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.pos_setpoint   = 0.0f;
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     case DM_CMD_CLEAR_ERR:
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         // 清故障必须先清残留指令(2026-07-12 修): 清错→IDLE→自动重标定→自
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         // 这窗口里若上次故障时的 MIT/速度目标还在, 控制环立刻按旧指令猛
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         // 只能重启(12V幅度不够8A, 从未暴露)。清空目标后自动RUNNING窗口零输
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_torque   = 0.0f;
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_velocity = 0.0f;
+ 163:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_kp       = 0.0f;
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_kd       = 0.0f;
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.torque_setpoint= 0.0f;
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.vel_setpoint   = 0.0f;
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_position = motor_data.components.encoder->pos_estimate_; // 位
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.pos_setpoint   = motor_data.components.encoder->pos_estimate_;
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.components.foc->iq_set    = 0.0f;
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.components.foc->id_set    = 0.0f;
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.state.Fault_State = FAULT_STATE_NORMAL;
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.state.State_Mode  = STATE_MODE_IDLE;
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     case DM_CMD_COGGING_CAL: // 扩展(非DM标准): 启动闭环慢速扫齿槽标定(清零首遍
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         Cogging_CalStart(&motor_data, true);
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     case DM_CMD_SING: // 扩展(非DM标准): 让电机唱歌
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         g_sing_on = 1;
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     default:
+ 181:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 182:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     }
+ 183:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** /* ---------------- RX 总回调(按 rx_id 分发) ---------------- */
+ 186:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** static void DM_RxCallback(FDCANInstance *ins)
+ 187:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+  30              		.loc 1 187 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 8
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+ 188:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     const uint8_t *rx = ins->rx_buff;
+  34              		.loc 1 188 5 view .LVU1
+ 189:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 190:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     g_can_last_rx_ms = DWT->CYCCNT; // 喂通信看门狗(存DWT周期数; deadman 用DWT计时, �
+  35              		.loc 1 190 5 view .LVU2
+ 187:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     const uint8_t *rx = ins->rx_buff;
+  36              		.loc 1 187 1 is_stmt 0 view .LVU3
+  37 0000 70B5     		push	{r4, r5, r6, lr}
+  38              	.LCFI0:
+ARM GAS  /tmp/ccKOOhfX.s 			page 5
+
+
+  39              		.cfi_def_cfa_offset 16
+  40              		.cfi_offset 4, -16
+  41              		.cfi_offset 5, -12
+  42              		.cfi_offset 6, -8
+  43              		.cfi_offset 14, -4
+  44              		.loc 1 190 27 view .LVU4
+  45 0002 D94A     		ldr	r2, .L46
+ 191:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 192:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     switch (ins->rx_id)
+  46              		.loc 1 192 16 view .LVU5
+  47 0004 036C     		ldr	r3, [r0, #64]
+ 190:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+  48              		.loc 1 190 27 view .LVU6
+  49 0006 5468     		ldr	r4, [r2, #4]
+ 190:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+  50              		.loc 1 190 22 view .LVU7
+  51 0008 D849     		ldr	r1, .L46+4
+  52              		.loc 1 192 5 view .LVU8
+  53 000a 40F20112 		movw	r2, #257
+  54 000e 9342     		cmp	r3, r2
+ 187:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     const uint8_t *rx = ins->rx_buff;
+  55              		.loc 1 187 1 view .LVU9
+  56 0010 82B0     		sub	sp, sp, #8
+  57              	.LCFI1:
+  58              		.cfi_def_cfa_offset 24
+ 190:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+  59              		.loc 1 190 22 view .LVU10
+  60 0012 0C60     		str	r4, [r1]
+  61              		.loc 1 192 5 is_stmt 1 view .LVU11
+  62 0014 00F05781 		beq	.L2
+  63 0018 40F20122 		movw	r2, #513
+  64 001c 9342     		cmp	r3, r2
+  65 001e 00F09880 		beq	.L3
+  66 0022 012B     		cmp	r3, #1
+  67 0024 40F06B81 		bne	.L1
+ 193:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     {
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     case DM_ID_MIT:
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         // ID=电机ID：先判特殊命令(前7字节0xFF)，否则按 MIT 解析
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         if (rx[0] == 0xFF && rx[1] == 0xFF && rx[2] == 0xFF && rx[3] == 0xFF &&
+  68              		.loc 1 196 9 view .LVU12
+ 197:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****             rx[4] == 0xFF && rx[5] == 0xFF && rx[6] == 0xFF)
+  69              		.loc 1 197 44 is_stmt 0 discriminator 1 view .LVU13
+  70 0028 90F83920 		ldrb	r2, [r0, #57]	@ zero_extendqisi2
+  71 002c 90F83830 		ldrb	r3, [r0, #56]	@ zero_extendqisi2
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****             rx[4] == 0xFF && rx[5] == 0xFF && rx[6] == 0xFF)
+  72              		.loc 1 196 49 discriminator 2 view .LVU14
+  73 0030 90F83A60 		ldrb	r6, [r0, #58]	@ zero_extendqisi2
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****             rx[4] == 0xFF && rx[5] == 0xFF && rx[6] == 0xFF)
+  74              		.loc 1 196 66 discriminator 3 view .LVU15
+  75 0034 90F83B10 		ldrb	r1, [r0, #59]	@ zero_extendqisi2
+  76              		.loc 1 197 15 view .LVU16
+  77 0038 90F83C50 		ldrb	r5, [r0, #60]	@ zero_extendqisi2
+  78              		.loc 1 197 32 view .LVU17
+  79 003c 90F83D40 		ldrb	r4, [r0, #61]	@ zero_extendqisi2
+  80              	.LBB50:
+  81              	.LBB51:
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     {
+ARM GAS  /tmp/ccKOOhfX.s 			page 6
+
+
+  82              		.loc 1 142 15 view .LVU18
+  83 0040 90F83FC0 		ldrb	ip, [r0, #63]	@ zero_extendqisi2
+  84              	.LBE51:
+  85              	.LBE50:
+  86              		.loc 1 197 44 discriminator 1 view .LVU19
+  87 0044 1340     		ands	r3, r3, r2
+  88 0046 3340     		ands	r3, r3, r6
+  89 0048 0B40     		ands	r3, r3, r1
+  90              		.loc 1 197 49 discriminator 1 view .LVU20
+  91 004a 90F83E20 		ldrb	r2, [r0, #62]	@ zero_extendqisi2
+  92              		.loc 1 197 44 discriminator 1 view .LVU21
+  93 004e 2B40     		ands	r3, r3, r5
+  94 0050 2340     		ands	r3, r3, r4
+  95 0052 1340     		ands	r3, r3, r2
+  96 0054 FF2B     		cmp	r3, #255
+  97 0056 00F0C881 		beq	.L38
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****             DM_HandleSpecial(rx);
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         else
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****             DM_HandleMIT(rx);
+  98              		.loc 1 200 13 is_stmt 1 view .LVU22
+  99              	.LVL1:
+ 100              	.LBB53:
+ 101              	.LBI53:
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 102              		.loc 1 86 13 view .LVU23
+ 103              	.LBB54:
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint16_t v_int  = (uint16_t)((rx[2] << 4) | (rx[3] >> 4));
+ 104              		.loc 1 88 5 view .LVU24
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint16_t kp_int = (uint16_t)(((rx[3] & 0xF) << 8) | rx[4]);
+ 105              		.loc 1 89 5 view .LVU25
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint16_t kd_int = (uint16_t)((rx[5] << 4) | (rx[6] >> 4));
+ 106              		.loc 1 90 5 view .LVU26
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint16_t t_int  = (uint16_t)(((rx[6] & 0xF) << 8) | rx[7]);
+ 107              		.loc 1 91 5 view .LVU27
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 108              		.loc 1 92 5 view .LVU28
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float v_des = uint_to_float(v_int, -DM_V_MAX, DM_V_MAX, 12); // rad/s
+ 109              		.loc 1 94 5 view .LVU29
+ 110              	.LBB55:
+ 111              	.LBI55:
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 112              		.loc 1 36 14 view .LVU30
+ 113              	.LBB56:
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     return ((float)xi) * span / ((float)((1u << bits) - 1u)) + xmin;
+ 114              		.loc 1 38 5 view .LVU31
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 115              		.loc 1 39 5 view .LVU32
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 116              		.loc 1 39 5 is_stmt 0 view .LVU33
+ 117              	.LBE56:
+ 118              	.LBE55:
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float kp    = uint_to_float(kp_int, DM_KP_MIN, DM_KP_MAX, 12);
+ 119              		.loc 1 95 5 is_stmt 1 view .LVU34
+ 120              	.LBB63:
+ 121              	.LBI63:
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 122              		.loc 1 36 14 view .LVU35
+ARM GAS  /tmp/ccKOOhfX.s 			page 7
+
+
+ 123              	.LBB64:
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     return ((float)xi) * span / ((float)((1u << bits) - 1u)) + xmin;
+ 124              		.loc 1 38 5 view .LVU36
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 125              		.loc 1 39 5 view .LVU37
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 126              		.loc 1 39 5 is_stmt 0 view .LVU38
+ 127              	.LBE64:
+ 128              	.LBE63:
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float kd    = uint_to_float(kd_int, DM_KD_MIN, DM_KD_MAX, 12);
+ 129              		.loc 1 96 5 is_stmt 1 view .LVU39
+ 130              	.LBB72:
+ 131              	.LBI72:
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 132              		.loc 1 36 14 view .LVU40
+ 133              	.LBB73:
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     return ((float)xi) * span / ((float)((1u << bits) - 1u)) + xmin;
+ 134              		.loc 1 38 5 view .LVU41
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 135              		.loc 1 39 5 view .LVU42
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 136              		.loc 1 39 5 is_stmt 0 view .LVU43
+ 137              	.LBE73:
+ 138              	.LBE72:
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float t_ff  = uint_to_float(t_int, -DM_T_MAX, DM_T_MAX, 12); // N·m
+ 139              		.loc 1 97 5 is_stmt 1 view .LVU44
+ 140              	.LBB82:
+ 141              	.LBI82:
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 142              		.loc 1 36 14 view .LVU45
+ 143              	.LBB83:
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     return ((float)xi) * span / ((float)((1u << bits) - 1u)) + xmin;
+ 144              		.loc 1 38 5 view .LVU46
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 145              		.loc 1 39 5 view .LVU47
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 146              		.loc 1 39 5 is_stmt 0 view .LVU48
+ 147              	.LBE83:
+ 148              	.LBE82:
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 149              		.loc 1 98 5 is_stmt 1 view .LVU49
+ 150              	.LBB90:
+ 151              	.LBI90:
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 152              		.loc 1 36 14 view .LVU50
+ 153              	.LBB91:
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     return ((float)xi) * span / ((float)((1u << bits) - 1u)) + xmin;
+ 154              		.loc 1 38 5 view .LVU51
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 155              		.loc 1 39 5 view .LVU52
+ 156              	.LBE91:
+ 157              	.LBE90:
+ 158              	.LBB101:
+ 159              	.LBB57:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 160              		.loc 1 39 13 is_stmt 0 view .LVU53
+ 161 005a 038F     		ldrh	r3, [r0, #56]	@ unaligned
+ARM GAS  /tmp/ccKOOhfX.s 			page 8
+
+
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 162              		.loc 1 39 24 view .LVU54
+ 163 005c 9FEDC47A 		vldr.32	s14, .L46+8
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 164              		.loc 1 39 31 view .LVU55
+ 165 0060 DFEDC45A 		vldr.32	s11, .L46+12
+ 166              	.LBE57:
+ 167              	.LBE101:
+ 168              	.LBB102:
+ 169              	.LBB65:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 170              		.loc 1 39 24 view .LVU56
+ 171 0064 9FEDC46A 		vldr.32	s12, .L46+16
+ 172              	.LBE65:
+ 173              	.LBE102:
+ 174              	.LBB103:
+ 175              	.LBB92:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 176              		.loc 1 39 31 view .LVU57
+ 177 0068 9FEDC45A 		vldr.32	s10, .L46+20
+ 178              	.LBE92:
+ 179              	.LBE103:
+ 180              	.LBB104:
+ 181              	.LBB74:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 182              		.loc 1 39 24 view .LVU58
+ 183 006c 9FEDC41A 		vldr.32	s2, .L46+24
+ 184              	.LBE74:
+ 185              	.LBE104:
+ 186              	.LBB105:
+ 187              	.LBB93:
+ 188 0070 DFEDC44A 		vldr.32	s9, .L46+28
+ 189              	.LBE93:
+ 190              	.LBE105:
+ 191              	.LBB106:
+ 192              	.LBB66:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 193              		.loc 1 39 62 view .LVU59
+ 194 0074 DFEDC41A 		vldr.32	s3, .L46+32
+ 195              	.LBE66:
+ 196              	.LBE106:
+ 197              	.LBB107:
+ 198              	.LBB75:
+ 199 0078 9FEDC43A 		vldr.32	s6, .L46+36
+ 200              	.LBE75:
+ 201              	.LBE107:
+ 202              	.LBB108:
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_kd   = kd_turn;
+ 203              		.loc 1 109 12 view .LVU60
+ 204 007c DFEDC43A 		vldr.32	s7, .L46+40
+ 205              	.LBE108:
+ 206              	.LBB109:
+ 207              	.LBB94:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 208              		.loc 1 39 62 view .LVU61
+ 209 0080 DFEDC42A 		vldr.32	s5, .L46+44
+ 210              	.LBE94:
+ARM GAS  /tmp/ccKOOhfX.s 			page 9
+
+
+ 211              	.LBE109:
+ 212              	.LBB110:
+ 213              	.LBB58:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 214              		.loc 1 39 13 view .LVU62
+ 215 0084 5BBA     		rev16	r3, r3
+ 216 0086 9BB2     		uxth	r3, r3
+ 217 0088 07EE903A 		vmov	s15, r3	@ int
+ 218 008c F8EE677A 		vcvt.f32.u32	s15, s15
+ 219              	.LBE58:
+ 220              	.LBE110:
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint16_t kp_int = (uint16_t)(((rx[3] & 0xF) << 8) | rx[4]);
+ 221              		.loc 1 89 47 view .LVU63
+ 222 0090 0B09     		lsrs	r3, r1, #4
+ 223              	.LBB111:
+ 224              	.LBB59:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 225              		.loc 1 39 24 view .LVU64
+ 226 0092 67EE877A 		vmul.f32	s15, s15, s14
+ 227              	.LBE59:
+ 228              	.LBE111:
+ 229              	.LBB112:
+ 230              	.LBB67:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 231              		.loc 1 39 13 view .LVU65
+ 232 0096 43EA0613 		orr	r3, r3, r6, lsl #4
+ 233              	.LBE67:
+ 234              	.LBE112:
+ 235              	.LBB113:
+ 236              	.LBB60:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 237              		.loc 1 39 31 view .LVU66
+ 238 009a 87EEA57A 		vdiv.f32	s14, s15, s11
+ 239              	.LBE60:
+ 240              	.LBE113:
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint16_t kd_int = (uint16_t)((rx[5] << 4) | (rx[6] >> 4));
+ 241              		.loc 1 90 55 view .LVU67
+ 242 009e 0902     		lsls	r1, r1, #8
+ 243              	.LVL2:
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint16_t kd_int = (uint16_t)((rx[5] << 4) | (rx[6] >> 4));
+ 244              		.loc 1 90 55 view .LVU68
+ 245 00a0 01F47061 		and	r1, r1, #3840
+ 246              	.LBB114:
+ 247              	.LBB61:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 248              		.loc 1 39 62 view .LVU69
+ 249 00a4 DFEDBC7A 		vldr.32	s15, .L46+48
+ 250              	.LBE61:
+ 251              	.LBE114:
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.Controller.input_velocity = v_des / M_2PI;
+ 252              		.loc 1 101 50 view .LVU70
+ 253 00a8 DFEDBC5A 		vldr.32	s11, .L46+52
+ 254              	.LBB115:
+ 255              	.LBB62:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 256              		.loc 1 39 62 view .LVU71
+ 257 00ac 77EE677A 		vsub.f32	s15, s14, s15
+ARM GAS  /tmp/ccKOOhfX.s 			page 10
+
+
+ 258              	.LBE62:
+ 259              	.LBE115:
+ 260              	.LBB116:
+ 261              	.LBB84:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 262              		.loc 1 39 24 view .LVU72
+ 263 00b0 F1EE046A 		vmov.f32	s13, #5.0e+0
+ 264              	.LBE84:
+ 265              	.LBE116:
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.Controller.input_velocity = v_des / M_2PI;
+ 266              		.loc 1 101 50 view .LVU73
+ 267 00b4 87EEA52A 		vdiv.f32	s4, s15, s11
+ 268              	.LBB117:
+ 269              	.LBB68:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 270              		.loc 1 39 13 view .LVU74
+ 271 00b8 07EE903A 		vmov	s15, r3	@ int
+ 272 00bc F8EE677A 		vcvt.f32.u32	s15, s15
+ 273              	.LBE68:
+ 274              	.LBE117:
+ 275              	.LBB118:
+ 276              	.LBB76:
+ 277 00c0 41EA0503 		orr	r3, r1, r5
+ 278              	.LBE76:
+ 279              	.LBE118:
+ 280              	.LBB119:
+ 281              	.LBB69:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 282              		.loc 1 39 24 view .LVU75
+ 283 00c4 67EE867A 		vmul.f32	s15, s15, s12
+ 284              	.LBE69:
+ 285              	.LBE119:
+ 286              	.LBB120:
+ 287              	.LBB77:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 288              		.loc 1 39 13 view .LVU76
+ 289 00c8 07EE103A 		vmov	s14, r3	@ int
+ 290              	.LBE77:
+ 291              	.LBE120:
+ 292              	.LBB121:
+ 293              	.LBB70:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 294              		.loc 1 39 31 view .LVU77
+ 295 00cc 87EE854A 		vdiv.f32	s8, s15, s10
+ 296              	.LBE70:
+ 297              	.LBE121:
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint16_t t_int  = (uint16_t)(((rx[6] & 0xF) << 8) | rx[7]);
+ 298              		.loc 1 91 47 view .LVU78
+ 299 00d0 1309     		lsrs	r3, r2, #4
+ 300              	.LBB122:
+ 301              	.LBB85:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 302              		.loc 1 39 13 view .LVU79
+ 303 00d2 43EA0413 		orr	r3, r3, r4, lsl #4
+ 304              	.LBE85:
+ 305              	.LBE122:
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ARM GAS  /tmp/ccKOOhfX.s 			page 11
+
+
+ 306              		.loc 1 92 55 view .LVU80
+ 307 00d6 1202     		lsls	r2, r2, #8
+ 308              	.LVL3:
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 309              		.loc 1 92 55 view .LVU81
+ 310 00d8 02F47062 		and	r2, r2, #3840
+ 311              	.LBB123:
+ 312              	.LBB86:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 313              		.loc 1 39 13 view .LVU82
+ 314 00dc 06EE103A 		vmov	s12, r3	@ int
+ 315 00e0 B8EE466A 		vcvt.f32.u32	s12, s12
+ 316              	.LBE86:
+ 317              	.LBE123:
+ 318              	.LBB124:
+ 319              	.LBB95:
+ 320 00e4 42EA0C03 		orr	r3, r2, ip
+ 321              	.LBE95:
+ 322              	.LBE124:
+ 323              	.LBB125:
+ 324              	.LBB87:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 325              		.loc 1 39 24 view .LVU83
+ 326 00e8 26EE266A 		vmul.f32	s12, s12, s13
+ 327              	.LBE87:
+ 328              	.LBE125:
+ 329              	.LBB126:
+ 330              	.LBB96:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 331              		.loc 1 39 13 view .LVU84
+ 332 00ec 07EE903A 		vmov	s15, r3	@ int
+ 333              	.LBE96:
+ 334              	.LBE126:
+ 335              	.LBB127:
+ 336              	.LBB78:
+ 337 00f0 B8EE477A 		vcvt.f32.u32	s14, s14
+ 338              	.LBE78:
+ 339              	.LBE127:
+ 340              	.LBB128:
+ 341              	.LBB88:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 342              		.loc 1 39 31 view .LVU85
+ 343 00f4 C6EE056A 		vdiv.f32	s13, s12, s10
+ 344              	.LBE88:
+ 345              	.LBE128:
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.Controller.input_velocity = v_des / M_2PI;
+ 346              		.loc 1 101 42 view .LVU86
+ 347 00f8 A94B     		ldr	r3, .L46+56
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 348              		.loc 1 113 42 view .LVU87
+ 349 00fa 0622     		movs	r2, #6
+ 350 00fc 5A73     		strb	r2, [r3, #13]
+ 351              	.LBB129:
+ 352              	.LBB79:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 353              		.loc 1 39 24 view .LVU88
+ 354 00fe 27EE017A 		vmul.f32	s14, s14, s2
+ARM GAS  /tmp/ccKOOhfX.s 			page 12
+
+
+ 355              	.LBE79:
+ 356              	.LBE129:
+ 357              	.LBB130:
+ 358              	.LBB97:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 359              		.loc 1 39 13 view .LVU89
+ 360 0102 F8EE677A 		vcvt.f32.u32	s15, s15
+ 361              	.LBE97:
+ 362              	.LBE130:
+ 363              	.LBB131:
+ 364              	.LBB80:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 365              		.loc 1 39 31 view .LVU90
+ 366 0106 87EE056A 		vdiv.f32	s12, s14, s10
+ 367              	.LBE80:
+ 368              	.LBE131:
+ 369              	.LBB132:
+ 370              	.LBB98:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 371              		.loc 1 39 24 view .LVU91
+ 372 010a 67EEA47A 		vmul.f32	s15, s15, s9
+ 373              	.LBE98:
+ 374              	.LBE132:
+ 375              	.LBB133:
+ 376              	.LBB81:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 377              		.loc 1 39 62 view .LVU92
+ 378 010e 36EE037A 		vadd.f32	s14, s12, s6
+ 379              	.LBE81:
+ 380              	.LBE133:
+ 381              	.LBB134:
+ 382              	.LBB99:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 383              		.loc 1 39 31 view .LVU93
+ 384 0112 C7EE854A 		vdiv.f32	s9, s15, s10
+ 385              	.LBE99:
+ 386              	.LBE134:
+ 387              	.LBB135:
+ 388              	.LBB71:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 389              		.loc 1 39 62 view .LVU94
+ 390 0116 74EE617A 		vsub.f32	s15, s8, s3
+ 391              	.LBE71:
+ 392              	.LBE135:
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     // MIT Kd 上限: 4010 Kt≈0.0265 → Kd/Kt≈38× 放大, SWD 实测稳定上限 CAN Kd≈0.0
+ 393              		.loc 1 103 47 view .LVU95
+ 394 011a 27EE257A 		vmul.f32	s14, s14, s11
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.Controller.input_kp       = kp * M_2PI;
+ 395              		.loc 1 102 50 view .LVU96
+ 396 011e 87EEA55A 		vdiv.f32	s10, s15, s11
+ 397              	.LBB136:
+ 398              	.LBB89:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 399              		.loc 1 39 62 view .LVU97
+ 400 0122 76EE837A 		vadd.f32	s15, s13, s6
+ 401              	.LBE89:
+ 402              	.LBE136:
+ARM GAS  /tmp/ccKOOhfX.s 			page 13
+
+
+ 403              	.LBB137:
+ 404              	.LBB100:
+ 405 0126 74EEE26A 		vsub.f32	s13, s9, s5
+ 406              	.LVL4:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 407              		.loc 1 39 62 view .LVU98
+ 408              	.LBE100:
+ 409              	.LBE137:
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.Controller.input_velocity = v_des / M_2PI;
+ 410              		.loc 1 101 5 is_stmt 1 view .LVU99
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.Controller.input_kp       = kp * M_2PI;
+ 411              		.loc 1 102 5 view .LVU100
+ 412              	.LBB138:
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         if (kd_turn > MIT_KD_TURN_MAX) kd_turn = MIT_KD_TURN_MAX;
+ 413              		.loc 1 108 15 is_stmt 0 view .LVU101
+ 414 012a 67EEA57A 		vmul.f32	s15, s15, s11
+ 415              	.LBE138:
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.Controller.input_velocity = v_des / M_2PI;
+ 416              		.loc 1 101 42 view .LVU102
+ 417 012e 83ED162A 		vstr.32	s4, [r3, #88]
+ 418              	.LVL5:
+ 419              	.LBB139:
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_kd   = kd_turn;
+ 420              		.loc 1 109 48 discriminator 1 view .LVU103
+ 421 0132 F4EE637A 		vcmp.f32	s15, s7
+ 422 0136 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 423 013a C8BF     		it	gt
+ 424 013c F0EE637A 		vmovgt.f32	s15, s7
+ 425              	.LBE139:
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.Controller.input_kp       = kp * M_2PI;
+ 426              		.loc 1 102 42 view .LVU104
+ 427 0140 83ED175A 		vstr.32	s10, [r3, #92]
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     // MIT Kd 上限: 4010 Kt≈0.0265 → Kd/Kt≈38× 放大, SWD 实测稳定上限 CAN Kd≈0.0
+ 428              		.loc 1 103 5 is_stmt 1 view .LVU105
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     // MIT Kd 上限: 4010 Kt≈0.0265 → Kd/Kt≈38× 放大, SWD 实测稳定上限 CAN Kd≈0.0
+ 429              		.loc 1 103 42 is_stmt 0 view .LVU106
+ 430 0144 83ED197A 		vstr.32	s14, [r3, #100]
+ 431              	.LBB140:
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         if (kd_turn > MIT_KD_TURN_MAX) kd_turn = MIT_KD_TURN_MAX;
+ 432              		.loc 1 108 9 is_stmt 1 view .LVU107
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_kd   = kd_turn;
+ 433              		.loc 1 109 9 view .LVU108
+ 434              	.LVL6:
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     }
+ 435              		.loc 1 110 9 view .LVU109
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     }
+ 436              		.loc 1 110 42 is_stmt 0 view .LVU110
+ 437 0148 C3ED1A7A 		vstr.32	s15, [r3, #104]
+ 438              	.LBE140:
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.state.Control_Mode        = CONTROL_MODE_MIT; // 最后设模式，避免半更新
+ 439              		.loc 1 112 5 is_stmt 1 view .LVU111
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.state.Control_Mode        = CONTROL_MODE_MIT; // 最后设模式，避免半更新
+ 440              		.loc 1 112 42 is_stmt 0 view .LVU112
+ 441 014c C3ED186A 		vstr.32	s13, [r3, #96]
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 442              		.loc 1 113 5 is_stmt 1 view .LVU113
+ 443              	.LVL7:
+ARM GAS  /tmp/ccKOOhfX.s 			page 14
+
+
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 444              		.loc 1 114 1 is_stmt 0 view .LVU114
+ 445 0150 0BE0     		b	.L6
+ 446              	.LVL8:
+ 447              	.L3:
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 448              		.loc 1 114 1 view .LVU115
+ 449              	.LBE54:
+ 450              	.LBE53:
+ 201:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     case DM_ID_POSVEL:
+ 203:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         DM_HandlePosVel(rx);
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 205:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     case DM_ID_VEL:
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         DM_HandleVel(rx);
+ 451              		.loc 1 206 9 is_stmt 1 view .LVU116
+ 452              	.LBB141:
+ 453              	.LBI141:
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 454              		.loc 1 132 13 view .LVU117
+ 455              	.LBB142:
+ 134:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     memcpy(&v, rx, 4);
+ 456              		.loc 1 134 5 view .LVU118
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.Controller.input_velocity = v / M_2PI; // turn/s
+ 457              		.loc 1 135 5 view .LVU119
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.state.Control_Mode        = CONTROL_MODE_VELOCITY_RAMP;
+ 458              		.loc 1 136 5 view .LVU120
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.Controller.input_velocity = v / M_2PI; // turn/s
+ 459              		.loc 1 135 5 is_stmt 0 view .LVU121
+ 460 0152 826B     		ldr	r2, [r0, #56]	@ unaligned
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.state.Control_Mode        = CONTROL_MODE_VELOCITY_RAMP;
+ 461              		.loc 1 136 46 view .LVU122
+ 462 0154 9FED917A 		vldr.32	s14, .L46+52
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.state.Control_Mode        = CONTROL_MODE_VELOCITY_RAMP;
+ 463              		.loc 1 136 42 view .LVU123
+ 464 0158 914B     		ldr	r3, .L46+56
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.state.Control_Mode        = CONTROL_MODE_VELOCITY_RAMP;
+ 465              		.loc 1 136 46 view .LVU124
+ 466 015a 07EE902A 		vmov	s15, r2
+ 467 015e C7EE877A 		vdiv.f32	s15, s15, s14
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 468              		.loc 1 137 42 view .LVU125
+ 469 0162 0422     		movs	r2, #4
+ 470 0164 5A73     		strb	r2, [r3, #13]
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.state.Control_Mode        = CONTROL_MODE_VELOCITY_RAMP;
+ 471              		.loc 1 136 42 view .LVU126
+ 472 0166 C3ED177A 		vstr.32	s15, [r3, #92]
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 473              		.loc 1 137 5 is_stmt 1 view .LVU127
+ 474              	.LVL9:
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 475              		.loc 1 137 5 is_stmt 0 view .LVU128
+ 476              	.LBE142:
+ 477              	.LBE141:
+ 207:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 478              		.loc 1 207 9 is_stmt 1 view .LVU129
+ 479              	.L6:
+ARM GAS  /tmp/ccKOOhfX.s 			page 15
+
+
+ 208:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     default:
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         return;
+ 210:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     }
+ 211:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 212:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     DM_SendFeedback(); // 每收到一帧控制/命令即回一帧反馈
+ 480              		.loc 1 212 5 view .LVU130
+ 481              	.LBB143:
+ 482              	.LBI143:
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 483              		.loc 1 58 13 view .LVU131
+ 484              	.LBB144:
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float vel_rad = motor_data.components.encoder->vel_estimate_ * M_2PI;
+ 485              		.loc 1 60 5 view .LVU132
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float vel_rad = motor_data.components.encoder->vel_estimate_ * M_2PI;
+ 486              		.loc 1 60 42 is_stmt 0 view .LVU133
+ 487 016a 5A68     		ldr	r2, [r3, #4]
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float vel_rad = motor_data.components.encoder->vel_estimate_ * M_2PI;
+ 488              		.loc 1 60 11 view .LVU134
+ 489 016c 9FED8B6A 		vldr.32	s12, .L46+52
+ 490 0170 D2ED926A 		vldr.32	s13, [r2, #584]
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 491              		.loc 1 62 46 view .LVU135
+ 492 0174 1968     		ldr	r1, [r3]
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float torque  = motor_data.components.foc->i_q * motor_data.Controller.torque_const;
+ 493              		.loc 1 61 11 view .LVU136
+ 494 0176 D2ED947A 		vldr.32	s15, [r2, #592]
+ 495              	.LBB145:
+ 496              	.LBB146:
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     else if (x > xmax) x = xmax;
+ 497              		.loc 1 31 8 view .LVU137
+ 498 017a DFED8A5A 		vldr.32	s11, .L46+60
+ 499              	.LBE146:
+ 500              	.LBE145:
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 501              		.loc 1 62 46 view .LVU138
+ 502 017e 0A6D     		ldr	r2, [r1, #80]	@ unaligned
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 503              		.loc 1 62 11 view .LVU139
+ 504 0180 93ED0F7A 		vldr.32	s14, [r3, #60]
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float vel_rad = motor_data.components.encoder->vel_estimate_ * M_2PI;
+ 505              		.loc 1 60 11 view .LVU140
+ 506 0184 66EE866A 		vmul.f32	s13, s13, s12
+ 507              	.LVL10:
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float torque  = motor_data.components.foc->i_q * motor_data.Controller.torque_const;
+ 508              		.loc 1 61 5 is_stmt 1 view .LVU141
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float torque  = motor_data.components.foc->i_q * motor_data.Controller.torque_const;
+ 509              		.loc 1 61 11 is_stmt 0 view .LVU142
+ 510 0188 67EE867A 		vmul.f32	s15, s15, s12
+ 511              	.LVL11:
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 512              		.loc 1 62 5 is_stmt 1 view .LVU143
+ 513              	.LBB153:
+ 514              	.LBB147:
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     else if (x > xmax) x = xmax;
+ 515              		.loc 1 31 8 is_stmt 0 view .LVU144
+ 516 018c F4EEE56A 		vcmpe.f32	s13, s11
+ 517              	.LBE147:
+ARM GAS  /tmp/ccKOOhfX.s 			page 16
+
+
+ 518              	.LBE153:
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 519              		.loc 1 62 11 view .LVU145
+ 520 0190 06EE102A 		vmov	s12, r2
+ 521              	.LBB154:
+ 522              	.LBB148:
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     else if (x > xmax) x = xmax;
+ 523              		.loc 1 31 8 view .LVU146
+ 524 0194 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 525              	.LBE148:
+ 526              	.LBE154:
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 527              		.loc 1 62 11 view .LVU147
+ 528 0198 27EE067A 		vmul.f32	s14, s14, s12
+ 529              	.LVL12:
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint16_t v_int = (uint16_t)float_to_uint(vel_rad, -DM_V_MAX, DM_V_MAX, 12);
+ 530              		.loc 1 64 5 is_stmt 1 view .LVU148
+ 531              	.LBB155:
+ 532              	.LBI145:
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 533              		.loc 1 28 17 view .LVU149
+ 534              	.LBB149:
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     if (x < xmin) x = xmin;
+ 535              		.loc 1 30 5 view .LVU150
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     else if (x > xmax) x = xmax;
+ 536              		.loc 1 31 5 view .LVU151
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     else if (x > xmax) x = xmax;
+ 537              		.loc 1 31 8 is_stmt 0 view .LVU152
+ 538 019c 27D4     		bmi	.L26
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     return (uint32_t)((x - xmin) * (((float)((1u << bits) - 1u)) / span));
+ 539              		.loc 1 32 10 is_stmt 1 view .LVU153
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     return (uint32_t)((x - xmin) * (((float)((1u << bits) - 1u)) / span));
+ 540              		.loc 1 32 13 is_stmt 0 view .LVU154
+ 541 019e 9FED7E6A 		vldr.32	s12, .L46+48
+ 542 01a2 F4EEC66A 		vcmpe.f32	s13, s12
+ 543 01a6 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 544 01aa 40F3CD80 		ble	.L39
+ 545              	.LBE149:
+ 546              	.LBE155:
+ 547              	.LBB156:
+ 548              	.LBB157:
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     else if (x > xmax) x = xmax;
+ 549              		.loc 1 31 8 view .LVU155
+ 550 01ae DFED7E6A 		vldr.32	s13, .L46+64
+ 551              	.LVL13:
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     else if (x > xmax) x = xmax;
+ 552              		.loc 1 31 8 view .LVU156
+ 553 01b2 F4EEE67A 		vcmpe.f32	s15, s13
+ 554 01b6 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 555              	.LBE157:
+ 556              	.LBE156:
+ 557              	.LBB162:
+ 558              	.LBB150:
+ 559 01ba 4FF0FE0C 		mov	ip, #254
+ 560 01be 4FF0FF0E 		mov	lr, #255
+ 561              	.LVL14:
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ARM GAS  /tmp/ccKOOhfX.s 			page 17
+
+
+ 562              		.loc 1 33 5 is_stmt 1 view .LVU157
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 563              		.loc 1 33 5 is_stmt 0 view .LVU158
+ 564              	.LBE150:
+ 565              	.LBE162:
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint16_t t_int = (uint16_t)float_to_uint(torque, -DM_T_MAX, DM_T_MAX, 12);
+ 566              		.loc 1 65 5 is_stmt 1 view .LVU159
+ 567              	.LBB163:
+ 568              	.LBI156:
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 569              		.loc 1 28 17 view .LVU160
+ 570              	.LBB158:
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     if (x < xmin) x = xmin;
+ 571              		.loc 1 30 5 view .LVU161
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     else if (x > xmax) x = xmax;
+ 572              		.loc 1 31 5 view .LVU162
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     else if (x > xmax) x = xmax;
+ 573              		.loc 1 31 8 is_stmt 0 view .LVU163
+ 574 01c2 1ED5     		bpl	.L40
+ 575              	.LVL15:
+ 576              	.L28:
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     else if (x > xmax) x = xmax;
+ 577              		.loc 1 31 8 view .LVU164
+ 578 01c4 0022     		movs	r2, #0
+ 579 01c6 1446     		mov	r4, r2
+ 580              	.LVL16:
+ 581              	.L19:
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 582              		.loc 1 33 5 is_stmt 1 view .LVU165
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 583              		.loc 1 33 5 is_stmt 0 view .LVU166
+ 584              	.LBE158:
+ 585              	.LBE163:
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 586              		.loc 1 66 5 is_stmt 1 view .LVU167
+ 587              	.LBB164:
+ 588              	.LBI164:
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 589              		.loc 1 28 17 view .LVU168
+ 590              	.LBB165:
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     if (x < xmin) x = xmin;
+ 591              		.loc 1 30 5 view .LVU169
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     else if (x > xmax) x = xmax;
+ 592              		.loc 1 31 5 view .LVU170
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     else if (x > xmax) x = xmax;
+ 593              		.loc 1 31 8 is_stmt 0 view .LVU171
+ 594 01c8 DFED787A 		vldr.32	s15, .L46+68
+ 595 01cc B4EEE77A 		vcmpe.f32	s14, s15
+ 596 01d0 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 597 01d4 28D4     		bmi	.L30
+ 598              	.LVL17:
+ 599              	.L43:
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     return (uint32_t)((x - xmin) * (((float)((1u << bits) - 1u)) / span));
+ 600              		.loc 1 32 10 is_stmt 1 view .LVU172
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     return (uint32_t)((x - xmin) * (((float)((1u << bits) - 1u)) / span));
+ 601              		.loc 1 32 13 is_stmt 0 view .LVU173
+ 602 01d6 DFED6F7A 		vldr.32	s15, .L46+44
+ARM GAS  /tmp/ccKOOhfX.s 			page 18
+
+
+ 603 01da B4EEE77A 		vcmpe.f32	s14, s15
+ 604 01de F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 605 01e2 40F39280 		ble	.L41
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     return (uint32_t)((x - xmin) * (((float)((1u << bits) - 1u)) / span));
+ 606              		.loc 1 32 24 is_stmt 1 discriminator 1 view .LVU174
+ 607              	.LVL18:
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     return (uint32_t)((x - xmin) * (((float)((1u << bits) - 1u)) / span));
+ 608              		.loc 1 32 24 is_stmt 0 discriminator 1 view .LVU175
+ 609              	.LBE165:
+ 610              	.LBE164:
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[5] = (uint8_t)(t_int & 0xFF);
+ 611              		.loc 1 77 44 view .LVU176
+ 612 01e6 42F00F02 		orr	r2, r2, #15
+ 613 01ea FE21     		movs	r1, #254
+ 614 01ec 1DE0     		b	.L20
+ 615              	.LVL19:
+ 616              	.L26:
+ 617              	.LBB169:
+ 618              	.LBB151:
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[5] = (uint8_t)(t_int & 0xFF);
+ 619              		.loc 1 77 44 view .LVU177
+ 620 01ee 4FF0000C 		mov	ip, #0
+ 621 01f2 E646     		mov	lr, ip
+ 622              	.LVL20:
+ 623              	.L18:
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 624              		.loc 1 33 5 is_stmt 1 view .LVU178
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 625              		.loc 1 33 5 is_stmt 0 view .LVU179
+ 626              	.LBE151:
+ 627              	.LBE169:
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint16_t t_int = (uint16_t)float_to_uint(torque, -DM_T_MAX, DM_T_MAX, 12);
+ 628              		.loc 1 65 5 is_stmt 1 view .LVU180
+ 629              	.LBB170:
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 630              		.loc 1 28 17 view .LVU181
+ 631              	.LBB159:
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     if (x < xmin) x = xmin;
+ 632              		.loc 1 30 5 view .LVU182
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     else if (x > xmax) x = xmax;
+ 633              		.loc 1 31 5 view .LVU183
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     else if (x > xmax) x = xmax;
+ 634              		.loc 1 31 8 is_stmt 0 view .LVU184
+ 635 01f4 DFED6C6A 		vldr.32	s13, .L46+64
+ 636 01f8 F4EEE67A 		vcmpe.f32	s15, s13
+ 637 01fc F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 638 0200 E0D4     		bmi	.L28
+ 639              	.LVL21:
+ 640              	.L40:
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     return (uint32_t)((x - xmin) * (((float)((1u << bits) - 1u)) / span));
+ 641              		.loc 1 32 10 is_stmt 1 view .LVU185
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     return (uint32_t)((x - xmin) * (((float)((1u << bits) - 1u)) / span));
+ 642              		.loc 1 32 13 is_stmt 0 view .LVU186
+ 643 0202 DFED616A 		vldr.32	s13, .L46+32
+ 644 0206 F4EEE67A 		vcmpe.f32	s15, s13
+ 645 020a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 646 020e 40F38C80 		ble	.L42
+ARM GAS  /tmp/ccKOOhfX.s 			page 19
+
+
+ 647              	.LBE159:
+ 648              	.LBE170:
+ 649              	.LBB171:
+ 650              	.LBB166:
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     else if (x > xmax) x = xmax;
+ 651              		.loc 1 31 8 view .LVU187
+ 652 0212 DFED667A 		vldr.32	s15, .L46+68
+ 653              	.LVL22:
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     else if (x > xmax) x = xmax;
+ 654              		.loc 1 31 8 view .LVU188
+ 655 0216 B4EEE77A 		vcmpe.f32	s14, s15
+ 656 021a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 657              	.LBE166:
+ 658              	.LBE171:
+ 659              	.LBB172:
+ 660              	.LBB160:
+ 661 021e 6FF00F02 		mvn	r2, #15
+ 662 0222 4FF0FF04 		mov	r4, #255
+ 663              	.LVL23:
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 664              		.loc 1 33 5 is_stmt 1 view .LVU189
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 665              		.loc 1 33 5 is_stmt 0 view .LVU190
+ 666              	.LBE160:
+ 667              	.LBE172:
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 668              		.loc 1 66 5 is_stmt 1 view .LVU191
+ 669              	.LBB173:
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 670              		.loc 1 28 17 view .LVU192
+ 671              	.LBB167:
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     if (x < xmin) x = xmin;
+ 672              		.loc 1 30 5 view .LVU193
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     else if (x > xmax) x = xmax;
+ 673              		.loc 1 31 5 view .LVU194
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     else if (x > xmax) x = xmax;
+ 674              		.loc 1 31 8 is_stmt 0 view .LVU195
+ 675 0226 D6D5     		bpl	.L43
+ 676              	.LVL24:
+ 677              	.L30:
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     else if (x > xmax) x = xmax;
+ 678              		.loc 1 31 8 view .LVU196
+ 679 0228 0021     		movs	r1, #0
+ 680              	.LVL25:
+ 681              	.L20:
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 682              		.loc 1 33 5 is_stmt 1 view .LVU197
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 683              		.loc 1 33 5 is_stmt 0 view .LVU198
+ 684              	.LBE167:
+ 685              	.LBE173:
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     if (tmp < 0.0f) tmp = 0.0f; else if (tmp > 255.0f) tmp = 255.0f;
+ 686              		.loc 1 68 5 is_stmt 1 view .LVU199
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     if (tmp < 0.0f) tmp = 0.0f; else if (tmp > 255.0f) tmp = 255.0f;
+ 687              		.loc 1 68 11 is_stmt 0 view .LVU200
+ 688 022a 9868     		ldr	r0, [r3, #8]
+ 689 022c D0ED017A 		vldr.32	s15, [r0, #4]
+ARM GAS  /tmp/ccKOOhfX.s 			page 20
+
+
+ 690              	.LVL26:
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint8_t temp8 = (uint8_t)tmp; // 仅一颗 NTC，T_mos 与 T_rotor 暂用同一值
+ 691              		.loc 1 69 5 is_stmt 1 view .LVU201
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint8_t temp8 = (uint8_t)tmp; // 仅一颗 NTC，T_mos 与 T_rotor 暂用同一值
+ 692              		.loc 1 69 8 is_stmt 0 view .LVU202
+ 693 0230 F5EEC07A 		vcmpe.f32	s15, #0
+ 694 0234 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 695 0238 35D4     		bmi	.L31
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint8_t temp8 = (uint8_t)tmp; // 仅一颗 NTC，T_mos 与 T_rotor 暂用同一值
+ 696              		.loc 1 69 38 is_stmt 1 discriminator 2 view .LVU203
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint8_t temp8 = (uint8_t)tmp; // 仅一颗 NTC，T_mos 与 T_rotor 暂用同一值
+ 697              		.loc 1 69 41 is_stmt 0 discriminator 2 view .LVU204
+ 698 023a 9FED5D7A 		vldr.32	s14, .L46+72
+ 699 023e F4EEC77A 		vcmpe.f32	s15, s14
+ 700 0242 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 701 0246 5EDC     		bgt	.L32
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 702              		.loc 1 70 13 view .LVU205
+ 703 0248 FCEEE77A 		vcvt.u32.f32	s15, s15
+ 704              	.LVL27:
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 705              		.loc 1 70 13 view .LVU206
+ 706 024c CDED017A 		vstr.32	s15, [sp, #4]	@ int
+ 707 0250 9DF80450 		ldrb	r5, [sp, #4]	@ zero_extendqisi2
+ 708              	.L22:
+ 709              	.LVL28:
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 710              		.loc 1 70 5 is_stmt 1 view .LVU207
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[0] = (uint8_t)((dm_error_nibble() << 4) | (DM_MOTOR_ID & 0x0F));
+ 711              		.loc 1 72 5 view .LVU208
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[0] = (uint8_t)((dm_error_nibble() << 4) | (DM_MOTOR_ID & 0x0F));
+ 712              		.loc 1 72 25 is_stmt 0 view .LVU209
+ 713 0254 5748     		ldr	r0, .L46+76
+ 714              	.LBB174:
+ 715              	.LBB175:
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         return (motor_data.state.State_Mode == STATE_MODE_RUNNING) ? 1u : 0u;
+ 716              		.loc 1 45 25 view .LVU210
+ 717 0256 1E7C     		ldrb	r6, [r3, #16]	@ zero_extendqisi2
+ 718              	.LBE175:
+ 719              	.LBE174:
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[0] = (uint8_t)((dm_error_nibble() << 4) | (DM_MOTOR_ID & 0x0F));
+ 720              		.loc 1 72 25 view .LVU211
+ 721 0258 0068     		ldr	r0, [r0]
+ 722              	.LVL29:
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[1] = (uint8_t)(p_int >> 8);
+ 723              		.loc 1 73 5 is_stmt 1 view .LVU212
+ 724              	.LBB181:
+ 725              	.LBI174:
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 726              		.loc 1 43 16 view .LVU213
+ 727              	.LBB176:
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         return (motor_data.state.State_Mode == STATE_MODE_RUNNING) ? 1u : 0u;
+ 728              		.loc 1 45 5 view .LVU214
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         return (motor_data.state.State_Mode == STATE_MODE_RUNNING) ? 1u : 0u;
+ 729              		.loc 1 45 8 is_stmt 0 view .LVU215
+ 730 025a 56B3     		cbz	r6, .L44
+ 731              	.LVL30:
+ARM GAS  /tmp/ccKOOhfX.s 			page 21
+
+
+ 732              	.L23:
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     {
+ 733              		.loc 1 47 5 is_stmt 1 view .LVU216
+ 734 025c 013E     		subs	r6, r6, #1
+ 735 025e F6B2     		uxtb	r6, r6
+ 736 0260 042E     		cmp	r6, #4
+ 737 0262 4ED8     		bhi	.L33
+ 738              	.LBE176:
+ 739              	.LBE181:
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[1] = (uint8_t)(p_int >> 8);
+ 740              		.loc 1 73 42 is_stmt 0 discriminator 1 view .LVU217
+ 741 0264 544B     		ldr	r3, .L46+80
+ 742              	.LVL31:
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[1] = (uint8_t)(p_int >> 8);
+ 743              		.loc 1 73 42 discriminator 1 view .LVU218
+ 744 0266 9B5D     		ldrb	r3, [r3, r6]	@ zero_extendqisi2
+ 745 0268 1B01     		lsls	r3, r3, #4
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[1] = (uint8_t)(p_int >> 8);
+ 746              		.loc 1 73 13 discriminator 1 view .LVU219
+ 747 026a 43F00103 		orr	r3, r3, #1
+ 748 026e DBB2     		uxtb	r3, r3
+ 749              	.L24:
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[2] = (uint8_t)(p_int & 0xFF);
+ 750              		.loc 1 74 5 is_stmt 1 view .LVU220
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[3] = (uint8_t)(v_int >> 4);
+ 751              		.loc 1 75 5 view .LVU221
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[4] = (uint8_t)(((v_int & 0xF) << 4) | (t_int >> 8));
+ 752              		.loc 1 76 5 view .LVU222
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[5] = (uint8_t)(t_int & 0xFF);
+ 753              		.loc 1 77 5 view .LVU223
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[6] = temp8;
+ 754              		.loc 1 78 5 view .LVU224
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[7] = temp8;
+ 755              		.loc 1 79 5 view .LVU225
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 756              		.loc 1 80 5 view .LVU226
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[1] = (uint8_t)(p_int >> 8);
+ 757              		.loc 1 73 11 is_stmt 0 discriminator 1 view .LVU227
+ 758 0270 0026     		movs	r6, #0
+ 759 0272 63F30706 		bfi	r6, r3, #0, #8
+ 760 0276 0023     		movs	r3, #0
+ 761 0278 62F30703 		bfi	r3, r2, #0, #8
+ 762 027c 6EF30F26 		bfi	r6, lr, #8, #8
+ 763 0280 61F30F23 		bfi	r3, r1, #8, #8
+ 764 0284 6CF31746 		bfi	r6, ip, #16, #8
+ 765 0288 65F31743 		bfi	r3, r5, #16, #8
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 766              		.loc 1 82 5 view .LVU228
+ 767 028c 9FED3F0A 		vldr.32	s0, .L46+36
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[1] = (uint8_t)(p_int >> 8);
+ 768              		.loc 1 73 11 discriminator 1 view .LVU229
+ 769 0290 64F31F66 		bfi	r6, r4, #24, #8
+ 770 0294 65F31F63 		bfi	r3, r5, #24, #8
+ 771 0298 0663     		str	r6, [r0, #48]	@ unaligned
+ 772              	.LVL32:
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[1] = (uint8_t)(p_int >> 8);
+ 773              		.loc 1 73 11 discriminator 1 view .LVU230
+ARM GAS  /tmp/ccKOOhfX.s 			page 22
+
+
+ 774 029a 4363     		str	r3, [r0, #52]	@ unaligned
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 775              		.loc 1 82 5 is_stmt 1 view .LVU231
+ 776              	.LBE144:
+ 777              	.LBE143:
+ 213:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 778              		.loc 1 213 1 is_stmt 0 view .LVU232
+ 779 029c 02B0     		add	sp, sp, #8
+ 780              	.LCFI2:
+ 781              		.cfi_remember_state
+ 782              		.cfi_def_cfa_offset 16
+ 783              		@ sp needed
+ 784 029e BDE87040 		pop	{r4, r5, r6, lr}
+ 785              	.LCFI3:
+ 786              		.cfi_restore 14
+ 787              		.cfi_restore 6
+ 788              		.cfi_restore 5
+ 789              		.cfi_restore 4
+ 790              		.cfi_def_cfa_offset 0
+ 791              	.LBB191:
+ 792              	.LBB189:
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 793              		.loc 1 82 5 view .LVU233
+ 794 02a2 FFF7FEBF 		b	FDCANTransmit
+ 795              	.LVL33:
+ 796              	.L31:
+ 797              	.LCFI4:
+ 798              		.cfi_restore_state
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[0] = (uint8_t)((dm_error_nibble() << 4) | (DM_MOTOR_ID & 0x0F));
+ 799              		.loc 1 72 25 view .LVU234
+ 800 02a6 4348     		ldr	r0, .L46+76
+ 801              	.LBB182:
+ 802              	.LBB177:
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         return (motor_data.state.State_Mode == STATE_MODE_RUNNING) ? 1u : 0u;
+ 803              		.loc 1 45 25 view .LVU235
+ 804 02a8 1E7C     		ldrb	r6, [r3, #16]	@ zero_extendqisi2
+ 805              	.LBE177:
+ 806              	.LBE182:
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[0] = (uint8_t)((dm_error_nibble() << 4) | (DM_MOTOR_ID & 0x0F));
+ 807              		.loc 1 72 25 view .LVU236
+ 808 02aa 0068     		ldr	r0, [r0]
+ 809 02ac 0025     		movs	r5, #0
+ 810              	.LVL34:
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 811              		.loc 1 70 5 is_stmt 1 view .LVU237
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[0] = (uint8_t)((dm_error_nibble() << 4) | (DM_MOTOR_ID & 0x0F));
+ 812              		.loc 1 72 5 view .LVU238
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[1] = (uint8_t)(p_int >> 8);
+ 813              		.loc 1 73 5 view .LVU239
+ 814              	.LBB183:
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 815              		.loc 1 43 16 view .LVU240
+ 816              	.LBB178:
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         return (motor_data.state.State_Mode == STATE_MODE_RUNNING) ? 1u : 0u;
+ 817              		.loc 1 45 5 view .LVU241
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         return (motor_data.state.State_Mode == STATE_MODE_RUNNING) ? 1u : 0u;
+ 818              		.loc 1 45 8 is_stmt 0 view .LVU242
+ARM GAS  /tmp/ccKOOhfX.s 			page 23
+
+
+ 819 02ae 002E     		cmp	r6, #0
+ 820 02b0 D4D1     		bne	.L23
+ 821              	.LVL35:
+ 822              	.L44:
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     switch (motor_data.state.Fault_State)
+ 823              		.loc 1 46 9 is_stmt 1 view .LVU243
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     switch (motor_data.state.Fault_State)
+ 824              		.loc 1 46 73 is_stmt 0 view .LVU244
+ 825 02b2 1B7B     		ldrb	r3, [r3, #12]	@ zero_extendqisi2
+ 826              	.LVL36:
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     switch (motor_data.state.Fault_State)
+ 827              		.loc 1 46 73 view .LVU245
+ 828 02b4 A3F10203 		sub	r3, #2
+ 829 02b8 B3FA83F3 		clz	r3, r3
+ 830 02bc 5B09     		lsrs	r3, r3, #5
+ 831              	.LBE178:
+ 832              	.LBE183:
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[1] = (uint8_t)(p_int >> 8);
+ 833              		.loc 1 73 42 discriminator 1 view .LVU246
+ 834 02be 1B01     		lsls	r3, r3, #4
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[1] = (uint8_t)(p_int >> 8);
+ 835              		.loc 1 73 13 discriminator 1 view .LVU247
+ 836 02c0 43F00103 		orr	r3, r3, #1
+ 837              	.LBB184:
+ 838              	.LBB179:
+ 839 02c4 D4E7     		b	.L24
+ 840              	.LVL37:
+ 841              	.L2:
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[1] = (uint8_t)(p_int >> 8);
+ 842              		.loc 1 73 13 discriminator 1 view .LVU248
+ 843              	.LBE179:
+ 844              	.LBE184:
+ 845              	.LBE189:
+ 846              	.LBE191:
+ 203:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 847              		.loc 1 203 9 is_stmt 1 view .LVU249
+ 848              	.LBB192:
+ 849              	.LBI192:
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 850              		.loc 1 116 13 view .LVU250
+ 851              	.LBB193:
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     memcpy(&p, rx, 4);     // float32 小端
+ 852              		.loc 1 118 5 view .LVU251
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     memcpy(&v, rx + 4, 4);
+ 853              		.loc 1 119 5 view .LVU252
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float new_pos = p / M_2PI; // turn
+ 854              		.loc 1 120 5 view .LVU253
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         fabsf(new_pos - motor_data.Controller.input_position) > 1e-4f)
+ 855              		.loc 1 124 25 is_stmt 0 view .LVU254
+ 856 02c6 364B     		ldr	r3, .L46+56
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     memcpy(&v, rx + 4, 4);
+ 857              		.loc 1 119 5 view .LVU255
+ 858 02c8 816B     		ldr	r1, [r0, #56]	@ unaligned
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         fabsf(new_pos - motor_data.Controller.input_position) > 1e-4f)
+ 859              		.loc 1 124 8 view .LVU256
+ 860 02ca 5A7B     		ldrb	r2, [r3, #13]	@ zero_extendqisi2
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     // 只在目标位置真正变化(或刚切入位置模式)时才置 input_updated → 重规�
+ARM GAS  /tmp/ccKOOhfX.s 			page 24
+
+
+ 861              		.loc 1 121 11 view .LVU257
+ 862 02cc 9FED337A 		vldr.32	s14, .L46+52
+ 863 02d0 07EE901A 		vmov	s15, r1
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         fabsf(new_pos - motor_data.Controller.input_position) > 1e-4f)
+ 864              		.loc 1 124 8 view .LVU258
+ 865 02d4 052A     		cmp	r2, #5
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     // 只在目标位置真正变化(或刚切入位置模式)时才置 input_updated → 重规�
+ 866              		.loc 1 121 11 view .LVU259
+ 867 02d6 C7EE877A 		vdiv.f32	s15, s15, s14
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     float new_pos = p / M_2PI; // turn
+ 868              		.loc 1 120 5 view .LVU260
+ 869 02da C16B     		ldr	r1, [r0, #60]	@ unaligned
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     // 只在目标位置真正变化(或刚切入位置模式)时才置 input_updated → 重规�
+ 870              		.loc 1 121 5 is_stmt 1 view .LVU261
+ 871              	.LVL38:
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         fabsf(new_pos - motor_data.Controller.input_position) > 1e-4f)
+ 872              		.loc 1 124 5 view .LVU262
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         fabsf(new_pos - motor_data.Controller.input_position) > 1e-4f)
+ 873              		.loc 1 124 8 is_stmt 0 view .LVU263
+ 874 02dc 76D0     		beq	.L45
+ 875              	.L15:
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.Controller.input_position = new_pos;
+ 876              		.loc 1 126 9 is_stmt 1 view .LVU264
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.Controller.input_position = new_pos;
+ 877              		.loc 1 126 45 is_stmt 0 view .LVU265
+ 878 02de 0122     		movs	r2, #1
+ 879 02e0 83F87C20 		strb	r2, [r3, #124]
+ 880              	.L16:
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.Controller.input_velocity = v / M_2PI; // turn/s (作梯度限速)
+ 881              		.loc 1 127 5 is_stmt 1 view .LVU266
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 882              		.loc 1 129 42 is_stmt 0 view .LVU267
+ 883 02e4 0522     		movs	r2, #5
+ 884 02e6 5A73     		strb	r2, [r3, #13]
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.state.Control_Mode        = CONTROL_MODE_POSITION_RAMP;
+ 885              		.loc 1 128 46 view .LVU268
+ 886 02e8 DFED2C6A 		vldr.32	s13, .L46+52
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.Controller.input_velocity = v / M_2PI; // turn/s (作梯度限速)
+ 887              		.loc 1 127 42 view .LVU269
+ 888 02ec C3ED167A 		vstr.32	s15, [r3, #88]
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.state.Control_Mode        = CONTROL_MODE_POSITION_RAMP;
+ 889              		.loc 1 128 5 is_stmt 1 view .LVU270
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.state.Control_Mode        = CONTROL_MODE_POSITION_RAMP;
+ 890              		.loc 1 128 46 is_stmt 0 view .LVU271
+ 891 02f0 07EE101A 		vmov	s14, r1
+ 892 02f4 87EE267A 		vdiv.f32	s14, s14, s13
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     motor_data.state.Control_Mode        = CONTROL_MODE_POSITION_RAMP;
+ 893              		.loc 1 128 42 view .LVU272
+ 894 02f8 83ED177A 		vstr.32	s14, [r3, #92]
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 895              		.loc 1 129 5 is_stmt 1 view .LVU273
+ 896              	.LVL39:
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 897              		.loc 1 129 5 is_stmt 0 view .LVU274
+ 898              	.LBE193:
+ 899              	.LBE192:
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     case DM_ID_VEL:
+ARM GAS  /tmp/ccKOOhfX.s 			page 25
+
+
+ 900              		.loc 1 204 9 is_stmt 1 view .LVU275
+ 901              	.LBB196:
+ 902              	.LBB194:
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 903              		.loc 1 130 1 is_stmt 0 view .LVU276
+ 904 02fc 35E7     		b	.L6
+ 905              	.L1:
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 906              		.loc 1 130 1 view .LVU277
+ 907              	.LBE194:
+ 908              	.LBE196:
+ 909              		.loc 1 213 1 view .LVU278
+ 910 02fe 02B0     		add	sp, sp, #8
+ 911              	.LCFI5:
+ 912              		.cfi_remember_state
+ 913              		.cfi_def_cfa_offset 16
+ 914              		@ sp needed
+ 915 0300 70BD     		pop	{r4, r5, r6, pc}
+ 916              	.LVL40:
+ 917              	.L33:
+ 918              	.LCFI6:
+ 919              		.cfi_restore_state
+ 920              	.LBB197:
+ 921              	.LBB190:
+ 922              	.LBB185:
+ 923              	.LBB180:
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         return (motor_data.state.State_Mode == STATE_MODE_RUNNING) ? 1u : 0u;
+ 924              		.loc 1 45 8 view .LVU279
+ 925 0302 1123     		movs	r3, #17
+ 926              	.LVL41:
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         return (motor_data.state.State_Mode == STATE_MODE_RUNNING) ? 1u : 0u;
+ 927              		.loc 1 45 8 view .LVU280
+ 928 0304 B4E7     		b	.L24
+ 929              	.LVL42:
+ 930              	.L32:
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         return (motor_data.state.State_Mode == STATE_MODE_RUNNING) ? 1u : 0u;
+ 931              		.loc 1 45 8 view .LVU281
+ 932              	.LBE180:
+ 933              	.LBE185:
+ 934 0306 FF25     		movs	r5, #255
+ 935 0308 A4E7     		b	.L22
+ 936              	.LVL43:
+ 937              	.L41:
+ 938              	.LBB186:
+ 939              	.LBB168:
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 940              		.loc 1 33 26 view .LVU282
+ 941 030a 37EE277A 		vadd.f32	s14, s14, s15
+ 942              	.LVL44:
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 943              		.loc 1 33 34 view .LVU283
+ 944 030e DFED2B7A 		vldr.32	s15, .L46+84
+ 945 0312 27EE277A 		vmul.f32	s14, s14, s15
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 946              		.loc 1 33 12 view .LVU284
+ 947 0316 FCEEC77A 		vcvt.u32.f32	s15, s14
+ 948 031a 17EE901A 		vmov	r1, s15	@ int
+ARM GAS  /tmp/ccKOOhfX.s 			page 26
+
+
+ 949              	.LBE168:
+ 950              	.LBE186:
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[5] = (uint8_t)(t_int & 0xFF);
+ 951              		.loc 1 77 44 view .LVU285
+ 952 031e C1F30720 		ubfx	r0, r1, #8, #8
+ 953 0322 0243     		orrs	r2, r2, r0
+ 954 0324 52B2     		sxtb	r2, r2
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[6] = temp8;
+ 955              		.loc 1 78 13 view .LVU286
+ 956 0326 C9B2     		uxtb	r1, r1
+ 957 0328 7FE7     		b	.L20
+ 958              	.LVL45:
+ 959              	.L42:
+ 960              	.LBB187:
+ 961              	.LBB161:
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 962              		.loc 1 33 26 view .LVU287
+ 963 032a 77EEA67A 		vadd.f32	s15, s15, s13
+ 964              	.LVL46:
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 965              		.loc 1 33 34 view .LVU288
+ 966 032e DFED246A 		vldr.32	s13, .L46+88
+ 967 0332 67EEA67A 		vmul.f32	s15, s15, s13
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 968              		.loc 1 33 12 view .LVU289
+ 969 0336 FCEEE77A 		vcvt.u32.f32	s15, s15
+ 970 033a 17EE902A 		vmov	r2, s15	@ int
+ 971              	.LBE161:
+ 972              	.LBE187:
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[4] = (uint8_t)(((v_int & 0xF) << 4) | (t_int >> 8));
+ 973              		.loc 1 76 13 view .LVU290
+ 974 033e C2F30714 		ubfx	r4, r2, #4, #8
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[5] = (uint8_t)(t_int & 0xFF);
+ 975              		.loc 1 77 44 view .LVU291
+ 976 0342 1201     		lsls	r2, r2, #4
+ 977 0344 52B2     		sxtb	r2, r2
+ 978 0346 3FE7     		b	.L19
+ 979              	.LVL47:
+ 980              	.L39:
+ 981              	.LBB188:
+ 982              	.LBB152:
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 983              		.loc 1 33 26 view .LVU292
+ 984 0348 76EE866A 		vadd.f32	s13, s13, s12
+ 985              	.LVL48:
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 986              		.loc 1 33 34 view .LVU293
+ 987 034c 9FED1D6A 		vldr.32	s12, .L46+92
+ 988 0350 66EE866A 		vmul.f32	s13, s13, s12
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 989              		.loc 1 33 12 view .LVU294
+ 990 0354 FCEEE66A 		vcvt.u32.f32	s13, s13
+ 991 0358 16EE90CA 		vmov	ip, s13	@ int
+ 992              	.LBE152:
+ 993              	.LBE188:
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[2] = (uint8_t)(p_int & 0xFF);
+ 994              		.loc 1 74 13 view .LVU295
+ARM GAS  /tmp/ccKOOhfX.s 			page 27
+
+
+ 995 035c CCF3072E 		ubfx	lr, ip, #8, #8
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[3] = (uint8_t)(v_int >> 4);
+ 996              		.loc 1 75 13 view .LVU296
+ 997 0360 5FFA8CFC 		uxtb	ip, ip
+ 998 0364 46E7     		b	.L18
+ 999              	.L47:
+ 1000 0366 00BF     		.align	2
+ 1001              	.L46:
+ 1002 0368 001000E0 		.word	-536866816
+ 1003 036c 00000000 		.word	g_can_last_rx_ms
+ 1004 0370 0000C842 		.word	1120403456
+ 1005 0374 00FF7F47 		.word	1199570688
+ 1006 0378 00001644 		.word	1142292480
+ 1007 037c 00F07F45 		.word	1166012416
+ 1008 0380 0000FA43 		.word	1140457472
+ 1009 0384 9A99193F 		.word	1058642330
+ 1010 0388 00009643 		.word	1133903872
+ 1011 038c 00000000 		.word	0
+ 1012 0390 CDCCCC3D 		.word	1036831949
+ 1013 0394 9A99993E 		.word	1050253722
+ 1014 0398 00004842 		.word	1112014848
+ 1015 039c DB0FC940 		.word	1086918619
+ 1016 03a0 00000000 		.word	motor_data
+ 1017 03a4 000048C2 		.word	-1035468800
+ 1018 03a8 000096C3 		.word	-1013579776
+ 1019 03ac 9A9999BE 		.word	-1097229926
+ 1020 03b0 00007F43 		.word	1132396544
+ 1021 03b4 00000000 		.word	dm_mit
+ 1022 03b8 00000000 		.word	CSWTCH.11
+ 1023 03bc FF47D545 		.word	1171605503
+ 1024 03c0 6666DA40 		.word	1088054886
+ 1025 03c4 66D62344 		.word	1143199334
+ 1026 03c8 17B7D138 		.word	953267991
+ 1027              	.LVL49:
+ 1028              	.L45:
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     tx[3] = (uint8_t)(v_int >> 4);
+ 1029              		.loc 1 75 13 view .LVU297
+ 1030              	.LBE190:
+ 1031              	.LBE197:
+ 1032              	.LBB198:
+ 1033              	.LBB195:
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_updated = true;
+ 1034              		.loc 1 125 23 view .LVU298
+ 1035 03cc 93ED167A 		vldr.32	s14, [r3, #88]
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         fabsf(new_pos - motor_data.Controller.input_position) > 1e-4f)
+ 1036              		.loc 1 124 69 discriminator 1 view .LVU299
+ 1037 03d0 5FED036A 		vldr.32	s13, .L46+96
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_updated = true;
+ 1038              		.loc 1 125 23 view .LVU300
+ 1039 03d4 37EEC77A 		vsub.f32	s14, s15, s14
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_updated = true;
+ 1040              		.loc 1 125 9 view .LVU301
+ 1041 03d8 B0EEC77A 		vabs.f32	s14, s14
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         fabsf(new_pos - motor_data.Controller.input_position) > 1e-4f)
+ 1042              		.loc 1 124 69 discriminator 1 view .LVU302
+ 1043 03dc B4EEE67A 		vcmpe.f32	s14, s13
+ 1044 03e0 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ARM GAS  /tmp/ccKOOhfX.s 			page 28
+
+
+ 1045 03e4 7FF77EAF 		ble	.L16
+ 1046 03e8 79E7     		b	.L15
+ 1047              	.LVL50:
+ 1048              	.L38:
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         fabsf(new_pos - motor_data.Controller.input_position) > 1e-4f)
+ 1049              		.loc 1 124 69 discriminator 1 view .LVU303
+ 1050              	.LBE195:
+ 1051              	.LBE198:
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         else
+ 1052              		.loc 1 198 13 is_stmt 1 view .LVU304
+ 1053              	.LBB199:
+ 1054              	.LBI50:
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 1055              		.loc 1 140 13 view .LVU305
+ 1056              	.LBB52:
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     {
+ 1057              		.loc 1 142 5 view .LVU306
+ 1058 03ea ACF1F90C 		sub	ip, ip, #249
+ 1059 03ee BCF1050F 		cmp	ip, #5
+ 1060 03f2 08D8     		bhi	.L36
+ 1061 03f4 DFE80CF0 		tbb	[pc, ip]
+ 1062              	.L8:
+ 1063 03f8 36       		.byte	(.L13-.L8)/2
+ 1064 03f9 03       		.byte	(.L12-.L8)/2
+ 1065 03fa 21       		.byte	(.L11-.L8)/2
+ 1066 03fb 1D       		.byte	(.L10-.L8)/2
+ 1067 03fc 17       		.byte	(.L9-.L8)/2
+ 1068 03fd 09       		.byte	(.L7-.L8)/2
+ 1069              		.p2align 1
+ 1070              	.L12:
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 1071              		.loc 1 175 9 view .LVU307
+ 1072 03fe 1C48     		ldr	r0, .L48
+ 1073              	.LVL51:
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 1074              		.loc 1 175 9 is_stmt 0 view .LVU308
+ 1075 0400 0121     		movs	r1, #1
+ 1076 0402 FFF7FEFF 		bl	Cogging_CalStart
+ 1077              	.LVL52:
+ 1078              	.L36:
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     case DM_CMD_SING: // 扩展(非DM标准): 让电机唱歌
+ 1079              		.loc 1 176 9 is_stmt 1 view .LVU309
+ 1080 0406 1A4B     		ldr	r3, .L48
+ 1081 0408 AFE6     		b	.L6
+ 1082              	.LVL53:
+ 1083              	.L7:
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_position = 0.0f;
+ 1084              		.loc 1 153 9 view .LVU310
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_position = 0.0f;
+ 1085              		.loc 1 153 30 is_stmt 0 view .LVU311
+ 1086 040a 194B     		ldr	r3, .L48
+ 1087 040c 5A68     		ldr	r2, [r3, #4]
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_position = 0.0f;
+ 1088              		.loc 1 153 56 view .LVU312
+ 1089 040e D2ED937A 		vldr.32	s15, [r2, #588]
+ 1090 0412 92ED927A 		vldr.32	s14, [r2, #584]
+ 1091 0416 77EE877A 		vadd.f32	s15, s15, s14
+ARM GAS  /tmp/ccKOOhfX.s 			page 29
+
+
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.pos_setpoint   = 0.0f;
+ 1092              		.loc 1 154 46 view .LVU313
+ 1093 041a 0021     		movs	r1, #0
+ 1094 041c 9965     		str	r1, [r3, #88]	@ float
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 1095              		.loc 1 155 46 view .LVU314
+ 1096 041e 1967     		str	r1, [r3, #112]	@ float
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_position = 0.0f;
+ 1097              		.loc 1 153 56 view .LVU315
+ 1098 0420 C2ED937A 		vstr.32	s15, [r2, #588]
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.pos_setpoint   = 0.0f;
+ 1099              		.loc 1 154 9 is_stmt 1 view .LVU316
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 1100              		.loc 1 155 9 view .LVU317
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     case DM_CMD_CLEAR_ERR:
+ 1101              		.loc 1 156 9 view .LVU318
+ 1102 0424 A1E6     		b	.L6
+ 1103              	.L9:
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.state.State_Mode = STATE_MODE_GUARD;
+ 1104              		.loc 1 148 9 view .LVU319
+ 1105 0426 FFF7FEFF 		bl	Foc_Pwm_LowSides
+ 1106              	.LVL54:
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 1107              		.loc 1 149 9 view .LVU320
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 1108              		.loc 1 149 37 is_stmt 0 view .LVU321
+ 1109 042a 114B     		ldr	r3, .L48
+ 1110 042c 0322     		movs	r2, #3
+ 1111 042e 1A73     		strb	r2, [r3, #12]
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     case DM_CMD_SET_ZERO:
+ 1112              		.loc 1 150 9 is_stmt 1 view .LVU322
+ 1113 0430 9BE6     		b	.L6
+ 1114              	.LVL55:
+ 1115              	.L10:
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 1116              		.loc 1 145 9 view .LVU323
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 1117              		.loc 1 145 37 is_stmt 0 view .LVU324
+ 1118 0432 0F4B     		ldr	r3, .L48
+ 1119 0434 0222     		movs	r2, #2
+ 1120 0436 1A73     		strb	r2, [r3, #12]
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     case DM_CMD_DISABLE:
+ 1121              		.loc 1 146 9 is_stmt 1 view .LVU325
+ 1122 0438 97E6     		b	.L6
+ 1123              	.L11:
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_velocity = 0.0f;
+ 1124              		.loc 1 161 9 view .LVU326
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_velocity = 0.0f;
+ 1125              		.loc 1 161 46 is_stmt 0 view .LVU327
+ 1126 043a 0D4B     		ldr	r3, .L48
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.pos_setpoint   = motor_data.components.encoder->pos_estimate_;
+ 1127              		.loc 1 167 77 view .LVU328
+ 1128 043c 5868     		ldr	r0, [r3, #4]
+ 1129              	.LVL56:
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.pos_setpoint   = motor_data.components.encoder->pos_estimate_;
+ 1130              		.loc 1 167 77 view .LVU329
+ 1131 043e D0F84842 		ldr	r4, [r0, #584]	@ float
+ARM GAS  /tmp/ccKOOhfX.s 			page 30
+
+
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.components.foc->id_set    = 0.0f;
+ 1132              		.loc 1 169 30 view .LVU330
+ 1133 0442 1868     		ldr	r0, [r3]
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.pos_setpoint   = motor_data.components.encoder->pos_estimate_;
+ 1134              		.loc 1 167 46 view .LVU331
+ 1135 0444 9C65     		str	r4, [r3, #88]	@ float
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_velocity = 0.0f;
+ 1136              		.loc 1 161 46 view .LVU332
+ 1137 0446 0022     		movs	r2, #0
+ 1138 0448 1A66     		str	r2, [r3, #96]	@ float
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_kp       = 0.0f;
+ 1139              		.loc 1 162 9 is_stmt 1 view .LVU333
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_kp       = 0.0f;
+ 1140              		.loc 1 162 46 is_stmt 0 view .LVU334
+ 1141 044a DA65     		str	r2, [r3, #92]	@ float
+ 163:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_kd       = 0.0f;
+ 1142              		.loc 1 163 9 is_stmt 1 view .LVU335
+ 163:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_kd       = 0.0f;
+ 1143              		.loc 1 163 46 is_stmt 0 view .LVU336
+ 1144 044c 5A66     		str	r2, [r3, #100]	@ float
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.torque_setpoint= 0.0f;
+ 1145              		.loc 1 164 9 is_stmt 1 view .LVU337
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.torque_setpoint= 0.0f;
+ 1146              		.loc 1 164 46 is_stmt 0 view .LVU338
+ 1147 044e 9A66     		str	r2, [r3, #104]	@ float
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.vel_setpoint   = 0.0f;
+ 1148              		.loc 1 165 9 is_stmt 1 view .LVU339
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.vel_setpoint   = 0.0f;
+ 1149              		.loc 1 165 46 is_stmt 0 view .LVU340
+ 1150 0450 9A67     		str	r2, [r3, #120]	@ float
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_position = motor_data.components.encoder->pos_estimate_; // 位
+ 1151              		.loc 1 166 9 is_stmt 1 view .LVU341
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.input_position = motor_data.components.encoder->pos_estimate_; // 位
+ 1152              		.loc 1 166 46 is_stmt 0 view .LVU342
+ 1153 0452 5A67     		str	r2, [r3, #116]	@ float
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.Controller.pos_setpoint   = motor_data.components.encoder->pos_estimate_;
+ 1154              		.loc 1 167 9 is_stmt 1 view .LVU343
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.components.foc->iq_set    = 0.0f;
+ 1155              		.loc 1 168 9 view .LVU344
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.state.Fault_State = FAULT_STATE_NORMAL;
+ 1156              		.loc 1 170 46 is_stmt 0 view .LVU345
+ 1157 0454 C0F88020 		str	r2, [r0, #128]	@ unaligned
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.components.foc->iq_set    = 0.0f;
+ 1158              		.loc 1 168 46 view .LVU346
+ 1159 0458 1C67     		str	r4, [r3, #112]	@ float
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.components.foc->id_set    = 0.0f;
+ 1160              		.loc 1 169 9 is_stmt 1 view .LVU347
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.components.foc->id_set    = 0.0f;
+ 1161              		.loc 1 169 46 is_stmt 0 view .LVU348
+ 1162 045a C0F88420 		str	r2, [r0, #132]	@ unaligned
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.state.Fault_State = FAULT_STATE_NORMAL;
+ 1163              		.loc 1 170 9 is_stmt 1 view .LVU349
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.state.State_Mode  = STATE_MODE_IDLE;
+ 1164              		.loc 1 171 9 view .LVU350
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         motor_data.state.State_Mode  = STATE_MODE_IDLE;
+ 1165              		.loc 1 171 38 is_stmt 0 view .LVU351
+ 1166 045e 1A74     		strb	r2, [r3, #16]
+ARM GAS  /tmp/ccKOOhfX.s 			page 31
+
+
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 1167              		.loc 1 172 9 is_stmt 1 view .LVU352
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 1168              		.loc 1 172 38 is_stmt 0 view .LVU353
+ 1169 0460 1A73     		strb	r2, [r3, #12]
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     case DM_CMD_COGGING_CAL: // 扩展(非DM标准): 启动闭环慢速扫齿槽标定(清零首遍
+ 1170              		.loc 1 173 9 is_stmt 1 view .LVU354
+ 1171 0462 82E6     		b	.L6
+ 1172              	.LVL57:
+ 1173              	.L13:
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 1174              		.loc 1 178 9 view .LVU355
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         break;
+ 1175              		.loc 1 178 19 is_stmt 0 view .LVU356
+ 1176 0464 034A     		ldr	r2, .L48+4
+ 1177 0466 024B     		ldr	r3, .L48
+ 1178 0468 0121     		movs	r1, #1
+ 1179 046a 1170     		strb	r1, [r2]
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     default:
+ 1180              		.loc 1 179 9 is_stmt 1 view .LVU357
+ 1181 046c 7DE6     		b	.L6
+ 1182              	.L49:
+ 1183 046e 00BF     		.align	2
+ 1184              	.L48:
+ 1185 0470 00000000 		.word	motor_data
+ 1186 0474 00000000 		.word	g_sing_on
+ 1187              	.LBE52:
+ 1188              	.LBE199:
+ 1189              		.cfi_endproc
+ 1190              	.LFE400:
+ 1192              		.section	.text.DM_CanInit,"ax",%progbits
+ 1193              		.align	1
+ 1194              		.p2align 2,,3
+ 1195              		.global	DM_CanInit
+ 1196              		.syntax unified
+ 1197              		.thumb
+ 1198              		.thumb_func
+ 1200              	DM_CanInit:
+ 1201              	.LFB401:
+ 214:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 215:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** /* ---------------- 初始化：注册 3 个 RX ID ---------------- */
+ 216:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** void DM_CanInit(void)
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 1202              		.loc 1 217 1 view -0
+ 1203              		.cfi_startproc
+ 1204              		@ args = 0, pretend = 0, frame = 64
+ 1205              		@ frame_needed = 0, uses_anonymous_args = 0
+ 218:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     FDCAN_Init_Config_s cfg_mit = {
+ 1206              		.loc 1 218 5 view .LVU359
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     FDCAN_Init_Config_s cfg_mit = {
+ 1207              		.loc 1 217 1 is_stmt 0 view .LVU360
+ 1208 0000 10B5     		push	{r4, lr}
+ 1209              	.LCFI7:
+ 1210              		.cfi_def_cfa_offset 8
+ 1211              		.cfi_offset 4, -8
+ 1212              		.cfi_offset 14, -4
+ 1213              		.loc 1 218 25 view .LVU361
+ARM GAS  /tmp/ccKOOhfX.s 			page 32
+
+
+ 1214 0002 174C     		ldr	r4, .L52
+ 1215 0004 A646     		mov	lr, r4
+ 1216 0006 BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     FDCAN_Init_Config_s cfg_mit = {
+ 1217              		.loc 1 217 1 view .LVU362
+ 1218 000a 90B0     		sub	sp, sp, #64
+ 1219              	.LCFI8:
+ 1220              		.cfi_def_cfa_offset 72
+ 1221              		.loc 1 218 25 view .LVU363
+ 1222 000c 0DF1040C 		add	ip, sp, #4
+ 1223 0010 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
+ 1224 0014 DEF80030 		ldr	r3, [lr]
+ 1225 0018 CCF80030 		str	r3, [ip]
+ 219:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         .fdcan_handle = &hfdcan1,
+ 220:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         .tx_id = DM_MASTER_ID, // 反馈发往主控
+ 221:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         .rx_id = DM_ID_MIT,
+ 222:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         .fdcan_module_callback = DM_RxCallback,
+ 223:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         .id = NULL};
+ 224:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     dm_mit = FDCANRegister(&cfg_mit);
+ 1226              		.loc 1 224 5 is_stmt 1 view .LVU364
+ 1227              		.loc 1 224 14 is_stmt 0 view .LVU365
+ 1228 001c 01A8     		add	r0, sp, #4
+ 1229 001e FFF7FEFF 		bl	FDCANRegister
+ 1230              	.LVL58:
+ 1231              		.loc 1 224 12 discriminator 1 view .LVU366
+ 1232 0022 104B     		ldr	r3, .L52+4
+ 225:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 226:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     FDCAN_Init_Config_s cfg_posvel = {
+ 1233              		.loc 1 226 25 view .LVU367
+ 1234 0024 04F1140E 		add	lr, r4, #20
+ 224:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 1235              		.loc 1 224 12 discriminator 1 view .LVU368
+ 1236 0028 1860     		str	r0, [r3]
+ 1237              		.loc 1 226 5 is_stmt 1 view .LVU369
+ 1238              		.loc 1 226 25 is_stmt 0 view .LVU370
+ 1239 002a BEE80F00 		ldmia	lr!, {r0, r1, r2, r3}
+ 1240 002e 0DF1180C 		add	ip, sp, #24
+ 1241 0032 ACE80F00 		stmia	ip!, {r0, r1, r2, r3}
+ 1242 0036 DEF80030 		ldr	r3, [lr]
+ 1243 003a CCF80030 		str	r3, [ip]
+ 227:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         .fdcan_handle = &hfdcan1,
+ 228:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         .tx_id = DM_MASTER_ID,
+ 229:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         .rx_id = DM_ID_POSVEL,
+ 230:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         .fdcan_module_callback = DM_RxCallback,
+ 231:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         .id = NULL};
+ 232:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     dm_posvel = FDCANRegister(&cfg_posvel);
+ 1244              		.loc 1 232 5 is_stmt 1 view .LVU371
+ 1245              		.loc 1 232 17 is_stmt 0 view .LVU372
+ 1246 003e 06A8     		add	r0, sp, #24
+ 1247 0040 FFF7FEFF 		bl	FDCANRegister
+ 1248              	.LVL59:
+ 233:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 234:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     FDCAN_Init_Config_s cfg_vel = {
+ 1249              		.loc 1 234 5 is_stmt 1 view .LVU373
+ 1250              		.loc 1 234 25 is_stmt 0 view .LVU374
+ 1251 0044 04F1280C 		add	ip, r4, #40
+ 1252 0048 BCE80F00 		ldmia	ip!, {r0, r1, r2, r3}
+ARM GAS  /tmp/ccKOOhfX.s 			page 33
+
+
+ 1253 004c 0BAC     		add	r4, sp, #44
+ 1254 004e 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+ 1255 0050 DCF80030 		ldr	r3, [ip]
+ 1256 0054 2360     		str	r3, [r4]
+ 235:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         .fdcan_handle = &hfdcan1,
+ 236:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         .tx_id = DM_MASTER_ID,
+ 237:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         .rx_id = DM_ID_VEL,
+ 238:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         .fdcan_module_callback = DM_RxCallback,
+ 239:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         .id = NULL};
+ 240:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     dm_vel = FDCANRegister(&cfg_vel);
+ 1257              		.loc 1 240 5 is_stmt 1 view .LVU375
+ 1258              		.loc 1 240 14 is_stmt 0 view .LVU376
+ 1259 0056 0BA8     		add	r0, sp, #44
+ 1260 0058 FFF7FEFF 		bl	FDCANRegister
+ 1261              	.LVL60:
+ 241:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 1262              		.loc 1 241 1 view .LVU377
+ 1263 005c 10B0     		add	sp, sp, #64
+ 1264              	.LCFI9:
+ 1265              		.cfi_def_cfa_offset 8
+ 1266              		@ sp needed
+ 1267 005e 10BD     		pop	{r4, pc}
+ 1268              	.L53:
+ 1269              		.align	2
+ 1270              	.L52:
+ 1271 0060 00000000 		.word	.LANCHOR0
+ 1272 0064 00000000 		.word	dm_mit
+ 1273              		.cfi_endproc
+ 1274              	.LFE401:
+ 1276              		.section	.text.DM_CanHealthCheck,"ax",%progbits
+ 1277              		.align	1
+ 1278              		.p2align 2,,3
+ 1279              		.global	DM_CanHealthCheck
+ 1280              		.syntax unified
+ 1281              		.thumb
+ 1282              		.thumb_func
+ 1284              	DM_CanHealthCheck:
+ 1285              	.LFB402:
+ 242:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 243:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** /* ---------------- #2 FDCAN 健康检查 / bus-off 自恢复 ----------------
+ 244:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****  * 周期调用(RobotCMDTask, 已内部节流)。bus-off 时硬件自动置 CCCR.INIT 停机且不�
+ 245:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****  * 此处检测到 bus-off 或意外 INIT(运行中本应为 0) 就清 INIT, 触发硬件总线恢�
+ 246:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****  * 正常运行时此函数几乎零开销(只读一次 PSR)。 */
+ 247:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** void DM_CanHealthCheck(void)
+ 248:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** {
+ 1286              		.loc 1 248 1 is_stmt 1 view -0
+ 1287              		.cfi_startproc
+ 1288              		@ args = 0, pretend = 0, frame = 48
+ 1289              		@ frame_needed = 0, uses_anonymous_args = 0
+ 249:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     static uint32_t last_ms = 0;
+ 1290              		.loc 1 249 5 view .LVU379
+ 250:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint32_t now = HAL_GetTick();
+ 1291              		.loc 1 250 5 view .LVU380
+ 248:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     static uint32_t last_ms = 0;
+ 1292              		.loc 1 248 1 is_stmt 0 view .LVU381
+ 1293 0000 30B5     		push	{r4, r5, lr}
+ 1294              	.LCFI10:
+ARM GAS  /tmp/ccKOOhfX.s 			page 34
+
+
+ 1295              		.cfi_def_cfa_offset 12
+ 1296              		.cfi_offset 4, -12
+ 1297              		.cfi_offset 5, -8
+ 1298              		.cfi_offset 14, -4
+ 251:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     if ((uint32_t)(now - last_ms) < 20u) // 节流: 20ms 一次足够(恢复本身需若干 ms)
+ 1299              		.loc 1 251 24 view .LVU382
+ 1300 0002 124C     		ldr	r4, .L65
+ 248:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     static uint32_t last_ms = 0;
+ 1301              		.loc 1 248 1 view .LVU383
+ 1302 0004 8DB0     		sub	sp, sp, #52
+ 1303              	.LCFI11:
+ 1304              		.cfi_def_cfa_offset 64
+ 250:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     uint32_t now = HAL_GetTick();
+ 1305              		.loc 1 250 20 view .LVU384
+ 1306 0006 FFF7FEFF 		bl	HAL_GetTick
+ 1307              	.LVL61:
+ 1308              		.loc 1 251 5 is_stmt 1 view .LVU385
+ 1309              		.loc 1 251 24 is_stmt 0 view .LVU386
+ 1310 000a 2268     		ldr	r2, [r4]
+ 1311 000c 821A     		subs	r2, r0, r2
+ 1312              		.loc 1 251 8 view .LVU387
+ 1313 000e 132A     		cmp	r2, #19
+ 1314 0010 01D8     		bhi	.L64
+ 252:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         return;
+ 253:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     last_ms = now;
+ 254:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 255:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     FDCAN_ProtocolStatusTypeDef psr;
+ 256:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     HAL_FDCAN_GetProtocolStatus(&hfdcan1, &psr);
+ 257:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     // bus-off, 或运行中 INIT 被意外置位(停机) → 清 INIT 恢复
+ 258:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     if (psr.BusOff || (hfdcan1.Instance->CCCR & FDCAN_CCCR_INIT))
+ 259:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     {
+ 260:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         CLEAR_BIT(hfdcan1.Instance->CCCR, FDCAN_CCCR_INIT);
+ 261:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         g_can_recover_cnt++;
+ 262:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     }
+ 263:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** }
+ 1315              		.loc 1 263 1 view .LVU388
+ 1316 0012 0DB0     		add	sp, sp, #52
+ 1317              	.LCFI12:
+ 1318              		.cfi_remember_state
+ 1319              		.cfi_def_cfa_offset 12
+ 1320              		@ sp needed
+ 1321 0014 30BD     		pop	{r4, r5, pc}
+ 1322              	.L64:
+ 1323              	.LCFI13:
+ 1324              		.cfi_restore_state
+ 253:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 1325              		.loc 1 253 5 is_stmt 1 view .LVU389
+ 256:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     // bus-off, 或运行中 INIT 被意外置位(停机) → 清 INIT 恢复
+ 1326              		.loc 1 256 5 is_stmt 0 view .LVU390
+ 1327 0016 0E4D     		ldr	r5, .L65+4
+ 1328 0018 0346     		mov	r3, r0
+ 1329 001a 01A9     		add	r1, sp, #4
+ 1330 001c 2846     		mov	r0, r5
+ 1331              	.LVL62:
+ 253:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c **** 
+ 1332              		.loc 1 253 13 view .LVU391
+ 1333 001e 2360     		str	r3, [r4]
+ARM GAS  /tmp/ccKOOhfX.s 			page 35
+
+
+ 255:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     HAL_FDCAN_GetProtocolStatus(&hfdcan1, &psr);
+ 1334              		.loc 1 255 5 is_stmt 1 view .LVU392
+ 256:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     // bus-off, 或运行中 INIT 被意外置位(停机) → 清 INIT 恢复
+ 1335              		.loc 1 256 5 view .LVU393
+ 1336 0020 FFF7FEFF 		bl	HAL_FDCAN_GetProtocolStatus
+ 1337              	.LVL63:
+ 258:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     {
+ 1338              		.loc 1 258 5 view .LVU394
+ 258:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     {
+ 1339              		.loc 1 258 8 is_stmt 0 view .LVU395
+ 1340 0024 069B     		ldr	r3, [sp, #24]
+ 1341 0026 53B1     		cbz	r3, .L56
+ 258:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     {
+ 1342              		.loc 1 258 31 discriminator 1 view .LVU396
+ 1343 0028 2B68     		ldr	r3, [r5]
+ 1344              	.L57:
+ 260:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         g_can_recover_cnt++;
+ 1345              		.loc 1 260 9 is_stmt 1 view .LVU397
+ 1346 002a 9A69     		ldr	r2, [r3, #24]
+ 261:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     }
+ 1347              		.loc 1 261 26 is_stmt 0 view .LVU398
+ 1348 002c 0949     		ldr	r1, .L65+8
+ 260:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****         g_can_recover_cnt++;
+ 1349              		.loc 1 260 9 view .LVU399
+ 1350 002e 22F00102 		bic	r2, r2, #1
+ 1351 0032 9A61     		str	r2, [r3, #24]
+ 261:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     }
+ 1352              		.loc 1 261 9 is_stmt 1 view .LVU400
+ 261:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     }
+ 1353              		.loc 1 261 26 is_stmt 0 view .LVU401
+ 1354 0034 0B68     		ldr	r3, [r1]
+ 1355 0036 0133     		adds	r3, r3, #1
+ 1356 0038 0B60     		str	r3, [r1]
+ 1357              		.loc 1 263 1 view .LVU402
+ 1358 003a 0DB0     		add	sp, sp, #52
+ 1359              	.LCFI14:
+ 1360              		.cfi_remember_state
+ 1361              		.cfi_def_cfa_offset 12
+ 1362              		@ sp needed
+ 1363 003c 30BD     		pop	{r4, r5, pc}
+ 1364              	.L56:
+ 1365              	.LCFI15:
+ 1366              		.cfi_restore_state
+ 258:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     {
+ 1367              		.loc 1 258 31 discriminator 1 view .LVU403
+ 1368 003e 2B68     		ldr	r3, [r5]
+ 258:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     {
+ 1369              		.loc 1 258 40 discriminator 1 view .LVU404
+ 1370 0040 9A69     		ldr	r2, [r3, #24]
+ 258:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.c ****     {
+ 1371              		.loc 1 258 20 discriminator 1 view .LVU405
+ 1372 0042 D207     		lsls	r2, r2, #31
+ 1373 0044 F1D4     		bmi	.L57
+ 1374              		.loc 1 263 1 view .LVU406
+ 1375 0046 0DB0     		add	sp, sp, #52
+ 1376              	.LCFI16:
+ 1377              		.cfi_def_cfa_offset 12
+ARM GAS  /tmp/ccKOOhfX.s 			page 36
+
+
+ 1378              		@ sp needed
+ 1379 0048 30BD     		pop	{r4, r5, pc}
+ 1380              	.L66:
+ 1381 004a 00BF     		.align	2
+ 1382              	.L65:
+ 1383 004c 00000000 		.word	last_ms.0
+ 1384 0050 00000000 		.word	hfdcan1
+ 1385 0054 00000000 		.word	g_can_recover_cnt
+ 1386              		.cfi_endproc
+ 1387              	.LFE402:
+ 1389              		.section	.rodata.CSWTCH.11,"a"
+ 1390              		.align	2
+ 1393              	CSWTCH.11:
+ 1394 0000 0A       		.byte	10
+ 1395 0001 08       		.byte	8
+ 1396 0002 09       		.byte	9
+ 1397 0003 0B       		.byte	11
+ 1398 0004 0E       		.byte	14
+ 1399              		.section	.bss.last_ms.0,"aw",%nobits
+ 1400              		.align	2
+ 1403              	last_ms.0:
+ 1404 0000 00000000 		.space	4
+ 1405              		.section	.bss.dm_mit,"aw",%nobits
+ 1406              		.align	2
+ 1409              	dm_mit:
+ 1410 0000 00000000 		.space	4
+ 1411              		.global	g_can_recover_cnt
+ 1412              		.section	.bss.g_can_recover_cnt,"aw",%nobits
+ 1413              		.align	2
+ 1416              	g_can_recover_cnt:
+ 1417 0000 00000000 		.space	4
+ 1418              		.global	g_can_last_rx_ms
+ 1419              		.section	.bss.g_can_last_rx_ms,"aw",%nobits
+ 1420              		.align	2
+ 1423              	g_can_last_rx_ms:
+ 1424 0000 00000000 		.space	4
+ 1425              		.section	.rodata
+ 1426              		.align	2
+ 1427              		.set	.LANCHOR0,. + 0
+ 1428              	.LC0:
+ 1429 0000 00000000 		.word	hfdcan1
+ 1430 0004 00000000 		.word	0
+ 1431 0008 01000000 		.word	1
+ 1432 000c 00000000 		.word	DM_RxCallback
+ 1433 0010 00000000 		.word	0
+ 1434              	.LC1:
+ 1435 0014 00000000 		.word	hfdcan1
+ 1436 0018 00000000 		.word	0
+ 1437 001c 01010000 		.word	257
+ 1438 0020 00000000 		.word	DM_RxCallback
+ 1439 0024 00000000 		.word	0
+ 1440              	.LC2:
+ 1441 0028 00000000 		.word	hfdcan1
+ 1442 002c 00000000 		.word	0
+ 1443 0030 01020000 		.word	513
+ 1444 0034 00000000 		.word	DM_RxCallback
+ 1445 0038 00000000 		.word	0
+ARM GAS  /tmp/ccKOOhfX.s 			page 37
+
+
+ 1446              		.text
+ 1447              	.Letext0:
+ 1448              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 1449              		.file 3 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.h"
+ 1450              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/core_cm4.h"
+ 1451              		.file 5 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 1452              		.file 6 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 1453              		.file 7 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 1454              		.file 8 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 1455              		.file 9 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 1456              		.file 10 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm
+ 1457              		.file 11 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm
+ 1458              		.file 12 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/fdcan.h"
+ 1459              		.file 13 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.h"
+ 1460              		.file 14 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.h"
+ 1461              		.file 15 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/encoder/MT6816/mt6816_encode
+ 1462              		.file 16 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/BLDCMotor.h"
+ 1463              		.file 17 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.h"
+ 1464              		.file 18 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/FOCMotor.h"
+ 1465              		.file 19 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm
+ 1466              		.file 20 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.h"
+ARM GAS  /tmp/ccKOOhfX.s 			page 38
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 dm_can.c
+     /tmp/ccKOOhfX.s:21     .text.DM_RxCallback:00000000 $t
+     /tmp/ccKOOhfX.s:27     .text.DM_RxCallback:00000000 DM_RxCallback
+     /tmp/ccKOOhfX.s:1002   .text.DM_RxCallback:00000368 $d
+     /tmp/ccKOOhfX.s:1423   .bss.g_can_last_rx_ms:00000000 g_can_last_rx_ms
+     /tmp/ccKOOhfX.s:1409   .bss.dm_mit:00000000 dm_mit
+     /tmp/ccKOOhfX.s:1393   .rodata.CSWTCH.11:00000000 CSWTCH.11
+     /tmp/ccKOOhfX.s:1035   .text.DM_RxCallback:000003cc $t
+     /tmp/ccKOOhfX.s:1063   .text.DM_RxCallback:000003f8 $d
+     /tmp/ccKOOhfX.s:1069   .text.DM_RxCallback:000003fe $t
+     /tmp/ccKOOhfX.s:1185   .text.DM_RxCallback:00000470 $d
+     /tmp/ccKOOhfX.s:1193   .text.DM_CanInit:00000000 $t
+     /tmp/ccKOOhfX.s:1200   .text.DM_CanInit:00000000 DM_CanInit
+     /tmp/ccKOOhfX.s:1271   .text.DM_CanInit:00000060 $d
+     /tmp/ccKOOhfX.s:1277   .text.DM_CanHealthCheck:00000000 $t
+     /tmp/ccKOOhfX.s:1284   .text.DM_CanHealthCheck:00000000 DM_CanHealthCheck
+     /tmp/ccKOOhfX.s:1383   .text.DM_CanHealthCheck:0000004c $d
+     /tmp/ccKOOhfX.s:1403   .bss.last_ms.0:00000000 last_ms.0
+     /tmp/ccKOOhfX.s:1416   .bss.g_can_recover_cnt:00000000 g_can_recover_cnt
+     /tmp/ccKOOhfX.s:1390   .rodata.CSWTCH.11:00000000 $d
+     /tmp/ccKOOhfX.s:1400   .bss.last_ms.0:00000000 $d
+     /tmp/ccKOOhfX.s:1406   .bss.dm_mit:00000000 $d
+     /tmp/ccKOOhfX.s:1413   .bss.g_can_recover_cnt:00000000 $d
+     /tmp/ccKOOhfX.s:1420   .bss.g_can_last_rx_ms:00000000 $d
+     /tmp/ccKOOhfX.s:1426   .rodata:00000000 $d
+
+UNDEFINED SYMBOLS
+FDCANTransmit
+motor_data
+Cogging_CalStart
+Foc_Pwm_LowSides
+g_sing_on
+FDCANRegister
+HAL_GetTick
+HAL_FDCAN_GetProtocolStatus
+hfdcan1

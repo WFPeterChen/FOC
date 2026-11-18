@@ -1,0 +1,1676 @@
+ARM GAS  /tmp/cczNifnl.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"tim.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c"
+  20              		.section	.text.HAL_TIM_PWM_MspInit,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	HAL_TIM_PWM_MspInit
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	HAL_TIM_PWM_MspInit:
+  29              	.LVL0:
+  30              	.LFB331:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** /* USER CODE BEGIN Header */
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** /**
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   ******************************************************************************
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   * @file    tim.c
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   * @brief   This file provides code for the configuration
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   *          of the TIM instances.
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   ******************************************************************************
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   * @attention
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   *
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   * Copyright (c) 2024 STMicroelectronics.
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   * All rights reserved.
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   *
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   * in the root directory of this software component.
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   *
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   ******************************************************************************
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   */
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** /* USER CODE END Header */
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** /* Includes ------------------------------------------------------------------*/
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** #include "tim.h"
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** /* USER CODE BEGIN 0 */
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** /* USER CODE END 0 */
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** TIM_HandleTypeDef htim1;
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** TIM_HandleTypeDef htim3;
+ARM GAS  /tmp/cczNifnl.s 			page 2
+
+
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** DMA_HandleTypeDef hdma_tim3_ch2;
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** /* TIM1 init function */
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** void MX_TIM1_Init(void)
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** {
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM1_Init 0 */
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE END TIM1_Init 0 */
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   TIM_MasterConfigTypeDef sMasterConfig = {0};
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   TIM_OC_InitTypeDef sConfigOC = {0};
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM1_Init 1 */
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE END TIM1_Init 1 */
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim1.Instance = TIM1;
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim1.Init.Prescaler = 0;
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim1.Init.CounterMode = TIM_COUNTERMODE_CENTERALIGNED1;
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim1.Init.Period = 4200;
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim1.Init.RepetitionCounter = MCPWM_RCR;
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIM_PWM_Init(&htim1) != HAL_OK)
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     Error_Handler();
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sMasterConfig.MasterOutputTrigger = TIM_TRGO_OC4REF;
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sMasterConfig.MasterOutputTrigger2 = TIM_TRGO2_RESET;
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     Error_Handler();
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.Pulse = 0;
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     Error_Handler();
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     Error_Handler();
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_3) != HAL_OK)
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     Error_Handler();
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.Pulse = 4190;
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_4) != HAL_OK)
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ARM GAS  /tmp/cczNifnl.s 			page 3
+
+
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     Error_Handler();
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.DeadTime = MCPWM_DEADTIME_CLOCKS;
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.BreakFilter = 0;
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.BreakAFMode = TIM_BREAK_AFMODE_INPUT;
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.Break2State = TIM_BREAK2_DISABLE;
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.Break2Polarity = TIM_BREAK2POLARITY_HIGH;
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.Break2Filter = 0;
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.Break2AFMode = TIM_BREAK_AFMODE_INPUT;
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIMEx_ConfigBreakDeadTime(&htim1, &sBreakDeadTimeConfig) != HAL_OK)
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     Error_Handler();
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM1_Init 2 */
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE END TIM1_Init 2 */
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   HAL_TIM_MspPostInit(&htim1);
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** }
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** /* TIM3 init function */
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** void MX_TIM3_Init(void)
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** {
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM3_Init 0 */
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE END TIM3_Init 0 */
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   TIM_MasterConfigTypeDef sMasterConfig = {0};
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   TIM_OC_InitTypeDef sConfigOC = {0};
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM3_Init 1 */
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE END TIM3_Init 1 */
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim3.Instance = TIM3;
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim3.Init.Prescaler = 0;
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim3.Init.Period = 209;
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     Error_Handler();
+ 134:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     Error_Handler();
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCMode = TIM_OCMODE_PWM1;
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.Pulse = 0;
+ARM GAS  /tmp/cczNifnl.s 			page 4
+
+
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     Error_Handler();
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM3_Init 2 */
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE END TIM3_Init 2 */
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   HAL_TIM_MspPostInit(&htim3);
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** }
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef* tim_pwmHandle)
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** {
+  31              		.loc 1 157 1 view -0
+  32              		.cfi_startproc
+  33              		@ args = 0, pretend = 0, frame = 8
+  34              		@ frame_needed = 0, uses_anonymous_args = 0
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if(tim_pwmHandle->Instance==TIM1)
+  35              		.loc 1 159 3 view .LVU1
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+  36              		.loc 1 157 1 is_stmt 0 view .LVU2
+  37 0000 30B5     		push	{r4, r5, lr}
+  38              	.LCFI0:
+  39              		.cfi_def_cfa_offset 12
+  40              		.cfi_offset 4, -12
+  41              		.cfi_offset 5, -8
+  42              		.cfi_offset 14, -4
+  43              		.loc 1 159 5 view .LVU3
+  44 0002 254A     		ldr	r2, .L13
+  45              		.loc 1 159 19 view .LVU4
+  46 0004 0368     		ldr	r3, [r0]
+  47              		.loc 1 159 5 view .LVU5
+  48 0006 9342     		cmp	r3, r2
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+  49              		.loc 1 157 1 view .LVU6
+  50 0008 83B0     		sub	sp, sp, #12
+  51              	.LCFI1:
+  52              		.cfi_def_cfa_offset 24
+  53              		.loc 1 159 5 view .LVU7
+  54 000a 04D0     		beq	.L10
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM1_MspInit 0 */
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 163:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE END TIM1_MspInit 0 */
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /* TIM1 clock enable */
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     __HAL_RCC_TIM1_CLK_ENABLE();
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /* TIM1 interrupt Init */
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     HAL_NVIC_SetPriority(TIM1_TRG_COM_TIM17_IRQn, 15, 0);
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     HAL_NVIC_EnableIRQ(TIM1_TRG_COM_TIM17_IRQn);
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM1_MspInit 1 */
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE END TIM1_MspInit 1 */
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+ARM GAS  /tmp/cczNifnl.s 			page 5
+
+
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   else if(tim_pwmHandle->Instance==TIM3)
+  55              		.loc 1 174 8 is_stmt 1 view .LVU8
+  56              		.loc 1 174 10 is_stmt 0 view .LVU9
+  57 000c 234A     		ldr	r2, .L13+4
+  58 000e 9342     		cmp	r3, r2
+  59 0010 16D0     		beq	.L11
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM3_MspInit 0 */
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE END TIM3_MspInit 0 */
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /* TIM3 clock enable */
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     __HAL_RCC_TIM3_CLK_ENABLE();
+ 181:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 182:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /* TIM3 DMA Init */
+ 183:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /* TIM3_CH2 Init */
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Instance = DMA1_Channel1;
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Init.Request = DMA_REQUEST_TIM3_CH2;
+ 186:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Init.Direction = DMA_MEMORY_TO_PERIPH;
+ 187:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Init.PeriphInc = DMA_PINC_DISABLE;
+ 188:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Init.MemInc = DMA_MINC_ENABLE;
+ 189:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
+ 190:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
+ 191:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Init.Mode = DMA_NORMAL;
+ 192:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Init.Priority = DMA_PRIORITY_MEDIUM;
+ 193:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     if (HAL_DMA_Init(&hdma_tim3_ch2) != HAL_OK)
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     {
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****       Error_Handler();
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     }
+ 197:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     __HAL_LINKDMA(tim_pwmHandle,hdma[TIM_DMA_ID_CC2],hdma_tim3_ch2);
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM3_MspInit 1 */
+ 201:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE END TIM3_MspInit 1 */
+ 203:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** }
+  60              		.loc 1 204 1 view .LVU10
+  61 0012 03B0     		add	sp, sp, #12
+  62              	.LCFI2:
+  63              		.cfi_remember_state
+  64              		.cfi_def_cfa_offset 12
+  65              		@ sp needed
+  66 0014 30BD     		pop	{r4, r5, pc}
+  67              	.L10:
+  68              	.LCFI3:
+  69              		.cfi_restore_state
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+  70              		.loc 1 165 5 is_stmt 1 view .LVU11
+  71              	.LBB2:
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+  72              		.loc 1 165 5 view .LVU12
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+  73              		.loc 1 165 5 view .LVU13
+  74 0016 224B     		ldr	r3, .L13+8
+  75 0018 186E     		ldr	r0, [r3, #96]
+  76              	.LVL1:
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ARM GAS  /tmp/cczNifnl.s 			page 6
+
+
+  77              		.loc 1 165 5 is_stmt 0 view .LVU14
+  78 001a 40F40060 		orr	r0, r0, #2048
+  79 001e 1866     		str	r0, [r3, #96]
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+  80              		.loc 1 165 5 is_stmt 1 view .LVU15
+  81 0020 1B6E     		ldr	r3, [r3, #96]
+  82 0022 03F40063 		and	r3, r3, #2048
+  83 0026 0093     		str	r3, [sp]
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+  84              		.loc 1 165 5 view .LVU16
+  85              	.LBE2:
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     HAL_NVIC_EnableIRQ(TIM1_TRG_COM_TIM17_IRQn);
+  86              		.loc 1 168 5 is_stmt 0 view .LVU17
+  87 0028 0022     		movs	r2, #0
+  88 002a 0F21     		movs	r1, #15
+  89 002c 1A20     		movs	r0, #26
+  90              	.LBB3:
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+  91              		.loc 1 165 5 view .LVU18
+  92 002e 009B     		ldr	r3, [sp]
+  93              	.LBE3:
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+  94              		.loc 1 165 5 is_stmt 1 view .LVU19
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     HAL_NVIC_EnableIRQ(TIM1_TRG_COM_TIM17_IRQn);
+  95              		.loc 1 168 5 view .LVU20
+  96 0030 FFF7FEFF 		bl	HAL_NVIC_SetPriority
+  97              	.LVL2:
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM1_MspInit 1 */
+  98              		.loc 1 169 5 view .LVU21
+  99 0034 1A20     		movs	r0, #26
+ 100              		.loc 1 204 1 is_stmt 0 view .LVU22
+ 101 0036 03B0     		add	sp, sp, #12
+ 102              	.LCFI4:
+ 103              		.cfi_remember_state
+ 104              		.cfi_def_cfa_offset 12
+ 105              		@ sp needed
+ 106 0038 BDE83040 		pop	{r4, r5, lr}
+ 107              	.LCFI5:
+ 108              		.cfi_restore 14
+ 109              		.cfi_restore 5
+ 110              		.cfi_restore 4
+ 111              		.cfi_def_cfa_offset 0
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM1_MspInit 1 */
+ 112              		.loc 1 169 5 view .LVU23
+ 113 003c FFF7FEBF 		b	HAL_NVIC_EnableIRQ
+ 114              	.LVL3:
+ 115              	.L11:
+ 116              	.LCFI6:
+ 117              		.cfi_restore_state
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 118              		.loc 1 180 5 is_stmt 1 view .LVU24
+ 119              	.LBB4:
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 120              		.loc 1 180 5 view .LVU25
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 121              		.loc 1 180 5 view .LVU26
+ 122 0040 174B     		ldr	r3, .L13+8
+ARM GAS  /tmp/cczNifnl.s 			page 7
+
+
+ 123              	.LBE4:
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Init.Request = DMA_REQUEST_TIM3_CH2;
+ 124              		.loc 1 184 28 is_stmt 0 view .LVU27
+ 125 0042 184D     		ldr	r5, .L13+12
+ 126              	.LBB5:
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 127              		.loc 1 180 5 view .LVU28
+ 128 0044 9A6D     		ldr	r2, [r3, #88]
+ 129 0046 42F00202 		orr	r2, r2, #2
+ 130 004a 9A65     		str	r2, [r3, #88]
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 131              		.loc 1 180 5 is_stmt 1 view .LVU29
+ 132 004c 9B6D     		ldr	r3, [r3, #88]
+ 133              	.LBE5:
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Init.Request = DMA_REQUEST_TIM3_CH2;
+ 134              		.loc 1 184 28 is_stmt 0 view .LVU30
+ 135 004e 164A     		ldr	r2, .L13+16
+ 136 0050 2A60     		str	r2, [r5]
+ 137              	.LBB6:
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 138              		.loc 1 180 5 view .LVU31
+ 139 0052 03F00203 		and	r3, r3, #2
+ 140 0056 0193     		str	r3, [sp, #4]
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 141              		.loc 1 180 5 is_stmt 1 view .LVU32
+ 142              	.LBE6:
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Init.Direction = DMA_MEMORY_TO_PERIPH;
+ 143              		.loc 1 185 32 is_stmt 0 view .LVU33
+ 144 0058 3E22     		movs	r2, #62
+ 145              	.LBB7:
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 146              		.loc 1 180 5 view .LVU34
+ 147 005a 019B     		ldr	r3, [sp, #4]
+ 148              	.LBE7:
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 149              		.loc 1 180 5 is_stmt 1 view .LVU35
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Init.Request = DMA_REQUEST_TIM3_CH2;
+ 150              		.loc 1 184 5 view .LVU36
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Init.Direction = DMA_MEMORY_TO_PERIPH;
+ 151              		.loc 1 185 5 view .LVU37
+ 186:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Init.PeriphInc = DMA_PINC_DISABLE;
+ 152              		.loc 1 186 5 view .LVU38
+ 187:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Init.MemInc = DMA_MINC_ENABLE;
+ 153              		.loc 1 187 5 view .LVU39
+ 188:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
+ 154              		.loc 1 188 5 view .LVU40
+ 189:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Init.MemDataAlignment = DMA_MDATAALIGN_WORD;
+ 155              		.loc 1 189 5 view .LVU41
+ 190:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Init.Mode = DMA_NORMAL;
+ 156              		.loc 1 190 5 view .LVU42
+ 191:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Init.Priority = DMA_PRIORITY_MEDIUM;
+ 157              		.loc 1 191 5 view .LVU43
+ 192:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     if (HAL_DMA_Init(&hdma_tim3_ch2) != HAL_OK)
+ 158              		.loc 1 192 5 view .LVU44
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Init.Direction = DMA_MEMORY_TO_PERIPH;
+ 159              		.loc 1 185 32 is_stmt 0 view .LVU45
+ 160 005c 1023     		movs	r3, #16
+ARM GAS  /tmp/cczNifnl.s 			page 8
+
+
+ 161 005e C5E90123 		strd	r2, r3, [r5, #4]
+ 162 0062 0021     		movs	r1, #0
+ 163 0064 8022     		movs	r2, #128
+ 164 0066 4FF40073 		mov	r3, #512
+ 165 006a C5E90312 		strd	r1, r2, [r5, #12]
+ 166 006e 0446     		mov	r4, r0
+ 167 0070 6B61     		str	r3, [r5, #20]
+ 168 0072 4FF40062 		mov	r2, #2048
+ 169 0076 4FF48053 		mov	r3, #4096
+ 193:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     {
+ 170              		.loc 1 193 9 view .LVU46
+ 171 007a 2846     		mov	r0, r5
+ 172              	.LVL4:
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     hdma_tim3_ch2.Init.Direction = DMA_MEMORY_TO_PERIPH;
+ 173              		.loc 1 185 32 view .LVU47
+ 174 007c C5E90621 		strd	r2, r1, [r5, #24]
+ 175 0080 2B62     		str	r3, [r5, #32]
+ 193:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     {
+ 176              		.loc 1 193 5 is_stmt 1 view .LVU48
+ 193:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     {
+ 177              		.loc 1 193 9 is_stmt 0 view .LVU49
+ 178 0082 FFF7FEFF 		bl	HAL_DMA_Init
+ 179              	.LVL5:
+ 193:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     {
+ 180              		.loc 1 193 8 discriminator 1 view .LVU50
+ 181 0086 18B9     		cbnz	r0, .L12
+ 182              	.L4:
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 183              		.loc 1 198 5 is_stmt 1 view .LVU51
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 184              		.loc 1 198 5 view .LVU52
+ 185 0088 A562     		str	r5, [r4, #40]
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 186              		.loc 1 198 5 view .LVU53
+ 187 008a AC62     		str	r4, [r5, #40]
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 188              		.loc 1 198 5 discriminator 1 view .LVU54
+ 189              		.loc 1 204 1 is_stmt 0 view .LVU55
+ 190 008c 03B0     		add	sp, sp, #12
+ 191              	.LCFI7:
+ 192              		.cfi_remember_state
+ 193              		.cfi_def_cfa_offset 12
+ 194              		@ sp needed
+ 195 008e 30BD     		pop	{r4, r5, pc}
+ 196              	.LVL6:
+ 197              	.L12:
+ 198              	.LCFI8:
+ 199              		.cfi_restore_state
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     }
+ 200              		.loc 1 195 7 is_stmt 1 view .LVU56
+ 201 0090 FFF7FEFF 		bl	Error_Handler
+ 202              	.LVL7:
+ 203 0094 F8E7     		b	.L4
+ 204              	.L14:
+ 205 0096 00BF     		.align	2
+ 206              	.L13:
+ 207 0098 002C0140 		.word	1073818624
+ARM GAS  /tmp/cczNifnl.s 			page 9
+
+
+ 208 009c 00040040 		.word	1073742848
+ 209 00a0 00100240 		.word	1073876992
+ 210 00a4 00000000 		.word	hdma_tim3_ch2
+ 211 00a8 08000240 		.word	1073872904
+ 212              		.cfi_endproc
+ 213              	.LFE331:
+ 215              		.section	.text.HAL_TIM_MspPostInit,"ax",%progbits
+ 216              		.align	1
+ 217              		.p2align 2,,3
+ 218              		.global	HAL_TIM_MspPostInit
+ 219              		.syntax unified
+ 220              		.thumb
+ 221              		.thumb_func
+ 223              	HAL_TIM_MspPostInit:
+ 224              	.LVL8:
+ 225              	.LFB332:
+ 205:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** void HAL_TIM_MspPostInit(TIM_HandleTypeDef* timHandle)
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** {
+ 226              		.loc 1 206 1 view -0
+ 227              		.cfi_startproc
+ 228              		@ args = 0, pretend = 0, frame = 40
+ 229              		@ frame_needed = 0, uses_anonymous_args = 0
+ 207:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 208:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   GPIO_InitTypeDef GPIO_InitStruct = {0};
+ 230              		.loc 1 208 3 view .LVU58
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 231              		.loc 1 206 1 is_stmt 0 view .LVU59
+ 232 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 233              	.LCFI9:
+ 234              		.cfi_def_cfa_offset 20
+ 235              		.cfi_offset 4, -20
+ 236              		.cfi_offset 5, -16
+ 237              		.cfi_offset 6, -12
+ 238              		.cfi_offset 7, -8
+ 239              		.cfi_offset 14, -4
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if(timHandle->Instance==TIM1)
+ 240              		.loc 1 209 15 view .LVU60
+ 241 0002 0368     		ldr	r3, [r0]
+ 242              		.loc 1 209 5 view .LVU61
+ 243 0004 304A     		ldr	r2, .L21
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 244              		.loc 1 206 1 view .LVU62
+ 245 0006 8BB0     		sub	sp, sp, #44
+ 246              	.LCFI10:
+ 247              		.cfi_def_cfa_offset 64
+ 208:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if(timHandle->Instance==TIM1)
+ 248              		.loc 1 208 20 view .LVU63
+ 249 0008 0024     		movs	r4, #0
+ 250              		.loc 1 209 5 view .LVU64
+ 251 000a 9342     		cmp	r3, r2
+ 208:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if(timHandle->Instance==TIM1)
+ 252              		.loc 1 208 20 view .LVU65
+ 253 000c CDE90444 		strd	r4, r4, [sp, #16]
+ 254 0010 CDE90644 		strd	r4, r4, [sp, #24]
+ 255 0014 0894     		str	r4, [sp, #32]
+ 256              		.loc 1 209 3 is_stmt 1 view .LVU66
+ 257              		.loc 1 209 5 is_stmt 0 view .LVU67
+ARM GAS  /tmp/cczNifnl.s 			page 10
+
+
+ 258 0016 04D0     		beq	.L19
+ 210:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 211:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM1_MspPostInit 0 */
+ 212:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 213:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE END TIM1_MspPostInit 0 */
+ 214:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     __HAL_RCC_GPIOB_CLK_ENABLE();
+ 215:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     __HAL_RCC_GPIOA_CLK_ENABLE();
+ 216:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /**TIM1 GPIO Configuration
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     PB13     ------> TIM1_CH1N
+ 218:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     PB14     ------> TIM1_CH2N
+ 219:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     PB15     ------> TIM1_CH3N
+ 220:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     PA8     ------> TIM1_CH1
+ 221:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     PA9     ------> TIM1_CH2
+ 222:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     PA10     ------> TIM1_CH3
+ 223:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     */
+ 224:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Pin = LIN3_Pin|LIN2_Pin;
+ 225:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 226:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 227:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 228:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Alternate = GPIO_AF6_TIM1;
+ 229:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+ 230:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 231:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Pin = LIN1_Pin;
+ 232:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 233:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 234:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 235:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Alternate = GPIO_AF4_TIM1;
+ 236:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     HAL_GPIO_Init(LIN1_GPIO_Port, &GPIO_InitStruct);
+ 237:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 238:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Pin = HIN3_Pin|HIN2_Pin|HIN1_Pin;
+ 239:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 240:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 241:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 242:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Alternate = GPIO_AF6_TIM1;
+ 243:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+ 244:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 245:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM1_MspPostInit 1 */
+ 246:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 247:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE END TIM1_MspPostInit 1 */
+ 248:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+ 249:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   else if(timHandle->Instance==TIM3)
+ 259              		.loc 1 249 8 is_stmt 1 view .LVU68
+ 260              		.loc 1 249 10 is_stmt 0 view .LVU69
+ 261 0018 2C4A     		ldr	r2, .L21+4
+ 262 001a 9342     		cmp	r3, r2
+ 263 001c 3CD0     		beq	.L20
+ 250:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 251:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM3_MspPostInit 0 */
+ 252:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 253:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE END TIM3_MspPostInit 0 */
+ 254:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 255:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     __HAL_RCC_GPIOA_CLK_ENABLE();
+ 256:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /**TIM3 GPIO Configuration
+ 257:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     PA4     ------> TIM3_CH2
+ 258:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     */
+ 259:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Pin = WS2812_Pin;
+ 260:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ARM GAS  /tmp/cczNifnl.s 			page 11
+
+
+ 261:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 262:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 263:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Alternate = GPIO_AF2_TIM3;
+ 264:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     HAL_GPIO_Init(WS2812_GPIO_Port, &GPIO_InitStruct);
+ 265:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 266:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM3_MspPostInit 1 */
+ 267:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 268:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE END TIM3_MspPostInit 1 */
+ 269:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+ 270:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 271:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** }
+ 264              		.loc 1 271 1 view .LVU70
+ 265 001e 0BB0     		add	sp, sp, #44
+ 266              	.LCFI11:
+ 267              		.cfi_remember_state
+ 268              		.cfi_def_cfa_offset 20
+ 269              		@ sp needed
+ 270 0020 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 271              	.L19:
+ 272              	.LCFI12:
+ 273              		.cfi_restore_state
+ 214:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     __HAL_RCC_GPIOA_CLK_ENABLE();
+ 274              		.loc 1 214 5 is_stmt 1 view .LVU71
+ 275              	.LBB8:
+ 214:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     __HAL_RCC_GPIOA_CLK_ENABLE();
+ 276              		.loc 1 214 5 view .LVU72
+ 214:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     __HAL_RCC_GPIOA_CLK_ENABLE();
+ 277              		.loc 1 214 5 view .LVU73
+ 278 0022 2B4B     		ldr	r3, .L21+8
+ 279              	.LBE8:
+ 229:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 280              		.loc 1 229 5 is_stmt 0 view .LVU74
+ 281 0024 2B48     		ldr	r0, .L21+12
+ 282              	.LVL9:
+ 283              	.LBB9:
+ 214:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     __HAL_RCC_GPIOA_CLK_ENABLE();
+ 284              		.loc 1 214 5 view .LVU75
+ 285 0026 DA6C     		ldr	r2, [r3, #76]
+ 286 0028 42F00202 		orr	r2, r2, #2
+ 287 002c DA64     		str	r2, [r3, #76]
+ 214:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     __HAL_RCC_GPIOA_CLK_ENABLE();
+ 288              		.loc 1 214 5 is_stmt 1 view .LVU76
+ 289 002e DA6C     		ldr	r2, [r3, #76]
+ 290 0030 02F00202 		and	r2, r2, #2
+ 291 0034 0192     		str	r2, [sp, #4]
+ 214:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     __HAL_RCC_GPIOA_CLK_ENABLE();
+ 292              		.loc 1 214 5 view .LVU77
+ 293 0036 019A     		ldr	r2, [sp, #4]
+ 294              	.LBE9:
+ 214:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     __HAL_RCC_GPIOA_CLK_ENABLE();
+ 295              		.loc 1 214 5 view .LVU78
+ 215:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /**TIM1 GPIO Configuration
+ 296              		.loc 1 215 5 view .LVU79
+ 297              	.LBB10:
+ 215:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /**TIM1 GPIO Configuration
+ 298              		.loc 1 215 5 view .LVU80
+ 215:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /**TIM1 GPIO Configuration
+ARM GAS  /tmp/cczNifnl.s 			page 12
+
+
+ 299              		.loc 1 215 5 view .LVU81
+ 300 0038 DA6C     		ldr	r2, [r3, #76]
+ 301 003a 42F00102 		orr	r2, r2, #1
+ 302 003e DA64     		str	r2, [r3, #76]
+ 215:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /**TIM1 GPIO Configuration
+ 303              		.loc 1 215 5 view .LVU82
+ 304 0040 DB6C     		ldr	r3, [r3, #76]
+ 305 0042 03F00103 		and	r3, r3, #1
+ 306              	.LBE10:
+ 224:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 307              		.loc 1 224 25 is_stmt 0 view .LVU83
+ 308 0046 4FF4C042 		mov	r2, #24576
+ 309              	.LBB11:
+ 215:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /**TIM1 GPIO Configuration
+ 310              		.loc 1 215 5 view .LVU84
+ 311 004a 0293     		str	r3, [sp, #8]
+ 215:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /**TIM1 GPIO Configuration
+ 312              		.loc 1 215 5 is_stmt 1 view .LVU85
+ 313              	.LBE11:
+ 227:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Alternate = GPIO_AF6_TIM1;
+ 314              		.loc 1 227 27 is_stmt 0 view .LVU86
+ 315 004c 0325     		movs	r5, #3
+ 316 004e 0626     		movs	r6, #6
+ 229:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 317              		.loc 1 229 5 view .LVU87
+ 318 0050 04A9     		add	r1, sp, #16
+ 224:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 319              		.loc 1 224 25 view .LVU88
+ 320 0052 0223     		movs	r3, #2
+ 321 0054 CDE90423 		strd	r2, [sp, #16]
+ 232:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 322              		.loc 1 232 26 view .LVU89
+ 323 0058 0227     		movs	r7, #2
+ 324              	.LBB12:
+ 215:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /**TIM1 GPIO Configuration
+ 325              		.loc 1 215 5 view .LVU90
+ 326 005a 029B     		ldr	r3, [sp, #8]
+ 327              	.LBE12:
+ 215:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /**TIM1 GPIO Configuration
+ 328              		.loc 1 215 5 is_stmt 1 view .LVU91
+ 224:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 329              		.loc 1 224 5 view .LVU92
+ 225:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 330              		.loc 1 225 5 view .LVU93
+ 226:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 331              		.loc 1 226 5 view .LVU94
+ 227:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Alternate = GPIO_AF6_TIM1;
+ 332              		.loc 1 227 5 view .LVU95
+ 228:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+ 333              		.loc 1 228 5 view .LVU96
+ 227:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Alternate = GPIO_AF6_TIM1;
+ 334              		.loc 1 227 27 is_stmt 0 view .LVU97
+ 335 005c CDE90756 		strd	r5, r6, [sp, #28]
+ 229:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 336              		.loc 1 229 5 is_stmt 1 view .LVU98
+ 337 0060 FFF7FEFF 		bl	HAL_GPIO_Init
+ 338              	.LVL10:
+ARM GAS  /tmp/cczNifnl.s 			page 13
+
+
+ 231:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 339              		.loc 1 231 5 view .LVU99
+ 232:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 340              		.loc 1 232 26 is_stmt 0 view .LVU100
+ 341 0064 4FF40043 		mov	r3, #32768
+ 342 0068 CDE90437 		strd	r3, r7, [sp, #16]
+ 233:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 343              		.loc 1 233 5 is_stmt 1 view .LVU101
+ 236:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 344              		.loc 1 236 5 is_stmt 0 view .LVU102
+ 345 006c 04A9     		add	r1, sp, #16
+ 235:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     HAL_GPIO_Init(LIN1_GPIO_Port, &GPIO_InitStruct);
+ 346              		.loc 1 235 31 view .LVU103
+ 347 006e 0423     		movs	r3, #4
+ 236:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 348              		.loc 1 236 5 view .LVU104
+ 349 0070 1848     		ldr	r0, .L21+12
+ 235:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     HAL_GPIO_Init(LIN1_GPIO_Port, &GPIO_InitStruct);
+ 350              		.loc 1 235 31 view .LVU105
+ 351 0072 0893     		str	r3, [sp, #32]
+ 234:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Alternate = GPIO_AF4_TIM1;
+ 352              		.loc 1 234 27 view .LVU106
+ 353 0074 CDE90645 		strd	r4, r5, [sp, #24]
+ 235:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     HAL_GPIO_Init(LIN1_GPIO_Port, &GPIO_InitStruct);
+ 354              		.loc 1 235 5 is_stmt 1 view .LVU107
+ 236:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 355              		.loc 1 236 5 view .LVU108
+ 356 0078 FFF7FEFF 		bl	HAL_GPIO_Init
+ 357              	.LVL11:
+ 238:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 358              		.loc 1 238 5 view .LVU109
+ 238:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 359              		.loc 1 238 25 is_stmt 0 view .LVU110
+ 360 007c 4FF4E063 		mov	r3, #1792
+ 243:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 361              		.loc 1 243 5 view .LVU111
+ 362 0080 04A9     		add	r1, sp, #16
+ 363 0082 4FF09040 		mov	r0, #1207959552
+ 241:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Alternate = GPIO_AF6_TIM1;
+ 364              		.loc 1 241 27 view .LVU112
+ 365 0086 CDE90645 		strd	r4, r5, [sp, #24]
+ 239:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 366              		.loc 1 239 26 view .LVU113
+ 367 008a 0597     		str	r7, [sp, #20]
+ 242:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+ 368              		.loc 1 242 31 view .LVU114
+ 369 008c 0896     		str	r6, [sp, #32]
+ 238:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 370              		.loc 1 238 25 view .LVU115
+ 371 008e 0493     		str	r3, [sp, #16]
+ 239:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 372              		.loc 1 239 5 is_stmt 1 view .LVU116
+ 240:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 373              		.loc 1 240 5 view .LVU117
+ 241:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Alternate = GPIO_AF6_TIM1;
+ 374              		.loc 1 241 5 view .LVU118
+ 242:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+ARM GAS  /tmp/cczNifnl.s 			page 14
+
+
+ 375              		.loc 1 242 5 view .LVU119
+ 243:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 376              		.loc 1 243 5 view .LVU120
+ 377 0090 FFF7FEFF 		bl	HAL_GPIO_Init
+ 378              	.LVL12:
+ 379              		.loc 1 271 1 is_stmt 0 view .LVU121
+ 380 0094 0BB0     		add	sp, sp, #44
+ 381              	.LCFI13:
+ 382              		.cfi_remember_state
+ 383              		.cfi_def_cfa_offset 20
+ 384              		@ sp needed
+ 385 0096 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 386              	.LVL13:
+ 387              	.L20:
+ 388              	.LCFI14:
+ 389              		.cfi_restore_state
+ 255:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /**TIM3 GPIO Configuration
+ 390              		.loc 1 255 5 is_stmt 1 view .LVU122
+ 391              	.LBB13:
+ 255:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /**TIM3 GPIO Configuration
+ 392              		.loc 1 255 5 view .LVU123
+ 255:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /**TIM3 GPIO Configuration
+ 393              		.loc 1 255 5 view .LVU124
+ 394 0098 0D4B     		ldr	r3, .L21+8
+ 395 009a DA6C     		ldr	r2, [r3, #76]
+ 396 009c 42F00102 		orr	r2, r2, #1
+ 397 00a0 DA64     		str	r2, [r3, #76]
+ 255:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /**TIM3 GPIO Configuration
+ 398              		.loc 1 255 5 view .LVU125
+ 399 00a2 DB6C     		ldr	r3, [r3, #76]
+ 400 00a4 03F00103 		and	r3, r3, #1
+ 401 00a8 0393     		str	r3, [sp, #12]
+ 255:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /**TIM3 GPIO Configuration
+ 402              		.loc 1 255 5 view .LVU126
+ 403              	.LBE13:
+ 259:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 404              		.loc 1 259 25 is_stmt 0 view .LVU127
+ 405 00aa 1024     		movs	r4, #16
+ 263:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     HAL_GPIO_Init(WS2812_GPIO_Port, &GPIO_InitStruct);
+ 406              		.loc 1 263 31 view .LVU128
+ 407 00ac 0223     		movs	r3, #2
+ 259:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 408              		.loc 1 259 25 view .LVU129
+ 409 00ae 0225     		movs	r5, #2
+ 264:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 410              		.loc 1 264 5 view .LVU130
+ 411 00b0 04A9     		add	r1, sp, #16
+ 412 00b2 4FF09040 		mov	r0, #1207959552
+ 413              	.LVL14:
+ 259:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 414              		.loc 1 259 25 view .LVU131
+ 415 00b6 CDE90445 		strd	r4, [sp, #16]
+ 416              	.LBB14:
+ 255:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /**TIM3 GPIO Configuration
+ 417              		.loc 1 255 5 view .LVU132
+ 418 00ba 039A     		ldr	r2, [sp, #12]
+ 419              	.LBE14:
+ARM GAS  /tmp/cczNifnl.s 			page 15
+
+
+ 255:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /**TIM3 GPIO Configuration
+ 420              		.loc 1 255 5 is_stmt 1 view .LVU133
+ 259:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 421              		.loc 1 259 5 view .LVU134
+ 260:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 422              		.loc 1 260 5 view .LVU135
+ 261:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 423              		.loc 1 261 5 view .LVU136
+ 262:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     GPIO_InitStruct.Alternate = GPIO_AF2_TIM3;
+ 424              		.loc 1 262 5 view .LVU137
+ 263:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     HAL_GPIO_Init(WS2812_GPIO_Port, &GPIO_InitStruct);
+ 425              		.loc 1 263 5 view .LVU138
+ 263:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     HAL_GPIO_Init(WS2812_GPIO_Port, &GPIO_InitStruct);
+ 426              		.loc 1 263 31 is_stmt 0 view .LVU139
+ 427 00bc 0893     		str	r3, [sp, #32]
+ 264:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 428              		.loc 1 264 5 is_stmt 1 view .LVU140
+ 429 00be FFF7FEFF 		bl	HAL_GPIO_Init
+ 430              	.LVL15:
+ 431              		.loc 1 271 1 is_stmt 0 view .LVU141
+ 432 00c2 0BB0     		add	sp, sp, #44
+ 433              	.LCFI15:
+ 434              		.cfi_def_cfa_offset 20
+ 435              		@ sp needed
+ 436 00c4 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 437              	.L22:
+ 438 00c6 00BF     		.align	2
+ 439              	.L21:
+ 440 00c8 002C0140 		.word	1073818624
+ 441 00cc 00040040 		.word	1073742848
+ 442 00d0 00100240 		.word	1073876992
+ 443 00d4 00040048 		.word	1207960576
+ 444              		.cfi_endproc
+ 445              	.LFE332:
+ 447              		.section	.text.MX_TIM1_Init,"ax",%progbits
+ 448              		.align	1
+ 449              		.p2align 2,,3
+ 450              		.global	MX_TIM1_Init
+ 451              		.syntax unified
+ 452              		.thumb
+ 453              		.thumb_func
+ 455              	MX_TIM1_Init:
+ 456              	.LFB329:
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 457              		.loc 1 33 1 is_stmt 1 view -0
+ 458              		.cfi_startproc
+ 459              		@ args = 0, pretend = 0, frame = 96
+ 460              		@ frame_needed = 0, uses_anonymous_args = 0
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   TIM_OC_InitTypeDef sConfigOC = {0};
+ 461              		.loc 1 39 3 view .LVU143
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 462              		.loc 1 33 1 is_stmt 0 view .LVU144
+ 463 0000 10B5     		push	{r4, lr}
+ 464              	.LCFI16:
+ 465              		.cfi_def_cfa_offset 8
+ 466              		.cfi_offset 4, -8
+ 467              		.cfi_offset 14, -4
+ARM GAS  /tmp/cczNifnl.s 			page 16
+
+
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   TIM_OC_InitTypeDef sConfigOC = {0};
+ 468              		.loc 1 39 27 view .LVU145
+ 469 0002 0024     		movs	r4, #0
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 470              		.loc 1 33 1 view .LVU146
+ 471 0004 98B0     		sub	sp, sp, #96
+ 472              	.LCFI17:
+ 473              		.cfi_def_cfa_offset 104
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 474              		.loc 1 41 34 view .LVU147
+ 475 0006 2146     		mov	r1, r4
+ 476 0008 3422     		movs	r2, #52
+ 477 000a 0BA8     		add	r0, sp, #44
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   TIM_OC_InitTypeDef sConfigOC = {0};
+ 478              		.loc 1 39 27 view .LVU148
+ 479 000c CDE90144 		strd	r4, r4, [sp, #4]
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
+ 480              		.loc 1 40 3 is_stmt 1 view .LVU149
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
+ 481              		.loc 1 40 22 is_stmt 0 view .LVU150
+ 482 0010 CDE90544 		strd	r4, r4, [sp, #20]
+ 483 0014 CDE90744 		strd	r4, r4, [sp, #28]
+ 484 0018 CDE90944 		strd	r4, r4, [sp, #36]
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 485              		.loc 1 41 3 is_stmt 1 view .LVU151
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   TIM_OC_InitTypeDef sConfigOC = {0};
+ 486              		.loc 1 39 27 is_stmt 0 view .LVU152
+ 487 001c 0094     		str	r4, [sp]
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
+ 488              		.loc 1 40 22 view .LVU153
+ 489 001e 0494     		str	r4, [sp, #16]
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 490              		.loc 1 41 34 view .LVU154
+ 491 0020 FFF7FEFF 		bl	memset
+ 492              	.LVL16:
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim1.Init.Prescaler = 0;
+ 493              		.loc 1 46 3 is_stmt 1 view .LVU155
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim1.Init.Prescaler = 0;
+ 494              		.loc 1 46 18 is_stmt 0 view .LVU156
+ 495 0024 3C48     		ldr	r0, .L60
+ 496 0026 3D4B     		ldr	r3, .L60+4
+ 497 0028 0360     		str	r3, [r0]
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim1.Init.CounterMode = TIM_COUNTERMODE_CENTERALIGNED1;
+ 498              		.loc 1 47 3 is_stmt 1 view .LVU157
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim1.Init.Period = 4200;
+ 499              		.loc 1 48 3 view .LVU158
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+ 500              		.loc 1 49 21 is_stmt 0 view .LVU159
+ 501 002a 2021     		movs	r1, #32
+ 502 002c 41F26803 		movw	r3, #4200
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+ 503              		.loc 1 51 32 view .LVU160
+ 504 0030 C0E90444 		strd	r4, r4, [r0, #16]
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+ 505              		.loc 1 49 21 view .LVU161
+ 506 0034 C0E90213 		strd	r1, r3, [r0, #8]
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim1.Init.RepetitionCounter = MCPWM_RCR;
+ARM GAS  /tmp/cczNifnl.s 			page 17
+
+
+ 507              		.loc 1 50 3 is_stmt 1 view .LVU162
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+ 508              		.loc 1 51 3 view .LVU163
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIM_PWM_Init(&htim1) != HAL_OK)
+ 509              		.loc 1 52 3 view .LVU164
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 510              		.loc 1 53 3 view .LVU165
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim1.Init.CounterMode = TIM_COUNTERMODE_CENTERALIGNED1;
+ 511              		.loc 1 47 24 is_stmt 0 view .LVU166
+ 512 0038 4460     		str	r4, [r0, #4]
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+ 513              		.loc 1 51 32 view .LVU167
+ 514 003a 8461     		str	r4, [r0, #24]
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 515              		.loc 1 53 7 view .LVU168
+ 516 003c FFF7FEFF 		bl	HAL_TIM_PWM_Init
+ 517              	.LVL17:
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 518              		.loc 1 53 6 discriminator 1 view .LVU169
+ 519 0040 0028     		cmp	r0, #0
+ 520 0042 4FD1     		bne	.L53
+ 521              	.L24:
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sMasterConfig.MasterOutputTrigger2 = TIM_TRGO2_RESET;
+ 522              		.loc 1 57 3 is_stmt 1 view .LVU170
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+ 523              		.loc 1 58 3 view .LVU171
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sMasterConfig.MasterOutputTrigger2 = TIM_TRGO2_RESET;
+ 524              		.loc 1 57 37 is_stmt 0 view .LVU172
+ 525 0044 0023     		movs	r3, #0
+ 526 0046 7022     		movs	r2, #112
+ 527 0048 CDE90023 		strd	r2, [sp]
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
+ 528              		.loc 1 59 3 is_stmt 1 view .LVU173
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 529              		.loc 1 60 7 is_stmt 0 view .LVU174
+ 530 004c 3248     		ldr	r0, .L60
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
+ 531              		.loc 1 59 33 view .LVU175
+ 532 004e 0023     		movs	r3, #0
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 533              		.loc 1 60 7 view .LVU176
+ 534 0050 6946     		mov	r1, sp
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
+ 535              		.loc 1 59 33 view .LVU177
+ 536 0052 0293     		str	r3, [sp, #8]
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 537              		.loc 1 60 3 is_stmt 1 view .LVU178
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 538              		.loc 1 60 7 is_stmt 0 view .LVU179
+ 539 0054 FFF7FEFF 		bl	HAL_TIMEx_MasterConfigSynchronization
+ 540              	.LVL18:
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 541              		.loc 1 60 6 discriminator 1 view .LVU180
+ 542 0058 0028     		cmp	r0, #0
+ 543 005a 59D1     		bne	.L54
+ 544              	.L25:
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.Pulse = 0;
+ARM GAS  /tmp/cczNifnl.s 			page 18
+
+
+ 545              		.loc 1 64 3 is_stmt 1 view .LVU181
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
+ 546              		.loc 1 68 24 is_stmt 0 view .LVU182
+ 547 005c 0020     		movs	r0, #0
+ 548 005e 0021     		movs	r1, #0
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+ 549              		.loc 1 65 19 view .LVU183
+ 550 0060 0022     		movs	r2, #0
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
+ 551              		.loc 1 68 24 view .LVU184
+ 552 0062 CDE90801 		strd	r0, [sp, #32]
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.Pulse = 0;
+ 553              		.loc 1 64 20 view .LVU185
+ 554 0066 6023     		movs	r3, #96
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 555              		.loc 1 71 7 view .LVU186
+ 556 0068 2B48     		ldr	r0, .L60
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.Pulse = 0;
+ 557              		.loc 1 64 20 view .LVU187
+ 558 006a 0493     		str	r3, [sp, #16]
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+ 559              		.loc 1 65 3 is_stmt 1 view .LVU188
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 560              		.loc 1 71 7 is_stmt 0 view .LVU189
+ 561 006c 04A9     		add	r1, sp, #16
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
+ 562              		.loc 1 66 24 view .LVU190
+ 563 006e CDE90522 		strd	r2, r2, [sp, #20]
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+ 564              		.loc 1 67 3 is_stmt 1 view .LVU191
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+ 565              		.loc 1 67 25 is_stmt 0 view .LVU192
+ 566 0072 0792     		str	r2, [sp, #28]
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
+ 567              		.loc 1 68 3 is_stmt 1 view .LVU193
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
+ 568              		.loc 1 69 3 view .LVU194
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+ 569              		.loc 1 70 3 view .LVU195
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+ 570              		.loc 1 70 26 is_stmt 0 view .LVU196
+ 571 0074 0A92     		str	r2, [sp, #40]
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 572              		.loc 1 71 3 is_stmt 1 view .LVU197
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 573              		.loc 1 71 7 is_stmt 0 view .LVU198
+ 574 0076 FFF7FEFF 		bl	HAL_TIM_PWM_ConfigChannel
+ 575              	.LVL19:
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 576              		.loc 1 71 6 discriminator 1 view .LVU199
+ 577 007a 0028     		cmp	r0, #0
+ 578 007c 45D1     		bne	.L55
+ 579              	.L26:
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 580              		.loc 1 75 3 is_stmt 1 view .LVU200
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 581              		.loc 1 75 7 is_stmt 0 view .LVU201
+ARM GAS  /tmp/cczNifnl.s 			page 19
+
+
+ 582 007e 2648     		ldr	r0, .L60
+ 583 0080 0422     		movs	r2, #4
+ 584 0082 04A9     		add	r1, sp, #16
+ 585 0084 FFF7FEFF 		bl	HAL_TIM_PWM_ConfigChannel
+ 586              	.LVL20:
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 587              		.loc 1 75 6 discriminator 1 view .LVU202
+ 588 0088 0028     		cmp	r0, #0
+ 589 008a 3BD1     		bne	.L56
+ 590              	.L27:
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 591              		.loc 1 79 3 is_stmt 1 view .LVU203
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 592              		.loc 1 79 7 is_stmt 0 view .LVU204
+ 593 008c 2248     		ldr	r0, .L60
+ 594 008e 0822     		movs	r2, #8
+ 595 0090 04A9     		add	r1, sp, #16
+ 596 0092 FFF7FEFF 		bl	HAL_TIM_PWM_ConfigChannel
+ 597              	.LVL21:
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 598              		.loc 1 79 6 discriminator 1 view .LVU205
+ 599 0096 90BB     		cbnz	r0, .L57
+ 600              	.L28:
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_4) != HAL_OK)
+ 601              		.loc 1 83 3 is_stmt 1 view .LVU206
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_4) != HAL_OK)
+ 602              		.loc 1 83 19 is_stmt 0 view .LVU207
+ 603 0098 41F25E03 		movw	r3, #4190
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 604              		.loc 1 84 7 view .LVU208
+ 605 009c 1E48     		ldr	r0, .L60
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_4) != HAL_OK)
+ 606              		.loc 1 83 19 view .LVU209
+ 607 009e 0593     		str	r3, [sp, #20]
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 608              		.loc 1 84 3 is_stmt 1 view .LVU210
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 609              		.loc 1 84 7 is_stmt 0 view .LVU211
+ 610 00a0 0C22     		movs	r2, #12
+ 611 00a2 04A9     		add	r1, sp, #16
+ 612 00a4 FFF7FEFF 		bl	HAL_TIM_PWM_ConfigChannel
+ 613              	.LVL22:
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 614              		.loc 1 84 6 discriminator 1 view .LVU212
+ 615 00a8 30BB     		cbnz	r0, .L58
+ 616              	.L29:
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
+ 617              		.loc 1 88 3 is_stmt 1 view .LVU213
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
+ 618              		.loc 1 88 40 is_stmt 0 view .LVU214
+ 619 00aa 0023     		movs	r3, #0
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.BreakFilter = 0;
+ 620              		.loc 1 93 38 view .LVU215
+ 621 00ac 4FF40050 		mov	r0, #8192
+ 622 00b0 CDE90F30 		strd	r3, r0, [sp, #60]
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
+ 623              		.loc 1 91 33 view .LVU216
+ARM GAS  /tmp/cczNifnl.s 			page 20
+
+
+ 624 00b4 1424     		movs	r4, #20
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.Break2Filter = 0;
+ 625              		.loc 1 97 39 view .LVU217
+ 626 00b6 4FF00072 		mov	r2, #33554432
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 627              		.loc 1 101 7 view .LVU218
+ 628 00ba 1748     		ldr	r0, .L60
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIMEx_ConfigBreakDeadTime(&htim1, &sBreakDeadTimeConfig) != HAL_OK)
+ 629              		.loc 1 100 40 view .LVU219
+ 630 00bc 1793     		str	r3, [sp, #92]
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 631              		.loc 1 101 7 view .LVU220
+ 632 00be 0BA9     		add	r1, sp, #44
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
+ 633              		.loc 1 89 41 view .LVU221
+ 634 00c0 CDE90B33 		strd	r3, r3, [sp, #44]
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.DeadTime = MCPWM_DEADTIME_CLOCKS;
+ 635              		.loc 1 90 3 is_stmt 1 view .LVU222
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
+ 636              		.loc 1 91 33 is_stmt 0 view .LVU223
+ 637 00c4 CDE90D34 		strd	r3, r4, [sp, #52]
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
+ 638              		.loc 1 92 3 is_stmt 1 view .LVU224
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.BreakAFMode = TIM_BREAK_AFMODE_INPUT;
+ 639              		.loc 1 94 3 view .LVU225
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.Break2State = TIM_BREAK2_DISABLE;
+ 640              		.loc 1 95 36 is_stmt 0 view .LVU226
+ 641 00c8 CDE91133 		strd	r3, r3, [sp, #68]
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.Break2Polarity = TIM_BREAK2POLARITY_HIGH;
+ 642              		.loc 1 96 3 is_stmt 1 view .LVU227
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.Break2Filter = 0;
+ 643              		.loc 1 97 39 is_stmt 0 view .LVU228
+ 644 00cc CDE91332 		strd	r3, r2, [sp, #76]
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.Break2AFMode = TIM_BREAK_AFMODE_INPUT;
+ 645              		.loc 1 98 3 is_stmt 1 view .LVU229
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
+ 646              		.loc 1 99 37 is_stmt 0 view .LVU230
+ 647 00d0 CDE91533 		strd	r3, r3, [sp, #84]
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIMEx_ConfigBreakDeadTime(&htim1, &sBreakDeadTimeConfig) != HAL_OK)
+ 648              		.loc 1 100 3 is_stmt 1 view .LVU231
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 649              		.loc 1 101 3 view .LVU232
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 650              		.loc 1 101 7 is_stmt 0 view .LVU233
+ 651 00d4 FFF7FEFF 		bl	HAL_TIMEx_ConfigBreakDeadTime
+ 652              	.LVL23:
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 653              		.loc 1 101 6 discriminator 1 view .LVU234
+ 654 00d8 38B9     		cbnz	r0, .L59
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 655              		.loc 1 108 3 is_stmt 1 view .LVU235
+ 656 00da 0F48     		ldr	r0, .L60
+ 657 00dc FFF7FEFF 		bl	HAL_TIM_MspPostInit
+ 658              	.LVL24:
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** /* TIM3 init function */
+ 659              		.loc 1 110 1 is_stmt 0 view .LVU236
+ 660 00e0 18B0     		add	sp, sp, #96
+ARM GAS  /tmp/cczNifnl.s 			page 21
+
+
+ 661              	.LCFI18:
+ 662              		.cfi_remember_state
+ 663              		.cfi_def_cfa_offset 8
+ 664              		@ sp needed
+ 665 00e2 10BD     		pop	{r4, pc}
+ 666              	.L53:
+ 667              	.LCFI19:
+ 668              		.cfi_restore_state
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+ 669              		.loc 1 55 5 is_stmt 1 view .LVU237
+ 670 00e4 FFF7FEFF 		bl	Error_Handler
+ 671              	.LVL25:
+ 672 00e8 ACE7     		b	.L24
+ 673              	.L59:
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+ 674              		.loc 1 103 5 view .LVU238
+ 675 00ea FFF7FEFF 		bl	Error_Handler
+ 676              	.LVL26:
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 677              		.loc 1 108 3 view .LVU239
+ 678 00ee 0A48     		ldr	r0, .L60
+ 679 00f0 FFF7FEFF 		bl	HAL_TIM_MspPostInit
+ 680              	.LVL27:
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** /* TIM3 init function */
+ 681              		.loc 1 110 1 is_stmt 0 view .LVU240
+ 682 00f4 18B0     		add	sp, sp, #96
+ 683              	.LCFI20:
+ 684              		.cfi_remember_state
+ 685              		.cfi_def_cfa_offset 8
+ 686              		@ sp needed
+ 687 00f6 10BD     		pop	{r4, pc}
+ 688              	.L58:
+ 689              	.LCFI21:
+ 690              		.cfi_restore_state
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+ 691              		.loc 1 86 5 is_stmt 1 view .LVU241
+ 692 00f8 FFF7FEFF 		bl	Error_Handler
+ 693              	.LVL28:
+ 694 00fc D5E7     		b	.L29
+ 695              	.L57:
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+ 696              		.loc 1 81 5 view .LVU242
+ 697 00fe FFF7FEFF 		bl	Error_Handler
+ 698              	.LVL29:
+ 699 0102 C9E7     		b	.L28
+ 700              	.L56:
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+ 701              		.loc 1 77 5 view .LVU243
+ 702 0104 FFF7FEFF 		bl	Error_Handler
+ 703              	.LVL30:
+ 704 0108 C0E7     		b	.L27
+ 705              	.L55:
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+ 706              		.loc 1 73 5 view .LVU244
+ 707 010a FFF7FEFF 		bl	Error_Handler
+ 708              	.LVL31:
+ 709 010e B6E7     		b	.L26
+ARM GAS  /tmp/cczNifnl.s 			page 22
+
+
+ 710              	.L54:
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+ 711              		.loc 1 62 5 view .LVU245
+ 712 0110 FFF7FEFF 		bl	Error_Handler
+ 713              	.LVL32:
+ 714 0114 A2E7     		b	.L25
+ 715              	.L61:
+ 716 0116 00BF     		.align	2
+ 717              	.L60:
+ 718 0118 00000000 		.word	htim1
+ 719 011c 002C0140 		.word	1073818624
+ 720              		.cfi_endproc
+ 721              	.LFE329:
+ 723              		.section	.text.MX_TIM3_Init,"ax",%progbits
+ 724              		.align	1
+ 725              		.p2align 2,,3
+ 726              		.global	MX_TIM3_Init
+ 727              		.syntax unified
+ 728              		.thumb
+ 729              		.thumb_func
+ 731              	MX_TIM3_Init:
+ 732              	.LFB330:
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 733              		.loc 1 113 1 view -0
+ 734              		.cfi_startproc
+ 735              		@ args = 0, pretend = 0, frame = 48
+ 736              		@ frame_needed = 0, uses_anonymous_args = 0
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   TIM_OC_InitTypeDef sConfigOC = {0};
+ 737              		.loc 1 119 3 view .LVU247
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 738              		.loc 1 113 1 is_stmt 0 view .LVU248
+ 739 0000 00B5     		push	{lr}
+ 740              	.LCFI22:
+ 741              		.cfi_def_cfa_offset 4
+ 742              		.cfi_offset 14, -4
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim3.Init.Prescaler = 0;
+ 743              		.loc 1 125 18 view .LVU249
+ 744 0002 2348     		ldr	r0, .L79+8
+ 745 0004 234A     		ldr	r2, .L79+12
+ 746 0006 0260     		str	r2, [r0]
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   TIM_OC_InitTypeDef sConfigOC = {0};
+ 747              		.loc 1 119 27 view .LVU250
+ 748 0008 0023     		movs	r3, #0
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 749              		.loc 1 113 1 view .LVU251
+ 750 000a 8DB0     		sub	sp, sp, #52
+ 751              	.LCFI23:
+ 752              		.cfi_def_cfa_offset 56
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+ 753              		.loc 1 128 21 view .LVU252
+ 754 000c D122     		movs	r2, #209
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   TIM_OC_InitTypeDef sConfigOC = {0};
+ 755              		.loc 1 119 27 view .LVU253
+ 756 000e CDE90133 		strd	r3, r3, [sp, #4]
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 757              		.loc 1 120 22 view .LVU254
+ 758 0012 CDE90333 		strd	r3, r3, [sp, #12]
+ARM GAS  /tmp/cczNifnl.s 			page 23
+
+
+ 759 0016 CDE90533 		strd	r3, r3, [sp, #20]
+ 760 001a CDE90733 		strd	r3, r3, [sp, #28]
+ 761 001e CDE90933 		strd	r3, r3, [sp, #36]
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim3.Init.Prescaler = 0;
+ 762              		.loc 1 125 3 is_stmt 1 view .LVU255
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
+ 763              		.loc 1 126 3 view .LVU256
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim3.Init.Period = 209;
+ 764              		.loc 1 127 26 is_stmt 0 view .LVU257
+ 765 0022 C0E90133 		strd	r3, r3, [r0, #4]
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+ 766              		.loc 1 128 3 is_stmt 1 view .LVU258
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+ 767              		.loc 1 129 28 is_stmt 0 view .LVU259
+ 768 0026 C0E90323 		strd	r2, r3, [r0, #12]
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
+ 769              		.loc 1 130 3 is_stmt 1 view .LVU260
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
+ 770              		.loc 1 130 32 is_stmt 0 view .LVU261
+ 771 002a 8361     		str	r3, [r0, #24]
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 772              		.loc 1 131 3 is_stmt 1 view .LVU262
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 773              		.loc 1 131 7 is_stmt 0 view .LVU263
+ 774 002c FFF7FEFF 		bl	HAL_TIM_PWM_Init
+ 775              	.LVL33:
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 776              		.loc 1 131 6 discriminator 1 view .LVU264
+ 777 0030 D0B9     		cbnz	r0, .L76
+ 778              	.L63:
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+ 779              		.loc 1 135 3 is_stmt 1 view .LVU265
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+ 780              		.loc 1 135 37 is_stmt 0 view .LVU266
+ 781 0032 0023     		movs	r3, #0
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 782              		.loc 1 137 7 view .LVU267
+ 783 0034 1648     		ldr	r0, .L79+8
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+ 784              		.loc 1 135 37 view .LVU268
+ 785 0036 0193     		str	r3, [sp, #4]
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
+ 786              		.loc 1 136 3 is_stmt 1 view .LVU269
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 787              		.loc 1 137 7 is_stmt 0 view .LVU270
+ 788 0038 01A9     		add	r1, sp, #4
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
+ 789              		.loc 1 136 33 view .LVU271
+ 790 003a 0393     		str	r3, [sp, #12]
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 791              		.loc 1 137 3 is_stmt 1 view .LVU272
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 792              		.loc 1 137 7 is_stmt 0 view .LVU273
+ 793 003c FFF7FEFF 		bl	HAL_TIMEx_MasterConfigSynchronization
+ 794              	.LVL34:
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 795              		.loc 1 137 6 discriminator 1 view .LVU274
+ARM GAS  /tmp/cczNifnl.s 			page 24
+
+
+ 796 0040 E8B9     		cbnz	r0, .L77
+ 797              	.L64:
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.Pulse = 0;
+ 798              		.loc 1 141 3 is_stmt 1 view .LVU275
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+ 799              		.loc 1 142 3 view .LVU276
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.Pulse = 0;
+ 800              		.loc 1 141 20 is_stmt 0 view .LVU277
+ 801 0042 9FED117B 		vldr.64	d7, .L79	@ int
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+ 802              		.loc 1 143 24 view .LVU278
+ 803 0046 0023     		movs	r3, #0
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 804              		.loc 1 145 7 view .LVU279
+ 805 0048 1148     		ldr	r0, .L79+8
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+ 806              		.loc 1 143 24 view .LVU280
+ 807 004a 0693     		str	r3, [sp, #24]
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 808              		.loc 1 145 7 view .LVU281
+ 809 004c 0422     		movs	r2, #4
+ 810 004e 04A9     		add	r1, sp, #16
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.Pulse = 0;
+ 811              		.loc 1 141 20 view .LVU282
+ 812 0050 8DED047B 		vstr.64	d7, [sp, #16]	@ int
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+ 813              		.loc 1 143 3 is_stmt 1 view .LVU283
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+ 814              		.loc 1 144 3 view .LVU284
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+ 815              		.loc 1 144 24 is_stmt 0 view .LVU285
+ 816 0054 0893     		str	r3, [sp, #32]
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 817              		.loc 1 145 3 is_stmt 1 view .LVU286
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 818              		.loc 1 145 7 is_stmt 0 view .LVU287
+ 819 0056 FFF7FEFF 		bl	HAL_TIM_PWM_ConfigChannel
+ 820              	.LVL35:
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 821              		.loc 1 145 6 discriminator 1 view .LVU288
+ 822 005a 40B9     		cbnz	r0, .L78
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 823              		.loc 1 152 3 is_stmt 1 view .LVU289
+ 824 005c 0C48     		ldr	r0, .L79+8
+ 825 005e FFF7FEFF 		bl	HAL_TIM_MspPostInit
+ 826              	.LVL36:
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 827              		.loc 1 154 1 is_stmt 0 view .LVU290
+ 828 0062 0DB0     		add	sp, sp, #52
+ 829              	.LCFI24:
+ 830              		.cfi_remember_state
+ 831              		.cfi_def_cfa_offset 4
+ 832              		@ sp needed
+ 833 0064 5DF804FB 		ldr	pc, [sp], #4
+ 834              	.L76:
+ 835              	.LCFI25:
+ 836              		.cfi_restore_state
+ARM GAS  /tmp/cczNifnl.s 			page 25
+
+
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+ 837              		.loc 1 133 5 is_stmt 1 view .LVU291
+ 838 0068 FFF7FEFF 		bl	Error_Handler
+ 839              	.LVL37:
+ 840 006c E1E7     		b	.L63
+ 841              	.L78:
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+ 842              		.loc 1 147 5 view .LVU292
+ 843 006e FFF7FEFF 		bl	Error_Handler
+ 844              	.LVL38:
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 845              		.loc 1 152 3 view .LVU293
+ 846 0072 0748     		ldr	r0, .L79+8
+ 847 0074 FFF7FEFF 		bl	HAL_TIM_MspPostInit
+ 848              	.LVL39:
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 849              		.loc 1 154 1 is_stmt 0 view .LVU294
+ 850 0078 0DB0     		add	sp, sp, #52
+ 851              	.LCFI26:
+ 852              		.cfi_remember_state
+ 853              		.cfi_def_cfa_offset 4
+ 854              		@ sp needed
+ 855 007a 5DF804FB 		ldr	pc, [sp], #4
+ 856              	.L77:
+ 857              	.LCFI27:
+ 858              		.cfi_restore_state
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+ 859              		.loc 1 139 5 is_stmt 1 view .LVU295
+ 860 007e FFF7FEFF 		bl	Error_Handler
+ 861              	.LVL40:
+ 862 0082 DEE7     		b	.L64
+ 863              	.L80:
+ 864 0084 AFF30080 		.align	3
+ 865              	.L79:
+ 866 0088 60000000 		.word	96
+ 867 008c 00000000 		.word	0
+ 868 0090 00000000 		.word	htim3
+ 869 0094 00040040 		.word	1073742848
+ 870              		.cfi_endproc
+ 871              	.LFE330:
+ 873              		.section	.text.HAL_TIM_PWM_MspDeInit,"ax",%progbits
+ 874              		.align	1
+ 875              		.p2align 2,,3
+ 876              		.global	HAL_TIM_PWM_MspDeInit
+ 877              		.syntax unified
+ 878              		.thumb
+ 879              		.thumb_func
+ 881              	HAL_TIM_PWM_MspDeInit:
+ 882              	.LVL41:
+ 883              	.LFB333:
+ 272:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 273:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef* tim_pwmHandle)
+ 274:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** {
+ 884              		.loc 1 274 1 view -0
+ 885              		.cfi_startproc
+ 886              		@ args = 0, pretend = 0, frame = 0
+ 887              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/cczNifnl.s 			page 26
+
+
+ 888              		@ link register save eliminated.
+ 275:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 276:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   if(tim_pwmHandle->Instance==TIM1)
+ 889              		.loc 1 276 3 view .LVU297
+ 890              		.loc 1 276 5 is_stmt 0 view .LVU298
+ 891 0000 0C4A     		ldr	r2, .L86
+ 892              		.loc 1 276 19 view .LVU299
+ 893 0002 0368     		ldr	r3, [r0]
+ 894              		.loc 1 276 5 view .LVU300
+ 895 0004 9342     		cmp	r3, r2
+ 896 0006 03D0     		beq	.L84
+ 277:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 278:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM1_MspDeInit 0 */
+ 279:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 280:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE END TIM1_MspDeInit 0 */
+ 281:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /* Peripheral clock disable */
+ 282:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     __HAL_RCC_TIM1_CLK_DISABLE();
+ 283:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 284:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /* TIM1 interrupt Deinit */
+ 285:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     HAL_NVIC_DisableIRQ(TIM1_TRG_COM_TIM17_IRQn);
+ 286:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM1_MspDeInit 1 */
+ 287:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 288:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE END TIM1_MspDeInit 1 */
+ 289:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+ 290:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   else if(tim_pwmHandle->Instance==TIM3)
+ 897              		.loc 1 290 8 is_stmt 1 view .LVU301
+ 898              		.loc 1 290 10 is_stmt 0 view .LVU302
+ 899 0008 0B4A     		ldr	r2, .L86+4
+ 900 000a 9342     		cmp	r3, r2
+ 901 000c 09D0     		beq	.L85
+ 291:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   {
+ 292:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM3_MspDeInit 0 */
+ 293:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 294:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE END TIM3_MspDeInit 0 */
+ 295:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /* Peripheral clock disable */
+ 296:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     __HAL_RCC_TIM3_CLK_DISABLE();
+ 297:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 298:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     /* TIM3 DMA DeInit */
+ 299:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****     HAL_DMA_DeInit(tim_pwmHandle->hdma[TIM_DMA_ID_CC2]);
+ 300:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM3_MspDeInit 1 */
+ 301:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 302:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE END TIM3_MspDeInit 1 */
+ 303:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   }
+ 304:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** }
+ 902              		.loc 1 304 1 view .LVU303
+ 903 000e 7047     		bx	lr
+ 904              	.L84:
+ 282:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 905              		.loc 1 282 5 is_stmt 1 view .LVU304
+ 906 0010 02F56442 		add	r2, r2, #58368
+ 285:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM1_MspDeInit 1 */
+ 907              		.loc 1 285 5 is_stmt 0 view .LVU305
+ 908 0014 1A20     		movs	r0, #26
+ 909              	.LVL42:
+ 282:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 910              		.loc 1 282 5 view .LVU306
+ 911 0016 136E     		ldr	r3, [r2, #96]
+ARM GAS  /tmp/cczNifnl.s 			page 27
+
+
+ 912 0018 23F40063 		bic	r3, r3, #2048
+ 913 001c 1366     		str	r3, [r2, #96]
+ 285:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM1_MspDeInit 1 */
+ 914              		.loc 1 285 5 is_stmt 1 view .LVU307
+ 915 001e FFF7FEBF 		b	HAL_NVIC_DisableIRQ
+ 916              	.LVL43:
+ 917              	.L85:
+ 296:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 918              		.loc 1 296 5 view .LVU308
+ 919 0022 02F50332 		add	r2, r2, #134144
+ 299:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM3_MspDeInit 1 */
+ 920              		.loc 1 299 5 is_stmt 0 view .LVU309
+ 921 0026 806A     		ldr	r0, [r0, #40]
+ 922              	.LVL44:
+ 296:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c **** 
+ 923              		.loc 1 296 5 view .LVU310
+ 924 0028 936D     		ldr	r3, [r2, #88]
+ 925 002a 23F00203 		bic	r3, r3, #2
+ 926 002e 9365     		str	r3, [r2, #88]
+ 299:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/tim.c ****   /* USER CODE BEGIN TIM3_MspDeInit 1 */
+ 927              		.loc 1 299 5 is_stmt 1 view .LVU311
+ 928 0030 FFF7FEBF 		b	HAL_DMA_DeInit
+ 929              	.LVL45:
+ 930              	.L87:
+ 931              		.align	2
+ 932              	.L86:
+ 933 0034 002C0140 		.word	1073818624
+ 934 0038 00040040 		.word	1073742848
+ 935              		.cfi_endproc
+ 936              	.LFE333:
+ 938              		.global	hdma_tim3_ch2
+ 939              		.section	.bss.hdma_tim3_ch2,"aw",%nobits
+ 940              		.align	3
+ 943              	hdma_tim3_ch2:
+ 944 0000 00000000 		.space	96
+ 944      00000000 
+ 944      00000000 
+ 944      00000000 
+ 944      00000000 
+ 945              		.global	htim3
+ 946              		.section	.bss.htim3,"aw",%nobits
+ 947              		.align	2
+ 950              	htim3:
+ 951 0000 00000000 		.space	76
+ 951      00000000 
+ 951      00000000 
+ 951      00000000 
+ 951      00000000 
+ 952              		.global	htim1
+ 953              		.section	.bss.htim1,"aw",%nobits
+ 954              		.align	3
+ 957              	htim1:
+ 958 0000 00000000 		.space	76
+ 958      00000000 
+ 958      00000000 
+ 958      00000000 
+ 958      00000000 
+ARM GAS  /tmp/cczNifnl.s 			page 28
+
+
+ 959              		.text
+ 960              	.Letext0:
+ 961              		.file 2 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 962              		.file 3 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 963              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 964              		.file 5 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 965              		.file 6 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 966              		.file 7 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 967              		.file 8 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/tim.h"
+ 968              		.file 9 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 969              		.file 10 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm
+ 970              		.file 11 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/main.h"
+ 971              		.file 12 "<built-in>"
+ARM GAS  /tmp/cczNifnl.s 			page 29
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 tim.c
+     /tmp/cczNifnl.s:21     .text.HAL_TIM_PWM_MspInit:00000000 $t
+     /tmp/cczNifnl.s:28     .text.HAL_TIM_PWM_MspInit:00000000 HAL_TIM_PWM_MspInit
+     /tmp/cczNifnl.s:207    .text.HAL_TIM_PWM_MspInit:00000098 $d
+     /tmp/cczNifnl.s:943    .bss.hdma_tim3_ch2:00000000 hdma_tim3_ch2
+     /tmp/cczNifnl.s:216    .text.HAL_TIM_MspPostInit:00000000 $t
+     /tmp/cczNifnl.s:223    .text.HAL_TIM_MspPostInit:00000000 HAL_TIM_MspPostInit
+     /tmp/cczNifnl.s:440    .text.HAL_TIM_MspPostInit:000000c8 $d
+     /tmp/cczNifnl.s:448    .text.MX_TIM1_Init:00000000 $t
+     /tmp/cczNifnl.s:455    .text.MX_TIM1_Init:00000000 MX_TIM1_Init
+     /tmp/cczNifnl.s:718    .text.MX_TIM1_Init:00000118 $d
+     /tmp/cczNifnl.s:957    .bss.htim1:00000000 htim1
+     /tmp/cczNifnl.s:724    .text.MX_TIM3_Init:00000000 $t
+     /tmp/cczNifnl.s:731    .text.MX_TIM3_Init:00000000 MX_TIM3_Init
+     /tmp/cczNifnl.s:866    .text.MX_TIM3_Init:00000088 $d
+     /tmp/cczNifnl.s:950    .bss.htim3:00000000 htim3
+     /tmp/cczNifnl.s:874    .text.HAL_TIM_PWM_MspDeInit:00000000 $t
+     /tmp/cczNifnl.s:881    .text.HAL_TIM_PWM_MspDeInit:00000000 HAL_TIM_PWM_MspDeInit
+     /tmp/cczNifnl.s:933    .text.HAL_TIM_PWM_MspDeInit:00000034 $d
+     /tmp/cczNifnl.s:940    .bss.hdma_tim3_ch2:00000000 $d
+     /tmp/cczNifnl.s:947    .bss.htim3:00000000 $d
+     /tmp/cczNifnl.s:954    .bss.htim1:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_NVIC_SetPriority
+HAL_NVIC_EnableIRQ
+HAL_DMA_Init
+Error_Handler
+HAL_GPIO_Init
+memset
+HAL_TIM_PWM_Init
+HAL_TIMEx_MasterConfigSynchronization
+HAL_TIM_PWM_ConfigChannel
+HAL_TIMEx_ConfigBreakDeadTime
+HAL_NVIC_DisableIRQ
+HAL_DMA_DeInit

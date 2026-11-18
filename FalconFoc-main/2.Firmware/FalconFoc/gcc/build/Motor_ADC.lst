@@ -1,0 +1,1017 @@
+ARM GAS  /tmp/ccZA3Bng.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"Motor_ADC.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c"
+  20              		.section	.text.GetTempNtc,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	GetTempNtc
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	GetTempNtc:
+  29              	.LVL0:
+  30              	.LFB348:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** #include "Motor_ADC.h"
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** 
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** CURRENT_DATA current_data = {
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     .hadc                 = &ADC_HSPI,
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     .Temp_Result          = 0.0f,
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     .Ia_offset            = 0.0f,
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     .Ib_offset            = 0.0f,
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     .Ic_offset            = 0.0f,
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     .current_offset_sum_a = 0.0f,
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     .current_offset_sum_b = 0.0f,
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     .current_offset_sum_c = 0.0f,
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** };
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** 
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** // �����
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** static const uint16_t Temp_TAB[] = {
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     3738, 3719, 3698, 3677, 3655, 3631, 3607, 3582, 3556, 3530, //-20? ... -11?
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     3502, 3473, 3443, 3412, 3381, 3348, 3314, 3280, 3244, 3208, //-10? ...  -1?
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     3170, 3132, 3093, 3053, 3012, 2970, 2928, 2885, 2842, 2797, //  0? ...   9?
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     2752, 2707, 2661, 2615, 2568, 2522, 2474, 2427, 2379, 2332, // 10? ...  19?
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     2284, 2237, 2189, 2142, 2095, 2048, 2001, 1954, 1908, 1863, // 20? ...  29?
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     1818, 1773, 1729, 1685, 1642, 1600, 1558, 1517, 1477, 1437, // 30? ...  39?
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     1398, 1360, 1323, 1286, 1250, 1215, 1180, 1147, 1114, 1082, // 40? ...  49?
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     1051, 1020, 990, 961, 933, 905, 878, 852, 827, 802,         // 50? ...  59?
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     778, 755, 732, 710, 688, 668, 647, 628, 609, 590,           // 60? ...  69?
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     572, 555, 538, 522, 506, 491, 476, 461, 447, 434,           // 70? ...  79?
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     421, 408, 395, 384, 372, 361, 350, 340, 330, 320,           // 80? ...  89?
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     311, 302, 293, 284, 276, 268, 261, 253, 246, 239,           // 90? ...  99?
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     233, 226, 220, 214, 209, 203                                // 100? ... 105?
+ARM GAS  /tmp/ccZA3Bng.s 			page 2
+
+
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** };
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** 
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** void GetTempNtc(uint16_t value_adc, float *value_temp)
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** {
+  31              		.loc 1 32 1 view -0
+  32              		.cfi_startproc
+  33              		@ args = 0, pretend = 0, frame = 0
+  34              		@ frame_needed = 0, uses_anonymous_args = 0
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     uint8_t index_l, index_r;
+  35              		.loc 1 33 5 view .LVU1
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     uint8_t Temp_Tab_Zize = 126;
+  36              		.loc 1 34 5 view .LVU2
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     int32_t temp          = 0;
+  37              		.loc 1 35 5 view .LVU3
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     index_l               = 0;
+  38              		.loc 1 36 5 view .LVU4
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     index_r               = Temp_Tab_Zize - 1;
+  39              		.loc 1 37 5 view .LVU5
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     for (; index_r - index_l > 1;)
+  40              		.loc 1 38 5 view .LVU6
+  41              		.loc 1 38 30 view .LVU7
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     uint8_t index_l, index_r;
+  42              		.loc 1 32 1 is_stmt 0 view .LVU8
+  43 0000 70B5     		push	{r4, r5, r6, lr}
+  44              	.LCFI0:
+  45              		.cfi_def_cfa_offset 16
+  46              		.cfi_offset 4, -16
+  47              		.cfi_offset 5, -12
+  48              		.cfi_offset 6, -8
+  49              		.cfi_offset 14, -4
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     index_r               = Temp_Tab_Zize - 1;
+  50              		.loc 1 37 27 view .LVU9
+  51 0002 7D25     		movs	r5, #125
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     index_r               = Temp_Tab_Zize - 1;
+  52              		.loc 1 36 27 view .LVU10
+  53 0004 0024     		movs	r4, #0
+  54 0006 334E     		ldr	r6, .L19
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     uint8_t index_l, index_r;
+  55              		.loc 1 32 1 view .LVU11
+  56 0008 40F69A6C 		movw	ip, #3738
+  57              		.loc 1 38 20 view .LVU12
+  58 000c 2246     		mov	r2, r4
+  59 000e 2B46     		mov	r3, r5
+  60 0010 10E0     		b	.L8
+  61              	.LVL1:
+  62              	.L16:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         if ((value_adc <= Temp_TAB[index_l]) && (value_adc > Temp_TAB[(index_r + index_l) % 2 == 0 
+  63              		.loc 1 40 91 discriminator 1 view .LVU13
+  64 0012 6319     		adds	r3, r4, r5
+  65              		.loc 1 40 126 discriminator 1 view .LVU14
+  66 0014 DB07     		lsls	r3, r3, #31
+  67 0016 46D4     		bmi	.L3
+  68              		.loc 1 40 70 discriminator 5 view .LVU15
+  69 0018 36F812C0 		ldrh	ip, [r6, r2, lsl #1]
+  70              		.loc 1 40 46 discriminator 5 view .LVU16
+  71 001c 8445     		cmp	ip, r0
+ARM GAS  /tmp/ccZA3Bng.s 			page 3
+
+
+  72 001e 12D2     		bcs	.L5
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****             index_r = (index_r + index_l) % 2 == 0 ? (index_r + index_l) / 2 : (index_r + index_l) 
+  73              		.loc 1 42 13 is_stmt 1 view .LVU17
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         }
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         else
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****             index_l = (index_r + index_l) / 2;
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         }
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     if (Temp_TAB[index_l] == value_adc)
+  74              		.loc 1 49 17 is_stmt 0 view .LVU18
+  75 0020 36F814C0 		ldrh	ip, [r6, r4, lsl #1]
+  76 0024 1346     		mov	r3, r2
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         }
+  77              		.loc 1 42 21 discriminator 1 view .LVU19
+  78 0026 7546     		mov	r5, lr
+  79              	.LVL2:
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         }
+  80              		.loc 1 42 21 discriminator 1 view .LVU20
+  81 0028 2246     		mov	r2, r4
+  82              	.L7:
+  83              	.LVL3:
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+  84              		.loc 1 38 30 is_stmt 1 view .LVU21
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+  85              		.loc 1 38 20 is_stmt 0 view .LVU22
+  86 002a A3EB020E 		sub	lr, r3, r2
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+  87              		.loc 1 38 30 view .LVU23
+  88 002e BEF1010F 		cmp	lr, #1
+  89 0032 0FDD     		ble	.L15
+  90              	.LVL4:
+  91              	.L8:
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+  92              		.loc 1 40 9 is_stmt 1 view .LVU24
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+  93              		.loc 1 40 111 is_stmt 0 discriminator 2 view .LVU25
+  94 0034 1344     		add	r3, r3, r2
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+  95              		.loc 1 40 12 view .LVU26
+  96 0036 8445     		cmp	ip, r0
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+  97              		.loc 1 40 126 discriminator 2 view .LVU27
+  98 0038 4FEA6302 		asr	r2, r3, #1
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         }
+  99              		.loc 1 42 21 discriminator 1 view .LVU28
+ 100 003c C3F3470E 		ubfx	lr, r3, #1, #8
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+ 101              		.loc 1 40 12 view .LVU29
+ 102 0040 E7D2     		bcs	.L16
+ 103              	.L2:
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+ 104              		.loc 1 40 70 discriminator 5 view .LVU30
+ 105 0042 36F812C0 		ldrh	ip, [r6, r2, lsl #1]
+ 106              	.L5:
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         }
+ARM GAS  /tmp/ccZA3Bng.s 			page 4
+
+
+ 107              		.loc 1 46 13 is_stmt 1 view .LVU31
+ 108              	.LVL5:
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+ 109              		.loc 1 38 20 is_stmt 0 view .LVU32
+ 110 0046 2B46     		mov	r3, r5
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         }
+ 111              		.loc 1 46 21 view .LVU33
+ 112 0048 7446     		mov	r4, lr
+ 113              	.LVL6:
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+ 114              		.loc 1 38 30 is_stmt 1 view .LVU34
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+ 115              		.loc 1 38 20 is_stmt 0 view .LVU35
+ 116 004a A3EB020E 		sub	lr, r3, r2
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+ 117              		.loc 1 38 30 view .LVU36
+ 118 004e BEF1010F 		cmp	lr, #1
+ 119 0052 EFDC     		bgt	.L8
+ 120              	.L15:
+ 121              		.loc 1 49 5 is_stmt 1 view .LVU37
+ 122              		.loc 1 49 8 is_stmt 0 view .LVU38
+ 123 0054 6045     		cmp	r0, ip
+ 124 0056 38D0     		beq	.L17
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         temp = (((int16_t)index_l) - 20) * 10; // rate *10
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     else if (Temp_TAB[index_r] == value_adc)
+ 125              		.loc 1 53 10 is_stmt 1 view .LVU39
+ 126              		.loc 1 53 22 is_stmt 0 view .LVU40
+ 127 0058 36F81340 		ldrh	r4, [r6, r3, lsl #1]
+ 128              	.LVL7:
+ 129              		.loc 1 53 13 view .LVU41
+ 130 005c 8442     		cmp	r4, r0
+ 131 005e 2FD0     		beq	.L18
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         temp = (((int16_t)index_r) - 20) * 10; // rate *10
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     else
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         if (Temp_TAB[index_l] - Temp_TAB[index_r] == 0)
+ 132              		.loc 1 59 9 is_stmt 1 view .LVU42
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+ 133              		.loc 1 51 36 is_stmt 0 view .LVU43
+ 134 0060 143A     		subs	r2, r2, #20
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****             temp = (((int16_t)index_l) - 20) * 10; // rate *10
+ 135              		.loc 1 61 18 view .LVU44
+ 136 0062 02EB8202 		add	r2, r2, r2, lsl #2
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+ 137              		.loc 1 59 12 view .LVU45
+ 138 0066 6445     		cmp	r4, ip
+ 139              		.loc 1 61 18 view .LVU46
+ 140 0068 4FEA4202 		lsl	r2, r2, #1
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+ 141              		.loc 1 59 12 view .LVU47
+ 142 006c 10D0     		beq	.L10
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         }
+ARM GAS  /tmp/ccZA3Bng.s 			page 5
+
+
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         else
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****             temp = (((int16_t)index_l) - 20) * 10 + ((Temp_TAB[index_l] - value_adc) * 100 + 5) / 1
+ 143              		.loc 1 65 13 is_stmt 1 view .LVU48
+ 144              		.loc 1 65 73 is_stmt 0 view .LVU49
+ 145 006e ACEB0003 		sub	r3, ip, r0
+ 146              		.loc 1 65 86 view .LVU50
+ 147 0072 6420     		movs	r0, #100
+ 148              	.LVL8:
+ 149              		.loc 1 65 86 view .LVU51
+ 150 0074 00FB03F3 		mul	r3, r0, r3
+ 151              		.loc 1 65 97 view .LVU52
+ 152 0078 1748     		ldr	r0, .L19+4
+ 153              		.loc 1 65 92 view .LVU53
+ 154 007a 0533     		adds	r3, r3, #5
+ 155              		.loc 1 65 123 view .LVU54
+ 156 007c ACEB040C 		sub	ip, ip, r4
+ 157              		.loc 1 65 97 view .LVU55
+ 158 0080 80FB0340 		smull	r4, r0, r0, r3
+ 159 0084 DB17     		asrs	r3, r3, #31
+ 160 0086 C3EBA003 		rsb	r3, r3, r0, asr #2
+ 161              		.loc 1 65 102 view .LVU56
+ 162 008a 93FBFCF3 		sdiv	r3, r3, ip
+ 163              		.loc 1 65 18 view .LVU57
+ 164 008e 1A44     		add	r2, r2, r3
+ 165              	.LVL9:
+ 166              	.L10:
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         }
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     *value_temp  = ((float)temp / 10.0f);
+ 167              		.loc 1 68 5 is_stmt 1 view .LVU58
+ 168              		.loc 1 68 21 is_stmt 0 view .LVU59
+ 169 0090 07EE902A 		vmov	s15, r2	@ int
+ 170 0094 F8EEE77A 		vcvt.f32.s32	s15, s15
+ 171              		.loc 1 68 33 view .LVU60
+ 172 0098 F2EE046A 		vmov.f32	s13, #1.0e+1
+ 173 009c 87EEA67A 		vdiv.f32	s14, s15, s13
+ 174              		.loc 1 68 18 view .LVU61
+ 175 00a0 81ED007A 		vstr.32	s14, [r1]
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** }
+ 176              		.loc 1 69 1 view .LVU62
+ 177 00a4 70BD     		pop	{r4, r5, r6, pc}
+ 178              	.LVL10:
+ 179              	.L3:
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+ 180              		.loc 1 40 126 discriminator 3 view .LVU63
+ 181 00a6 531C     		adds	r3, r2, #1
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+ 182              		.loc 1 40 46 discriminator 5 view .LVU64
+ 183 00a8 36F813C0 		ldrh	ip, [r6, r3, lsl #1]
+ 184 00ac 8445     		cmp	ip, r0
+ 185 00ae C8D2     		bcs	.L2
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         }
+ 186              		.loc 1 42 13 is_stmt 1 view .LVU65
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         }
+ 187              		.loc 1 42 21 is_stmt 0 discriminator 2 view .LVU66
+ 188 00b0 0EF1010E 		add	lr, lr, #1
+ARM GAS  /tmp/ccZA3Bng.s 			page 6
+
+
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+ 189              		.loc 1 49 17 view .LVU67
+ 190 00b4 36F814C0 		ldrh	ip, [r6, r4, lsl #1]
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         }
+ 191              		.loc 1 42 21 discriminator 2 view .LVU68
+ 192 00b8 5FFA8EF5 		uxtb	r5, lr
+ 193              	.LVL11:
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+ 194              		.loc 1 38 20 view .LVU69
+ 195 00bc 2246     		mov	r2, r4
+ 196 00be B4E7     		b	.L7
+ 197              	.LVL12:
+ 198              	.L18:
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+ 199              		.loc 1 55 9 is_stmt 1 view .LVU70
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+ 200              		.loc 1 55 36 is_stmt 0 view .LVU71
+ 201 00c0 143B     		subs	r3, r3, #20
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+ 202              		.loc 1 55 14 view .LVU72
+ 203 00c2 03EB8303 		add	r3, r3, r3, lsl #2
+ 204 00c6 5A00     		lsls	r2, r3, #1
+ 205              	.LVL13:
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+ 206              		.loc 1 55 14 view .LVU73
+ 207 00c8 E2E7     		b	.L10
+ 208              	.LVL14:
+ 209              	.L17:
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+ 210              		.loc 1 51 9 is_stmt 1 view .LVU74
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+ 211              		.loc 1 51 36 is_stmt 0 view .LVU75
+ 212 00ca 143A     		subs	r2, r2, #20
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+ 213              		.loc 1 51 14 view .LVU76
+ 214 00cc 02EB8202 		add	r2, r2, r2, lsl #2
+ 215 00d0 5200     		lsls	r2, r2, #1
+ 216              	.LVL15:
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+ 217              		.loc 1 51 14 view .LVU77
+ 218 00d2 DDE7     		b	.L10
+ 219              	.L20:
+ 220              		.align	2
+ 221              	.L19:
+ 222 00d4 00000000 		.word	Temp_TAB
+ 223 00d8 67666666 		.word	1717986919
+ 224              		.cfi_endproc
+ 225              	.LFE348:
+ 227              		.section	.text.adc1_median_filter,"ax",%progbits
+ 228              		.align	1
+ 229              		.p2align 2,,3
+ 230              		.global	adc1_median_filter
+ 231              		.syntax unified
+ 232              		.thumb
+ 233              		.thumb_func
+ 235              	adc1_median_filter:
+ 236              	.LVL16:
+ARM GAS  /tmp/ccZA3Bng.s 			page 7
+
+
+ 237              	.LFB349:
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** 
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** /**
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** ***********************************************************************
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** * @brief:      adc1_median_filter(uint8_t channel)
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** * @param[in]:	 channel adcͨ��
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** * @retval:     void
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** * @details:    ��ֵ�˲�
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** ***********************************************************************
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** **/
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** uint16_t
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** adc1_median_filter(uint8_t channel)
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** {
+ 238              		.loc 1 81 1 is_stmt 1 view -0
+ 239              		.cfi_startproc
+ 240              		@ args = 0, pretend = 0, frame = 0
+ 241              		@ frame_needed = 0, uses_anonymous_args = 0
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     uint16_t i, j, temp;
+ 242              		.loc 1 82 5 view .LVU79
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     for (j = 0; j < adc1_samples - 1; j++)
+ 243              		.loc 1 83 5 view .LVU80
+ 244              		.loc 1 83 19 discriminator 1 view .LVU81
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     uint16_t i, j, temp;
+ 245              		.loc 1 81 1 is_stmt 0 view .LVU82
+ 246 0000 10B5     		push	{r4, lr}
+ 247              	.LCFI1:
+ 248              		.cfi_def_cfa_offset 8
+ 249              		.cfi_offset 4, -8
+ 250              		.cfi_offset 14, -4
+ 251 0002 0D4C     		ldr	r4, .L28
+ 252 0004 04EB400C 		add	ip, r4, r0, lsl #1
+ 253 0008 0CF1080C 		add	ip, ip, #8
+ 254 000c 04EB400E 		add	lr, r4, r0, lsl #1
+ 255              	.LVL17:
+ 256              	.L22:
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         for (i = 1; i < adc1_samples - j; i++)
+ 257              		.loc 1 85 23 is_stmt 1 discriminator 1 view .LVU83
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     uint16_t i, j, temp;
+ 258              		.loc 1 81 1 is_stmt 0 view .LVU84
+ 259 0010 7346     		mov	r3, lr
+ 260              	.LVL18:
+ 261              	.L24:
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****             if (adc1_dma_value[i][channel] > adc1_dma_value[i - 1][channel])
+ 262              		.loc 1 87 13 is_stmt 1 view .LVU85
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****             {
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****                 temp = adc1_dma_value[i][channel];
+ 263              		.loc 1 89 17 view .LVU86
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+ 264              		.loc 1 85 44 discriminator 2 view .LVU87
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+ 265              		.loc 1 85 23 discriminator 1 view .LVU88
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****             {
+ 266              		.loc 1 87 34 is_stmt 0 view .LVU89
+ 267 0012 5A88     		ldrh	r2, [r3, #2]
+ 268              	.LVL19:
+ARM GAS  /tmp/ccZA3Bng.s 			page 8
+
+
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****                 adc1_dma_value[i][channel]     = adc1_dma_value[i - 1][channel];
+ 269              		.loc 1 90 17 is_stmt 1 view .LVU90
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****             {
+ 270              		.loc 1 87 67 is_stmt 0 view .LVU91
+ 271 0014 33F8021B 		ldrh	r1, [r3], #2
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****             {
+ 272              		.loc 1 87 16 view .LVU92
+ 273 0018 8A42     		cmp	r2, r1
+ 274              		.loc 1 90 48 view .LVU93
+ 275 001a 84BF     		itt	hi
+ 276 001c 1980     		strhhi	r1, [r3]	@ movhi
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****                 adc1_dma_value[i - 1][channel] = temp;
+ 277              		.loc 1 91 17 is_stmt 1 view .LVU94
+ 278              		.loc 1 91 48 is_stmt 0 view .LVU95
+ 279 001e 23F8022C 		strhhi	r2, [r3, #-2]	@ movhi
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+ 280              		.loc 1 85 23 discriminator 1 view .LVU96
+ 281 0022 6345     		cmp	r3, ip
+ 282 0024 F5D1     		bne	.L24
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+ 283              		.loc 1 83 40 is_stmt 1 discriminator 2 view .LVU97
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+ 284              		.loc 1 83 19 discriminator 1 view .LVU98
+ 285 0026 A3F1020C 		sub	ip, r3, #2
+ 286 002a F445     		cmp	ip, lr
+ 287 002c F0D1     		bne	.L22
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****             }
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         }
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     return adc1_dma_value[(adc1_samples - 1) / 2][channel];
+ 288              		.loc 1 95 5 view .LVU99
+ 289              		.loc 1 95 50 is_stmt 0 view .LVU100
+ 290 002e 0230     		adds	r0, r0, #2
+ 291              	.LVL20:
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** }
+ 292              		.loc 1 96 1 view .LVU101
+ 293 0030 34F81000 		ldrh	r0, [r4, r0, lsl #1]
+ 294 0034 10BD     		pop	{r4, pc}
+ 295              	.L29:
+ 296 0036 00BF     		.align	2
+ 297              	.L28:
+ 298 0038 00000000 		.word	adc1_dma_value
+ 299              		.cfi_endproc
+ 300              	.LFE349:
+ 302              		.section	.text.adc1_avg_filter,"ax",%progbits
+ 303              		.align	1
+ 304              		.p2align 2,,3
+ 305              		.global	adc1_avg_filter
+ 306              		.syntax unified
+ 307              		.thumb
+ 308              		.thumb_func
+ 310              	adc1_avg_filter:
+ 311              	.LVL21:
+ 312              	.LFB350:
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** 
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** /**
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** ***********************************************************************
+ARM GAS  /tmp/ccZA3Bng.s 			page 9
+
+
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** * @brief:      adc1_avg_filter(uint8_t channel)
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** * @param[in]:	 channel adcͨ��
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** * @retval:     void
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** * @details:    ��ֵ�˲�
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** ***********************************************************************
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** **/
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** uint16_t adc1_avg_filter(uint8_t channel)
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** {
+ 313              		.loc 1 107 1 is_stmt 1 view -0
+ 314              		.cfi_startproc
+ 315              		@ args = 0, pretend = 0, frame = 0
+ 316              		@ frame_needed = 0, uses_anonymous_args = 0
+ 317              		@ link register save eliminated.
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     uint16_t i;
+ 318              		.loc 1 108 5 view .LVU103
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     uint32_t temp = 0;
+ 319              		.loc 1 109 5 view .LVU104
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     for (i = 0; i < adc1_samples; i++)
+ 320              		.loc 1 110 5 view .LVU105
+ 321              		.loc 1 110 19 discriminator 1 view .LVU106
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         temp += adc1_dma_value[i][channel];
+ 322              		.loc 1 112 9 view .LVU107
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     for (i = 0; i < adc1_samples; i++)
+ 323              		.loc 1 110 36 discriminator 3 view .LVU108
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     for (i = 0; i < adc1_samples; i++)
+ 324              		.loc 1 110 19 discriminator 1 view .LVU109
+ 325              		.loc 1 112 9 view .LVU110
+ 326              		.loc 1 112 34 is_stmt 0 view .LVU111
+ 327 0000 0D4B     		ldr	r3, .L32
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     uint16_t i;
+ 328              		.loc 1 107 1 view .LVU112
+ 329 0002 10B4     		push	{r4}
+ 330              	.LCFI2:
+ 331              		.cfi_def_cfa_offset 4
+ 332              		.cfi_offset 4, -4
+ 333              		.loc 1 112 34 view .LVU113
+ 334 0004 441C     		adds	r4, r0, #1
+ 335 0006 811C     		adds	r1, r0, #2
+ 336 0008 33F81020 		ldrh	r2, [r3, r0, lsl #1]
+ 337 000c 33F81440 		ldrh	r4, [r3, r4, lsl #1]
+ 338 0010 33F81110 		ldrh	r1, [r3, r1, lsl #1]
+ 339              		.loc 1 112 14 view .LVU114
+ 340 0014 2244     		add	r2, r2, r4
+ 341              	.LVL22:
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     for (i = 0; i < adc1_samples; i++)
+ 342              		.loc 1 110 36 is_stmt 1 discriminator 3 view .LVU115
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     for (i = 0; i < adc1_samples; i++)
+ 343              		.loc 1 110 19 discriminator 1 view .LVU116
+ 344              		.loc 1 112 9 view .LVU117
+ 345              		.loc 1 112 14 is_stmt 0 view .LVU118
+ 346 0016 1144     		add	r1, r1, r2
+ 347              	.LVL23:
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     for (i = 0; i < adc1_samples; i++)
+ 348              		.loc 1 110 36 is_stmt 1 discriminator 3 view .LVU119
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     for (i = 0; i < adc1_samples; i++)
+ 349              		.loc 1 110 19 discriminator 1 view .LVU120
+ARM GAS  /tmp/ccZA3Bng.s 			page 10
+
+
+ 350              		.loc 1 112 9 view .LVU121
+ 351              		.loc 1 112 34 is_stmt 0 view .LVU122
+ 352 0018 C21C     		adds	r2, r0, #3
+ 353 001a 0430     		adds	r0, r0, #4
+ 354              	.LVL24:
+ 355              		.loc 1 112 34 view .LVU123
+ 356 001c 33F81220 		ldrh	r2, [r3, r2, lsl #1]
+ 357 0020 33F81000 		ldrh	r0, [r3, r0, lsl #1]
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     return temp / adc1_samples;
+ 358              		.loc 1 114 17 view .LVU124
+ 359 0024 054C     		ldr	r4, .L32+4
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+ 360              		.loc 1 112 14 view .LVU125
+ 361 0026 5318     		adds	r3, r2, r1
+ 362              	.LVL25:
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+ 363              		.loc 1 110 36 is_stmt 1 discriminator 3 view .LVU126
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+ 364              		.loc 1 110 19 discriminator 1 view .LVU127
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+ 365              		.loc 1 112 9 view .LVU128
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+ 366              		.loc 1 110 36 discriminator 3 view .LVU129
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+ 367              		.loc 1 110 19 discriminator 1 view .LVU130
+ 368              		.loc 1 114 5 view .LVU131
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+ 369              		.loc 1 112 14 is_stmt 0 view .LVU132
+ 370 0028 1844     		add	r0, r0, r3
+ 371              		.loc 1 114 17 view .LVU133
+ 372 002a A4FB0040 		umull	r4, r0, r4, r0
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** }
+ 373              		.loc 1 115 1 view .LVU134
+ 374 002e C0F38F00 		ubfx	r0, r0, #2, #16
+ 375 0032 5DF8044B 		ldr	r4, [sp], #4
+ 376              	.LCFI3:
+ 377              		.cfi_restore 4
+ 378              		.cfi_def_cfa_offset 0
+ 379 0036 7047     		bx	lr
+ 380              	.L33:
+ 381              		.align	2
+ 382              	.L32:
+ 383 0038 00000000 		.word	adc1_dma_value
+ 384 003c CDCCCCCC 		.word	-858993459
+ 385              		.cfi_endproc
+ 386              	.LFE350:
+ 388              		.section	.text.adc2_median_filter,"ax",%progbits
+ 389              		.align	1
+ 390              		.p2align 2,,3
+ 391              		.global	adc2_median_filter
+ 392              		.syntax unified
+ 393              		.thumb
+ 394              		.thumb_func
+ 396              	adc2_median_filter:
+ 397              	.LVL26:
+ 398              	.LFB351:
+ARM GAS  /tmp/ccZA3Bng.s 			page 11
+
+
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** 
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** /**
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** ***********************************************************************
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** * @brief:      adc2_median_filter(uint8_t channel)
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** * @param[in]:	 channel adcͨ��
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** * @retval:     void
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** * @details:    ��ֵ�˲�
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** ***********************************************************************
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** **/
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** uint16_t adc2_median_filter(uint8_t channel)
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** {
+ 399              		.loc 1 126 1 is_stmt 1 view -0
+ 400              		.cfi_startproc
+ 401              		@ args = 0, pretend = 0, frame = 0
+ 402              		@ frame_needed = 0, uses_anonymous_args = 0
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     uint16_t i, j, temp;
+ 403              		.loc 1 127 5 view .LVU136
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     for (j = 0; j < adc2_samples - 1; j++)
+ 404              		.loc 1 128 5 view .LVU137
+ 405              		.loc 1 128 19 discriminator 1 view .LVU138
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     uint16_t i, j, temp;
+ 406              		.loc 1 126 1 is_stmt 0 view .LVU139
+ 407 0000 10B5     		push	{r4, lr}
+ 408              	.LCFI4:
+ 409              		.cfi_def_cfa_offset 8
+ 410              		.cfi_offset 4, -8
+ 411              		.cfi_offset 14, -4
+ 412 0002 0D4C     		ldr	r4, .L41
+ 413 0004 04EB400C 		add	ip, r4, r0, lsl #1
+ 414 0008 0CF1080C 		add	ip, ip, #8
+ 415 000c 04EB400E 		add	lr, r4, r0, lsl #1
+ 416              	.LVL27:
+ 417              	.L35:
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         for (i = 1; i < adc2_samples - j; i++)
+ 418              		.loc 1 130 23 is_stmt 1 discriminator 1 view .LVU140
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     uint16_t i, j, temp;
+ 419              		.loc 1 126 1 is_stmt 0 view .LVU141
+ 420 0010 7346     		mov	r3, lr
+ 421              	.LVL28:
+ 422              	.L37:
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****             if (adc2_dma_value[i][channel] > adc2_dma_value[i - 1][channel])
+ 423              		.loc 1 132 13 is_stmt 1 view .LVU142
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****             {
+ 134:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****                 temp = adc2_dma_value[i][channel];
+ 424              		.loc 1 134 17 view .LVU143
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+ 425              		.loc 1 130 44 discriminator 2 view .LVU144
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+ 426              		.loc 1 130 23 discriminator 1 view .LVU145
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****             {
+ 427              		.loc 1 132 34 is_stmt 0 view .LVU146
+ 428 0012 5A88     		ldrh	r2, [r3, #2]
+ 429              	.LVL29:
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****                 adc2_dma_value[i][channel]     = adc2_dma_value[i - 1][channel];
+ 430              		.loc 1 135 17 is_stmt 1 view .LVU147
+ARM GAS  /tmp/ccZA3Bng.s 			page 12
+
+
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****             {
+ 431              		.loc 1 132 67 is_stmt 0 view .LVU148
+ 432 0014 33F8021B 		ldrh	r1, [r3], #2
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****             {
+ 433              		.loc 1 132 16 view .LVU149
+ 434 0018 8A42     		cmp	r2, r1
+ 435              		.loc 1 135 48 view .LVU150
+ 436 001a 84BF     		itt	hi
+ 437 001c 1980     		strhhi	r1, [r3]	@ movhi
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****                 adc2_dma_value[i - 1][channel] = temp;
+ 438              		.loc 1 136 17 is_stmt 1 view .LVU151
+ 439              		.loc 1 136 48 is_stmt 0 view .LVU152
+ 440 001e 23F8022C 		strhhi	r2, [r3, #-2]	@ movhi
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         {
+ 441              		.loc 1 130 23 discriminator 1 view .LVU153
+ 442 0022 6345     		cmp	r3, ip
+ 443 0024 F5D1     		bne	.L37
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+ 444              		.loc 1 128 40 is_stmt 1 discriminator 2 view .LVU154
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+ 445              		.loc 1 128 19 discriminator 1 view .LVU155
+ 446 0026 A3F1020C 		sub	ip, r3, #2
+ 447 002a F445     		cmp	ip, lr
+ 448 002c F0D1     		bne	.L35
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****             }
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         }
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     return adc2_dma_value[(adc2_samples - 1) / 2][channel];
+ 449              		.loc 1 140 5 view .LVU156
+ 450              		.loc 1 140 50 is_stmt 0 view .LVU157
+ 451 002e 0230     		adds	r0, r0, #2
+ 452              	.LVL30:
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** }
+ 453              		.loc 1 141 1 view .LVU158
+ 454 0030 34F81000 		ldrh	r0, [r4, r0, lsl #1]
+ 455 0034 10BD     		pop	{r4, pc}
+ 456              	.L42:
+ 457 0036 00BF     		.align	2
+ 458              	.L41:
+ 459 0038 00000000 		.word	adc2_dma_value
+ 460              		.cfi_endproc
+ 461              	.LFE351:
+ 463              		.section	.text.adc2_avg_filter,"ax",%progbits
+ 464              		.align	1
+ 465              		.p2align 2,,3
+ 466              		.global	adc2_avg_filter
+ 467              		.syntax unified
+ 468              		.thumb
+ 469              		.thumb_func
+ 471              	adc2_avg_filter:
+ 472              	.LVL31:
+ 473              	.LFB352:
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** /**
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** ***********************************************************************
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** * @brief:      adc2_avg_filter(uint8_t channel)
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** * @param[in]:	 channel adcͨ��
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** * @retval:     void
+ARM GAS  /tmp/ccZA3Bng.s 			page 13
+
+
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** * @details:    ��ֵ�˲�
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** ***********************************************************************
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** **/
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** uint16_t adc2_avg_filter(uint8_t channel)
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** {
+ 474              		.loc 1 151 1 is_stmt 1 view -0
+ 475              		.cfi_startproc
+ 476              		@ args = 0, pretend = 0, frame = 0
+ 477              		@ frame_needed = 0, uses_anonymous_args = 0
+ 478              		@ link register save eliminated.
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     uint16_t i;
+ 479              		.loc 1 152 5 view .LVU160
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     uint32_t temp = 0;
+ 480              		.loc 1 153 5 view .LVU161
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     for (i = 0; i < adc2_samples; i++)
+ 481              		.loc 1 154 5 view .LVU162
+ 482              		.loc 1 154 19 discriminator 1 view .LVU163
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****         temp += adc2_dma_value[i][channel];
+ 483              		.loc 1 156 9 view .LVU164
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     for (i = 0; i < adc2_samples; i++)
+ 484              		.loc 1 154 36 discriminator 3 view .LVU165
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     for (i = 0; i < adc2_samples; i++)
+ 485              		.loc 1 154 19 discriminator 1 view .LVU166
+ 486              		.loc 1 156 9 view .LVU167
+ 487              		.loc 1 156 34 is_stmt 0 view .LVU168
+ 488 0000 0D4B     		ldr	r3, .L45
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     uint16_t i;
+ 489              		.loc 1 151 1 view .LVU169
+ 490 0002 10B4     		push	{r4}
+ 491              	.LCFI5:
+ 492              		.cfi_def_cfa_offset 4
+ 493              		.cfi_offset 4, -4
+ 494              		.loc 1 156 34 view .LVU170
+ 495 0004 441C     		adds	r4, r0, #1
+ 496 0006 811C     		adds	r1, r0, #2
+ 497 0008 33F81020 		ldrh	r2, [r3, r0, lsl #1]
+ 498 000c 33F81440 		ldrh	r4, [r3, r4, lsl #1]
+ 499 0010 33F81110 		ldrh	r1, [r3, r1, lsl #1]
+ 500              		.loc 1 156 14 view .LVU171
+ 501 0014 2244     		add	r2, r2, r4
+ 502              	.LVL32:
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     for (i = 0; i < adc2_samples; i++)
+ 503              		.loc 1 154 36 is_stmt 1 discriminator 3 view .LVU172
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     for (i = 0; i < adc2_samples; i++)
+ 504              		.loc 1 154 19 discriminator 1 view .LVU173
+ 505              		.loc 1 156 9 view .LVU174
+ 506              		.loc 1 156 14 is_stmt 0 view .LVU175
+ 507 0016 1144     		add	r1, r1, r2
+ 508              	.LVL33:
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     for (i = 0; i < adc2_samples; i++)
+ 509              		.loc 1 154 36 is_stmt 1 discriminator 3 view .LVU176
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     for (i = 0; i < adc2_samples; i++)
+ 510              		.loc 1 154 19 discriminator 1 view .LVU177
+ 511              		.loc 1 156 9 view .LVU178
+ 512              		.loc 1 156 34 is_stmt 0 view .LVU179
+ 513 0018 C21C     		adds	r2, r0, #3
+ARM GAS  /tmp/ccZA3Bng.s 			page 14
+
+
+ 514 001a 0430     		adds	r0, r0, #4
+ 515              	.LVL34:
+ 516              		.loc 1 156 34 view .LVU180
+ 517 001c 33F81220 		ldrh	r2, [r3, r2, lsl #1]
+ 518 0020 33F81000 		ldrh	r0, [r3, r0, lsl #1]
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     return temp / adc2_samples;
+ 519              		.loc 1 158 17 view .LVU181
+ 520 0024 054C     		ldr	r4, .L45+4
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+ 521              		.loc 1 156 14 view .LVU182
+ 522 0026 5318     		adds	r3, r2, r1
+ 523              	.LVL35:
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+ 524              		.loc 1 154 36 is_stmt 1 discriminator 3 view .LVU183
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+ 525              		.loc 1 154 19 discriminator 1 view .LVU184
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+ 526              		.loc 1 156 9 view .LVU185
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+ 527              		.loc 1 154 36 discriminator 3 view .LVU186
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     {
+ 528              		.loc 1 154 19 discriminator 1 view .LVU187
+ 529              		.loc 1 158 5 view .LVU188
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c ****     }
+ 530              		.loc 1 156 14 is_stmt 0 view .LVU189
+ 531 0028 1844     		add	r0, r0, r3
+ 532              		.loc 1 158 17 view .LVU190
+ 533 002a A4FB0040 		umull	r4, r0, r4, r0
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.c **** }
+ 534              		.loc 1 159 1 view .LVU191
+ 535 002e C0F38F00 		ubfx	r0, r0, #2, #16
+ 536 0032 5DF8044B 		ldr	r4, [sp], #4
+ 537              	.LCFI6:
+ 538              		.cfi_restore 4
+ 539              		.cfi_def_cfa_offset 0
+ 540 0036 7047     		bx	lr
+ 541              	.L46:
+ 542              		.align	2
+ 543              	.L45:
+ 544 0038 00000000 		.word	adc2_dma_value
+ 545 003c CDCCCCCC 		.word	-858993459
+ 546              		.cfi_endproc
+ 547              	.LFE352:
+ 549              		.section	.rodata.Temp_TAB,"a"
+ 550              		.align	2
+ 553              	Temp_TAB:
+ 554 0000 9A0E     		.short	3738
+ 555 0002 870E     		.short	3719
+ 556 0004 720E     		.short	3698
+ 557 0006 5D0E     		.short	3677
+ 558 0008 470E     		.short	3655
+ 559 000a 2F0E     		.short	3631
+ 560 000c 170E     		.short	3607
+ 561 000e FE0D     		.short	3582
+ 562 0010 E40D     		.short	3556
+ 563 0012 CA0D     		.short	3530
+ARM GAS  /tmp/ccZA3Bng.s 			page 15
+
+
+ 564 0014 AE0D     		.short	3502
+ 565 0016 910D     		.short	3473
+ 566 0018 730D     		.short	3443
+ 567 001a 540D     		.short	3412
+ 568 001c 350D     		.short	3381
+ 569 001e 140D     		.short	3348
+ 570 0020 F20C     		.short	3314
+ 571 0022 D00C     		.short	3280
+ 572 0024 AC0C     		.short	3244
+ 573 0026 880C     		.short	3208
+ 574 0028 620C     		.short	3170
+ 575 002a 3C0C     		.short	3132
+ 576 002c 150C     		.short	3093
+ 577 002e ED0B     		.short	3053
+ 578 0030 C40B     		.short	3012
+ 579 0032 9A0B     		.short	2970
+ 580 0034 700B     		.short	2928
+ 581 0036 450B     		.short	2885
+ 582 0038 1A0B     		.short	2842
+ 583 003a ED0A     		.short	2797
+ 584 003c C00A     		.short	2752
+ 585 003e 930A     		.short	2707
+ 586 0040 650A     		.short	2661
+ 587 0042 370A     		.short	2615
+ 588 0044 080A     		.short	2568
+ 589 0046 DA09     		.short	2522
+ 590 0048 AA09     		.short	2474
+ 591 004a 7B09     		.short	2427
+ 592 004c 4B09     		.short	2379
+ 593 004e 1C09     		.short	2332
+ 594 0050 EC08     		.short	2284
+ 595 0052 BD08     		.short	2237
+ 596 0054 8D08     		.short	2189
+ 597 0056 5E08     		.short	2142
+ 598 0058 2F08     		.short	2095
+ 599 005a 0008     		.short	2048
+ 600 005c D107     		.short	2001
+ 601 005e A207     		.short	1954
+ 602 0060 7407     		.short	1908
+ 603 0062 4707     		.short	1863
+ 604 0064 1A07     		.short	1818
+ 605 0066 ED06     		.short	1773
+ 606 0068 C106     		.short	1729
+ 607 006a 9506     		.short	1685
+ 608 006c 6A06     		.short	1642
+ 609 006e 4006     		.short	1600
+ 610 0070 1606     		.short	1558
+ 611 0072 ED05     		.short	1517
+ 612 0074 C505     		.short	1477
+ 613 0076 9D05     		.short	1437
+ 614 0078 7605     		.short	1398
+ 615 007a 5005     		.short	1360
+ 616 007c 2B05     		.short	1323
+ 617 007e 0605     		.short	1286
+ 618 0080 E204     		.short	1250
+ 619 0082 BF04     		.short	1215
+ 620 0084 9C04     		.short	1180
+ARM GAS  /tmp/ccZA3Bng.s 			page 16
+
+
+ 621 0086 7B04     		.short	1147
+ 622 0088 5A04     		.short	1114
+ 623 008a 3A04     		.short	1082
+ 624 008c 1B04     		.short	1051
+ 625 008e FC03     		.short	1020
+ 626 0090 DE03     		.short	990
+ 627 0092 C103     		.short	961
+ 628 0094 A503     		.short	933
+ 629 0096 8903     		.short	905
+ 630 0098 6E03     		.short	878
+ 631 009a 5403     		.short	852
+ 632 009c 3B03     		.short	827
+ 633 009e 2203     		.short	802
+ 634 00a0 0A03     		.short	778
+ 635 00a2 F302     		.short	755
+ 636 00a4 DC02     		.short	732
+ 637 00a6 C602     		.short	710
+ 638 00a8 B002     		.short	688
+ 639 00aa 9C02     		.short	668
+ 640 00ac 8702     		.short	647
+ 641 00ae 7402     		.short	628
+ 642 00b0 6102     		.short	609
+ 643 00b2 4E02     		.short	590
+ 644 00b4 3C02     		.short	572
+ 645 00b6 2B02     		.short	555
+ 646 00b8 1A02     		.short	538
+ 647 00ba 0A02     		.short	522
+ 648 00bc FA01     		.short	506
+ 649 00be EB01     		.short	491
+ 650 00c0 DC01     		.short	476
+ 651 00c2 CD01     		.short	461
+ 652 00c4 BF01     		.short	447
+ 653 00c6 B201     		.short	434
+ 654 00c8 A501     		.short	421
+ 655 00ca 9801     		.short	408
+ 656 00cc 8B01     		.short	395
+ 657 00ce 8001     		.short	384
+ 658 00d0 7401     		.short	372
+ 659 00d2 6901     		.short	361
+ 660 00d4 5E01     		.short	350
+ 661 00d6 5401     		.short	340
+ 662 00d8 4A01     		.short	330
+ 663 00da 4001     		.short	320
+ 664 00dc 3701     		.short	311
+ 665 00de 2E01     		.short	302
+ 666 00e0 2501     		.short	293
+ 667 00e2 1C01     		.short	284
+ 668 00e4 1401     		.short	276
+ 669 00e6 0C01     		.short	268
+ 670 00e8 0501     		.short	261
+ 671 00ea FD00     		.short	253
+ 672 00ec F600     		.short	246
+ 673 00ee EF00     		.short	239
+ 674 00f0 E900     		.short	233
+ 675 00f2 E200     		.short	226
+ 676 00f4 DC00     		.short	220
+ 677 00f6 D600     		.short	214
+ARM GAS  /tmp/ccZA3Bng.s 			page 17
+
+
+ 678 00f8 D100     		.short	209
+ 679 00fa CB00     		.short	203
+ 680              		.global	current_data
+ 681              		.section	.data.current_data,"aw"
+ 682              		.align	2
+ 685              	current_data:
+ 686 0000 00000000 		.word	hadc1
+ 687 0004 00000000 		.word	0
+ 688 0008 00000000 		.word	0
+ 689 000c 00000000 		.word	0
+ 690 0010 00000000 		.word	0
+ 691 0014 00000000 		.word	0
+ 692 0018 00000000 		.word	0
+ 693 001c 00000000 		.word	0
+ 694              		.text
+ 695              	.Letext0:
+ 696              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 697              		.file 3 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 698              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 699              		.file 5 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 700              		.file 6 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 701              		.file 7 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 702              		.file 8 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/adc.h"
+ 703              		.file 9 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.h"
+ 704              		.file 10 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.h"
+ARM GAS  /tmp/ccZA3Bng.s 			page 18
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 Motor_ADC.c
+     /tmp/ccZA3Bng.s:21     .text.GetTempNtc:00000000 $t
+     /tmp/ccZA3Bng.s:28     .text.GetTempNtc:00000000 GetTempNtc
+     /tmp/ccZA3Bng.s:222    .text.GetTempNtc:000000d4 $d
+     /tmp/ccZA3Bng.s:553    .rodata.Temp_TAB:00000000 Temp_TAB
+     /tmp/ccZA3Bng.s:228    .text.adc1_median_filter:00000000 $t
+     /tmp/ccZA3Bng.s:235    .text.adc1_median_filter:00000000 adc1_median_filter
+     /tmp/ccZA3Bng.s:298    .text.adc1_median_filter:00000038 $d
+     /tmp/ccZA3Bng.s:303    .text.adc1_avg_filter:00000000 $t
+     /tmp/ccZA3Bng.s:310    .text.adc1_avg_filter:00000000 adc1_avg_filter
+     /tmp/ccZA3Bng.s:383    .text.adc1_avg_filter:00000038 $d
+     /tmp/ccZA3Bng.s:389    .text.adc2_median_filter:00000000 $t
+     /tmp/ccZA3Bng.s:396    .text.adc2_median_filter:00000000 adc2_median_filter
+     /tmp/ccZA3Bng.s:459    .text.adc2_median_filter:00000038 $d
+     /tmp/ccZA3Bng.s:464    .text.adc2_avg_filter:00000000 $t
+     /tmp/ccZA3Bng.s:471    .text.adc2_avg_filter:00000000 adc2_avg_filter
+     /tmp/ccZA3Bng.s:544    .text.adc2_avg_filter:00000038 $d
+     /tmp/ccZA3Bng.s:550    .rodata.Temp_TAB:00000000 $d
+     /tmp/ccZA3Bng.s:685    .data.current_data:00000000 current_data
+     /tmp/ccZA3Bng.s:682    .data.current_data:00000000 $d
+
+UNDEFINED SYMBOLS
+adc1_dma_value
+adc2_dma_value
+hadc1

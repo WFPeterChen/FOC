@@ -1,0 +1,169 @@
+ARM GAS  /tmp/ccQQnT0l.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"bsp_adc.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c"
+  20              		.section	.text.adc_bsp_init,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	adc_bsp_init
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	adc_bsp_init:
+  29              	.LFB348:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** #include "bsp_adc.h" // 包含 ADC 相关的 BSP（板级支持包）头文件
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** 
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** /* adc_dma 数据存储数组
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** 	 用于存储 ADC1 的 DMA 转换结果。
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** 	 adc1_samples: 采样次数
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** 	 adc1_channel: 通道数
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** */
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** /* adc_dma 数据存储数组*/
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** uint16_t adc1_dma_value[adc1_samples][adc1_channel];
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** uint16_t adc2_dma_value[adc2_samples][adc2_channel];
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** /**
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c ****  * @brief 初始化 ADC BSP
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c ****  *
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c ****  * 此函数用于初始化 ADC 的相关设置，包括启动 DMA 和注入模式。
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c ****  */
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** void adc_bsp_init(void)
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** {
+  30              		.loc 1 17 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** #if ADC_INJECTED_ENABLE
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** 	/**ADC自校验**/
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** 	HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
+  34              		.loc 1 20 2 view .LVU1
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** #if ADC_INJECTED_ENABLE
+  35              		.loc 1 17 1 is_stmt 0 view .LVU2
+  36 0000 38B5     		push	{r3, r4, r5, lr}
+  37              	.LCFI0:
+ARM GAS  /tmp/ccQQnT0l.s 			page 2
+
+
+  38              		.cfi_def_cfa_offset 16
+  39              		.cfi_offset 3, -16
+  40              		.cfi_offset 4, -12
+  41              		.cfi_offset 5, -8
+  42              		.cfi_offset 14, -4
+  43              		.loc 1 20 2 view .LVU3
+  44 0002 0A4D     		ldr	r5, .L4
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** 	HAL_ADCEx_Calibration_Start(&hadc2, ADC_SINGLE_ENDED);
+  45              		.loc 1 21 2 view .LVU4
+  46 0004 0A4C     		ldr	r4, .L4+4
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** 	HAL_ADCEx_Calibration_Start(&hadc2, ADC_SINGLE_ENDED);
+  47              		.loc 1 20 2 view .LVU5
+  48 0006 7F21     		movs	r1, #127
+  49 0008 2846     		mov	r0, r5
+  50 000a FFF7FEFF 		bl	HAL_ADCEx_Calibration_Start
+  51              	.LVL0:
+  52              		.loc 1 21 2 is_stmt 1 view .LVU6
+  53 000e 7F21     		movs	r1, #127
+  54 0010 2046     		mov	r0, r4
+  55 0012 FFF7FEFF 		bl	HAL_ADCEx_Calibration_Start
+  56              	.LVL1:
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** 	/**开启ADC注入中断**/
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** 	HAL_ADCEx_InjectedStart_IT(&hadc1);
+  57              		.loc 1 23 2 view .LVU7
+  58 0016 2846     		mov	r0, r5
+  59 0018 FFF7FEFF 		bl	HAL_ADCEx_InjectedStart_IT
+  60              	.LVL2:
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** 	HAL_ADC_Start_DMA(&hadc2, (uint32_t *)adc2_dma_value, adc2_length);
+  61              		.loc 1 24 2 view .LVU8
+  62 001c 2046     		mov	r0, r4
+  63 001e 0549     		ldr	r1, .L4+8
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** 
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** #else // 如果不启用注入模式
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** 
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** 	HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** 	HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adc1_dma_value, adc1_length);
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** #endif
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** }
+  64              		.loc 1 31 1 is_stmt 0 view .LVU9
+  65 0020 BDE83840 		pop	{r3, r4, r5, lr}
+  66              	.LCFI1:
+  67              		.cfi_restore 14
+  68              		.cfi_restore 5
+  69              		.cfi_restore 4
+  70              		.cfi_restore 3
+  71              		.cfi_def_cfa_offset 0
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.c **** 	HAL_ADC_Start_DMA(&hadc2, (uint32_t *)adc2_dma_value, adc2_length);
+  72              		.loc 1 24 2 view .LVU10
+  73 0024 0522     		movs	r2, #5
+  74 0026 FFF7FEBF 		b	HAL_ADC_Start_DMA
+  75              	.LVL3:
+  76              	.L5:
+  77 002a 00BF     		.align	2
+  78              	.L4:
+  79 002c 00000000 		.word	hadc1
+  80 0030 00000000 		.word	hadc2
+  81 0034 00000000 		.word	adc2_dma_value
+ARM GAS  /tmp/ccQQnT0l.s 			page 3
+
+
+  82              		.cfi_endproc
+  83              	.LFE348:
+  85              		.global	adc2_dma_value
+  86              		.section	.bss.adc2_dma_value,"aw",%nobits
+  87              		.align	2
+  90              	adc2_dma_value:
+  91 0000 00000000 		.space	10
+  91      00000000 
+  91      0000
+  92              		.global	adc1_dma_value
+  93              		.section	.bss.adc1_dma_value,"aw",%nobits
+  94              		.align	2
+  97              	adc1_dma_value:
+  98 0000 00000000 		.space	10
+  98      00000000 
+  98      0000
+  99              		.text
+ 100              	.Letext0:
+ 101              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 102              		.file 3 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 103              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 104              		.file 5 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 105              		.file 6 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 106              		.file 7 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 107              		.file 8 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/adc.h"
+ 108              		.file 9 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/adc/bsp_adc.h"
+ 109              		.file 10 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm
+ARM GAS  /tmp/ccQQnT0l.s 			page 4
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 bsp_adc.c
+     /tmp/ccQQnT0l.s:21     .text.adc_bsp_init:00000000 $t
+     /tmp/ccQQnT0l.s:28     .text.adc_bsp_init:00000000 adc_bsp_init
+     /tmp/ccQQnT0l.s:79     .text.adc_bsp_init:0000002c $d
+     /tmp/ccQQnT0l.s:90     .bss.adc2_dma_value:00000000 adc2_dma_value
+     /tmp/ccQQnT0l.s:87     .bss.adc2_dma_value:00000000 $d
+     /tmp/ccQQnT0l.s:97     .bss.adc1_dma_value:00000000 adc1_dma_value
+     /tmp/ccQQnT0l.s:94     .bss.adc1_dma_value:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_ADCEx_Calibration_Start
+HAL_ADCEx_InjectedStart_IT
+HAL_ADC_Start_DMA
+hadc1
+hadc2

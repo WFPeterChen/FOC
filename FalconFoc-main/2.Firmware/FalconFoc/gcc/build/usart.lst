@@ -1,0 +1,890 @@
+ARM GAS  /tmp/cczUF9GK.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"usart.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c"
+  20              		.section	.text.MX_USART1_UART_Init,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	MX_USART1_UART_Init
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	MX_USART1_UART_Init:
+  29              	.LFB329:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** /* USER CODE BEGIN Header */
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** /**
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   ******************************************************************************
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   * @file    usart.c
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   * @brief   This file provides code for the configuration
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   *          of the USART instances.
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   ******************************************************************************
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   * @attention
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   *
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   * Copyright (c) 2024 STMicroelectronics.
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   * All rights reserved.
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   *
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   * in the root directory of this software component.
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   *
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   ******************************************************************************
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   */
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** /* USER CODE END Header */
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** /* Includes ------------------------------------------------------------------*/
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** #include "usart.h"
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** /* USER CODE BEGIN 0 */
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** /* USER CODE END 0 */
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** UART_HandleTypeDef huart1;
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** DMA_HandleTypeDef hdma_usart1_rx;
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** DMA_HandleTypeDef hdma_usart1_tx;
+ARM GAS  /tmp/cczUF9GK.s 			page 2
+
+
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** /* USART1 init function */
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** void MX_USART1_UART_Init(void)
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** {
+  30              		.loc 1 34 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   /* USER CODE BEGIN USART1_Init 0 */
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   /* USER CODE END USART1_Init 0 */
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   /* USER CODE BEGIN USART1_Init 1 */
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   /* USER CODE END USART1_Init 1 */
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   huart1.Instance = USART1;
+  34              		.loc 1 43 3 view .LVU1
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+  35              		.loc 1 34 1 is_stmt 0 view .LVU2
+  36 0000 10B5     		push	{r4, lr}
+  37              	.LCFI0:
+  38              		.cfi_def_cfa_offset 8
+  39              		.cfi_offset 4, -8
+  40              		.cfi_offset 14, -4
+  41              		.loc 1 43 19 view .LVU3
+  42 0002 1F48     		ldr	r0, .L21
+  43 0004 1F4C     		ldr	r4, .L21+4
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   huart1.Init.BaudRate = 921600;
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   huart1.Init.WordLength = UART_WORDLENGTH_8B;
+  44              		.loc 1 45 26 view .LVU4
+  45 0006 0023     		movs	r3, #0
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   huart1.Init.BaudRate = 921600;
+  46              		.loc 1 44 24 view .LVU5
+  47 0008 4FF46121 		mov	r1, #921600
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   huart1.Init.StopBits = UART_STOPBITS_1;
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   huart1.Init.Parity = UART_PARITY_NONE;
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   huart1.Init.Mode = UART_MODE_TX_RX;
+  48              		.loc 1 48 20 view .LVU6
+  49 000c 0C22     		movs	r2, #12
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   huart1.Init.BaudRate = 921600;
+  50              		.loc 1 44 24 view .LVU7
+  51 000e C0E90041 		strd	r4, r1, [r0]
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   huart1.Init.StopBits = UART_STOPBITS_1;
+  52              		.loc 1 45 3 is_stmt 1 view .LVU8
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   huart1.Init.StopBits = UART_STOPBITS_1;
+  53              		.loc 1 46 24 is_stmt 0 view .LVU9
+  54 0012 C0E90233 		strd	r3, r3, [r0, #8]
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   huart1.Init.Mode = UART_MODE_TX_RX;
+  55              		.loc 1 47 3 is_stmt 1 view .LVU10
+  56              		.loc 1 48 20 is_stmt 0 view .LVU11
+  57 0016 C0E90432 		strd	r3, r2, [r0, #16]
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  58              		.loc 1 49 3 is_stmt 1 view .LVU12
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   huart1.Init.OverSampling = UART_OVERSAMPLING_16;
+  59              		.loc 1 50 28 is_stmt 0 view .LVU13
+ARM GAS  /tmp/cczUF9GK.s 			page 3
+
+
+  60 001a C0E90633 		strd	r3, r3, [r0, #24]
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   huart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  61              		.loc 1 51 3 is_stmt 1 view .LVU14
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   huart1.Init.ClockPrescaler = UART_PRESCALER_DIV1;
+  62              		.loc 1 52 30 is_stmt 0 view .LVU15
+  63 001e C0E90833 		strd	r3, r3, [r0, #32]
+  64 0022 8362     		str	r3, [r0, #40]
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   huart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   if (HAL_UART_Init(&huart1) != HAL_OK)
+  65              		.loc 1 54 3 is_stmt 1 view .LVU16
+  66              		.loc 1 54 7 is_stmt 0 view .LVU17
+  67 0024 FFF7FEFF 		bl	HAL_UART_Init
+  68              	.LVL0:
+  69              		.loc 1 54 6 discriminator 1 view .LVU18
+  70 0028 70B9     		cbnz	r0, .L17
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   {
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     Error_Handler();
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   }
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   if (HAL_UARTEx_SetTxFifoThreshold(&huart1, UART_TXFIFO_THRESHOLD_1_8) != HAL_OK)
+  71              		.loc 1 58 3 is_stmt 1 view .LVU19
+  72              		.loc 1 58 7 is_stmt 0 view .LVU20
+  73 002a 1548     		ldr	r0, .L21
+  74 002c 0021     		movs	r1, #0
+  75 002e FFF7FEFF 		bl	HAL_UARTEx_SetTxFifoThreshold
+  76              	.LVL1:
+  77              		.loc 1 58 6 discriminator 1 view .LVU21
+  78 0032 88B9     		cbnz	r0, .L18
+  79              	.L3:
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   {
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     Error_Handler();
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   }
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   if (HAL_UARTEx_SetRxFifoThreshold(&huart1, UART_RXFIFO_THRESHOLD_1_8) != HAL_OK)
+  80              		.loc 1 62 3 is_stmt 1 view .LVU22
+  81              		.loc 1 62 7 is_stmt 0 view .LVU23
+  82 0034 1248     		ldr	r0, .L21
+  83 0036 0021     		movs	r1, #0
+  84 0038 FFF7FEFF 		bl	HAL_UARTEx_SetRxFifoThreshold
+  85              	.LVL2:
+  86              		.loc 1 62 6 discriminator 1 view .LVU24
+  87 003c A0B9     		cbnz	r0, .L19
+  88              	.L4:
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   {
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     Error_Handler();
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   }
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   if (HAL_UARTEx_DisableFifoMode(&huart1) != HAL_OK)
+  89              		.loc 1 66 3 is_stmt 1 view .LVU25
+  90              		.loc 1 66 7 is_stmt 0 view .LVU26
+  91 003e 1048     		ldr	r0, .L21
+  92 0040 FFF7FEFF 		bl	HAL_UARTEx_DisableFifoMode
+  93              	.LVL3:
+  94              		.loc 1 66 6 discriminator 1 view .LVU27
+  95 0044 B8B9     		cbnz	r0, .L20
+  96              	.L1:
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   {
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     Error_Handler();
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   }
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   /* USER CODE BEGIN USART1_Init 2 */
+ARM GAS  /tmp/cczUF9GK.s 			page 4
+
+
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   /* USER CODE END USART1_Init 2 */
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** }
+  97              		.loc 1 74 1 view .LVU28
+  98 0046 10BD     		pop	{r4, pc}
+  99              	.L17:
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   }
+ 100              		.loc 1 56 5 is_stmt 1 view .LVU29
+ 101 0048 FFF7FEFF 		bl	Error_Handler
+ 102              	.LVL4:
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   {
+ 103              		.loc 1 58 3 view .LVU30
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   {
+ 104              		.loc 1 58 7 is_stmt 0 view .LVU31
+ 105 004c 0C48     		ldr	r0, .L21
+ 106 004e 0021     		movs	r1, #0
+ 107 0050 FFF7FEFF 		bl	HAL_UARTEx_SetTxFifoThreshold
+ 108              	.LVL5:
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   {
+ 109              		.loc 1 58 6 discriminator 1 view .LVU32
+ 110 0054 0028     		cmp	r0, #0
+ 111 0056 EDD0     		beq	.L3
+ 112              	.L18:
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   }
+ 113              		.loc 1 60 5 is_stmt 1 view .LVU33
+ 114 0058 FFF7FEFF 		bl	Error_Handler
+ 115              	.LVL6:
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   {
+ 116              		.loc 1 62 3 view .LVU34
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   {
+ 117              		.loc 1 62 7 is_stmt 0 view .LVU35
+ 118 005c 0848     		ldr	r0, .L21
+ 119 005e 0021     		movs	r1, #0
+ 120 0060 FFF7FEFF 		bl	HAL_UARTEx_SetRxFifoThreshold
+ 121              	.LVL7:
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   {
+ 122              		.loc 1 62 6 discriminator 1 view .LVU36
+ 123 0064 0028     		cmp	r0, #0
+ 124 0066 EAD0     		beq	.L4
+ 125              	.L19:
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   }
+ 126              		.loc 1 64 5 is_stmt 1 view .LVU37
+ 127 0068 FFF7FEFF 		bl	Error_Handler
+ 128              	.LVL8:
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   {
+ 129              		.loc 1 66 3 view .LVU38
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   {
+ 130              		.loc 1 66 7 is_stmt 0 view .LVU39
+ 131 006c 0448     		ldr	r0, .L21
+ 132 006e FFF7FEFF 		bl	HAL_UARTEx_DisableFifoMode
+ 133              	.LVL9:
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   {
+ 134              		.loc 1 66 6 discriminator 1 view .LVU40
+ 135 0072 0028     		cmp	r0, #0
+ 136 0074 E7D0     		beq	.L1
+ 137              	.L20:
+ARM GAS  /tmp/cczUF9GK.s 			page 5
+
+
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   }
+ 138              		.loc 1 68 5 is_stmt 1 view .LVU41
+ 139              		.loc 1 74 1 is_stmt 0 view .LVU42
+ 140 0076 BDE81040 		pop	{r4, lr}
+ 141              	.LCFI1:
+ 142              		.cfi_restore 14
+ 143              		.cfi_restore 4
+ 144              		.cfi_def_cfa_offset 0
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   }
+ 145              		.loc 1 68 5 view .LVU43
+ 146 007a FFF7FEBF 		b	Error_Handler
+ 147              	.LVL10:
+ 148              	.L22:
+ 149 007e 00BF     		.align	2
+ 150              	.L21:
+ 151 0080 00000000 		.word	huart1
+ 152 0084 00380140 		.word	1073821696
+ 153              		.cfi_endproc
+ 154              	.LFE329:
+ 156              		.section	.text.HAL_UART_MspInit,"ax",%progbits
+ 157              		.align	1
+ 158              		.p2align 2,,3
+ 159              		.global	HAL_UART_MspInit
+ 160              		.syntax unified
+ 161              		.thumb
+ 162              		.thumb_func
+ 164              	HAL_UART_MspInit:
+ 165              	.LVL11:
+ 166              	.LFB330:
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** {
+ 167              		.loc 1 77 1 is_stmt 1 view -0
+ 168              		.cfi_startproc
+ 169              		@ args = 0, pretend = 0, frame = 96
+ 170              		@ frame_needed = 0, uses_anonymous_args = 0
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   GPIO_InitTypeDef GPIO_InitStruct = {0};
+ 171              		.loc 1 79 3 view .LVU45
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 172              		.loc 1 77 1 is_stmt 0 view .LVU46
+ 173 0000 70B5     		push	{r4, r5, r6, lr}
+ 174              	.LCFI2:
+ 175              		.cfi_def_cfa_offset 16
+ 176              		.cfi_offset 4, -16
+ 177              		.cfi_offset 5, -12
+ 178              		.cfi_offset 6, -8
+ 179              		.cfi_offset 14, -4
+ 180 0002 0446     		mov	r4, r0
+ 181 0004 98B0     		sub	sp, sp, #96
+ 182              	.LCFI3:
+ 183              		.cfi_def_cfa_offset 112
+ 184              		.loc 1 79 20 view .LVU47
+ 185 0006 0021     		movs	r1, #0
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
+ 186              		.loc 1 80 28 view .LVU48
+ 187 0008 4422     		movs	r2, #68
+ARM GAS  /tmp/cczUF9GK.s 			page 6
+
+
+ 188 000a 07A8     		add	r0, sp, #28
+ 189              	.LVL12:
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
+ 190              		.loc 1 79 20 view .LVU49
+ 191 000c CDE90211 		strd	r1, r1, [sp, #8]
+ 192 0010 CDE90411 		strd	r1, r1, [sp, #16]
+ 193 0014 0691     		str	r1, [sp, #24]
+ 194              		.loc 1 80 3 is_stmt 1 view .LVU50
+ 195              		.loc 1 80 28 is_stmt 0 view .LVU51
+ 196 0016 FFF7FEFF 		bl	memset
+ 197              	.LVL13:
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   if(uartHandle->Instance==USART1)
+ 198              		.loc 1 81 3 is_stmt 1 view .LVU52
+ 199              		.loc 1 81 5 is_stmt 0 view .LVU53
+ 200 001a 3B4B     		ldr	r3, .L42+16
+ 201 001c 2268     		ldr	r2, [r4]
+ 202 001e 9A42     		cmp	r2, r3
+ 203 0020 01D0     		beq	.L38
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   {
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   /* USER CODE BEGIN USART1_MspInit 0 */
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   /* USER CODE END USART1_MspInit 0 */
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   /** Initializes the peripherals clocks
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   */
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1;
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK2;
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     {
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****       Error_Handler();
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     }
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     /* USART1 clock enable */
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     __HAL_RCC_USART1_CLK_ENABLE();
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     __HAL_RCC_GPIOB_CLK_ENABLE();
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     /**USART1 GPIO Configuration
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     PB6     ------> USART1_TX
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     PB7     ------> USART1_RX
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     */
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     GPIO_InitStruct.Pin = GPIO_PIN_6|GPIO_PIN_7;
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     GPIO_InitStruct.Alternate = GPIO_AF7_USART1;
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     /* USART1 DMA Init */
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     /* USART1_RX Init */
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_rx.Instance = DMA1_Channel3;
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_rx.Init.Request = DMA_REQUEST_USART1_RX;
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_rx.Init.PeriphInc = DMA_PINC_DISABLE;
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_rx.Init.MemInc = DMA_MINC_ENABLE;
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_rx.Init.Mode = DMA_NORMAL;
+ARM GAS  /tmp/cczUF9GK.s 			page 7
+
+
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_rx.Init.Priority = DMA_PRIORITY_HIGH;
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     if (HAL_DMA_Init(&hdma_usart1_rx) != HAL_OK)
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     {
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****       Error_Handler();
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     }
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     __HAL_LINKDMA(uartHandle,hdmarx,hdma_usart1_rx);
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     /* USART1_TX Init */
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_tx.Instance = DMA1_Channel4;
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_tx.Init.Request = DMA_REQUEST_USART1_TX;
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_tx.Init.PeriphInc = DMA_PINC_DISABLE;
+ 134:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_tx.Init.MemInc = DMA_MINC_ENABLE;
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_tx.Init.Mode = DMA_NORMAL;
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_tx.Init.Priority = DMA_PRIORITY_HIGH;
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     if (HAL_DMA_Init(&hdma_usart1_tx) != HAL_OK)
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     {
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****       Error_Handler();
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     }
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     __HAL_LINKDMA(uartHandle,hdmatx,hdma_usart1_tx);
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     /* USART1 interrupt Init */
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     HAL_NVIC_SetPriority(USART1_IRQn, 7, 0);
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     HAL_NVIC_EnableIRQ(USART1_IRQn);
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   /* USER CODE BEGIN USART1_MspInit 1 */
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   /* USER CODE END USART1_MspInit 1 */
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   }
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** }
+ 204              		.loc 1 153 1 view .LVU54
+ 205 0022 18B0     		add	sp, sp, #96
+ 206              	.LCFI4:
+ 207              		.cfi_remember_state
+ 208              		.cfi_def_cfa_offset 16
+ 209              		@ sp needed
+ 210 0024 70BD     		pop	{r4, r5, r6, pc}
+ 211              	.LVL14:
+ 212              	.L38:
+ 213              	.LCFI5:
+ 214              		.cfi_restore_state
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK2;
+ 215              		.loc 1 89 5 is_stmt 1 view .LVU55
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK2;
+ 216              		.loc 1 89 40 is_stmt 0 view .LVU56
+ 217 0026 0123     		movs	r3, #1
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     {
+ 218              		.loc 1 91 9 view .LVU57
+ 219 0028 07A8     		add	r0, sp, #28
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK2;
+ 220              		.loc 1 89 40 view .LVU58
+ 221 002a 0793     		str	r3, [sp, #28]
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+ 222              		.loc 1 90 5 is_stmt 1 view .LVU59
+ARM GAS  /tmp/cczUF9GK.s 			page 8
+
+
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     {
+ 223              		.loc 1 91 5 view .LVU60
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     {
+ 224              		.loc 1 91 9 is_stmt 0 view .LVU61
+ 225 002c FFF7FEFF 		bl	HAL_RCCEx_PeriphCLKConfig
+ 226              	.LVL15:
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     {
+ 227              		.loc 1 91 8 discriminator 1 view .LVU62
+ 228 0030 0028     		cmp	r0, #0
+ 229 0032 58D1     		bne	.L39
+ 230              	.L25:
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 231              		.loc 1 97 5 is_stmt 1 view .LVU63
+ 232              	.LBB2:
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 233              		.loc 1 97 5 view .LVU64
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 234              		.loc 1 97 5 view .LVU65
+ 235 0034 354B     		ldr	r3, .L42+20
+ 236              	.LBE2:
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 237              		.loc 1 109 5 is_stmt 0 view .LVU66
+ 238 0036 3648     		ldr	r0, .L42+24
+ 239              	.LBB3:
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 240              		.loc 1 97 5 view .LVU67
+ 241 0038 1A6E     		ldr	r2, [r3, #96]
+ 242              	.LBE3:
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_rx.Init.Request = DMA_REQUEST_USART1_RX;
+ 243              		.loc 1 113 29 view .LVU68
+ 244 003a 364E     		ldr	r6, .L42+28
+ 245              	.LBB4:
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 246              		.loc 1 97 5 view .LVU69
+ 247 003c 42F48042 		orr	r2, r2, #16384
+ 248 0040 1A66     		str	r2, [r3, #96]
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 249              		.loc 1 97 5 is_stmt 1 view .LVU70
+ 250 0042 1A6E     		ldr	r2, [r3, #96]
+ 251 0044 02F48042 		and	r2, r2, #16384
+ 252 0048 0092     		str	r2, [sp]
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 253              		.loc 1 97 5 view .LVU71
+ 254 004a 009A     		ldr	r2, [sp]
+ 255              	.LBE4:
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 256              		.loc 1 97 5 view .LVU72
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     /**USART1 GPIO Configuration
+ 257              		.loc 1 99 5 view .LVU73
+ 258              	.LBB5:
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     /**USART1 GPIO Configuration
+ 259              		.loc 1 99 5 view .LVU74
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     /**USART1 GPIO Configuration
+ 260              		.loc 1 99 5 view .LVU75
+ 261 004c DA6C     		ldr	r2, [r3, #76]
+ 262              	.LBE5:
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ARM GAS  /tmp/cczUF9GK.s 			page 9
+
+
+ 263              		.loc 1 104 25 is_stmt 0 view .LVU76
+ 264 004e 9FED2A7B 		vldr.64	d7, .L42	@ int
+ 265              	.LBB6:
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     /**USART1 GPIO Configuration
+ 266              		.loc 1 99 5 view .LVU77
+ 267 0052 42F00202 		orr	r2, r2, #2
+ 268 0056 DA64     		str	r2, [r3, #76]
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     /**USART1 GPIO Configuration
+ 269              		.loc 1 99 5 is_stmt 1 view .LVU78
+ 270 0058 DB6C     		ldr	r3, [r3, #76]
+ 271              	.LBE6:
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 272              		.loc 1 104 25 is_stmt 0 view .LVU79
+ 273 005a 8DED027B 		vstr.64	d7, [sp, #8]	@ int
+ 274 005e 9FED287B 		vldr.64	d7, .L42+8	@ int
+ 275              	.LBB7:
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     /**USART1 GPIO Configuration
+ 276              		.loc 1 99 5 view .LVU80
+ 277 0062 03F00203 		and	r3, r3, #2
+ 278 0066 0193     		str	r3, [sp, #4]
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     /**USART1 GPIO Configuration
+ 279              		.loc 1 99 5 is_stmt 1 view .LVU81
+ 280              	.LBE7:
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 281              		.loc 1 109 5 is_stmt 0 view .LVU82
+ 282 0068 02A9     		add	r1, sp, #8
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+ 283              		.loc 1 108 31 view .LVU83
+ 284 006a 0723     		movs	r3, #7
+ 285              	.LBB8:
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     /**USART1 GPIO Configuration
+ 286              		.loc 1 99 5 view .LVU84
+ 287 006c 019A     		ldr	r2, [sp, #4]
+ 288              	.LBE8:
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     /**USART1 GPIO Configuration
+ 289              		.loc 1 99 5 is_stmt 1 view .LVU85
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 290              		.loc 1 104 5 view .LVU86
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 291              		.loc 1 105 5 view .LVU87
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 292              		.loc 1 106 5 view .LVU88
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     GPIO_InitStruct.Alternate = GPIO_AF7_USART1;
+ 293              		.loc 1 107 5 view .LVU89
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+ 294              		.loc 1 108 5 view .LVU90
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+ 295              		.loc 1 108 31 is_stmt 0 view .LVU91
+ 296 006e 0693     		str	r3, [sp, #24]
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 297              		.loc 1 109 5 is_stmt 1 view .LVU92
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 298              		.loc 1 104 25 is_stmt 0 view .LVU93
+ 299 0070 8DED047B 		vstr.64	d7, [sp, #16]	@ int
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 300              		.loc 1 109 5 view .LVU94
+ 301 0074 FFF7FEFF 		bl	HAL_GPIO_Init
+ARM GAS  /tmp/cczUF9GK.s 			page 10
+
+
+ 302              	.LVL16:
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_rx.Init.Request = DMA_REQUEST_USART1_RX;
+ 303              		.loc 1 113 5 is_stmt 1 view .LVU95
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
+ 304              		.loc 1 114 33 is_stmt 0 view .LVU96
+ 305 0078 2749     		ldr	r1, .L42+32
+ 306 007a 1822     		movs	r2, #24
+ 307 007c 0023     		movs	r3, #0
+ 308 007e C6E90012 		strd	r1, r2, [r6]
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     {
+ 309              		.loc 1 122 9 view .LVU97
+ 310 0082 3046     		mov	r0, r6
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
+ 311              		.loc 1 114 33 view .LVU98
+ 312 0084 8021     		movs	r1, #128
+ 313 0086 4FF40052 		mov	r2, #8192
+ 314 008a C6E90233 		strd	r3, r3, [r6, #8]
+ 315 008e C6E90413 		strd	r1, r3, [r6, #16]
+ 316 0092 C6E90633 		strd	r3, r3, [r6, #24]
+ 317 0096 3262     		str	r2, [r6, #32]
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     {
+ 318              		.loc 1 122 5 is_stmt 1 view .LVU99
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     {
+ 319              		.loc 1 122 9 is_stmt 0 view .LVU100
+ 320 0098 FFF7FEFF 		bl	HAL_DMA_Init
+ 321              	.LVL17:
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     {
+ 322              		.loc 1 122 8 discriminator 1 view .LVU101
+ 323 009c 48BB     		cbnz	r0, .L40
+ 324              	.L26:
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 325              		.loc 1 127 5 is_stmt 1 view .LVU102
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 326              		.loc 1 127 5 view .LVU103
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_tx.Init.Request = DMA_REQUEST_USART1_TX;
+ 327              		.loc 1 130 29 is_stmt 0 view .LVU104
+ 328 009e 1F4D     		ldr	r5, .L42+36
+ 329 00a0 1F49     		ldr	r1, .L42+40
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 330              		.loc 1 127 5 view .LVU105
+ 331 00a2 C4F88060 		str	r6, [r4, #128]
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 332              		.loc 1 127 5 is_stmt 1 view .LVU106
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
+ 333              		.loc 1 131 33 is_stmt 0 view .LVU107
+ 334 00a6 1922     		movs	r2, #25
+ 335 00a8 C5E90012 		strd	r1, r2, [r5]
+ 336 00ac 8022     		movs	r2, #128
+ 337 00ae 0023     		movs	r3, #0
+ 338 00b0 1021     		movs	r1, #16
+ 339 00b2 2A61     		str	r2, [r5, #16]
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     {
+ 340              		.loc 1 139 9 view .LVU108
+ 341 00b4 2846     		mov	r0, r5
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
+ 342              		.loc 1 131 33 view .LVU109
+ 343 00b6 4FF40052 		mov	r2, #8192
+ARM GAS  /tmp/cczUF9GK.s 			page 11
+
+
+ 344 00ba C5E90213 		strd	r1, r3, [r5, #8]
+ 345 00be C5E90533 		strd	r3, r3, [r5, #20]
+ 346 00c2 C5E90732 		strd	r3, r2, [r5, #28]
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 347              		.loc 1 127 5 view .LVU110
+ 348 00c6 B462     		str	r4, [r6, #40]
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 349              		.loc 1 127 5 is_stmt 1 view .LVU111
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     hdma_usart1_tx.Init.Request = DMA_REQUEST_USART1_TX;
+ 350              		.loc 1 130 5 view .LVU112
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     {
+ 351              		.loc 1 139 5 view .LVU113
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     {
+ 352              		.loc 1 139 9 is_stmt 0 view .LVU114
+ 353 00c8 FFF7FEFF 		bl	HAL_DMA_Init
+ 354              	.LVL18:
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     {
+ 355              		.loc 1 139 8 discriminator 1 view .LVU115
+ 356 00cc 70B9     		cbnz	r0, .L41
+ 357              	.L27:
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 358              		.loc 1 144 5 is_stmt 1 view .LVU116
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 359              		.loc 1 144 5 view .LVU117
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     HAL_NVIC_EnableIRQ(USART1_IRQn);
+ 360              		.loc 1 147 5 is_stmt 0 view .LVU118
+ 361 00ce 0022     		movs	r2, #0
+ 362 00d0 0721     		movs	r1, #7
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 363              		.loc 1 144 5 view .LVU119
+ 364 00d2 E567     		str	r5, [r4, #124]
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 365              		.loc 1 144 5 is_stmt 1 view .LVU120
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     HAL_NVIC_EnableIRQ(USART1_IRQn);
+ 366              		.loc 1 147 5 is_stmt 0 view .LVU121
+ 367 00d4 2520     		movs	r0, #37
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 368              		.loc 1 144 5 view .LVU122
+ 369 00d6 AC62     		str	r4, [r5, #40]
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 370              		.loc 1 144 5 is_stmt 1 view .LVU123
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     HAL_NVIC_EnableIRQ(USART1_IRQn);
+ 371              		.loc 1 147 5 view .LVU124
+ 372 00d8 FFF7FEFF 		bl	HAL_NVIC_SetPriority
+ 373              	.LVL19:
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   /* USER CODE BEGIN USART1_MspInit 1 */
+ 374              		.loc 1 148 5 view .LVU125
+ 375 00dc 2520     		movs	r0, #37
+ 376 00de FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
+ 377              	.LVL20:
+ 378              		.loc 1 153 1 is_stmt 0 view .LVU126
+ 379 00e2 18B0     		add	sp, sp, #96
+ 380              	.LCFI6:
+ 381              		.cfi_remember_state
+ 382              		.cfi_def_cfa_offset 16
+ 383              		@ sp needed
+ 384 00e4 70BD     		pop	{r4, r5, r6, pc}
+ARM GAS  /tmp/cczUF9GK.s 			page 12
+
+
+ 385              	.LVL21:
+ 386              	.L39:
+ 387              	.LCFI7:
+ 388              		.cfi_restore_state
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     }
+ 389              		.loc 1 93 7 is_stmt 1 view .LVU127
+ 390 00e6 FFF7FEFF 		bl	Error_Handler
+ 391              	.LVL22:
+ 392 00ea A3E7     		b	.L25
+ 393              	.L41:
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     }
+ 394              		.loc 1 141 7 view .LVU128
+ 395 00ec FFF7FEFF 		bl	Error_Handler
+ 396              	.LVL23:
+ 397 00f0 EDE7     		b	.L27
+ 398              	.L40:
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     }
+ 399              		.loc 1 124 7 view .LVU129
+ 400 00f2 FFF7FEFF 		bl	Error_Handler
+ 401              	.LVL24:
+ 402 00f6 D2E7     		b	.L26
+ 403              	.L43:
+ 404              		.align	3
+ 405              	.L42:
+ 406 00f8 C0000000 		.word	192
+ 407 00fc 02000000 		.word	2
+ 408 0100 00000000 		.word	0
+ 409 0104 03000000 		.word	3
+ 410 0108 00380140 		.word	1073821696
+ 411 010c 00100240 		.word	1073876992
+ 412 0110 00040048 		.word	1207960576
+ 413 0114 00000000 		.word	hdma_usart1_rx
+ 414 0118 30000240 		.word	1073872944
+ 415 011c 00000000 		.word	hdma_usart1_tx
+ 416 0120 44000240 		.word	1073872964
+ 417              		.cfi_endproc
+ 418              	.LFE330:
+ 420              		.section	.text.HAL_UART_MspDeInit,"ax",%progbits
+ 421              		.align	1
+ 422              		.p2align 2,,3
+ 423              		.global	HAL_UART_MspDeInit
+ 424              		.syntax unified
+ 425              		.thumb
+ 426              		.thumb_func
+ 428              	HAL_UART_MspDeInit:
+ 429              	.LVL25:
+ 430              	.LFB331:
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** {
+ 431              		.loc 1 156 1 view -0
+ 432              		.cfi_startproc
+ 433              		@ args = 0, pretend = 0, frame = 0
+ 434              		@ frame_needed = 0, uses_anonymous_args = 0
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   if(uartHandle->Instance==USART1)
+ 435              		.loc 1 158 3 view .LVU131
+ARM GAS  /tmp/cczUF9GK.s 			page 13
+
+
+ 436              		.loc 1 158 5 is_stmt 0 view .LVU132
+ 437 0000 0D4B     		ldr	r3, .L50
+ 438 0002 0268     		ldr	r2, [r0]
+ 439 0004 9A42     		cmp	r2, r3
+ 440 0006 00D0     		beq	.L49
+ 441 0008 7047     		bx	lr
+ 442              	.L49:
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   {
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   /* USER CODE BEGIN USART1_MspDeInit 0 */
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   /* USER CODE END USART1_MspDeInit 0 */
+ 163:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     /* Peripheral clock disable */
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     __HAL_RCC_USART1_CLK_DISABLE();
+ 443              		.loc 1 164 5 is_stmt 1 view .LVU133
+ 444 000a 0C4A     		ldr	r2, .L50+4
+ 445 000c 136E     		ldr	r3, [r2, #96]
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 446              		.loc 1 156 1 is_stmt 0 view .LVU134
+ 447 000e 10B5     		push	{r4, lr}
+ 448              	.LCFI8:
+ 449              		.cfi_def_cfa_offset 8
+ 450              		.cfi_offset 4, -8
+ 451              		.cfi_offset 14, -4
+ 452              		.loc 1 164 5 view .LVU135
+ 453 0010 23F48043 		bic	r3, r3, #16384
+ 454 0014 0446     		mov	r4, r0
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     /**USART1 GPIO Configuration
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     PB6     ------> USART1_TX
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     PB7     ------> USART1_RX
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     */
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     HAL_GPIO_DeInit(GPIOB, GPIO_PIN_6|GPIO_PIN_7);
+ 455              		.loc 1 170 5 view .LVU136
+ 456 0016 C021     		movs	r1, #192
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 457              		.loc 1 164 5 view .LVU137
+ 458 0018 1366     		str	r3, [r2, #96]
+ 459              		.loc 1 170 5 is_stmt 1 view .LVU138
+ 460 001a 0948     		ldr	r0, .L50+8
+ 461              	.LVL26:
+ 462              		.loc 1 170 5 is_stmt 0 view .LVU139
+ 463 001c FFF7FEFF 		bl	HAL_GPIO_DeInit
+ 464              	.LVL27:
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     /* USART1 DMA DeInit */
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     HAL_DMA_DeInit(uartHandle->hdmarx);
+ 465              		.loc 1 173 5 is_stmt 1 view .LVU140
+ 466 0020 D4F88000 		ldr	r0, [r4, #128]
+ 467 0024 FFF7FEFF 		bl	HAL_DMA_DeInit
+ 468              	.LVL28:
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     HAL_DMA_DeInit(uartHandle->hdmatx);
+ 469              		.loc 1 174 5 view .LVU141
+ 470 0028 E06F     		ldr	r0, [r4, #124]
+ 471 002a FFF7FEFF 		bl	HAL_DMA_DeInit
+ 472              	.LVL29:
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     /* USART1 interrupt Deinit */
+ARM GAS  /tmp/cczUF9GK.s 			page 14
+
+
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****     HAL_NVIC_DisableIRQ(USART1_IRQn);
+ 473              		.loc 1 177 5 view .LVU142
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   /* USER CODE BEGIN USART1_MspDeInit 1 */
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** 
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   /* USER CODE END USART1_MspDeInit 1 */
+ 181:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   }
+ 182:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c **** }
+ 474              		.loc 1 182 1 is_stmt 0 view .LVU143
+ 475 002e BDE81040 		pop	{r4, lr}
+ 476              	.LCFI9:
+ 477              		.cfi_restore 14
+ 478              		.cfi_restore 4
+ 479              		.cfi_def_cfa_offset 0
+ 480              	.LVL30:
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/usart.c ****   /* USER CODE BEGIN USART1_MspDeInit 1 */
+ 481              		.loc 1 177 5 view .LVU144
+ 482 0032 2520     		movs	r0, #37
+ 483 0034 FFF7FEBF 		b	HAL_NVIC_DisableIRQ
+ 484              	.LVL31:
+ 485              	.L51:
+ 486              		.align	2
+ 487              	.L50:
+ 488 0038 00380140 		.word	1073821696
+ 489 003c 00100240 		.word	1073876992
+ 490 0040 00040048 		.word	1207960576
+ 491              		.cfi_endproc
+ 492              	.LFE331:
+ 494              		.global	hdma_usart1_tx
+ 495              		.section	.bss.hdma_usart1_tx,"aw",%nobits
+ 496              		.align	3
+ 499              	hdma_usart1_tx:
+ 500 0000 00000000 		.space	96
+ 500      00000000 
+ 500      00000000 
+ 500      00000000 
+ 500      00000000 
+ 501              		.global	hdma_usart1_rx
+ 502              		.section	.bss.hdma_usart1_rx,"aw",%nobits
+ 503              		.align	3
+ 506              	hdma_usart1_rx:
+ 507 0000 00000000 		.space	96
+ 507      00000000 
+ 507      00000000 
+ 507      00000000 
+ 507      00000000 
+ 508              		.global	huart1
+ 509              		.section	.bss.huart1,"aw",%nobits
+ 510              		.align	3
+ 513              	huart1:
+ 514 0000 00000000 		.space	148
+ 514      00000000 
+ 514      00000000 
+ 514      00000000 
+ 514      00000000 
+ 515              		.text
+ 516              	.Letext0:
+ 517              		.file 2 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ARM GAS  /tmp/cczUF9GK.s 			page 15
+
+
+ 518              		.file 3 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 519              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 520              		.file 5 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 521              		.file 6 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 522              		.file 7 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 523              		.file 8 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 524              		.file 9 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/usart.h"
+ 525              		.file 10 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm
+ 526              		.file 11 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm
+ 527              		.file 12 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/main.h"
+ 528              		.file 13 "<built-in>"
+ARM GAS  /tmp/cczUF9GK.s 			page 16
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 usart.c
+     /tmp/cczUF9GK.s:21     .text.MX_USART1_UART_Init:00000000 $t
+     /tmp/cczUF9GK.s:28     .text.MX_USART1_UART_Init:00000000 MX_USART1_UART_Init
+     /tmp/cczUF9GK.s:151    .text.MX_USART1_UART_Init:00000080 $d
+     /tmp/cczUF9GK.s:513    .bss.huart1:00000000 huart1
+     /tmp/cczUF9GK.s:157    .text.HAL_UART_MspInit:00000000 $t
+     /tmp/cczUF9GK.s:164    .text.HAL_UART_MspInit:00000000 HAL_UART_MspInit
+     /tmp/cczUF9GK.s:406    .text.HAL_UART_MspInit:000000f8 $d
+     /tmp/cczUF9GK.s:506    .bss.hdma_usart1_rx:00000000 hdma_usart1_rx
+     /tmp/cczUF9GK.s:499    .bss.hdma_usart1_tx:00000000 hdma_usart1_tx
+     /tmp/cczUF9GK.s:421    .text.HAL_UART_MspDeInit:00000000 $t
+     /tmp/cczUF9GK.s:428    .text.HAL_UART_MspDeInit:00000000 HAL_UART_MspDeInit
+     /tmp/cczUF9GK.s:488    .text.HAL_UART_MspDeInit:00000038 $d
+     /tmp/cczUF9GK.s:496    .bss.hdma_usart1_tx:00000000 $d
+     /tmp/cczUF9GK.s:503    .bss.hdma_usart1_rx:00000000 $d
+     /tmp/cczUF9GK.s:510    .bss.huart1:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_UART_Init
+HAL_UARTEx_SetTxFifoThreshold
+HAL_UARTEx_SetRxFifoThreshold
+HAL_UARTEx_DisableFifoMode
+Error_Handler
+memset
+HAL_RCCEx_PeriphCLKConfig
+HAL_GPIO_Init
+HAL_DMA_Init
+HAL_NVIC_SetPriority
+HAL_NVIC_EnableIRQ
+HAL_GPIO_DeInit
+HAL_DMA_DeInit
+HAL_NVIC_DisableIRQ

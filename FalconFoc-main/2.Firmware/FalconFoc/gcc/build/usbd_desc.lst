@@ -1,0 +1,1092 @@
+ARM GAS  /tmp/ccEknUKA.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"usbd_desc.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c"
+  20              		.section	.text.USBD_CDC_DeviceDescriptor,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	USBD_CDC_DeviceDescriptor
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	USBD_CDC_DeviceDescriptor:
+  29              	.LVL0:
+  30              	.LFB333:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /* USER CODE BEGIN Header */
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /**
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   ******************************************************************************
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @file           : App/usbd_desc.c
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @version        : v3.0_Cube
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @brief          : This file implements the USB device descriptors.
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   ******************************************************************************
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @attention
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   *
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * Copyright (c) 2024 STMicroelectronics.
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * All rights reserved.
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   *
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * in the root directory of this software component.
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   *
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   ******************************************************************************
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /* USER CODE END Header */
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /* Includes ------------------------------------------------------------------*/
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** #include "usbd_core.h"
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** #include "usbd_desc.h"
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** #include "usbd_conf.h"
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /* USER CODE BEGIN INCLUDE */
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /* USER CODE END INCLUDE */
+ARM GAS  /tmp/ccEknUKA.s 			page 2
+
+
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /* Private typedef -----------------------------------------------------------*/
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /* Private define ------------------------------------------------------------*/
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /* Private macro -------------------------------------------------------------*/
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /* USER CODE BEGIN PV */
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /* Private variables ---------------------------------------------------------*/
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /* USER CODE END PV */
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @{
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /** @addtogroup USBD_DESC
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @{
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /** @defgroup USBD_DESC_Private_TypesDefinitions USBD_DESC_Private_TypesDefinitions
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @brief Private types.
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @{
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /* USER CODE BEGIN PRIVATE_TYPES */
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /* USER CODE END PRIVATE_TYPES */
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /**
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @}
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /** @defgroup USBD_DESC_Private_Defines USBD_DESC_Private_Defines
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @brief Private defines.
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @{
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** #define USBD_VID     1155
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** #define USBD_LANGID_STRING     1033
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** #define USBD_MANUFACTURER_STRING     "STMicroelectronics"
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** #define USBD_PID     22336
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** #define USBD_PRODUCT_STRING     "STM32 Virtual ComPort"
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** #define USBD_CONFIGURATION_STRING     "CDC Config"
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** #define USBD_INTERFACE_STRING     "CDC Interface"
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /* USER CODE BEGIN PRIVATE_DEFINES */
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /* USER CODE END PRIVATE_DEFINES */
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /**
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @}
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /* USER CODE BEGIN 0 */
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /* USER CODE END 0 */
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /** @defgroup USBD_DESC_Private_Macros USBD_DESC_Private_Macros
+ARM GAS  /tmp/ccEknUKA.s 			page 3
+
+
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @brief Private macros.
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @{
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /* USER CODE BEGIN PRIVATE_MACRO */
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /* USER CODE END PRIVATE_MACRO */
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /**
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @}
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /** @defgroup USBD_DESC_Private_FunctionPrototypes USBD_DESC_Private_FunctionPrototypes
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @brief Private functions declaration.
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @{
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** static void Get_SerialNum(void);
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** static void IntToUnicode(uint32_t value, uint8_t * pbuf, uint8_t len);
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /**
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @}
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /** @defgroup USBD_DESC_Private_FunctionPrototypes USBD_DESC_Private_FunctionPrototypes
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @brief Private functions declaration.
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @{
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** uint8_t * USBD_CDC_DeviceDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** uint8_t * USBD_CDC_LangIDStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** uint8_t * USBD_CDC_ManufacturerStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** uint8_t * USBD_CDC_ProductStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** uint8_t * USBD_CDC_SerialStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** uint8_t * USBD_CDC_ConfigStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** uint8_t * USBD_CDC_InterfaceStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length);
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /**
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @}
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /** @defgroup USBD_DESC_Private_Variables USBD_DESC_Private_Variables
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @brief Private variables.
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @{
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** USBD_DescriptorsTypeDef CDC_Desc =
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** {
+ 134:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   USBD_CDC_DeviceDescriptor,
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   USBD_CDC_LangIDStrDescriptor,
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   USBD_CDC_ManufacturerStrDescriptor,
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   USBD_CDC_ProductStrDescriptor,
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   USBD_CDC_SerialStrDescriptor,
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   USBD_CDC_ConfigStrDescriptor,
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   USBD_CDC_InterfaceStrDescriptor
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** };
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ARM GAS  /tmp/ccEknUKA.s 			page 4
+
+
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** #if defined ( __ICCARM__ ) /* IAR Compiler */
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   #pragma data_alignment=4
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** #endif /* defined ( __ICCARM__ ) */
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /** USB standard device descriptor. */
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** __ALIGN_BEGIN uint8_t USBD_CDC_DeviceDesc[USB_LEN_DEV_DESC] __ALIGN_END =
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** {
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   0x12,                       /*bLength */
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   USB_DESC_TYPE_DEVICE,       /*bDescriptorType*/
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   0x00,                       /*bcdUSB */
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   0x02,
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   0x02,                       /*bDeviceClass*/
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   0x02,                       /*bDeviceSubClass*/
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   0x00,                       /*bDeviceProtocol*/
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   USB_MAX_EP0_SIZE,           /*bMaxPacketSize*/
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   LOBYTE(USBD_VID),           /*idVendor*/
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   HIBYTE(USBD_VID),           /*idVendor*/
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   LOBYTE(USBD_PID),           /*idProduct*/
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   HIBYTE(USBD_PID),           /*idProduct*/
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   0x00,                       /*bcdDevice rel. 2.00*/
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   0x02,
+ 163:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   USBD_IDX_MFC_STR,           /*Index of manufacturer  string*/
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   USBD_IDX_PRODUCT_STR,       /*Index of product string*/
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   USBD_IDX_SERIAL_STR,        /*Index of serial number string*/
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   USBD_MAX_NUM_CONFIGURATION  /*bNumConfigurations*/
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** };
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /* USB_DeviceDescriptor */
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /**
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @}
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /** @defgroup USBD_DESC_Private_Variables USBD_DESC_Private_Variables
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @brief Private variables.
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @{
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** #if defined ( __ICCARM__ ) /* IAR Compiler */
+ 181:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   #pragma data_alignment=4
+ 182:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** #endif /* defined ( __ICCARM__ ) */
+ 183:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /** USB lang identifier descriptor. */
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** __ALIGN_BEGIN uint8_t USBD_LangIDDesc[USB_LEN_LANGID_STR_DESC] __ALIGN_END =
+ 186:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** {
+ 187:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****      USB_LEN_LANGID_STR_DESC,
+ 188:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****      USB_DESC_TYPE_STRING,
+ 189:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****      LOBYTE(USBD_LANGID_STRING),
+ 190:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****      HIBYTE(USBD_LANGID_STRING)
+ 191:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** };
+ 192:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 193:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** #if defined ( __ICCARM__ ) /* IAR Compiler */
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   #pragma data_alignment=4
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** #endif /* defined ( __ICCARM__ ) */
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /* Internal string descriptor. */
+ 197:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** __ALIGN_BEGIN uint8_t USBD_StrDesc[USBD_MAX_STR_DESC_SIZ] __ALIGN_END;
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** #if defined ( __ICCARM__ ) /*!< IAR Compiler */
+ARM GAS  /tmp/ccEknUKA.s 			page 5
+
+
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   #pragma data_alignment=4
+ 201:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** #endif
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** __ALIGN_BEGIN uint8_t USBD_StringSerial[USB_SIZ_STRING_SERIAL] __ALIGN_END = {
+ 203:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   USB_SIZ_STRING_SERIAL,
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   USB_DESC_TYPE_STRING,
+ 205:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** };
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 207:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /**
+ 208:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @}
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+ 210:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 211:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /** @defgroup USBD_DESC_Private_Functions USBD_DESC_Private_Functions
+ 212:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @brief Private functions.
+ 213:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @{
+ 214:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+ 215:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 216:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /**
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @brief  Return the device descriptor
+ 218:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @param  speed : Current device speed
+ 219:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @param  length : Pointer to data length variable
+ 220:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @retval Pointer to descriptor buffer
+ 221:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+ 222:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** uint8_t * USBD_CDC_DeviceDescriptor(USBD_SpeedTypeDef speed, uint16_t *length)
+ 223:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** {
+  31              		.loc 1 223 1 view -0
+  32              		.cfi_startproc
+  33              		@ args = 0, pretend = 0, frame = 0
+  34              		@ frame_needed = 0, uses_anonymous_args = 0
+  35              		@ link register save eliminated.
+ 224:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   UNUSED(speed);
+  36              		.loc 1 224 3 view .LVU1
+ 225:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   *length = sizeof(USBD_CDC_DeviceDesc);
+  37              		.loc 1 225 3 view .LVU2
+  38              		.loc 1 225 11 is_stmt 0 view .LVU3
+  39 0000 1223     		movs	r3, #18
+ 226:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   return USBD_CDC_DeviceDesc;
+ 227:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** }
+  40              		.loc 1 227 1 view .LVU4
+  41 0002 0148     		ldr	r0, .L3
+  42              	.LVL1:
+ 225:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   *length = sizeof(USBD_CDC_DeviceDesc);
+  43              		.loc 1 225 11 view .LVU5
+  44 0004 0B80     		strh	r3, [r1]	@ movhi
+ 226:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   return USBD_CDC_DeviceDesc;
+  45              		.loc 1 226 3 is_stmt 1 view .LVU6
+  46              		.loc 1 227 1 is_stmt 0 view .LVU7
+  47 0006 7047     		bx	lr
+  48              	.L4:
+  49              		.align	2
+  50              	.L3:
+  51 0008 00000000 		.word	USBD_CDC_DeviceDesc
+  52              		.cfi_endproc
+  53              	.LFE333:
+  55              		.section	.text.USBD_CDC_LangIDStrDescriptor,"ax",%progbits
+  56              		.align	1
+  57              		.p2align 2,,3
+  58              		.global	USBD_CDC_LangIDStrDescriptor
+ARM GAS  /tmp/ccEknUKA.s 			page 6
+
+
+  59              		.syntax unified
+  60              		.thumb
+  61              		.thumb_func
+  63              	USBD_CDC_LangIDStrDescriptor:
+  64              	.LVL2:
+  65              	.LFB334:
+ 228:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 229:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /**
+ 230:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @brief  Return the LangID string descriptor
+ 231:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @param  speed : Current device speed
+ 232:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @param  length : Pointer to data length variable
+ 233:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @retval Pointer to descriptor buffer
+ 234:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+ 235:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** uint8_t * USBD_CDC_LangIDStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length)
+ 236:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** {
+  66              		.loc 1 236 1 is_stmt 1 view -0
+  67              		.cfi_startproc
+  68              		@ args = 0, pretend = 0, frame = 0
+  69              		@ frame_needed = 0, uses_anonymous_args = 0
+  70              		@ link register save eliminated.
+ 237:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   UNUSED(speed);
+  71              		.loc 1 237 3 view .LVU9
+ 238:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   *length = sizeof(USBD_LangIDDesc);
+  72              		.loc 1 238 3 view .LVU10
+  73              		.loc 1 238 11 is_stmt 0 view .LVU11
+  74 0000 0423     		movs	r3, #4
+ 239:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   return USBD_LangIDDesc;
+ 240:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** }
+  75              		.loc 1 240 1 view .LVU12
+  76 0002 0148     		ldr	r0, .L6
+  77              	.LVL3:
+ 238:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   *length = sizeof(USBD_LangIDDesc);
+  78              		.loc 1 238 11 view .LVU13
+  79 0004 0B80     		strh	r3, [r1]	@ movhi
+ 239:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   return USBD_LangIDDesc;
+  80              		.loc 1 239 3 is_stmt 1 view .LVU14
+  81              		.loc 1 240 1 is_stmt 0 view .LVU15
+  82 0006 7047     		bx	lr
+  83              	.L7:
+  84              		.align	2
+  85              	.L6:
+  86 0008 00000000 		.word	USBD_LangIDDesc
+  87              		.cfi_endproc
+  88              	.LFE334:
+  90              		.section	.rodata.USBD_CDC_ManufacturerStrDescriptor.str1.4,"aMS",%progbits,1
+  91              		.align	2
+  92              	.LC0:
+  93 0000 53544D69 		.ascii	"STMicroelectronics\000"
+  93      63726F65 
+  93      6C656374 
+  93      726F6E69 
+  93      637300
+  94              		.section	.text.USBD_CDC_ManufacturerStrDescriptor,"ax",%progbits
+  95              		.align	1
+  96              		.p2align 2,,3
+  97              		.global	USBD_CDC_ManufacturerStrDescriptor
+  98              		.syntax unified
+ARM GAS  /tmp/ccEknUKA.s 			page 7
+
+
+  99              		.thumb
+ 100              		.thumb_func
+ 102              	USBD_CDC_ManufacturerStrDescriptor:
+ 103              	.LVL4:
+ 104              	.LFB336:
+ 241:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 242:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /**
+ 243:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @brief  Return the product string descriptor
+ 244:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @param  speed : Current device speed
+ 245:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @param  length : Pointer to data length variable
+ 246:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @retval Pointer to descriptor buffer
+ 247:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+ 248:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** uint8_t * USBD_CDC_ProductStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length)
+ 249:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** {
+ 250:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   if(speed == 0)
+ 251:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   {
+ 252:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     USBD_GetString((uint8_t *)USBD_PRODUCT_STRING, USBD_StrDesc, length);
+ 253:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   }
+ 254:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   else
+ 255:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   {
+ 256:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     USBD_GetString((uint8_t *)USBD_PRODUCT_STRING, USBD_StrDesc, length);
+ 257:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   }
+ 258:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   return USBD_StrDesc;
+ 259:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** }
+ 260:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 261:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /**
+ 262:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @brief  Return the manufacturer string descriptor
+ 263:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @param  speed : Current device speed
+ 264:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @param  length : Pointer to data length variable
+ 265:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @retval Pointer to descriptor buffer
+ 266:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+ 267:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** uint8_t * USBD_CDC_ManufacturerStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length)
+ 268:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** {
+ 105              		.loc 1 268 1 is_stmt 1 view -0
+ 106              		.cfi_startproc
+ 107              		@ args = 0, pretend = 0, frame = 0
+ 108              		@ frame_needed = 0, uses_anonymous_args = 0
+ 269:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   UNUSED(speed);
+ 109              		.loc 1 269 3 view .LVU17
+ 270:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   USBD_GetString((uint8_t *)USBD_MANUFACTURER_STRING, USBD_StrDesc, length);
+ 110              		.loc 1 270 3 view .LVU18
+ 268:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   UNUSED(speed);
+ 111              		.loc 1 268 1 is_stmt 0 view .LVU19
+ 112 0000 10B5     		push	{r4, lr}
+ 113              	.LCFI0:
+ 114              		.cfi_def_cfa_offset 8
+ 115              		.cfi_offset 4, -8
+ 116              		.cfi_offset 14, -4
+ 117              		.loc 1 270 3 view .LVU20
+ 118 0002 044C     		ldr	r4, .L10
+ 119 0004 0448     		ldr	r0, .L10+4
+ 120              	.LVL5:
+ 268:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   UNUSED(speed);
+ 121              		.loc 1 268 1 view .LVU21
+ 122 0006 0A46     		mov	r2, r1
+ 123              		.loc 1 270 3 view .LVU22
+ 124 0008 2146     		mov	r1, r4
+ARM GAS  /tmp/ccEknUKA.s 			page 8
+
+
+ 125              	.LVL6:
+ 126              		.loc 1 270 3 view .LVU23
+ 127 000a FFF7FEFF 		bl	USBD_GetString
+ 128              	.LVL7:
+ 271:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   return USBD_StrDesc;
+ 129              		.loc 1 271 3 is_stmt 1 view .LVU24
+ 272:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** }
+ 130              		.loc 1 272 1 is_stmt 0 view .LVU25
+ 131 000e 2046     		mov	r0, r4
+ 132 0010 10BD     		pop	{r4, pc}
+ 133              	.L11:
+ 134 0012 00BF     		.align	2
+ 135              	.L10:
+ 136 0014 00000000 		.word	USBD_StrDesc
+ 137 0018 00000000 		.word	.LC0
+ 138              		.cfi_endproc
+ 139              	.LFE336:
+ 141              		.section	.rodata.USBD_CDC_ProductStrDescriptor.str1.4,"aMS",%progbits,1
+ 142              		.align	2
+ 143              	.LC1:
+ 144 0000 53544D33 		.ascii	"STM32 Virtual ComPort\000"
+ 144      32205669 
+ 144      72747561 
+ 144      6C20436F 
+ 144      6D506F72 
+ 145              		.section	.text.USBD_CDC_ProductStrDescriptor,"ax",%progbits
+ 146              		.align	1
+ 147              		.p2align 2,,3
+ 148              		.global	USBD_CDC_ProductStrDescriptor
+ 149              		.syntax unified
+ 150              		.thumb
+ 151              		.thumb_func
+ 153              	USBD_CDC_ProductStrDescriptor:
+ 154              	.LVL8:
+ 155              	.LFB335:
+ 249:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   if(speed == 0)
+ 156              		.loc 1 249 1 is_stmt 1 view -0
+ 157              		.cfi_startproc
+ 158              		@ args = 0, pretend = 0, frame = 0
+ 159              		@ frame_needed = 0, uses_anonymous_args = 0
+ 250:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   {
+ 160              		.loc 1 250 3 view .LVU27
+ 249:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   if(speed == 0)
+ 161              		.loc 1 249 1 is_stmt 0 view .LVU28
+ 162 0000 10B5     		push	{r4, lr}
+ 163              	.LCFI1:
+ 164              		.cfi_def_cfa_offset 8
+ 165              		.cfi_offset 4, -8
+ 166              		.cfi_offset 14, -4
+ 167              	.LBB4:
+ 168              	.LBB5:
+ 252:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   }
+ 169              		.loc 1 252 5 view .LVU29
+ 170 0002 044C     		ldr	r4, .L14
+ 171 0004 0448     		ldr	r0, .L14+4
+ 172              	.LVL9:
+ 252:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   }
+ARM GAS  /tmp/ccEknUKA.s 			page 9
+
+
+ 173              		.loc 1 252 5 view .LVU30
+ 174              	.LBE5:
+ 175              	.LBE4:
+ 249:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   if(speed == 0)
+ 176              		.loc 1 249 1 view .LVU31
+ 177 0006 0A46     		mov	r2, r1
+ 178              	.LVL10:
+ 179              	.LBB7:
+ 180              	.LBI4:
+ 248:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** {
+ 181              		.loc 1 248 11 is_stmt 1 view .LVU32
+ 182              	.LBB6:
+ 252:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   }
+ 183              		.loc 1 252 5 view .LVU33
+ 184 0008 2146     		mov	r1, r4
+ 185              	.LVL11:
+ 252:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   }
+ 186              		.loc 1 252 5 is_stmt 0 view .LVU34
+ 187 000a FFF7FEFF 		bl	USBD_GetString
+ 188              	.LVL12:
+ 252:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   }
+ 189              		.loc 1 252 5 view .LVU35
+ 190              	.LBE6:
+ 191              	.LBE7:
+ 258:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** }
+ 192              		.loc 1 258 3 is_stmt 1 view .LVU36
+ 259:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 193              		.loc 1 259 1 is_stmt 0 view .LVU37
+ 194 000e 2046     		mov	r0, r4
+ 195 0010 10BD     		pop	{r4, pc}
+ 196              	.L15:
+ 197 0012 00BF     		.align	2
+ 198              	.L14:
+ 199 0014 00000000 		.word	USBD_StrDesc
+ 200 0018 00000000 		.word	.LC1
+ 201              		.cfi_endproc
+ 202              	.LFE335:
+ 204              		.section	.rodata.USBD_CDC_ConfigStrDescriptor.str1.4,"aMS",%progbits,1
+ 205              		.align	2
+ 206              	.LC2:
+ 207 0000 43444320 		.ascii	"CDC Config\000"
+ 207      436F6E66 
+ 207      696700
+ 208              		.section	.text.USBD_CDC_ConfigStrDescriptor,"ax",%progbits
+ 209              		.align	1
+ 210              		.p2align 2,,3
+ 211              		.global	USBD_CDC_ConfigStrDescriptor
+ 212              		.syntax unified
+ 213              		.thumb
+ 214              		.thumb_func
+ 216              	USBD_CDC_ConfigStrDescriptor:
+ 217              	.LVL13:
+ 218              	.LFB338:
+ 273:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 274:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /**
+ 275:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @brief  Return the serial number string descriptor
+ 276:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @param  speed : Current device speed
+ARM GAS  /tmp/ccEknUKA.s 			page 10
+
+
+ 277:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @param  length : Pointer to data length variable
+ 278:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @retval Pointer to descriptor buffer
+ 279:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+ 280:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** uint8_t * USBD_CDC_SerialStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length)
+ 281:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** {
+ 282:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   UNUSED(speed);
+ 283:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   *length = USB_SIZ_STRING_SERIAL;
+ 284:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 285:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   /* Update the serial number string descriptor with the data from the unique
+ 286:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****    * ID */
+ 287:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   Get_SerialNum();
+ 288:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 289:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   /* USER CODE BEGIN USBD_CDC_SerialStrDescriptor */
+ 290:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 291:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   /* USER CODE END USBD_CDC_SerialStrDescriptor */
+ 292:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 293:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   return (uint8_t *) USBD_StringSerial;
+ 294:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** }
+ 295:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 296:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /**
+ 297:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @brief  Return the configuration string descriptor
+ 298:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @param  speed : Current device speed
+ 299:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @param  length : Pointer to data length variable
+ 300:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @retval Pointer to descriptor buffer
+ 301:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+ 302:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** uint8_t * USBD_CDC_ConfigStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length)
+ 303:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** {
+ 219              		.loc 1 303 1 is_stmt 1 view -0
+ 220              		.cfi_startproc
+ 221              		@ args = 0, pretend = 0, frame = 0
+ 222              		@ frame_needed = 0, uses_anonymous_args = 0
+ 304:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   if(speed == USBD_SPEED_HIGH)
+ 223              		.loc 1 304 3 view .LVU39
+ 303:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   if(speed == USBD_SPEED_HIGH)
+ 224              		.loc 1 303 1 is_stmt 0 view .LVU40
+ 225 0000 10B5     		push	{r4, lr}
+ 226              	.LCFI2:
+ 227              		.cfi_def_cfa_offset 8
+ 228              		.cfi_offset 4, -8
+ 229              		.cfi_offset 14, -4
+ 230              	.LBB10:
+ 231              	.LBB11:
+ 305:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   {
+ 306:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     USBD_GetString((uint8_t *)USBD_CONFIGURATION_STRING, USBD_StrDesc, length);
+ 232              		.loc 1 306 5 view .LVU41
+ 233 0002 044C     		ldr	r4, .L18
+ 234 0004 0448     		ldr	r0, .L18+4
+ 235              	.LVL14:
+ 236              		.loc 1 306 5 view .LVU42
+ 237              	.LBE11:
+ 238              	.LBE10:
+ 303:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   if(speed == USBD_SPEED_HIGH)
+ 239              		.loc 1 303 1 view .LVU43
+ 240 0006 0A46     		mov	r2, r1
+ 241              	.LVL15:
+ 242              	.LBB13:
+ 243              	.LBI10:
+ARM GAS  /tmp/ccEknUKA.s 			page 11
+
+
+ 302:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** {
+ 244              		.loc 1 302 11 is_stmt 1 view .LVU44
+ 245              	.LBB12:
+ 246              		.loc 1 306 5 view .LVU45
+ 247 0008 2146     		mov	r1, r4
+ 248              	.LVL16:
+ 249              		.loc 1 306 5 is_stmt 0 view .LVU46
+ 250 000a FFF7FEFF 		bl	USBD_GetString
+ 251              	.LVL17:
+ 252              		.loc 1 306 5 view .LVU47
+ 253              	.LBE12:
+ 254              	.LBE13:
+ 307:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   }
+ 308:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   else
+ 309:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   {
+ 310:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     USBD_GetString((uint8_t *)USBD_CONFIGURATION_STRING, USBD_StrDesc, length);
+ 311:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   }
+ 312:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   return USBD_StrDesc;
+ 255              		.loc 1 312 3 is_stmt 1 view .LVU48
+ 313:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** }
+ 256              		.loc 1 313 1 is_stmt 0 view .LVU49
+ 257 000e 2046     		mov	r0, r4
+ 258 0010 10BD     		pop	{r4, pc}
+ 259              	.L19:
+ 260 0012 00BF     		.align	2
+ 261              	.L18:
+ 262 0014 00000000 		.word	USBD_StrDesc
+ 263 0018 00000000 		.word	.LC2
+ 264              		.cfi_endproc
+ 265              	.LFE338:
+ 267              		.section	.rodata.USBD_CDC_InterfaceStrDescriptor.str1.4,"aMS",%progbits,1
+ 268              		.align	2
+ 269              	.LC3:
+ 270 0000 43444320 		.ascii	"CDC Interface\000"
+ 270      496E7465 
+ 270      72666163 
+ 270      6500
+ 271              		.section	.text.USBD_CDC_InterfaceStrDescriptor,"ax",%progbits
+ 272              		.align	1
+ 273              		.p2align 2,,3
+ 274              		.global	USBD_CDC_InterfaceStrDescriptor
+ 275              		.syntax unified
+ 276              		.thumb
+ 277              		.thumb_func
+ 279              	USBD_CDC_InterfaceStrDescriptor:
+ 280              	.LVL18:
+ 281              	.LFB339:
+ 314:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 315:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /**
+ 316:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @brief  Return the interface string descriptor
+ 317:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @param  speed : Current device speed
+ 318:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @param  length : Pointer to data length variable
+ 319:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @retval Pointer to descriptor buffer
+ 320:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+ 321:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** uint8_t * USBD_CDC_InterfaceStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length)
+ 322:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** {
+ 282              		.loc 1 322 1 is_stmt 1 view -0
+ARM GAS  /tmp/ccEknUKA.s 			page 12
+
+
+ 283              		.cfi_startproc
+ 284              		@ args = 0, pretend = 0, frame = 0
+ 285              		@ frame_needed = 0, uses_anonymous_args = 0
+ 323:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   if(speed == 0)
+ 286              		.loc 1 323 3 view .LVU51
+ 322:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   if(speed == 0)
+ 287              		.loc 1 322 1 is_stmt 0 view .LVU52
+ 288 0000 10B5     		push	{r4, lr}
+ 289              	.LCFI3:
+ 290              		.cfi_def_cfa_offset 8
+ 291              		.cfi_offset 4, -8
+ 292              		.cfi_offset 14, -4
+ 293              	.LBB16:
+ 294              	.LBB17:
+ 324:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   {
+ 325:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     USBD_GetString((uint8_t *)USBD_INTERFACE_STRING, USBD_StrDesc, length);
+ 295              		.loc 1 325 5 view .LVU53
+ 296 0002 044C     		ldr	r4, .L22
+ 297 0004 0448     		ldr	r0, .L22+4
+ 298              	.LVL19:
+ 299              		.loc 1 325 5 view .LVU54
+ 300              	.LBE17:
+ 301              	.LBE16:
+ 322:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   if(speed == 0)
+ 302              		.loc 1 322 1 view .LVU55
+ 303 0006 0A46     		mov	r2, r1
+ 304              	.LVL20:
+ 305              	.LBB19:
+ 306              	.LBI16:
+ 321:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** {
+ 307              		.loc 1 321 11 is_stmt 1 view .LVU56
+ 308              	.LBB18:
+ 309              		.loc 1 325 5 view .LVU57
+ 310 0008 2146     		mov	r1, r4
+ 311              	.LVL21:
+ 312              		.loc 1 325 5 is_stmt 0 view .LVU58
+ 313 000a FFF7FEFF 		bl	USBD_GetString
+ 314              	.LVL22:
+ 315              		.loc 1 325 5 view .LVU59
+ 316              	.LBE18:
+ 317              	.LBE19:
+ 326:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   }
+ 327:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   else
+ 328:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   {
+ 329:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     USBD_GetString((uint8_t *)USBD_INTERFACE_STRING, USBD_StrDesc, length);
+ 330:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   }
+ 331:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   return USBD_StrDesc;
+ 318              		.loc 1 331 3 is_stmt 1 view .LVU60
+ 332:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** }
+ 319              		.loc 1 332 1 is_stmt 0 view .LVU61
+ 320 000e 2046     		mov	r0, r4
+ 321 0010 10BD     		pop	{r4, pc}
+ 322              	.L23:
+ 323 0012 00BF     		.align	2
+ 324              	.L22:
+ 325 0014 00000000 		.word	USBD_StrDesc
+ 326 0018 00000000 		.word	.LC3
+ARM GAS  /tmp/ccEknUKA.s 			page 13
+
+
+ 327              		.cfi_endproc
+ 328              	.LFE339:
+ 330              		.section	.text.USBD_CDC_SerialStrDescriptor,"ax",%progbits
+ 331              		.align	1
+ 332              		.p2align 2,,3
+ 333              		.global	USBD_CDC_SerialStrDescriptor
+ 334              		.syntax unified
+ 335              		.thumb
+ 336              		.thumb_func
+ 338              	USBD_CDC_SerialStrDescriptor:
+ 339              	.LVL23:
+ 340              	.LFB337:
+ 281:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   UNUSED(speed);
+ 341              		.loc 1 281 1 is_stmt 1 view -0
+ 342              		.cfi_startproc
+ 343              		@ args = 0, pretend = 0, frame = 0
+ 344              		@ frame_needed = 0, uses_anonymous_args = 0
+ 282:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   *length = USB_SIZ_STRING_SERIAL;
+ 345              		.loc 1 282 3 view .LVU63
+ 283:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 346              		.loc 1 283 3 view .LVU64
+ 347              	.LBB26:
+ 348              	.LBB27:
+ 333:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 334:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /**
+ 335:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @brief  Create the serial number string descriptor
+ 336:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @param  None
+ 337:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @retval None
+ 338:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+ 339:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** static void Get_SerialNum(void)
+ 340:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** {
+ 341:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   uint32_t deviceserial0;
+ 342:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   uint32_t deviceserial1;
+ 343:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   uint32_t deviceserial2;
+ 344:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 345:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   deviceserial0 = *(uint32_t *) DEVICE_ID1;
+ 349              		.loc 1 345 17 is_stmt 0 view .LVU65
+ 350 0000 1B48     		ldr	r0, .L38
+ 351              	.LVL24:
+ 352              		.loc 1 345 17 view .LVU66
+ 353 0002 D0F89035 		ldr	r3, [r0, #1424]
+ 346:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   deviceserial1 = *(uint32_t *) DEVICE_ID2;
+ 347:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   deviceserial2 = *(uint32_t *) DEVICE_ID3;
+ 348:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 349:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   deviceserial0 += deviceserial2;
+ 354              		.loc 1 349 17 view .LVU67
+ 355 0006 D0F89825 		ldr	r2, [r0, #1432]
+ 356              	.LBE27:
+ 357              	.LBE26:
+ 281:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   UNUSED(speed);
+ 358              		.loc 1 281 1 view .LVU68
+ 359 000a 10B5     		push	{r4, lr}
+ 360              	.LCFI4:
+ 361              		.cfi_def_cfa_offset 8
+ 362              		.cfi_offset 4, -8
+ 363              		.cfi_offset 14, -4
+ 364              	.LBB35:
+ARM GAS  /tmp/ccEknUKA.s 			page 14
+
+
+ 365              	.LBB32:
+ 350:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 351:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   if (deviceserial0 != 0)
+ 366              		.loc 1 351 6 view .LVU69
+ 367 000c 9B18     		adds	r3, r3, r2
+ 368              	.LBE32:
+ 369              	.LBE35:
+ 283:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 370              		.loc 1 283 11 view .LVU70
+ 371 000e 4FF01A04 		mov	r4, #26
+ 372 0012 0C80     		strh	r4, [r1]	@ movhi
+ 287:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 373              		.loc 1 287 3 is_stmt 1 view .LVU71
+ 374              	.LBB36:
+ 375              	.LBI26:
+ 339:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** {
+ 376              		.loc 1 339 13 view .LVU72
+ 377              	.LBB33:
+ 341:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   uint32_t deviceserial1;
+ 378              		.loc 1 341 3 view .LVU73
+ 342:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   uint32_t deviceserial2;
+ 379              		.loc 1 342 3 view .LVU74
+ 343:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 380              		.loc 1 343 3 view .LVU75
+ 345:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   deviceserial1 = *(uint32_t *) DEVICE_ID2;
+ 381              		.loc 1 345 3 view .LVU76
+ 346:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   deviceserial2 = *(uint32_t *) DEVICE_ID3;
+ 382              		.loc 1 346 3 view .LVU77
+ 383              	.LVL25:
+ 347:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 384              		.loc 1 347 3 view .LVU78
+ 349:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 385              		.loc 1 349 3 view .LVU79
+ 386              		.loc 1 351 3 view .LVU80
+ 387              		.loc 1 351 6 is_stmt 0 view .LVU81
+ 388 0014 01D1     		bne	.L37
+ 389              	.LBE33:
+ 390              	.LBE36:
+ 294:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 391              		.loc 1 294 1 view .LVU82
+ 392 0016 1748     		ldr	r0, .L38+4
+ 393 0018 10BD     		pop	{r4, pc}
+ 394              	.L37:
+ 395 001a 164A     		ldr	r2, .L38+4
+ 396              	.LBB37:
+ 397              	.LBB34:
+ 346:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   deviceserial2 = *(uint32_t *) DEVICE_ID3;
+ 398              		.loc 1 346 17 view .LVU83
+ 399 001c D0F89405 		ldr	r0, [r0, #1428]
+ 400 0020 02F11004 		add	r4, r2, #16
+ 401 0024 1146     		mov	r1, r2
+ 402              	.LVL26:
+ 403              	.LBB28:
+ 404              	.LBB29:
+ 352:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   {
+ 353:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     IntToUnicode(deviceserial0, &USBD_StringSerial[2], 8);
+ 354:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     IntToUnicode(deviceserial1, &USBD_StringSerial[18], 4);
+ARM GAS  /tmp/ccEknUKA.s 			page 15
+
+
+ 355:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   }
+ 356:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** }
+ 357:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 358:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** /**
+ 359:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @brief  Convert Hex 32Bits value into char
+ 360:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @param  value: value to convert
+ 361:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @param  pbuf: pointer to the buffer
+ 362:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @param  len: buffer length
+ 363:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   * @retval None
+ 364:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   */
+ 365:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** static void IntToUnicode(uint32_t value, uint8_t * pbuf, uint8_t len)
+ 366:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** {
+ 367:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   uint8_t idx = 0;
+ 368:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 369:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   for (idx = 0; idx < len; idx++)
+ 370:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   {
+ 371:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     if (((value >> 28)) < 0xA)
+ 372:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     {
+ 373:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****       pbuf[2 * idx] = (value >> 28) + '0';
+ 374:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     }
+ 375:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     else
+ 376:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     {
+ 377:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****       pbuf[2 * idx] = (value >> 28) + 'A' - 10;
+ 378:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     }
+ 379:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 380:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     value = value << 4;
+ 381:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 382:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     pbuf[2 * idx + 1] = 0;
+ 405              		.loc 1 382 23 view .LVU84
+ 406 0026 4FF0000E 		mov	lr, #0
+ 407              	.LVL27:
+ 408              	.L28:
+ 371:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     {
+ 409              		.loc 1 371 5 is_stmt 1 view .LVU85
+ 373:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     }
+ 410              		.loc 1 373 7 view .LVU86
+ 377:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     }
+ 411              		.loc 1 377 7 view .LVU87
+ 373:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     }
+ 412              		.loc 1 373 37 is_stmt 0 view .LVU88
+ 413 002a 4FEA137C 		lsr	ip, r3, #28
+ 371:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     {
+ 414              		.loc 1 371 8 view .LVU89
+ 415 002e B3F1204F 		cmp	r3, #-1610612736
+ 373:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     }
+ 416              		.loc 1 373 37 view .LVU90
+ 417 0032 34BF     		ite	cc
+ 418 0034 0CF1300C 		addcc	ip, ip, #48
+ 377:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     }
+ 419              		.loc 1 377 43 view .LVU91
+ 420 0038 0CF1370C 		addcs	ip, ip, #55
+ 373:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     }
+ 421              		.loc 1 373 21 view .LVU92
+ 422 003c 81F802C0 		strb	ip, [r1, #2]
+ 380:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 423              		.loc 1 380 5 is_stmt 1 view .LVU93
+ 424              		.loc 1 382 23 is_stmt 0 view .LVU94
+ARM GAS  /tmp/ccEknUKA.s 			page 16
+
+
+ 425 0040 81F803E0 		strb	lr, [r1, #3]
+ 369:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   {
+ 426              		.loc 1 369 21 discriminator 1 view .LVU95
+ 427 0044 0231     		adds	r1, r1, #2
+ 428              	.LVL28:
+ 369:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   {
+ 429              		.loc 1 369 21 discriminator 1 view .LVU96
+ 430 0046 8C42     		cmp	r4, r1
+ 380:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 431              		.loc 1 380 11 view .LVU97
+ 432 0048 4FEA0313 		lsl	r3, r3, #4
+ 433              	.LVL29:
+ 434              		.loc 1 382 5 is_stmt 1 view .LVU98
+ 369:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   {
+ 435              		.loc 1 369 31 discriminator 2 view .LVU99
+ 369:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   {
+ 436              		.loc 1 369 21 discriminator 1 view .LVU100
+ 437 004c EDD1     		bne	.L28
+ 438 004e 0A4C     		ldr	r4, .L38+8
+ 439              	.LBE29:
+ 440              	.LBE28:
+ 441              	.LBB30:
+ 442              	.LBB31:
+ 443              		.loc 1 382 23 is_stmt 0 view .LVU101
+ 444 0050 0021     		movs	r1, #0
+ 445              	.LVL30:
+ 446              	.L31:
+ 371:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     {
+ 447              		.loc 1 371 5 is_stmt 1 view .LVU102
+ 373:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     }
+ 448              		.loc 1 373 7 view .LVU103
+ 377:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     }
+ 449              		.loc 1 377 7 view .LVU104
+ 373:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     }
+ 450              		.loc 1 373 37 is_stmt 0 view .LVU105
+ 451 0052 030F     		lsrs	r3, r0, #28
+ 371:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     {
+ 452              		.loc 1 371 8 view .LVU106
+ 453 0054 B0F1204F 		cmp	r0, #-1610612736
+ 373:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     }
+ 454              		.loc 1 373 37 view .LVU107
+ 455 0058 34BF     		ite	cc
+ 456 005a 3033     		addcc	r3, r3, #48
+ 377:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     }
+ 457              		.loc 1 377 43 view .LVU108
+ 458 005c 3733     		addcs	r3, r3, #55
+ 373:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****     }
+ 459              		.loc 1 373 21 view .LVU109
+ 460 005e 9374     		strb	r3, [r2, #18]
+ 380:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 461              		.loc 1 380 5 is_stmt 1 view .LVU110
+ 462              		.loc 1 382 23 is_stmt 0 view .LVU111
+ 463 0060 D174     		strb	r1, [r2, #19]
+ 369:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   {
+ 464              		.loc 1 369 21 discriminator 1 view .LVU112
+ 465 0062 0232     		adds	r2, r2, #2
+ 466              	.LVL31:
+ARM GAS  /tmp/ccEknUKA.s 			page 17
+
+
+ 369:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   {
+ 467              		.loc 1 369 21 discriminator 1 view .LVU113
+ 468 0064 9442     		cmp	r4, r2
+ 380:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 469              		.loc 1 380 11 view .LVU114
+ 470 0066 4FEA0010 		lsl	r0, r0, #4
+ 471              	.LVL32:
+ 472              		.loc 1 382 5 is_stmt 1 view .LVU115
+ 369:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   {
+ 473              		.loc 1 369 31 discriminator 2 view .LVU116
+ 369:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c ****   {
+ 474              		.loc 1 369 21 discriminator 1 view .LVU117
+ 475 006a F2D1     		bne	.L31
+ 476              	.LBE31:
+ 477              	.LBE30:
+ 478              	.LBE34:
+ 479              	.LBE37:
+ 294:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 480              		.loc 1 294 1 is_stmt 0 view .LVU118
+ 481 006c 0148     		ldr	r0, .L38+4
+ 482              	.LVL33:
+ 294:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.c **** 
+ 483              		.loc 1 294 1 view .LVU119
+ 484 006e 10BD     		pop	{r4, pc}
+ 485              	.L39:
+ 486              		.align	2
+ 487              	.L38:
+ 488 0070 0070FF1F 		.word	536834048
+ 489 0074 00000000 		.word	USBD_StringSerial
+ 490 0078 08000000 		.word	USBD_StringSerial+8
+ 491              		.cfi_endproc
+ 492              	.LFE337:
+ 494              		.global	USBD_StringSerial
+ 495              		.section	.data.USBD_StringSerial,"aw"
+ 496              		.align	2
+ 499              	USBD_StringSerial:
+ 500 0000 1A0300   		.ascii	"\032\003\000"
+ 501 0003 00000000 		.space	23
+ 501      00000000 
+ 501      00000000 
+ 501      00000000 
+ 501      00000000 
+ 502              		.global	USBD_StrDesc
+ 503              		.section	.bss.USBD_StrDesc,"aw",%nobits
+ 504              		.align	2
+ 507              	USBD_StrDesc:
+ 508 0000 00000000 		.space	512
+ 508      00000000 
+ 508      00000000 
+ 508      00000000 
+ 508      00000000 
+ 509              		.global	USBD_LangIDDesc
+ 510              		.section	.data.USBD_LangIDDesc,"aw"
+ 511              		.align	2
+ 514              	USBD_LangIDDesc:
+ 515 0000 04030904 		.ascii	"\004\003\011\004"
+ 516              		.global	USBD_CDC_DeviceDesc
+ARM GAS  /tmp/ccEknUKA.s 			page 18
+
+
+ 517              		.section	.data.USBD_CDC_DeviceDesc,"aw"
+ 518              		.align	2
+ 521              	USBD_CDC_DeviceDesc:
+ 522 0000 12010002 		.ascii	"\022\001\000\002\002\002\000@\203\004@W\000\002\001"
+ 522      02020040 
+ 522      83044057 
+ 522      000201
+ 523 000f 020301   		.ascii	"\002\003\001"
+ 524              		.global	CDC_Desc
+ 525              		.section	.data.CDC_Desc,"aw"
+ 526              		.align	2
+ 529              	CDC_Desc:
+ 530 0000 00000000 		.word	USBD_CDC_DeviceDescriptor
+ 531 0004 00000000 		.word	USBD_CDC_LangIDStrDescriptor
+ 532 0008 00000000 		.word	USBD_CDC_ManufacturerStrDescriptor
+ 533 000c 00000000 		.word	USBD_CDC_ProductStrDescriptor
+ 534 0010 00000000 		.word	USBD_CDC_SerialStrDescriptor
+ 535 0014 00000000 		.word	USBD_CDC_ConfigStrDescriptor
+ 536 0018 00000000 		.word	USBD_CDC_InterfaceStrDescriptor
+ 537 001c 00000000 		.space	4
+ 538              		.text
+ 539              	.Letext0:
+ 540              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 541              		.file 3 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Libra
+ 542              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_desc.h"
+ 543              		.file 5 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Libra
+ARM GAS  /tmp/ccEknUKA.s 			page 19
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 usbd_desc.c
+     /tmp/ccEknUKA.s:21     .text.USBD_CDC_DeviceDescriptor:00000000 $t
+     /tmp/ccEknUKA.s:28     .text.USBD_CDC_DeviceDescriptor:00000000 USBD_CDC_DeviceDescriptor
+     /tmp/ccEknUKA.s:51     .text.USBD_CDC_DeviceDescriptor:00000008 $d
+     /tmp/ccEknUKA.s:521    .data.USBD_CDC_DeviceDesc:00000000 USBD_CDC_DeviceDesc
+     /tmp/ccEknUKA.s:56     .text.USBD_CDC_LangIDStrDescriptor:00000000 $t
+     /tmp/ccEknUKA.s:63     .text.USBD_CDC_LangIDStrDescriptor:00000000 USBD_CDC_LangIDStrDescriptor
+     /tmp/ccEknUKA.s:86     .text.USBD_CDC_LangIDStrDescriptor:00000008 $d
+     /tmp/ccEknUKA.s:514    .data.USBD_LangIDDesc:00000000 USBD_LangIDDesc
+     /tmp/ccEknUKA.s:91     .rodata.USBD_CDC_ManufacturerStrDescriptor.str1.4:00000000 $d
+     /tmp/ccEknUKA.s:95     .text.USBD_CDC_ManufacturerStrDescriptor:00000000 $t
+     /tmp/ccEknUKA.s:102    .text.USBD_CDC_ManufacturerStrDescriptor:00000000 USBD_CDC_ManufacturerStrDescriptor
+     /tmp/ccEknUKA.s:136    .text.USBD_CDC_ManufacturerStrDescriptor:00000014 $d
+     /tmp/ccEknUKA.s:507    .bss.USBD_StrDesc:00000000 USBD_StrDesc
+     /tmp/ccEknUKA.s:142    .rodata.USBD_CDC_ProductStrDescriptor.str1.4:00000000 $d
+     /tmp/ccEknUKA.s:146    .text.USBD_CDC_ProductStrDescriptor:00000000 $t
+     /tmp/ccEknUKA.s:153    .text.USBD_CDC_ProductStrDescriptor:00000000 USBD_CDC_ProductStrDescriptor
+     /tmp/ccEknUKA.s:199    .text.USBD_CDC_ProductStrDescriptor:00000014 $d
+     /tmp/ccEknUKA.s:205    .rodata.USBD_CDC_ConfigStrDescriptor.str1.4:00000000 $d
+     /tmp/ccEknUKA.s:209    .text.USBD_CDC_ConfigStrDescriptor:00000000 $t
+     /tmp/ccEknUKA.s:216    .text.USBD_CDC_ConfigStrDescriptor:00000000 USBD_CDC_ConfigStrDescriptor
+     /tmp/ccEknUKA.s:262    .text.USBD_CDC_ConfigStrDescriptor:00000014 $d
+     /tmp/ccEknUKA.s:268    .rodata.USBD_CDC_InterfaceStrDescriptor.str1.4:00000000 $d
+     /tmp/ccEknUKA.s:272    .text.USBD_CDC_InterfaceStrDescriptor:00000000 $t
+     /tmp/ccEknUKA.s:279    .text.USBD_CDC_InterfaceStrDescriptor:00000000 USBD_CDC_InterfaceStrDescriptor
+     /tmp/ccEknUKA.s:325    .text.USBD_CDC_InterfaceStrDescriptor:00000014 $d
+     /tmp/ccEknUKA.s:331    .text.USBD_CDC_SerialStrDescriptor:00000000 $t
+     /tmp/ccEknUKA.s:338    .text.USBD_CDC_SerialStrDescriptor:00000000 USBD_CDC_SerialStrDescriptor
+     /tmp/ccEknUKA.s:488    .text.USBD_CDC_SerialStrDescriptor:00000070 $d
+     /tmp/ccEknUKA.s:499    .data.USBD_StringSerial:00000000 USBD_StringSerial
+     /tmp/ccEknUKA.s:496    .data.USBD_StringSerial:00000000 $d
+     /tmp/ccEknUKA.s:504    .bss.USBD_StrDesc:00000000 $d
+     /tmp/ccEknUKA.s:511    .data.USBD_LangIDDesc:00000000 $d
+     /tmp/ccEknUKA.s:518    .data.USBD_CDC_DeviceDesc:00000000 $d
+     /tmp/ccEknUKA.s:529    .data.CDC_Desc:00000000 CDC_Desc
+     /tmp/ccEknUKA.s:526    .data.CDC_Desc:00000000 $d
+
+UNDEFINED SYMBOLS
+USBD_GetString

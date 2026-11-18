@@ -1,0 +1,945 @@
+ARM GAS  /tmp/cchCkr9k.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"main.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c"
+  20              		.section	.text.SystemClock_Config,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	SystemClock_Config
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	SystemClock_Config:
+  29              	.LFB339:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* USER CODE BEGIN Header */
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /**
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****  ******************************************************************************
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****  * @file           : main.c
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****  * @brief          : Main program body
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****  ******************************************************************************
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****  * @attention
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****  *
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****  * Copyright (c) 2024 STMicroelectronics.
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****  * All rights reserved.
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****  *
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****  * This software is licensed under terms that can be found in the LICENSE file
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****  * in the root directory of this software component.
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****  * If no LICENSE file comes with this software, it is provided AS-IS.
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****  *
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****  ******************************************************************************
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****  */
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* USER CODE END Header */
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* Includes ------------------------------------------------------------------*/
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** #include "main.h"
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** #include "cmsis_os.h"
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** #include "adc.h"
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** #include "crc.h"
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** #include "dma.h"
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** #include "fdcan.h"
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** #include "rng.h"
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** #include "spi.h"
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** #include "tim.h"
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** #include "usart.h"
+ARM GAS  /tmp/cchCkr9k.s 			page 2
+
+
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** #include "usb_device.h"
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** #include "gpio.h"
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* Private includes ----------------------------------------------------------*/
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* USER CODE BEGIN Includes */
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** #include "robot.h"
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* USER CODE END Includes */
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* Private typedef -----------------------------------------------------------*/
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* USER CODE BEGIN PTD */
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* USER CODE END PTD */
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* Private define ------------------------------------------------------------*/
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* USER CODE BEGIN PD */
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* USER CODE END PD */
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* Private macro -------------------------------------------------------------*/
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* USER CODE BEGIN PM */
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* USER CODE END PM */
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* Private variables ---------------------------------------------------------*/
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* USER CODE BEGIN PV */
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* USER CODE END PV */
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* Private function prototypes -----------------------------------------------*/
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** void SystemClock_Config(void);
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** void MX_FREERTOS_Init(void);
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* USER CODE BEGIN PFP */
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* USER CODE END PFP */
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* Private user code ---------------------------------------------------------*/
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* USER CODE BEGIN 0 */
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* USER CODE END 0 */
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /**
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   * @brief  The application entry point.
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   * @retval int
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   */
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** int main(void)
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** {
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* USER CODE BEGIN 1 */
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* USER CODE END 1 */
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* MCU Configuration--------------------------------------------------------*/
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   HAL_Init();
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ARM GAS  /tmp/cchCkr9k.s 			page 3
+
+
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* USER CODE BEGIN Init */
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* USER CODE END Init */
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* Configure the system clock */
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   SystemClock_Config();
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* USER CODE BEGIN SysInit */
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* USER CODE END SysInit */
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* Initialize all configured peripherals */
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_GPIO_Init();
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_DMA_Init();
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_ADC1_Init();
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_FDCAN1_Init();
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_SPI1_Init();
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_TIM3_Init();
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_TIM1_Init();
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_ADC2_Init();
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_SPI3_Init();
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_USART1_UART_Init();
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_CRC_Init();
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_RNG_Init();
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* USER CODE BEGIN 2 */
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   // RGB_DisplayColorById(4);
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RobotInit();
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* USER CODE END 2 */
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* Call init function for freertos objects (in cmsis_os2.c) */
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_FREERTOS_Init();
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* Start scheduler */
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   osKernelStart();
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* We should never get here as control is now taken by the scheduler */
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* Infinite loop */
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* USER CODE BEGIN WHILE */
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   while (1)
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   {
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****     /* USER CODE END WHILE */
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****     /* USER CODE BEGIN 3 */
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****     //    vofa_start();
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   }
+ 134:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* USER CODE END 3 */
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** }
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /**
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   * @brief System Clock Configuration
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   * @retval None
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   */
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** void SystemClock_Config(void)
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** {
+  30              		.loc 1 142 1 view -0
+ARM GAS  /tmp/cchCkr9k.s 			page 4
+
+
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 80
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  34              		.loc 1 143 3 view .LVU1
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  35              		.loc 1 142 1 is_stmt 0 view .LVU2
+  36 0000 10B5     		push	{r4, lr}
+  37              	.LCFI0:
+  38              		.cfi_def_cfa_offset 8
+  39              		.cfi_offset 4, -8
+  40              		.cfi_offset 14, -4
+  41 0002 94B0     		sub	sp, sp, #80
+  42              	.LCFI1:
+  43              		.cfi_def_cfa_offset 88
+  44              		.loc 1 143 22 view .LVU3
+  45 0004 3822     		movs	r2, #56
+  46 0006 0021     		movs	r1, #0
+  47 0008 06A8     		add	r0, sp, #24
+  48 000a FFF7FEFF 		bl	memset
+  49              	.LVL0:
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  50              		.loc 1 144 3 is_stmt 1 view .LVU4
+  51              		.loc 1 144 22 is_stmt 0 view .LVU5
+  52 000e 0020     		movs	r0, #0
+  53 0010 CDE90100 		strd	r0, r0, [sp, #4]
+  54 0014 CDE90300 		strd	r0, r0, [sp, #12]
+  55 0018 0590     		str	r0, [sp, #20]
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /** Configure the main internal regulator output voltage
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   */
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1_BOOST);
+  56              		.loc 1 148 3 is_stmt 1 view .LVU6
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /** Initializes the RCC Oscillators according to the specified parameters
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   * in the RCC_OscInitTypeDef structure.
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   */
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48|RCC_OSCILLATORTYPE_HSE;
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  57              		.loc 1 157 35 is_stmt 0 view .LVU7
+  58 001a 0324     		movs	r4, #3
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+  59              		.loc 1 148 3 view .LVU8
+  60 001c FFF7FEFF 		bl	HAL_PWREx_ControlVoltageScaling
+  61              	.LVL1:
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  62              		.loc 1 153 3 is_stmt 1 view .LVU9
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
+  63              		.loc 1 154 3 view .LVU10
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  64              		.loc 1 156 34 is_stmt 0 view .LVU11
+  65 0020 0223     		movs	r3, #2
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  66              		.loc 1 155 32 view .LVU12
+ARM GAS  /tmp/cchCkr9k.s 			page 5
+
+
+  67 0022 0122     		movs	r2, #1
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  68              		.loc 1 153 36 view .LVU13
+  69 0024 2120     		movs	r0, #33
+  70 0026 4FF48031 		mov	r1, #65536
+  71 002a CDE90601 		strd	r0, [sp, #24]
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  72              		.loc 1 155 3 is_stmt 1 view .LVU14
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  73              		.loc 1 156 34 is_stmt 0 view .LVU15
+  74 002e CDE90C23 		strd	r2, r3, [sp, #48]
+  75              		.loc 1 157 3 is_stmt 1 view .LVU16
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV1;
+  76              		.loc 1 158 30 is_stmt 0 view .LVU17
+  77 0032 CDE90E42 		strd	r4, r2, [sp, #56]
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitStruct.PLL.PLLN = 42;
+  78              		.loc 1 159 3 is_stmt 1 view .LVU18
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
+ 163:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  79              		.loc 1 163 7 is_stmt 0 view .LVU19
+  80 0036 06A8     		add	r0, sp, #24
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitStruct.PLL.PLLN = 42;
+  81              		.loc 1 159 30 view .LVU20
+  82 0038 2A22     		movs	r2, #42
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+  83              		.loc 1 160 30 view .LVU21
+  84 003a CDE91023 		strd	r2, r3, [sp, #64]
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
+  85              		.loc 1 161 3 is_stmt 1 view .LVU22
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  86              		.loc 1 162 30 is_stmt 0 view .LVU23
+  87 003e CDE91233 		strd	r3, r3, [sp, #72]
+  88              		.loc 1 163 3 is_stmt 1 view .LVU24
+  89              		.loc 1 163 7 is_stmt 0 view .LVU25
+  90 0042 FFF7FEFF 		bl	HAL_RCC_OscConfig
+  91              	.LVL2:
+  92              		.loc 1 163 6 discriminator 1 view .LVU26
+  93 0046 08B1     		cbz	r0, .L2
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   {
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****     Error_Handler();
+  94              		.loc 1 165 5 is_stmt 1 view .LVU27
+  95              	.LBB12:
+  96              	.LBI12:
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   }
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /** Initializes the CPU, AHB and APB buses clocks
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   */
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
+ARM GAS  /tmp/cchCkr9k.s 			page 6
+
+
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   {
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****     Error_Handler();
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   }
+ 181:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** }
+ 182:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 183:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* USER CODE BEGIN 4 */
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /* USER CODE END 4 */
+ 186:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 187:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /**
+ 188:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   * @brief  Period elapsed callback in non blocking mode
+ 189:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   * @note   This function is called  when TIM17 interrupt took place, inside
+ 190:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+ 191:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   * a global variable "uwTick" used as application time base.
+ 192:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   * @param  htim : TIM handle
+ 193:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   * @retval None
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   */
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** {
+ 197:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* USER CODE BEGIN Callback 0 */
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* USER CODE END Callback 0 */
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   if (htim->Instance == TIM17) {
+ 201:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****     HAL_IncTick();
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   }
+ 203:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* USER CODE BEGIN Callback 1 */
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 205:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* USER CODE END Callback 1 */
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** }
+ 207:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 208:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** /**
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   * @brief  This function is executed in case of error occurrence.
+ 210:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   * @retval None
+ 211:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   */
+ 212:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** void Error_Handler(void)
+  97              		.loc 1 212 6 view .LVU28
+ 213:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** {
+ 214:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* USER CODE BEGIN Error_Handler_Debug */
+ 215:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* User can add his own implementation to report the HAL error return state */
+ 216:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   __disable_irq();
+  98              		.loc 1 216 3 view .LVU29
+  99              	.LBB13:
+ 100              	.LBI13:
+ 101              		.file 2 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h"
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /**************************************************************************//**
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * @file     cmsis_gcc.h
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * @brief    CMSIS compiler GCC header file
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * @version  V5.2.0
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * @date     08. May 2019
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  ******************************************************************************/
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /*
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * Copyright (c) 2009-2019 Arm Limited. All rights reserved.
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  *
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * SPDX-License-Identifier: Apache-2.0
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  *
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * Licensed under the Apache License, Version 2.0 (the License); you may
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * not use this file except in compliance with the License.
+ARM GAS  /tmp/cchCkr9k.s 			page 7
+
+
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * You may obtain a copy of the License at
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  *
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * www.apache.org/licenses/LICENSE-2.0
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  *
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * Unless required by applicable law or agreed to in writing, software
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * See the License for the specific language governing permissions and
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  * limitations under the License.
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __CMSIS_GCC_H
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #define __CMSIS_GCC_H
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /* ignore some GCC warnings */
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic push
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wsign-conversion"
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wconversion"
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wunused-parameter"
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /* Fallback for __has_builtin */
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __has_builtin
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __has_builtin(x) (0)
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /* CMSIS compiler specific defines */
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __ASM
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __ASM                                  __asm
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __INLINE
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __INLINE                               inline
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __STATIC_INLINE
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __STATIC_INLINE                        static inline
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __STATIC_FORCEINLINE                 
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __STATIC_FORCEINLINE                   __attribute__((always_inline)) static inline
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif                                           
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __NO_RETURN
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __NO_RETURN                            __attribute__((__noreturn__))
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __USED
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __USED                                 __attribute__((used))
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __WEAK
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __WEAK                                 __attribute__((weak))
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __PACKED
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __PACKED                               __attribute__((packed, aligned(1)))
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __PACKED_STRUCT
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __PACKED_STRUCT                        struct __attribute__((packed, aligned(1)))
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __PACKED_UNION
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __PACKED_UNION                         union __attribute__((packed, aligned(1)))
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT32        /* deprecated */
+ARM GAS  /tmp/cchCkr9k.s 			page 8
+
+
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   struct __attribute__((packed)) T_UINT32 { uint32_t v; };
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT32(x)                  (((struct T_UINT32 *)(x))->v)
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT16_WRITE
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT16_WRITE { uint16_t v; };
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT16_WRITE(addr, val)    (void)((((struct T_UINT16_WRITE *)(void *)(addr))-
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT16_READ
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT16_READ { uint16_t v; };
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT16_READ(addr)          (((const struct T_UINT16_READ *)(const void *)(add
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT32_WRITE
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT32_WRITE { uint32_t v; };
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT32_WRITE(addr, val)    (void)((((struct T_UINT32_WRITE *)(void *)(addr))-
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT32_READ
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT32_READ { uint32_t v; };
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT32_READ(addr)          (((const struct T_UINT32_READ *)(const void *)(add
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __ALIGNED
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __ALIGNED(x)                           __attribute__((aligned(x)))
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __RESTRICT
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __RESTRICT                             __restrict
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __COMPILER_BARRIER
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __COMPILER_BARRIER()                   __ASM volatile("":::"memory")
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /* #########################  Startup and Lowlevel Init  ######################## */
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __PROGRAM_START
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Initializes data and bss sections
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   \details This default implementations initialized all data and additional bss
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****            sections relying on .copy.table and .zero.table specified properly
+ARM GAS  /tmp/cchCkr9k.s 			page 9
+
+
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****            in the used linker script.
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE __NO_RETURN void __cmsis_start(void)
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   extern void _start(void) __NO_RETURN;
+ 134:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   typedef struct {
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****     uint32_t const* src;
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****     uint32_t* dest;
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****     uint32_t  wlen;
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   } __copy_table_t;
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   typedef struct {
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****     uint32_t* dest;
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****     uint32_t  wlen;
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   } __zero_table_t;
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   extern const __copy_table_t __copy_table_start__;
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   extern const __copy_table_t __copy_table_end__;
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   extern const __zero_table_t __zero_table_start__;
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   extern const __zero_table_t __zero_table_end__;
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   for (__copy_table_t const* pTable = &__copy_table_start__; pTable < &__copy_table_end__; ++pTable
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****     for(uint32_t i=0u; i<pTable->wlen; ++i) {
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****       pTable->dest[i] = pTable->src[i];
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****     }
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   }
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   for (__zero_table_t const* pTable = &__zero_table_start__; pTable < &__zero_table_end__; ++pTable
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****     for(uint32_t i=0u; i<pTable->wlen; ++i) {
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****       pTable->dest[i] = 0u;
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****     }
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   }
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  
+ 163:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   _start();
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #define __PROGRAM_START           __cmsis_start
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __INITIAL_SP
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #define __INITIAL_SP              __StackTop
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __STACK_LIMIT
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #define __STACK_LIMIT             __StackLimit
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __VECTOR_TABLE
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #define __VECTOR_TABLE            __Vectors
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 181:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __VECTOR_TABLE_ATTRIBUTE
+ 182:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #define __VECTOR_TABLE_ATTRIBUTE  __attribute((used, section(".vectors")))
+ 183:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ARM GAS  /tmp/cchCkr9k.s 			page 10
+
+
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /* ###########################  Core Function Access  ########################### */
+ 186:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /** \ingroup  CMSIS_Core_FunctionInterface
+ 187:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****     \defgroup CMSIS_Core_RegAccFunctions CMSIS Core Register Access Functions
+ 188:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   @{
+ 189:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 190:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 191:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 192:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Enable IRQ Interrupts
+ 193:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Enables IRQ interrupts by clearing the I-bit in the CPSR.
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****            Can only be executed in Privileged modes.
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE void __enable_irq(void)
+ 197:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("cpsie i" : : : "memory");
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 201:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 203:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Disable IRQ Interrupts
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Disables IRQ interrupts by setting the I-bit in the CPSR.
+ 205:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****            Can only be executed in Privileged modes.
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 207:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE void __disable_irq(void)
+ 102              		.loc 2 207 27 view .LVU30
+ 103              	.LBB14:
+ 208:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("cpsid i" : : : "memory");
+ 104              		.loc 2 209 3 view .LVU31
+ 105              		.syntax unified
+ 106              	@ 209 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h" 1
+ 107 0048 72B6     		cpsid i
+ 108              	@ 0 "" 2
+ 109              		.thumb
+ 110              		.syntax unified
+ 111              	.L3:
+ 112              	.LBE14:
+ 113              	.LBE13:
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   while (1)
+ 114              		.loc 1 217 3 view .LVU32
+ 218:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   {
+ 219:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   }
+ 115              		.loc 1 219 3 view .LVU33
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   while (1)
+ 116              		.loc 1 217 9 view .LVU34
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   while (1)
+ 117              		.loc 1 217 3 view .LVU35
+ 118              		.loc 1 219 3 view .LVU36
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   while (1)
+ 119              		.loc 1 217 9 view .LVU37
+ 120 004a FEE7     		b	.L3
+ 121              	.L2:
+ 122              	.LBE12:
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+ 123              		.loc 1 170 3 view .LVU38
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   {
+ 124              		.loc 1 177 7 is_stmt 0 view .LVU39
+ 125 004c 0421     		movs	r1, #4
+ARM GAS  /tmp/cchCkr9k.s 			page 11
+
+
+ 126 004e 0346     		mov	r3, r0
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+ 127              		.loc 1 170 31 view .LVU40
+ 128 0050 0F22     		movs	r2, #15
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   {
+ 129              		.loc 1 177 7 view .LVU41
+ 130 0052 0DEB0100 		add	r0, sp, r1
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+ 131              		.loc 1 172 34 view .LVU42
+ 132 0056 CDE90124 		strd	r2, r4, [sp, #4]
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+ 133              		.loc 1 173 3 is_stmt 1 view .LVU43
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+ 134              		.loc 1 174 36 is_stmt 0 view .LVU44
+ 135 005a CDE90333 		strd	r3, r3, [sp, #12]
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 136              		.loc 1 175 3 is_stmt 1 view .LVU45
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 137              		.loc 1 175 36 is_stmt 0 view .LVU46
+ 138 005e 0593     		str	r3, [sp, #20]
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   {
+ 139              		.loc 1 177 3 is_stmt 1 view .LVU47
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   {
+ 140              		.loc 1 177 7 is_stmt 0 view .LVU48
+ 141 0060 FFF7FEFF 		bl	HAL_RCC_ClockConfig
+ 142              	.LVL3:
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   {
+ 143              		.loc 1 177 6 discriminator 1 view .LVU49
+ 144 0064 08B1     		cbz	r0, .L1
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   }
+ 145              		.loc 1 179 5 is_stmt 1 view .LVU50
+ 146              	.LBB15:
+ 147              	.LBI15:
+ 212:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** {
+ 148              		.loc 1 212 6 view .LVU51
+ 216:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   while (1)
+ 149              		.loc 1 216 3 view .LVU52
+ 150              	.LBB16:
+ 151              	.LBI16:
+ 207:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 152              		.loc 2 207 27 view .LVU53
+ 153              	.LBB17:
+ 154              		.loc 2 209 3 view .LVU54
+ 155              		.syntax unified
+ 156              	@ 209 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h" 1
+ 157 0066 72B6     		cpsid i
+ 158              	@ 0 "" 2
+ 159              		.thumb
+ 160              		.syntax unified
+ 161              	.L5:
+ 162              	.LBE17:
+ 163              	.LBE16:
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   {
+ 164              		.loc 1 217 3 view .LVU55
+ 165              		.loc 1 219 3 view .LVU56
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   {
+ 166              		.loc 1 217 9 view .LVU57
+ARM GAS  /tmp/cchCkr9k.s 			page 12
+
+
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   {
+ 167              		.loc 1 217 3 view .LVU58
+ 168              		.loc 1 219 3 view .LVU59
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   {
+ 169              		.loc 1 217 9 view .LVU60
+ 170 0068 FEE7     		b	.L5
+ 171              	.L1:
+ 172              	.LBE15:
+ 181:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 173              		.loc 1 181 1 is_stmt 0 view .LVU61
+ 174 006a 14B0     		add	sp, sp, #80
+ 175              	.LCFI2:
+ 176              		.cfi_def_cfa_offset 8
+ 177              		@ sp needed
+ 178 006c 10BD     		pop	{r4, pc}
+ 179              		.cfi_endproc
+ 180              	.LFE339:
+ 182 006e 00BF     		.section	.text.startup.main,"ax",%progbits
+ 183              		.align	1
+ 184              		.p2align 2,,3
+ 185              		.global	main
+ 186              		.syntax unified
+ 187              		.thumb
+ 188              		.thumb_func
+ 190              	main:
+ 191              	.LFB338:
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 192              		.loc 1 76 1 is_stmt 1 view -0
+ 193              		.cfi_startproc
+ 194              		@ Volatile: function does not return.
+ 195              		@ args = 0, pretend = 0, frame = 0
+ 196              		@ frame_needed = 0, uses_anonymous_args = 0
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 197              		.loc 1 85 3 view .LVU63
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 198              		.loc 1 76 1 is_stmt 0 view .LVU64
+ 199 0000 08B5     		push	{r3, lr}
+ 200              	.LCFI3:
+ 201              		.cfi_def_cfa_offset 8
+ 202              		.cfi_offset 3, -8
+ 203              		.cfi_offset 14, -4
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 204              		.loc 1 85 3 view .LVU65
+ 205 0002 FFF7FEFF 		bl	HAL_Init
+ 206              	.LVL4:
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 207              		.loc 1 92 3 is_stmt 1 view .LVU66
+ 208 0006 FFF7FEFF 		bl	SystemClock_Config
+ 209              	.LVL5:
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_DMA_Init();
+ 210              		.loc 1 99 3 view .LVU67
+ 211 000a FFF7FEFF 		bl	MX_GPIO_Init
+ 212              	.LVL6:
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_ADC1_Init();
+ 213              		.loc 1 100 3 view .LVU68
+ 214 000e FFF7FEFF 		bl	MX_DMA_Init
+ 215              	.LVL7:
+ARM GAS  /tmp/cchCkr9k.s 			page 13
+
+
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_FDCAN1_Init();
+ 216              		.loc 1 101 3 view .LVU69
+ 217 0012 FFF7FEFF 		bl	MX_ADC1_Init
+ 218              	.LVL8:
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_SPI1_Init();
+ 219              		.loc 1 102 3 view .LVU70
+ 220 0016 FFF7FEFF 		bl	MX_FDCAN1_Init
+ 221              	.LVL9:
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_TIM3_Init();
+ 222              		.loc 1 103 3 view .LVU71
+ 223 001a FFF7FEFF 		bl	MX_SPI1_Init
+ 224              	.LVL10:
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_TIM1_Init();
+ 225              		.loc 1 104 3 view .LVU72
+ 226 001e FFF7FEFF 		bl	MX_TIM3_Init
+ 227              	.LVL11:
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_ADC2_Init();
+ 228              		.loc 1 105 3 view .LVU73
+ 229 0022 FFF7FEFF 		bl	MX_TIM1_Init
+ 230              	.LVL12:
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_SPI3_Init();
+ 231              		.loc 1 106 3 view .LVU74
+ 232 0026 FFF7FEFF 		bl	MX_ADC2_Init
+ 233              	.LVL13:
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_USART1_UART_Init();
+ 234              		.loc 1 107 3 view .LVU75
+ 235 002a FFF7FEFF 		bl	MX_SPI3_Init
+ 236              	.LVL14:
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_CRC_Init();
+ 237              		.loc 1 108 3 view .LVU76
+ 238 002e FFF7FEFF 		bl	MX_USART1_UART_Init
+ 239              	.LVL15:
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   MX_RNG_Init();
+ 240              		.loc 1 109 3 view .LVU77
+ 241 0032 FFF7FEFF 		bl	MX_CRC_Init
+ 242              	.LVL16:
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* USER CODE BEGIN 2 */
+ 243              		.loc 1 110 3 view .LVU78
+ 244 0036 FFF7FEFF 		bl	MX_RNG_Init
+ 245              	.LVL17:
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* USER CODE END 2 */
+ 246              		.loc 1 113 3 view .LVU79
+ 247 003a FFF7FEFF 		bl	RobotInit
+ 248              	.LVL18:
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 249              		.loc 1 117 3 view .LVU80
+ 250 003e FFF7FEFF 		bl	MX_FREERTOS_Init
+ 251              	.LVL19:
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 252              		.loc 1 120 3 view .LVU81
+ 253 0042 FFF7FEFF 		bl	osKernelStart
+ 254              	.LVL20:
+ 255              	.L9:
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   {
+ 256              		.loc 1 126 3 view .LVU82
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* USER CODE END 3 */
+ 257              		.loc 1 133 3 view .LVU83
+ARM GAS  /tmp/cchCkr9k.s 			page 14
+
+
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   {
+ 258              		.loc 1 126 9 view .LVU84
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   {
+ 259              		.loc 1 126 3 view .LVU85
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* USER CODE END 3 */
+ 260              		.loc 1 133 3 view .LVU86
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   {
+ 261              		.loc 1 126 9 view .LVU87
+ 262 0046 FEE7     		b	.L9
+ 263              		.cfi_endproc
+ 264              	.LFE338:
+ 266              		.section	.text.HAL_TIM_PeriodElapsedCallback,"ax",%progbits
+ 267              		.align	1
+ 268              		.p2align 2,,3
+ 269              		.global	HAL_TIM_PeriodElapsedCallback
+ 270              		.syntax unified
+ 271              		.thumb
+ 272              		.thumb_func
+ 274              	HAL_TIM_PeriodElapsedCallback:
+ 275              	.LVL21:
+ 276              	.LFB340:
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* USER CODE BEGIN Callback 0 */
+ 277              		.loc 1 196 1 view -0
+ 278              		.cfi_startproc
+ 279              		@ args = 0, pretend = 0, frame = 0
+ 280              		@ frame_needed = 0, uses_anonymous_args = 0
+ 281              		@ link register save eliminated.
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****     HAL_IncTick();
+ 282              		.loc 1 200 3 view .LVU89
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****     HAL_IncTick();
+ 283              		.loc 1 200 6 is_stmt 0 view .LVU90
+ 284 0000 034B     		ldr	r3, .L14
+ 285 0002 0268     		ldr	r2, [r0]
+ 286 0004 9A42     		cmp	r2, r3
+ 287 0006 00D0     		beq	.L13
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c **** 
+ 288              		.loc 1 206 1 view .LVU91
+ 289 0008 7047     		bx	lr
+ 290              	.L13:
+ 201:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   }
+ 291              		.loc 1 201 5 is_stmt 1 view .LVU92
+ 292 000a FFF7FEBF 		b	HAL_IncTick
+ 293              	.LVL22:
+ 294              	.L15:
+ 201:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   }
+ 295              		.loc 1 201 5 is_stmt 0 view .LVU93
+ 296 000e 00BF     		.align	2
+ 297              	.L14:
+ 298 0010 00480140 		.word	1073825792
+ 299              		.cfi_endproc
+ 300              	.LFE340:
+ 302              		.section	.text.Error_Handler,"ax",%progbits
+ 303              		.align	1
+ 304              		.p2align 2,,3
+ 305              		.global	Error_Handler
+ 306              		.syntax unified
+ 307              		.thumb
+ARM GAS  /tmp/cchCkr9k.s 			page 15
+
+
+ 308              		.thumb_func
+ 310              	Error_Handler:
+ 311              	.LFB341:
+ 213:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   /* USER CODE BEGIN Error_Handler_Debug */
+ 312              		.loc 1 213 1 is_stmt 1 view -0
+ 313              		.cfi_startproc
+ 314              		@ Volatile: function does not return.
+ 315              		@ args = 0, pretend = 0, frame = 0
+ 316              		@ frame_needed = 0, uses_anonymous_args = 0
+ 317              		@ link register save eliminated.
+ 216:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   while (1)
+ 318              		.loc 1 216 3 view .LVU95
+ 319              	.LBB18:
+ 320              	.LBI18:
+ 207:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 321              		.loc 2 207 27 view .LVU96
+ 322              	.LBB19:
+ 323              		.loc 2 209 3 view .LVU97
+ 324              		.syntax unified
+ 325              	@ 209 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/cmsis_gcc.h" 1
+ 326 0000 72B6     		cpsid i
+ 327              	@ 0 "" 2
+ 328              		.thumb
+ 329              		.syntax unified
+ 330              	.L17:
+ 331              	.LBE19:
+ 332              	.LBE18:
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   {
+ 333              		.loc 1 217 3 view .LVU98
+ 334              		.loc 1 219 3 view .LVU99
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   {
+ 335              		.loc 1 217 9 view .LVU100
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   {
+ 336              		.loc 1 217 3 view .LVU101
+ 337              		.loc 1 219 3 view .LVU102
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/main.c ****   {
+ 338              		.loc 1 217 9 view .LVU103
+ 339 0002 FEE7     		b	.L17
+ 340              		.cfi_endproc
+ 341              	.LFE341:
+ 343              		.text
+ 344              	.Letext0:
+ 345              		.file 3 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 346              		.file 4 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 347              		.file 5 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 348              		.file 6 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 349              		.file 7 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 350              		.file 8 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 351              		.file 9 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/Third_Party/FreeRTOS/Sour
+ 352              		.file 10 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm
+ 353              		.file 11 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm
+ 354              		.file 12 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/robot.h"
+ 355              		.file 13 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/rng.h"
+ 356              		.file 14 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/crc.h"
+ 357              		.file 15 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/usart.h"
+ 358              		.file 16 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/spi.h"
+ 359              		.file 17 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/adc.h"
+ARM GAS  /tmp/cchCkr9k.s 			page 16
+
+
+ 360              		.file 18 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/tim.h"
+ 361              		.file 19 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/fdcan.h"
+ 362              		.file 20 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/dma.h"
+ 363              		.file 21 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/gpio.h"
+ 364              		.file 22 "<built-in>"
+ARM GAS  /tmp/cchCkr9k.s 			page 17
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+     /tmp/cchCkr9k.s:21     .text.SystemClock_Config:00000000 $t
+     /tmp/cchCkr9k.s:28     .text.SystemClock_Config:00000000 SystemClock_Config
+     /tmp/cchCkr9k.s:183    .text.startup.main:00000000 $t
+     /tmp/cchCkr9k.s:190    .text.startup.main:00000000 main
+     /tmp/cchCkr9k.s:267    .text.HAL_TIM_PeriodElapsedCallback:00000000 $t
+     /tmp/cchCkr9k.s:274    .text.HAL_TIM_PeriodElapsedCallback:00000000 HAL_TIM_PeriodElapsedCallback
+     /tmp/cchCkr9k.s:298    .text.HAL_TIM_PeriodElapsedCallback:00000010 $d
+     /tmp/cchCkr9k.s:303    .text.Error_Handler:00000000 $t
+     /tmp/cchCkr9k.s:310    .text.Error_Handler:00000000 Error_Handler
+
+UNDEFINED SYMBOLS
+memset
+HAL_PWREx_ControlVoltageScaling
+HAL_RCC_OscConfig
+HAL_RCC_ClockConfig
+HAL_Init
+MX_GPIO_Init
+MX_DMA_Init
+MX_ADC1_Init
+MX_FDCAN1_Init
+MX_SPI1_Init
+MX_TIM3_Init
+MX_TIM1_Init
+MX_ADC2_Init
+MX_SPI3_Init
+MX_USART1_UART_Init
+MX_CRC_Init
+MX_RNG_Init
+RobotInit
+MX_FREERTOS_Init
+osKernelStart
+HAL_IncTick

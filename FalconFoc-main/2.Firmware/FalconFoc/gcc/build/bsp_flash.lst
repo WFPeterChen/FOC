@@ -1,0 +1,519 @@
+ARM GAS  /tmp/ccavaMr4.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"bsp_flash.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c"
+  20              		.section	.text.flash_bsp_erase_pages,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	flash_bsp_erase_pages
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	flash_bsp_erase_pages:
+  29              	.LVL0:
+  30              	.LFB349:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** #include "bsp_flash.h"
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** 
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** /**
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** ***********************************************************************
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** * @brief:      get_page(uint32_t addr)
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** * @param:		   addr：flash 地址
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** * @retval:     页数
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** * @details:    获取地址代表的页
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** ***********************************************************************
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** **/
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** static uint32_t get_page(uint32_t addr)
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** {
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     return (addr - FLASH_BASE) / FLASH_PAGE_SIZE;
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** }
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** /**
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** ***********************************************************************
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** * @brief:      flash_bsp_erase_pages(uint32_t start_addr, uint32_t end_addr)
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** * @param:		   start_addr：flash首地址
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** * @param:		   end_addr：flash尾地址
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** * @retval:     0：失败 1：成功
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** * @details:    按页面地址擦除，擦多页
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** ***********************************************************************
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** **/
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** uint8_t flash_bsp_erase_pages(uint32_t start_addr, uint32_t end_addr)
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** {
+  31              		.loc 1 25 1 view -0
+  32              		.cfi_startproc
+  33              		@ args = 0, pretend = 0, frame = 24
+ARM GAS  /tmp/ccavaMr4.s 			page 2
+
+
+  34              		@ frame_needed = 0, uses_anonymous_args = 0
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     uint32_t page_err = 0;
+  35              		.loc 1 26 5 view .LVU1
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     uint32_t page_err = 0;
+  36              		.loc 1 25 1 is_stmt 0 view .LVU2
+  37 0000 70B5     		push	{r4, r5, r6, lr}
+  38              	.LCFI0:
+  39              		.cfi_def_cfa_offset 16
+  40              		.cfi_offset 4, -16
+  41              		.cfi_offset 5, -12
+  42              		.cfi_offset 6, -8
+  43              		.cfi_offset 14, -4
+  44 0002 86B0     		sub	sp, sp, #24
+  45              	.LCFI1:
+  46              		.cfi_def_cfa_offset 40
+  47              		.loc 1 26 14 view .LVU3
+  48 0004 0026     		movs	r6, #0
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     uint32_t page_err = 0;
+  49              		.loc 1 25 1 view .LVU4
+  50 0006 0546     		mov	r5, r0
+  51 0008 0C46     		mov	r4, r1
+  52              		.loc 1 26 14 view .LVU5
+  53 000a 0196     		str	r6, [sp, #4]
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** 
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     FLASH_EraseInitTypeDef EraseInit;
+  54              		.loc 1 28 5 is_stmt 1 view .LVU6
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** 
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     HAL_FLASH_Unlock();
+  55              		.loc 1 30 5 view .LVU7
+  56 000c FFF7FEFF 		bl	HAL_FLASH_Unlock
+  57              	.LVL1:
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     __HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_OPTVERR);
+  58              		.loc 1 31 5 view .LVU8
+  59              		.loc 1 31 5 view .LVU9
+  60              		.loc 1 31 5 discriminator 3 view .LVU10
+  61              		.loc 1 31 5 discriminator 4 view .LVU11
+  62              	.LBB6:
+  63              	.LBB7:
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** }
+  64              		.loc 1 13 18 is_stmt 0 view .LVU12
+  65 0010 05F17843 		add	r3, r5, #-134217728
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** }
+  66              		.loc 1 13 32 view .LVU13
+  67 0014 DB0A     		lsrs	r3, r3, #11
+  68              	.LBE7:
+  69              	.LBE6:
+  70              		.loc 1 31 5 discriminator 4 view .LVU14
+  71 0016 0C4A     		ldr	r2, .L7
+  72              	.LBB9:
+  73              	.LBB10:
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** }
+  74              		.loc 1 13 18 view .LVU15
+  75 0018 04F17844 		add	r4, r4, #-134217728
+  76              	.LVL2:
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** }
+  77              		.loc 1 13 18 view .LVU16
+  78              	.LBE10:
+ARM GAS  /tmp/ccavaMr4.s 			page 3
+
+
+  79              	.LBE9:
+  80              		.loc 1 31 5 discriminator 4 view .LVU17
+  81 001c 4FF40041 		mov	r1, #32768
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** 
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     uint32_t FirstPage  = get_page(start_addr);
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     uint32_t NbOfPages  = get_page(end_addr) - FirstPage + 1;
+  82              		.loc 1 34 14 discriminator 1 view .LVU18
+  83 0020 C3EBD424 		rsb	r4, r3, r4, lsr #11
+  84              	.LVL3:
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** 
+  85              		.loc 1 31 5 discriminator 4 view .LVU19
+  86 0024 1161     		str	r1, [r2, #16]
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** 
+  87              		.loc 1 31 5 is_stmt 1 discriminator 6 view .LVU20
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     uint32_t NbOfPages  = get_page(end_addr) - FirstPage + 1;
+  88              		.loc 1 33 5 view .LVU21
+  89              	.LVL4:
+  90              	.LBB12:
+  91              	.LBI6:
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** {
+  92              		.loc 1 11 17 view .LVU22
+  93              	.LBB8:
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** }
+  94              		.loc 1 13 5 view .LVU23
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** }
+  95              		.loc 1 13 5 is_stmt 0 view .LVU24
+  96              	.LBE8:
+  97              	.LBE12:
+  98              		.loc 1 34 5 is_stmt 1 view .LVU25
+  99              	.LBB13:
+ 100              	.LBI9:
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** {
+ 101              		.loc 1 11 17 view .LVU26
+ 102              	.LBB11:
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** }
+ 103              		.loc 1 13 5 view .LVU27
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** }
+ 104              		.loc 1 13 5 is_stmt 0 view .LVU28
+ 105              	.LBE11:
+ 106              	.LBE13:
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** 
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     /* Fill EraseInit structure*/
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     EraseInit.TypeErase = FLASH_TYPEERASE_PAGES;
+ 107              		.loc 1 37 5 is_stmt 1 view .LVU29
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** 
+ 108              		.loc 1 34 14 is_stmt 0 discriminator 1 view .LVU30
+ 109 0026 0134     		adds	r4, r4, #1
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     EraseInit.Page      = FirstPage;
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     EraseInit.NbPages   = NbOfPages;
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     if (HAL_FLASHEx_Erase(&EraseInit, &page_err) != HAL_OK)
+ 110              		.loc 1 40 9 view .LVU31
+ 111 0028 01A9     		add	r1, sp, #4
+ 112 002a 02A8     		add	r0, sp, #8
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     if (HAL_FLASHEx_Erase(&EraseInit, &page_err) != HAL_OK)
+ 113              		.loc 1 39 25 view .LVU32
+ 114 002c CDE90434 		strd	r3, r4, [sp, #16]
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     EraseInit.Page      = FirstPage;
+ARM GAS  /tmp/ccavaMr4.s 			page 4
+
+
+ 115              		.loc 1 37 25 view .LVU33
+ 116 0030 0296     		str	r6, [sp, #8]
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     EraseInit.Page      = FirstPage;
+ 117              		.loc 1 38 5 is_stmt 1 view .LVU34
+ 118              		.loc 1 40 5 view .LVU35
+ 119              		.loc 1 40 9 is_stmt 0 view .LVU36
+ 120 0032 FFF7FEFF 		bl	HAL_FLASHEx_Erase
+ 121              	.LVL5:
+ 122              		.loc 1 40 8 discriminator 1 view .LVU37
+ 123 0036 10B1     		cbz	r0, .L6
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****         return 0;
+ 124              		.loc 1 41 16 view .LVU38
+ 125 0038 3046     		mov	r0, r6
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     HAL_FLASH_Lock();
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** 
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     return 1;
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** }
+ 126              		.loc 1 45 1 view .LVU39
+ 127 003a 06B0     		add	sp, sp, #24
+ 128              	.LCFI2:
+ 129              		.cfi_remember_state
+ 130              		.cfi_def_cfa_offset 16
+ 131              		@ sp needed
+ 132 003c 70BD     		pop	{r4, r5, r6, pc}
+ 133              	.LVL6:
+ 134              	.L6:
+ 135              	.LCFI3:
+ 136              		.cfi_restore_state
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     HAL_FLASH_Lock();
+ 137              		.loc 1 42 5 is_stmt 1 view .LVU40
+ 138 003e FFF7FEFF 		bl	HAL_FLASH_Lock
+ 139              	.LVL7:
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** }
+ 140              		.loc 1 44 5 view .LVU41
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** }
+ 141              		.loc 1 44 12 is_stmt 0 view .LVU42
+ 142 0042 0120     		movs	r0, #1
+ 143              		.loc 1 45 1 view .LVU43
+ 144 0044 06B0     		add	sp, sp, #24
+ 145              	.LCFI4:
+ 146              		.cfi_def_cfa_offset 16
+ 147              		@ sp needed
+ 148 0046 70BD     		pop	{r4, r5, r6, pc}
+ 149              	.LVL8:
+ 150              	.L8:
+ 151              		.loc 1 45 1 view .LVU44
+ 152              		.align	2
+ 153              	.L7:
+ 154 0048 00200240 		.word	1073881088
+ 155              		.cfi_endproc
+ 156              	.LFE349:
+ 158              		.section	.text.flash_bsp_erase_page,"ax",%progbits
+ 159              		.align	1
+ 160              		.p2align 2,,3
+ 161              		.global	flash_bsp_erase_page
+ 162              		.syntax unified
+ 163              		.thumb
+ARM GAS  /tmp/ccavaMr4.s 			page 5
+
+
+ 164              		.thumb_func
+ 166              	flash_bsp_erase_page:
+ 167              	.LVL9:
+ 168              	.LFB350:
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** /**
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** ***********************************************************************
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** * @brief:      flash_bsp_erase_page(uint8_t page)
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** * @param:		   page：flash页面
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** * @retval:     0：失败 1：成功
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** * @details:    按页面擦除，擦单页
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** ***********************************************************************
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** **/
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** uint8_t flash_bsp_erase_page(uint8_t page)
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** {
+ 169              		.loc 1 55 1 is_stmt 1 view -0
+ 170              		.cfi_startproc
+ 171              		@ args = 0, pretend = 0, frame = 24
+ 172              		@ frame_needed = 0, uses_anonymous_args = 0
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     uint32_t page_err = 0;
+ 173              		.loc 1 56 5 view .LVU46
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     uint32_t page_err = 0;
+ 174              		.loc 1 55 1 is_stmt 0 view .LVU47
+ 175 0000 70B5     		push	{r4, r5, r6, lr}
+ 176              	.LCFI5:
+ 177              		.cfi_def_cfa_offset 16
+ 178              		.cfi_offset 4, -16
+ 179              		.cfi_offset 5, -12
+ 180              		.cfi_offset 6, -8
+ 181              		.cfi_offset 14, -4
+ 182 0002 86B0     		sub	sp, sp, #24
+ 183              	.LCFI6:
+ 184              		.cfi_def_cfa_offset 40
+ 185              		.loc 1 56 14 view .LVU48
+ 186 0004 0024     		movs	r4, #0
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     uint32_t page_err = 0;
+ 187              		.loc 1 55 1 view .LVU49
+ 188 0006 0546     		mov	r5, r0
+ 189              		.loc 1 56 14 view .LVU50
+ 190 0008 0194     		str	r4, [sp, #4]
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** 
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     FLASH_EraseInitTypeDef EraseInit;
+ 191              		.loc 1 58 5 is_stmt 1 view .LVU51
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** 
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     HAL_FLASH_Unlock();
+ 192              		.loc 1 60 5 view .LVU52
+ 193 000a FFF7FEFF 		bl	HAL_FLASH_Unlock
+ 194              	.LVL10:
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     __HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_OPTVERR);
+ 195              		.loc 1 61 5 view .LVU53
+ 196              		.loc 1 61 5 view .LVU54
+ 197              		.loc 1 61 5 discriminator 3 view .LVU55
+ 198              		.loc 1 61 5 discriminator 4 view .LVU56
+ 199 000e 0A4B     		ldr	r3, .L14
+ 200 0010 4FF40042 		mov	r2, #32768
+ 201 0014 1A61     		str	r2, [r3, #16]
+ 202              		.loc 1 61 5 discriminator 6 view .LVU57
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** 
+ARM GAS  /tmp/ccavaMr4.s 			page 6
+
+
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     /* Fill EraseInit structure*/
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     EraseInit.TypeErase = FLASH_TYPEERASE_PAGES;
+ 203              		.loc 1 64 5 view .LVU58
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     EraseInit.Page      = page;
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     EraseInit.NbPages   = 1;
+ 204              		.loc 1 66 25 is_stmt 0 view .LVU59
+ 205 0016 0126     		movs	r6, #1
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     if (HAL_FLASHEx_Erase(&EraseInit, &page_err) != HAL_OK)
+ 206              		.loc 1 67 9 view .LVU60
+ 207 0018 01A9     		add	r1, sp, #4
+ 208 001a 02A8     		add	r0, sp, #8
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     if (HAL_FLASHEx_Erase(&EraseInit, &page_err) != HAL_OK)
+ 209              		.loc 1 66 25 view .LVU61
+ 210 001c CDE90456 		strd	r5, r6, [sp, #16]
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     EraseInit.Page      = page;
+ 211              		.loc 1 64 25 view .LVU62
+ 212 0020 0294     		str	r4, [sp, #8]
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     EraseInit.NbPages   = 1;
+ 213              		.loc 1 65 5 is_stmt 1 view .LVU63
+ 214              		.loc 1 67 5 view .LVU64
+ 215              		.loc 1 67 9 is_stmt 0 view .LVU65
+ 216 0022 FFF7FEFF 		bl	HAL_FLASHEx_Erase
+ 217              	.LVL11:
+ 218              		.loc 1 67 8 discriminator 1 view .LVU66
+ 219 0026 10B1     		cbz	r0, .L13
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****         return 0;
+ 220              		.loc 1 68 16 view .LVU67
+ 221 0028 2046     		mov	r0, r4
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     HAL_FLASH_Lock();
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** 
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     return 1;
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** }
+ 222              		.loc 1 72 1 view .LVU68
+ 223 002a 06B0     		add	sp, sp, #24
+ 224              	.LCFI7:
+ 225              		.cfi_remember_state
+ 226              		.cfi_def_cfa_offset 16
+ 227              		@ sp needed
+ 228 002c 70BD     		pop	{r4, r5, r6, pc}
+ 229              	.LVL12:
+ 230              	.L13:
+ 231              	.LCFI8:
+ 232              		.cfi_restore_state
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     HAL_FLASH_Lock();
+ 233              		.loc 1 69 5 is_stmt 1 view .LVU69
+ 234 002e FFF7FEFF 		bl	HAL_FLASH_Lock
+ 235              	.LVL13:
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** }
+ 236              		.loc 1 71 5 view .LVU70
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** }
+ 237              		.loc 1 71 12 is_stmt 0 view .LVU71
+ 238 0032 3046     		mov	r0, r6
+ 239              		.loc 1 72 1 view .LVU72
+ 240 0034 06B0     		add	sp, sp, #24
+ 241              	.LCFI9:
+ 242              		.cfi_def_cfa_offset 16
+ 243              		@ sp needed
+ARM GAS  /tmp/ccavaMr4.s 			page 7
+
+
+ 244 0036 70BD     		pop	{r4, r5, r6, pc}
+ 245              	.L15:
+ 246              		.align	2
+ 247              	.L14:
+ 248 0038 00200240 		.word	1073881088
+ 249              		.cfi_endproc
+ 250              	.LFE350:
+ 252              		.section	.text.flash_bsp_write_data,"ax",%progbits
+ 253              		.align	1
+ 254              		.p2align 2,,3
+ 255              		.global	flash_bsp_write_data
+ 256              		.syntax unified
+ 257              		.thumb
+ 258              		.thumb_func
+ 260              	flash_bsp_write_data:
+ 261              	.LVL14:
+ 262              	.LFB351:
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** /**
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** ***********************************************************************
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** * @brief:      flash_bsp_write_data(uint32_t addr, void *data, uint32_t size)
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** * @param:		   addr：flash 地址
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** * @param:		   data：写入的数据
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** * @param:		   size：写入的数据的字节数
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** * @retval:     void
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** * @details:    向flash中写入数据
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** ***********************************************************************
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** **/
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** void flash_bsp_write_data(uint32_t addr, void *data, uint32_t size)
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** {
+ 263              		.loc 1 84 1 is_stmt 1 view -0
+ 264              		.cfi_startproc
+ 265              		@ args = 0, pretend = 0, frame = 0
+ 266              		@ frame_needed = 0, uses_anonymous_args = 0
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     uint64_t *buffer = (uint64_t *)data;
+ 267              		.loc 1 85 5 view .LVU74
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     uint64_t *buffer = (uint64_t *)data;
+ 268              		.loc 1 84 1 is_stmt 0 view .LVU75
+ 269 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 270              	.LCFI10:
+ 271              		.cfi_def_cfa_offset 24
+ 272              		.cfi_offset 3, -24
+ 273              		.cfi_offset 4, -20
+ 274              		.cfi_offset 5, -16
+ 275              		.cfi_offset 6, -12
+ 276              		.cfi_offset 7, -8
+ 277              		.cfi_offset 14, -4
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     uint64_t *buffer = (uint64_t *)data;
+ 278              		.loc 1 84 1 view .LVU76
+ 279 0002 1746     		mov	r7, r2
+ 280 0004 0646     		mov	r6, r0
+ 281 0006 0C46     		mov	r4, r1
+ 282              	.LVL15:
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     uint32_t temp_addr = addr;
+ 283              		.loc 1 86 5 is_stmt 1 view .LVU77
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** 
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     HAL_FLASH_Unlock();
+ 284              		.loc 1 88 5 view .LVU78
+ARM GAS  /tmp/ccavaMr4.s 			page 8
+
+
+ 285 0008 FFF7FEFF 		bl	HAL_FLASH_Unlock
+ 286              	.LVL16:
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** 
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     for (uint32_t i = 0; i < size; i += 8)
+ 287              		.loc 1 90 5 view .LVU79
+ 288              	.LBB14:
+ 289              		.loc 1 90 10 view .LVU80
+ 290              		.loc 1 90 28 discriminator 1 view .LVU81
+ 291 000c 67B1     		cbz	r7, .L17
+ 292              		.loc 1 90 19 is_stmt 0 view .LVU82
+ 293 000e 0025     		movs	r5, #0
+ 294 0010 361B     		subs	r6, r6, r4
+ 295              	.LVL17:
+ 296              	.L18:
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     {
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****         HAL_FLASH_Program(FLASH_TYPEPROGRAM_DOUBLEWORD, temp_addr + i, *buffer);
+ 297              		.loc 1 92 9 is_stmt 1 view .LVU83
+ 298 0012 D4E90023 		ldrd	r2, [r4]
+ 299 0016 A119     		adds	r1, r4, r6
+ 300 0018 0020     		movs	r0, #0
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     {
+ 301              		.loc 1 90 38 is_stmt 0 discriminator 3 view .LVU84
+ 302 001a 0835     		adds	r5, r5, #8
+ 303              	.LVL18:
+ 304              		.loc 1 92 9 view .LVU85
+ 305 001c FFF7FEFF 		bl	HAL_FLASH_Program
+ 306              	.LVL19:
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****         buffer++;
+ 307              		.loc 1 93 9 is_stmt 1 view .LVU86
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     {
+ 308              		.loc 1 90 28 is_stmt 0 discriminator 1 view .LVU87
+ 309 0020 AF42     		cmp	r7, r5
+ 310              		.loc 1 93 15 view .LVU88
+ 311 0022 04F10804 		add	r4, r4, #8
+ 312              	.LVL20:
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     {
+ 313              		.loc 1 90 38 is_stmt 1 discriminator 3 view .LVU89
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     {
+ 314              		.loc 1 90 28 discriminator 1 view .LVU90
+ 315 0026 F4D8     		bhi	.L18
+ 316              	.LVL21:
+ 317              	.L17:
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     {
+ 318              		.loc 1 90 28 is_stmt 0 discriminator 1 view .LVU91
+ 319              	.LBE14:
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     }
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** 
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c ****     HAL_FLASH_Lock();
+ 320              		.loc 1 96 5 is_stmt 1 view .LVU92
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** }
+ 321              		.loc 1 97 1 is_stmt 0 view .LVU93
+ 322 0028 BDE8F840 		pop	{r3, r4, r5, r6, r7, lr}
+ 323              	.LCFI11:
+ 324              		.cfi_restore 14
+ 325              		.cfi_restore 7
+ 326              		.cfi_restore 6
+ 327              		.cfi_restore 5
+ARM GAS  /tmp/ccavaMr4.s 			page 9
+
+
+ 328              		.cfi_restore 4
+ 329              		.cfi_restore 3
+ 330              		.cfi_def_cfa_offset 0
+ 331              	.LVL22:
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.c **** }
+ 332              		.loc 1 96 5 view .LVU94
+ 333 002c FFF7FEBF 		b	HAL_FLASH_Lock
+ 334              	.LVL23:
+ 335              		.cfi_endproc
+ 336              	.LFE351:
+ 338              		.text
+ 339              	.Letext0:
+ 340              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 341              		.file 3 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 342              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 343              		.file 5 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 344              		.file 6 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ARM GAS  /tmp/ccavaMr4.s 			page 10
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 bsp_flash.c
+     /tmp/ccavaMr4.s:21     .text.flash_bsp_erase_pages:00000000 $t
+     /tmp/ccavaMr4.s:28     .text.flash_bsp_erase_pages:00000000 flash_bsp_erase_pages
+     /tmp/ccavaMr4.s:154    .text.flash_bsp_erase_pages:00000048 $d
+     /tmp/ccavaMr4.s:159    .text.flash_bsp_erase_page:00000000 $t
+     /tmp/ccavaMr4.s:166    .text.flash_bsp_erase_page:00000000 flash_bsp_erase_page
+     /tmp/ccavaMr4.s:248    .text.flash_bsp_erase_page:00000038 $d
+     /tmp/ccavaMr4.s:253    .text.flash_bsp_write_data:00000000 $t
+     /tmp/ccavaMr4.s:260    .text.flash_bsp_write_data:00000000 flash_bsp_write_data
+
+UNDEFINED SYMBOLS
+HAL_FLASH_Unlock
+HAL_FLASHEx_Erase
+HAL_FLASH_Lock
+HAL_FLASH_Program

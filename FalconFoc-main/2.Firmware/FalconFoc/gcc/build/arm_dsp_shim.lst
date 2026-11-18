@@ -1,0 +1,699 @@
+ARM GAS  /tmp/ccxx9qjM.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"arm_dsp_shim.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "arm_dsp_shim.c"
+  20              		.section	.text.fast_sincos,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	fast_sincos:
+  28              	.LVL0:
+  29              	.LFB343:
+  30              		.file 2 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h"
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #ifndef GENERAL_DEF_H
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define GENERAL_DEF_H
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #include "main.h"
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #include "stdint.h"
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #include "string.h"
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #include "stdlib.h"
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #include "stdio.h"
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #include "stdbool.h"
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #include <math.h>
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** typedef unsigned char bool_t; // 布尔类型
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define M_PI (3.14159265358979323846f)     // 圆周率
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define M_2PI (6.28318530717958647692f)    // 2倍圆周率
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define M_3PI_2 (4.71238898038469f)        // 3/2倍圆周率
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define _SQRT3 (1.7320508075688772935f)    // 3的平方根
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define _SQRT3_2 (0.86602540378443864f)    // 3的平方根的一半
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define ONE_BY_SQRT2 (0.7071067811865475f) // 1除以2的平方根
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define ONE_BY_SQRT3 (0.57735026919f)      // 1除以3的平方根
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define TWO_BY_SQRT3 (1.15470053838f)      // 2除以3的平方根
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define SQ(x) ((x) * (x))                                                         // 求平方
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define NORM2_f(x, y) (sqrtf(SQ(x) + SQ(y)))                                      // 求模
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define DEG2RAD_f(deg) ((deg) * (float)(M_PI / 180.0f))                           // 角度值转�
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define RAD2DEG_f(rad) ((rad) * (float)(180.0f / M_PI))                           // 弧度值转�
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define RPM2RADPS_f(rpm) ((rpm) * (float)((2.0f * M_PI) / 60.0f))                 // 转速值转�
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define RADPS2RPM_f(rad_per_sec) ((rad_per_sec) * (float)(60.0f / (2.0f * M_PI))) // 角速度值�
+ARM GAS  /tmp/ccxx9qjM.s 			page 2
+
+
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define ABS(a) (((a) > 0.0f) ? (a) : (-(a)))               // 求绝对值
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define min(a, b) (((a) < (b)) ? (a) : (b))                // 求最小值
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define max(a, b) (((a) > (b)) ? (a) : (b))                // 求最大值
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define CLAMP(x, lower, upper) (min(upper, max(x, lower))) // 求值范围
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define SIGN(x) (((x) < 0.0f) ? -1.0f : 1.0f)              // 求符号
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define UTILS_LP_FAST(value, sample, filter_constant) (value -= (filter_constant) * (value - (sampl
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** #define UTILS_LP_MOVING_AVG_APPROX(value, sample, N) UTILS_LP_FAST(value, sample, 2.0f / ((N) + 1.0
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** static inline int mod(int dividend, int divisor)
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** {
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   int r = dividend % divisor;
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   return (r < 0) ? (r + divisor) : r;
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** }
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** static inline void int_to_data(int val, uint8_t *data)
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** {
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   data[0] = *(((uint8_t *)(&val)) + 0);
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   data[1] = *(((uint8_t *)(&val)) + 1);
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   data[2] = *(((uint8_t *)(&val)) + 2);
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   data[3] = *(((uint8_t *)(&val)) + 3);
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** }
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** static inline int data_to_int(uint8_t *data)
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** {
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   int tmp_int;
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   *(((uint8_t *)(&tmp_int)) + 0) = data[0];
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   *(((uint8_t *)(&tmp_int)) + 1) = data[1];
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   *(((uint8_t *)(&tmp_int)) + 2) = data[2];
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   *(((uint8_t *)(&tmp_int)) + 3) = data[3];
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   return tmp_int;
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** }
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** static inline void float_to_data(float val, uint8_t *data)
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** {
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   data[0] = *(((uint8_t *)(&val)) + 0);
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   data[1] = *(((uint8_t *)(&val)) + 1);
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   data[2] = *(((uint8_t *)(&val)) + 2);
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   data[3] = *(((uint8_t *)(&val)) + 3);
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** }
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** static inline float data_to_float(uint8_t *data)
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** {
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   float tmp_float;
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   *(((uint8_t *)(&tmp_float)) + 0) = data[0];
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   *(((uint8_t *)(&tmp_float)) + 1) = data[1];
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   *(((uint8_t *)(&tmp_float)) + 2) = data[2];
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   *(((uint8_t *)(&tmp_float)) + 3) = data[3];
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   return tmp_float;
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** }
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** static inline void float4_to_data7(float val, uint8_t *data)
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** {
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   data[4] = *(((uint8_t *)(&val)) + 0);
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   data[5] = *(((uint8_t *)(&val)) + 1);
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   data[6] = *(((uint8_t *)(&val)) + 2);
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   data[7] = *(((uint8_t *)(&val)) + 3);
+ARM GAS  /tmp/ccxx9qjM.s 			page 3
+
+
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** }
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** static inline uint32_t cpu_enter_critical(void)
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** {
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   //    uint32_t primask = __get_PRIMASK();
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   __disable_irq();
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   return 1;
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** }
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** static inline void cpu_exit_critical(uint32_t priority_mask)
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** {
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   //__set_PRIMASK(priority_mask);
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   __enable_irq();
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** }
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** static inline float fmodf_pos(float x, float y)
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** {
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   float out = fmodf(x, y);
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   if (out < 0.0f)
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   {
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     out += y;
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   }
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   return out;
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** }
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** static inline float wrap_pm(float x, float pm_range)
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** {
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   return fmodf_pos(x + pm_range, 2.0f * pm_range) - pm_range;
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** }
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** static inline float wrap_pm_pi(float theta)
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** {
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   return wrap_pm(theta, M_PI);
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** }
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** static inline void fast_sincos(float angle, float *sin, float *cos)
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** {
+  31              		.loc 2 122 1 view -0
+  32              		.cfi_startproc
+  33              		@ args = 0, pretend = 0, frame = 0
+  34              		@ frame_needed = 0, uses_anonymous_args = 0
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   // always wrap input angle to -PI..PI
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   angle = wrap_pm_pi(angle);
+  35              		.loc 2 124 3 view .LVU1
+  36              	.LBB14:
+  37              	.LBI14:
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** {
+  38              		.loc 2 116 21 view .LVU2
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** }
+  39              		.loc 2 118 3 view .LVU3
+  40              	.LBB15:
+  41              	.LBI15:
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** {
+  42              		.loc 2 111 21 view .LVU4
+  43              	.LBB16:
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** }
+  44              		.loc 2 113 3 view .LVU5
+ARM GAS  /tmp/ccxx9qjM.s 			page 4
+
+
+  45              	.LBB17:
+  46              	.LBI17:
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** {
+  47              		.loc 2 101 21 view .LVU6
+  48              	.LBB18:
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   if (out < 0.0f)
+  49              		.loc 2 103 3 view .LVU7
+  50              	.LBE18:
+  51              	.LBE17:
+  52              	.LBE16:
+  53              	.LBE15:
+  54              	.LBE14:
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   // always wrap input angle to -PI..PI
+  55              		.loc 2 122 1 is_stmt 0 view .LVU8
+  56 0000 38B5     		push	{r3, r4, r5, lr}
+  57              	.LCFI0:
+  58              		.cfi_def_cfa_offset 16
+  59              		.cfi_offset 3, -16
+  60              		.cfi_offset 4, -12
+  61              		.cfi_offset 5, -8
+  62              		.cfi_offset 14, -4
+  63              	.LBB31:
+  64              	.LBB27:
+  65              	.LBB23:
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** }
+  66              		.loc 2 113 10 view .LVU9
+  67 0002 DFED447A 		vldr.32	s15, .L42
+  68              	.LBE23:
+  69              	.LBE27:
+  70              	.LBE31:
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   // always wrap input angle to -PI..PI
+  71              		.loc 2 122 1 view .LVU10
+  72 0006 2DED028B 		vpush.64	{d8}
+  73              	.LCFI1:
+  74              		.cfi_def_cfa_offset 24
+  75              		.cfi_offset 80, -24
+  76              		.cfi_offset 81, -20
+  77              	.LBB32:
+  78              	.LBB28:
+  79              	.LBB24:
+  80              	.LBB21:
+  81              	.LBB19:
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   if (out < 0.0f)
+  82              		.loc 2 103 15 view .LVU11
+  83 000a 9FED438A 		vldr.32	s16, .L42+4
+  84 000e 30EE270A 		vadd.f32	s0, s0, s15
+  85              	.LVL1:
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   if (out < 0.0f)
+  86              		.loc 2 103 15 view .LVU12
+  87 0012 F0EE480A 		vmov.f32	s1, s16
+  88              	.LBE19:
+  89              	.LBE21:
+  90              	.LBE24:
+  91              	.LBE28:
+  92              	.LBE32:
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   // always wrap input angle to -PI..PI
+  93              		.loc 2 122 1 view .LVU13
+ARM GAS  /tmp/ccxx9qjM.s 			page 5
+
+
+  94 0016 0546     		mov	r5, r0
+  95 0018 0C46     		mov	r4, r1
+  96              	.LBB33:
+  97              	.LBB29:
+  98              	.LBB25:
+  99              	.LBB22:
+ 100              	.LBB20:
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   if (out < 0.0f)
+ 101              		.loc 2 103 15 view .LVU14
+ 102 001a FFF7FEFF 		bl	fmodf
+ 103              	.LVL2:
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   {
+ 104              		.loc 2 104 3 is_stmt 1 view .LVU15
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   {
+ 105              		.loc 2 104 6 is_stmt 0 view .LVU16
+ 106 001e B5EEC00A 		vcmpe.f32	s0, #0
+ 107 0022 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   }
+ 108              		.loc 2 106 5 is_stmt 1 view .LVU17
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   }
+ 109              		.loc 2 106 9 is_stmt 0 view .LVU18
+ 110 0026 48BF     		it	mi
+ 111 0028 30EE080A 		vaddmi.f32	s0, s0, s16
+ 112              	.LVL3:
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** }
+ 113              		.loc 2 108 3 is_stmt 1 view .LVU19
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** }
+ 114              		.loc 2 108 3 is_stmt 0 view .LVU20
+ 115              	.LBE20:
+ 116              	.LBE22:
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** }
+ 117              		.loc 2 113 51 discriminator 1 view .LVU21
+ 118 002c 9FED396A 		vldr.32	s12, .L42
+ 119              	.LBE25:
+ 120              	.LBE29:
+ 121              	.LBE33:
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   // compute sine
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   if (angle < 0.0f)
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   {
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     *sin = 1.27323954f * angle + 0.405284735f * angle * angle;
+ 122              		.loc 2 129 47 view .LVU22
+ 123 0030 DFED3A6A 		vldr.32	s13, .L42+8
+ 124              		.loc 2 129 24 view .LVU23
+ 125 0034 DFED3A7A 		vldr.32	s15, .L42+12
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     if (*sin < 0.0f)
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     {
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****       *sin = 0.225f * (*sin * -*sin - *sin) + *sin;
+ 134:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     else
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     {
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****       *sin = 0.225f * (*sin * *sin - *sin) + *sin;
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   }
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   else
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   {
+ARM GAS  /tmp/ccxx9qjM.s 			page 6
+
+
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     *sin = 1.27323954f * angle - 0.405284735f * angle * angle;
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     if (*sin < 0.0f)
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     {
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****       *sin = 0.225f * (*sin * -*sin - *sin) + *sin;
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     else
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     {
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****       *sin = 0.225f * (*sin * *sin - *sin) + *sin;
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   }
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   // compute cosine: sin(x + PI/2) = cos(x)
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   angle += 0.5f * M_PI;
+ 126              		.loc 2 155 9 view .LVU24
+ 127 0038 9FED3A7A 		vldr.32	s14, .L42+16
+ 128              	.LBB34:
+ 129              	.LBB30:
+ 130              	.LBB26:
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** }
+ 131              		.loc 2 113 51 discriminator 1 view .LVU25
+ 132 003c 30EE460A 		vsub.f32	s0, s0, s12
+ 133              	.LVL4:
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** }
+ 134              		.loc 2 113 51 discriminator 1 view .LVU26
+ 135              	.LBE26:
+ 136              	.LBE30:
+ 137              	.LBE34:
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   {
+ 138              		.loc 2 127 3 is_stmt 1 view .LVU27
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 139              		.loc 2 129 47 is_stmt 0 view .LVU28
+ 140 0040 60EE266A 		vmul.f32	s13, s0, s13
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   {
+ 141              		.loc 2 127 6 view .LVU29
+ 142 0044 B5EEC00A 		vcmpe.f32	s0, #0
+ 143 0048 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 144              		.loc 2 129 24 view .LVU30
+ 145 004c 60EE277A 		vmul.f32	s15, s0, s15
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 146              		.loc 2 129 55 view .LVU31
+ 147 0050 66EE806A 		vmul.f32	s13, s13, s0
+ 148              		.loc 2 155 9 view .LVU32
+ 149 0054 30EE077A 		vadd.f32	s14, s0, s14
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   {
+ 150              		.loc 2 127 6 view .LVU33
+ 151 0058 48D4     		bmi	.L40
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 152              		.loc 2 142 5 is_stmt 1 view .LVU34
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 153              		.loc 2 142 32 is_stmt 0 view .LVU35
+ 154 005a 77EEE67A 		vsub.f32	s15, s15, s13
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     {
+ 155              		.loc 2 144 5 is_stmt 1 view .LVU36
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     {
+ 156              		.loc 2 144 8 is_stmt 0 view .LVU37
+ARM GAS  /tmp/ccxx9qjM.s 			page 7
+
+
+ 157 005e F5EEC07A 		vcmpe.f32	s15, #0
+ 158 0062 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 159              		.loc 2 146 37 view .LVU38
+ 160 0066 F0EE675A 		vmov.f32	s11, s15
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     {
+ 161              		.loc 2 144 8 view .LVU39
+ 162 006a 33D4     		bmi	.L41
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 163              		.loc 2 150 7 is_stmt 1 view .LVU40
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 164              		.loc 2 150 36 is_stmt 0 view .LVU41
+ 165 006c D7EEA75A 		vfnms.f32	s11, s15, s15
+ 166              	.L35:
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 167              		.loc 2 146 45 view .LVU42
+ 168 0070 DFED2D6A 		vldr.32	s13, .L42+20
+ 169 0074 E5EEA67A 		vfma.f32	s15, s11, s13
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   if (angle > M_PI)
+ 170              		.loc 2 156 6 view .LVU43
+ 171 0078 B4EEC67A 		vcmpe.f32	s14, s12
+ 172 007c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 173              		.loc 2 146 12 view .LVU44
+ 174 0080 C5ED007A 		vstr.32	s15, [r5]
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   if (angle > M_PI)
+ 175              		.loc 2 155 3 is_stmt 1 view .LVU45
+ 176              	.LVL5:
+ 177              		.loc 2 156 3 view .LVU46
+ 178              		.loc 2 156 6 is_stmt 0 view .LVU47
+ 179 0084 29DD     		ble	.L15
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   {
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     angle -= 2.0f * M_PI;
+ 180              		.loc 2 158 5 is_stmt 1 view .LVU48
+ 181              		.loc 2 158 11 is_stmt 0 view .LVU49
+ 182 0086 DFED247A 		vldr.32	s15, .L42+4
+ 183 008a 37EE677A 		vsub.f32	s14, s14, s15
+ 184              	.LVL6:
+ 185              	.L13:
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   }
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   if (angle < 0.0f)
+ 186              		.loc 2 161 3 is_stmt 1 view .LVU50
+ 187              		.loc 2 161 6 is_stmt 0 view .LVU51
+ 188 008e B5EEC07A 		vcmpe.f32	s14, #0
+ 189 0092 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 190 0096 20D5     		bpl	.L15
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   {
+ 163:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     *cos = 1.27323954f * angle + 0.405284735f * angle * angle;
+ 191              		.loc 2 163 5 is_stmt 1 view .LVU52
+ 192              		.loc 2 163 47 is_stmt 0 view .LVU53
+ 193 0098 DFED206A 		vldr.32	s13, .L42+8
+ 194              		.loc 2 163 24 view .LVU54
+ 195 009c DFED207A 		vldr.32	s15, .L42+12
+ 196              		.loc 2 163 47 view .LVU55
+ 197 00a0 67EE266A 		vmul.f32	s13, s14, s13
+ 198              		.loc 2 163 24 view .LVU56
+ARM GAS  /tmp/ccxx9qjM.s 			page 8
+
+
+ 199 00a4 67EE277A 		vmul.f32	s15, s14, s15
+ 200              	.LVL7:
+ 201              	.L38:
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     if (*cos < 0.0f)
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     {
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****       *cos = 0.225f * (*cos * -*cos - *cos) + *cos;
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     else
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     {
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****       *cos = 0.225f * (*cos * *cos - *cos) + *cos;
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   }
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   else
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   {
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     *cos = 1.27323954f * angle - 0.405284735f * angle * angle;
+ 202              		.loc 2 176 32 view .LVU57
+ 203 00a8 E7EE267A 		vfma.f32	s15, s14, s13
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     if (*cos < 0.0f)
+ 204              		.loc 2 178 5 is_stmt 1 view .LVU58
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     {
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****       *cos = 0.225f * (*cos * -*cos - *cos) + *cos;
+ 205              		.loc 2 180 7 view .LVU59
+ 181:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 182:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     else
+ 183:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     {
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****       *cos = 0.225f * (*cos * *cos - *cos) + *cos;
+ 206              		.loc 2 184 7 view .LVU60
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 186:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   }
+ 187:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** }
+ 207              		.loc 2 187 1 is_stmt 0 view .LVU61
+ 208 00ac BDEC028B 		vldm	sp!, {d8}
+ 209              	.LCFI2:
+ 210              		.cfi_remember_state
+ 211              		.cfi_restore 80
+ 212              		.cfi_restore 81
+ 213              		.cfi_def_cfa_offset 16
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     {
+ 214              		.loc 2 178 8 view .LVU62
+ 215 00b0 F5EEC07A 		vcmpe.f32	s15, #0
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 216              		.loc 2 180 37 view .LVU63
+ 217 00b4 F0EE676A 		vmov.f32	s13, s15
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     {
+ 218              		.loc 2 178 8 view .LVU64
+ 219 00b8 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 220              		.loc 2 180 37 view .LVU65
+ 221 00bc 4CBF     		ite	mi
+ 222 00be D7EEE76A 		vfnmami.f32	s13, s15, s15
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 223              		.loc 2 184 36 view .LVU66
+ 224 00c2 D7EEA76A 		vfnmspl.f32	s13, s15, s15
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 225              		.loc 2 184 44 view .LVU67
+ARM GAS  /tmp/ccxx9qjM.s 			page 9
+
+
+ 226 00c6 9FED187A 		vldr.32	s14, .L42+20
+ 227 00ca E6EE877A 		vfma.f32	s15, s13, s14
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 228              		.loc 2 171 12 view .LVU68
+ 229 00ce C4ED007A 		vstr.32	s15, [r4]
+ 230              		.loc 2 187 1 view .LVU69
+ 231 00d2 38BD     		pop	{r3, r4, r5, pc}
+ 232              	.LVL8:
+ 233              	.L41:
+ 234              	.LCFI3:
+ 235              		.cfi_restore_state
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 236              		.loc 2 146 7 is_stmt 1 view .LVU70
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 237              		.loc 2 146 37 is_stmt 0 view .LVU71
+ 238 00d4 D7EEE75A 		vfnma.f32	s11, s15, s15
+ 239 00d8 CAE7     		b	.L35
+ 240              	.LVL9:
+ 241              	.L15:
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 242              		.loc 2 176 5 is_stmt 1 view .LVU72
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 243              		.loc 2 176 47 is_stmt 0 view .LVU73
+ 244 00da DFED107A 		vldr.32	s15, .L42+8
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 245              		.loc 2 176 32 view .LVU74
+ 246 00de DFED106A 		vldr.32	s13, .L42+12
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 247              		.loc 2 176 47 view .LVU75
+ 248 00e2 67EE277A 		vmul.f32	s15, s14, s15
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 249              		.loc 2 176 32 view .LVU76
+ 250 00e6 67EE677A 		vnmul.f32	s15, s14, s15
+ 251 00ea DDE7     		b	.L38
+ 252              	.LVL10:
+ 253              	.L40:
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 254              		.loc 2 129 5 is_stmt 1 view .LVU77
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h **** 
+ 255              		.loc 2 129 32 is_stmt 0 view .LVU78
+ 256 00ec 77EEA67A 		vadd.f32	s15, s15, s13
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     {
+ 257              		.loc 2 131 5 is_stmt 1 view .LVU79
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 258              		.loc 2 133 7 view .LVU80
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 259              		.loc 2 137 7 view .LVU81
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 260              		.loc 2 137 44 is_stmt 0 view .LVU82
+ 261 00f0 DFED0D6A 		vldr.32	s13, .L42+20
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     {
+ 262              		.loc 2 131 8 view .LVU83
+ 263 00f4 F5EEC07A 		vcmpe.f32	s15, #0
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 264              		.loc 2 133 37 view .LVU84
+ 265 00f8 B0EE676A 		vmov.f32	s12, s15
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     {
+ARM GAS  /tmp/ccxx9qjM.s 			page 10
+
+
+ 266              		.loc 2 131 8 view .LVU85
+ 267 00fc F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 268              		.loc 2 133 37 view .LVU86
+ 269 0100 4CBF     		ite	mi
+ 270 0102 97EEE76A 		vfnmami.f32	s12, s15, s15
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 271              		.loc 2 137 36 view .LVU87
+ 272 0106 97EEA76A 		vfnmspl.f32	s12, s15, s15
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 273              		.loc 2 137 44 view .LVU88
+ 274 010a E6EE267A 		vfma.f32	s15, s12, s13
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****     }
+ 275              		.loc 2 137 12 view .LVU89
+ 276 010e C5ED007A 		vstr.32	s15, [r5]
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   if (angle > M_PI)
+ 277              		.loc 2 155 3 is_stmt 1 view .LVU90
+ 278              	.LVL11:
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/general_def.h ****   {
+ 279              		.loc 2 156 3 view .LVU91
+ 280 0112 BCE7     		b	.L13
+ 281              	.L43:
+ 282              		.align	2
+ 283              	.L42:
+ 284 0114 DB0F4940 		.word	1078530011
+ 285 0118 DB0FC940 		.word	1086918619
+ 286 011c 7B81CF3E 		.word	1053786491
+ 287 0120 83F9A23F 		.word	1067645315
+ 288 0124 DB0FC93F 		.word	1070141403
+ 289 0128 6666663E 		.word	1046898278
+ 290              		.cfi_endproc
+ 291              	.LFE343:
+ 293              		.section	.text.arm_sin_f32,"ax",%progbits
+ 294              		.align	1
+ 295              		.p2align 2,,3
+ 296              		.global	arm_sin_f32
+ 297              		.syntax unified
+ 298              		.thumb
+ 299              		.thumb_func
+ 301              	arm_sin_f32:
+ 302              	.LVL12:
+ 303              	.LFB348:
+   1:arm_dsp_shim.c **** /*
+   2:arm_dsp_shim.c ****  * arm_dsp_shim.c —— GCC 构建用：CMSIS-DSP 在本仓库是纯头文件，
+   3:arm_dsp_shim.c ****  * arm_sin_f32/arm_cos_f32 原由 Keil 链接的 DSP 库提供。
+   4:arm_dsp_shim.c ****  * 这里用 general_def.h 里的 fast_sincos() 顶替这两个函数，避免依赖 DSP 库。
+   5:arm_dsp_shim.c ****  */
+   6:arm_dsp_shim.c **** #include "general_def.h"
+   7:arm_dsp_shim.c **** 
+   8:arm_dsp_shim.c **** float arm_sin_f32(float x)
+   9:arm_dsp_shim.c **** {
+ 304              		.loc 1 9 1 view -0
+ 305              		.cfi_startproc
+ 306              		@ args = 0, pretend = 0, frame = 8
+ 307              		@ frame_needed = 0, uses_anonymous_args = 0
+  10:arm_dsp_shim.c ****     float s, c;
+ 308              		.loc 1 10 5 view .LVU93
+ARM GAS  /tmp/ccxx9qjM.s 			page 11
+
+
+  11:arm_dsp_shim.c ****     fast_sincos(x, &s, &c);
+ 309              		.loc 1 11 5 view .LVU94
+   9:arm_dsp_shim.c ****     float s, c;
+ 310              		.loc 1 9 1 is_stmt 0 view .LVU95
+ 311 0000 00B5     		push	{lr}
+ 312              	.LCFI4:
+ 313              		.cfi_def_cfa_offset 4
+ 314              		.cfi_offset 14, -4
+ 315 0002 83B0     		sub	sp, sp, #12
+ 316              	.LCFI5:
+ 317              		.cfi_def_cfa_offset 16
+ 318              		.loc 1 11 5 view .LVU96
+ 319 0004 01A9     		add	r1, sp, #4
+ 320 0006 6846     		mov	r0, sp
+ 321 0008 FFF7FEFF 		bl	fast_sincos
+ 322              	.LVL13:
+  12:arm_dsp_shim.c ****     return s;
+ 323              		.loc 1 12 5 is_stmt 1 view .LVU97
+  13:arm_dsp_shim.c **** }
+ 324              		.loc 1 13 1 is_stmt 0 view .LVU98
+ 325 000c 9DED000A 		vldr.32	s0, [sp]
+ 326 0010 03B0     		add	sp, sp, #12
+ 327              	.LCFI6:
+ 328              		.cfi_def_cfa_offset 4
+ 329              		@ sp needed
+ 330 0012 5DF804FB 		ldr	pc, [sp], #4
+ 331              		.cfi_endproc
+ 332              	.LFE348:
+ 334 0016 00BF     		.section	.text.arm_cos_f32,"ax",%progbits
+ 335              		.align	1
+ 336              		.p2align 2,,3
+ 337              		.global	arm_cos_f32
+ 338              		.syntax unified
+ 339              		.thumb
+ 340              		.thumb_func
+ 342              	arm_cos_f32:
+ 343              	.LVL14:
+ 344              	.LFB349:
+  14:arm_dsp_shim.c **** 
+  15:arm_dsp_shim.c **** float arm_cos_f32(float x)
+  16:arm_dsp_shim.c **** {
+ 345              		.loc 1 16 1 is_stmt 1 view -0
+ 346              		.cfi_startproc
+ 347              		@ args = 0, pretend = 0, frame = 8
+ 348              		@ frame_needed = 0, uses_anonymous_args = 0
+  17:arm_dsp_shim.c ****     float s, c;
+ 349              		.loc 1 17 5 view .LVU100
+  18:arm_dsp_shim.c ****     fast_sincos(x, &s, &c);
+ 350              		.loc 1 18 5 view .LVU101
+  16:arm_dsp_shim.c ****     float s, c;
+ 351              		.loc 1 16 1 is_stmt 0 view .LVU102
+ 352 0000 00B5     		push	{lr}
+ 353              	.LCFI7:
+ 354              		.cfi_def_cfa_offset 4
+ 355              		.cfi_offset 14, -4
+ 356 0002 83B0     		sub	sp, sp, #12
+ 357              	.LCFI8:
+ARM GAS  /tmp/ccxx9qjM.s 			page 12
+
+
+ 358              		.cfi_def_cfa_offset 16
+ 359              		.loc 1 18 5 view .LVU103
+ 360 0004 01A9     		add	r1, sp, #4
+ 361 0006 6846     		mov	r0, sp
+ 362 0008 FFF7FEFF 		bl	fast_sincos
+ 363              	.LVL15:
+  19:arm_dsp_shim.c ****     return c;
+ 364              		.loc 1 19 5 is_stmt 1 view .LVU104
+  20:arm_dsp_shim.c **** }
+ 365              		.loc 1 20 1 is_stmt 0 view .LVU105
+ 366 000c 9DED010A 		vldr.32	s0, [sp, #4]
+ 367 0010 03B0     		add	sp, sp, #12
+ 368              	.LCFI9:
+ 369              		.cfi_def_cfa_offset 4
+ 370              		@ sp needed
+ 371 0012 5DF804FB 		ldr	pc, [sp], #4
+ 372              		.cfi_endproc
+ 373              	.LFE349:
+ 375 0016 00BF     		.text
+ 376              	.Letext0:
+ 377              		.file 3 "/usr/include/newlib/math.h"
+ARM GAS  /tmp/ccxx9qjM.s 			page 13
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 arm_dsp_shim.c
+     /tmp/ccxx9qjM.s:21     .text.fast_sincos:00000000 $t
+     /tmp/ccxx9qjM.s:27     .text.fast_sincos:00000000 fast_sincos
+     /tmp/ccxx9qjM.s:284    .text.fast_sincos:00000114 $d
+     /tmp/ccxx9qjM.s:294    .text.arm_sin_f32:00000000 $t
+     /tmp/ccxx9qjM.s:301    .text.arm_sin_f32:00000000 arm_sin_f32
+     /tmp/ccxx9qjM.s:335    .text.arm_cos_f32:00000000 $t
+     /tmp/ccxx9qjM.s:342    .text.arm_cos_f32:00000000 arm_cos_f32
+
+UNDEFINED SYMBOLS
+fmodf

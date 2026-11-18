@@ -1,0 +1,1078 @@
+ARM GAS  /tmp/ccOowi6r.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"spi.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c"
+  20              		.section	.text.MX_SPI1_Init,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	MX_SPI1_Init
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	MX_SPI1_Init:
+  29              	.LFB329:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** /* USER CODE BEGIN Header */
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** /**
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   ******************************************************************************
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   * @file    spi.c
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   * @brief   This file provides code for the configuration
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   *          of the SPI instances.
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   ******************************************************************************
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   * @attention
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   *
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   * Copyright (c) 2024 STMicroelectronics.
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   * All rights reserved.
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   *
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   * in the root directory of this software component.
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   *
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   ******************************************************************************
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   */
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** /* USER CODE END Header */
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** /* Includes ------------------------------------------------------------------*/
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** #include "spi.h"
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** /* USER CODE BEGIN 0 */
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** /* USER CODE END 0 */
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** SPI_HandleTypeDef hspi1;
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** SPI_HandleTypeDef hspi3;
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** DMA_HandleTypeDef hdma_spi3_rx; // MT6816 编码器非阻塞DMA读 (编码器在 SPI3)
+ARM GAS  /tmp/ccOowi6r.s 			page 2
+
+
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** DMA_HandleTypeDef hdma_spi3_tx;
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** /* SPI1 init function */
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** void MX_SPI1_Init(void)
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** {
+  30              		.loc 1 34 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE BEGIN SPI1_Init 0 */
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE END SPI1_Init 0 */
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE BEGIN SPI1_Init 1 */
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE END SPI1_Init 1 */
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi1.Instance = SPI1;
+  34              		.loc 1 43 3 view .LVU1
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+  35              		.loc 1 34 1 is_stmt 0 view .LVU2
+  36 0000 10B5     		push	{r4, lr}
+  37              	.LCFI0:
+  38              		.cfi_def_cfa_offset 8
+  39              		.cfi_offset 4, -8
+  40              		.cfi_offset 14, -4
+  41              		.loc 1 43 18 view .LVU3
+  42 0002 1148     		ldr	r0, .L6
+  43 0004 114C     		ldr	r4, .L6+4
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi1.Init.Mode = SPI_MODE_MASTER;
+  44              		.loc 1 44 19 view .LVU4
+  45 0006 4FF48272 		mov	r2, #260
+  46 000a C0E90042 		strd	r4, r2, [r0]
+  47 000e 0222     		movs	r2, #2
+  48 0010 0023     		movs	r3, #0
+  49 0012 4FF4E061 		mov	r1, #1792
+  50 0016 0124     		movs	r4, #1
+  51 0018 0261     		str	r2, [r0, #16]
+  52 001a 4FF40072 		mov	r2, #512
+  53 001e C0E90231 		strd	r3, r1, [r0, #8]
+  54 0022 C0E90542 		strd	r4, r2, [r0, #20]
+  55 0026 1821     		movs	r1, #24
+  56 0028 0722     		movs	r2, #7
+  57 002a C0E90713 		strd	r1, r3, [r0, #28]
+  58 002e C0E90933 		strd	r3, r3, [r0, #36]
+  59 0032 C0E90B23 		strd	r2, r3, [r0, #44]
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi1.Init.Direction = SPI_DIRECTION_2LINES;
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi1.Init.CLKPolarity = SPI_POLARITY_HIGH;
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi1.Init.CLKPhase = SPI_PHASE_2EDGE;
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi1.Init.NSS = SPI_NSS_SOFT;
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi1.Init.CRCPolynomial = 7;
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi1.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
+ARM GAS  /tmp/ccOowi6r.s 			page 3
+
+
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi1.Init.NSSPMode = SPI_NSS_PULSE_DISABLE;
+  60              		.loc 1 56 3 is_stmt 1 view .LVU5
+  61              		.loc 1 56 23 is_stmt 0 view .LVU6
+  62 0036 4363     		str	r3, [r0, #52]
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   if (HAL_SPI_Init(&hspi1) != HAL_OK)
+  63              		.loc 1 57 3 is_stmt 1 view .LVU7
+  64              		.loc 1 57 7 is_stmt 0 view .LVU8
+  65 0038 FFF7FEFF 		bl	HAL_SPI_Init
+  66              	.LVL0:
+  67              		.loc 1 57 6 discriminator 1 view .LVU9
+  68 003c 00B9     		cbnz	r0, .L5
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   {
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     Error_Handler();
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   }
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE BEGIN SPI1_Init 2 */
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE END SPI1_Init 2 */
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** }
+  69              		.loc 1 65 1 view .LVU10
+  70 003e 10BD     		pop	{r4, pc}
+  71              	.L5:
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   }
+  72              		.loc 1 59 5 is_stmt 1 view .LVU11
+  73              		.loc 1 65 1 is_stmt 0 view .LVU12
+  74 0040 BDE81040 		pop	{r4, lr}
+  75              	.LCFI1:
+  76              		.cfi_restore 14
+  77              		.cfi_restore 4
+  78              		.cfi_def_cfa_offset 0
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   }
+  79              		.loc 1 59 5 view .LVU13
+  80 0044 FFF7FEBF 		b	Error_Handler
+  81              	.LVL1:
+  82              	.L7:
+  83              		.align	2
+  84              	.L6:
+  85 0048 00000000 		.word	hspi1
+  86 004c 00300140 		.word	1073819648
+  87              		.cfi_endproc
+  88              	.LFE329:
+  90              		.section	.text.MX_SPI3_Init,"ax",%progbits
+  91              		.align	1
+  92              		.p2align 2,,3
+  93              		.global	MX_SPI3_Init
+  94              		.syntax unified
+  95              		.thumb
+  96              		.thumb_func
+  98              	MX_SPI3_Init:
+  99              	.LFB330:
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** /* SPI3 init function */
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** void MX_SPI3_Init(void)
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** {
+ 100              		.loc 1 68 1 is_stmt 1 view -0
+ 101              		.cfi_startproc
+ 102              		@ args = 0, pretend = 0, frame = 0
+ 103              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/ccOowi6r.s 			page 4
+
+
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE BEGIN SPI3_Init 0 */
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE END SPI3_Init 0 */
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE BEGIN SPI3_Init 1 */
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE END SPI3_Init 1 */
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi3.Instance = SPI3;
+ 104              		.loc 1 77 3 view .LVU15
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 105              		.loc 1 68 1 is_stmt 0 view .LVU16
+ 106 0000 10B5     		push	{r4, lr}
+ 107              	.LCFI2:
+ 108              		.cfi_def_cfa_offset 8
+ 109              		.cfi_offset 4, -8
+ 110              		.cfi_offset 14, -4
+ 111              		.loc 1 77 18 view .LVU17
+ 112 0002 1148     		ldr	r0, .L12
+ 113 0004 114C     		ldr	r4, .L12+4
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi3.Init.Mode = SPI_MODE_MASTER;
+ 114              		.loc 1 78 19 view .LVU18
+ 115 0006 4FF48272 		mov	r2, #260
+ 116 000a C0E90042 		strd	r4, r2, [r0]
+ 117 000e 0222     		movs	r2, #2
+ 118 0010 0023     		movs	r3, #0
+ 119 0012 4FF4E061 		mov	r1, #1792
+ 120 0016 0124     		movs	r4, #1
+ 121 0018 0261     		str	r2, [r0, #16]
+ 122 001a 4FF40072 		mov	r2, #512
+ 123 001e C0E90231 		strd	r3, r1, [r0, #8]
+ 124 0022 C0E90542 		strd	r4, r2, [r0, #20]
+ 125 0026 1821     		movs	r1, #24
+ 126 0028 0722     		movs	r2, #7
+ 127 002a C0E90713 		strd	r1, r3, [r0, #28]
+ 128 002e C0E90933 		strd	r3, r3, [r0, #36]
+ 129 0032 C0E90B23 		strd	r2, r3, [r0, #44]
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi3.Init.Direction = SPI_DIRECTION_2LINES;
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi3.Init.CLKPolarity = SPI_POLARITY_HIGH;
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi3.Init.CLKPhase = SPI_PHASE_2EDGE;
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi3.Init.NSS = SPI_NSS_SOFT;
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi3.Init.TIMode = SPI_TIMODE_DISABLE;
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi3.Init.CRCPolynomial = 7;
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi3.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   hspi3.Init.NSSPMode = SPI_NSS_PULSE_DISABLE;
+ 130              		.loc 1 90 3 is_stmt 1 view .LVU19
+ 131              		.loc 1 90 23 is_stmt 0 view .LVU20
+ 132 0036 4363     		str	r3, [r0, #52]
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   if (HAL_SPI_Init(&hspi3) != HAL_OK)
+ 133              		.loc 1 91 3 is_stmt 1 view .LVU21
+ 134              		.loc 1 91 7 is_stmt 0 view .LVU22
+ 135 0038 FFF7FEFF 		bl	HAL_SPI_Init
+ 136              	.LVL2:
+ARM GAS  /tmp/ccOowi6r.s 			page 5
+
+
+ 137              		.loc 1 91 6 discriminator 1 view .LVU23
+ 138 003c 00B9     		cbnz	r0, .L11
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   {
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     Error_Handler();
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   }
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE BEGIN SPI3_Init 2 */
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE END SPI3_Init 2 */
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** }
+ 139              		.loc 1 99 1 view .LVU24
+ 140 003e 10BD     		pop	{r4, pc}
+ 141              	.L11:
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   }
+ 142              		.loc 1 93 5 is_stmt 1 view .LVU25
+ 143              		.loc 1 99 1 is_stmt 0 view .LVU26
+ 144 0040 BDE81040 		pop	{r4, lr}
+ 145              	.LCFI3:
+ 146              		.cfi_restore 14
+ 147              		.cfi_restore 4
+ 148              		.cfi_def_cfa_offset 0
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   }
+ 149              		.loc 1 93 5 view .LVU27
+ 150 0044 FFF7FEBF 		b	Error_Handler
+ 151              	.LVL3:
+ 152              	.L13:
+ 153              		.align	2
+ 154              	.L12:
+ 155 0048 00000000 		.word	hspi3
+ 156 004c 003C0040 		.word	1073757184
+ 157              		.cfi_endproc
+ 158              	.LFE330:
+ 160              		.section	.text.HAL_SPI_MspInit,"ax",%progbits
+ 161              		.align	1
+ 162              		.p2align 2,,3
+ 163              		.global	HAL_SPI_MspInit
+ 164              		.syntax unified
+ 165              		.thumb
+ 166              		.thumb_func
+ 168              	HAL_SPI_MspInit:
+ 169              	.LVL4:
+ 170              	.LFB331:
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** {
+ 171              		.loc 1 102 1 is_stmt 1 view -0
+ 172              		.cfi_startproc
+ 173              		@ args = 0, pretend = 0, frame = 48
+ 174              		@ frame_needed = 0, uses_anonymous_args = 0
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   GPIO_InitTypeDef GPIO_InitStruct = {0};
+ 175              		.loc 1 104 3 view .LVU29
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 176              		.loc 1 102 1 is_stmt 0 view .LVU30
+ 177 0000 2DE9F043 		push	{r4, r5, r6, r7, r8, r9, lr}
+ 178              	.LCFI4:
+ 179              		.cfi_def_cfa_offset 28
+ARM GAS  /tmp/ccOowi6r.s 			page 6
+
+
+ 180              		.cfi_offset 4, -28
+ 181              		.cfi_offset 5, -24
+ 182              		.cfi_offset 6, -20
+ 183              		.cfi_offset 7, -16
+ 184              		.cfi_offset 8, -12
+ 185              		.cfi_offset 9, -8
+ 186              		.cfi_offset 14, -4
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   if(spiHandle->Instance==SPI1)
+ 187              		.loc 1 105 15 view .LVU31
+ 188 0004 0368     		ldr	r3, [r0]
+ 189              		.loc 1 105 5 view .LVU32
+ 190 0006 554A     		ldr	r2, .L20
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 191              		.loc 1 102 1 view .LVU33
+ 192 0008 8DB0     		sub	sp, sp, #52
+ 193              	.LCFI5:
+ 194              		.cfi_def_cfa_offset 80
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   if(spiHandle->Instance==SPI1)
+ 195              		.loc 1 104 20 view .LVU34
+ 196 000a 0024     		movs	r4, #0
+ 197              		.loc 1 105 5 view .LVU35
+ 198 000c 9342     		cmp	r3, r2
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   if(spiHandle->Instance==SPI1)
+ 199              		.loc 1 104 20 view .LVU36
+ 200 000e CDE90644 		strd	r4, r4, [sp, #24]
+ 201 0012 CDE90844 		strd	r4, r4, [sp, #32]
+ 202 0016 0A94     		str	r4, [sp, #40]
+ 203              		.loc 1 105 3 is_stmt 1 view .LVU37
+ 204              		.loc 1 105 5 is_stmt 0 view .LVU38
+ 205 0018 05D0     		beq	.L18
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   {
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE BEGIN SPI1_MspInit 0 */
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE END SPI1_MspInit 0 */
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /* SPI1 clock enable */
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     __HAL_RCC_SPI1_CLK_ENABLE();
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     __HAL_RCC_GPIOA_CLK_ENABLE();
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /**SPI1 GPIO Configuration
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     PA5     ------> SPI1_SCK
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     PA6     ------> SPI1_MISO
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     PA7     ------> SPI1_MOSI
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     */
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7;
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE BEGIN SPI1_MspInit 1 */
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE END SPI1_MspInit 1 */
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   }
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   else if(spiHandle->Instance==SPI3)
+ 206              		.loc 1 130 8 is_stmt 1 view .LVU39
+ 207              		.loc 1 130 10 is_stmt 0 view .LVU40
+ARM GAS  /tmp/ccOowi6r.s 			page 7
+
+
+ 208 001a 514A     		ldr	r2, .L20+4
+ 209 001c 9342     		cmp	r3, r2
+ 210 001e 25D0     		beq	.L19
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   {
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE BEGIN SPI3_MspInit 0 */
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 134:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE END SPI3_MspInit 0 */
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /* SPI3 clock enable */
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     __HAL_RCC_SPI3_CLK_ENABLE();
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     __HAL_RCC_GPIOB_CLK_ENABLE();
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /**SPI3 GPIO Configuration
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     PB3     ------> SPI3_SCK
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     PB4     ------> SPI3_MISO
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     PB5     ------> SPI3_MOSI
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     */
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE BEGIN SPI3_MspInit 1 */
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     // MT6816 编码器非阻塞读: SPI3 DMA (RX=DMA1_Ch5, TX=DMA1_Ch6)。DMA硬件伺服FIFO, 不
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     // 在运动/高负载下被FOC ISR饿到RX溢出(OVR)。SPI3全局中断(优先级6)保留用�
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     // 注意: 编码器在 SPI3 而非 SPI1 —— DMAMUX request 必须是 SPI3_RX/TX, 否则通�
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     __HAL_RCC_DMA1_CLK_ENABLE(); __HAL_RCC_DMAMUX1_CLK_ENABLE();
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Instance = DMA1_Channel5;
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Init.Request = DMA_REQUEST_SPI3_RX;
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Init.PeriphInc = DMA_PINC_DISABLE;
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Init.MemInc = DMA_MINC_ENABLE;
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+ 163:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Init.Mode = DMA_NORMAL;
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Init.Priority = DMA_PRIORITY_HIGH;
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     HAL_DMA_Init(&hdma_spi3_rx);
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     __HAL_LINKDMA(spiHandle, hdmarx, hdma_spi3_rx);
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Instance = DMA1_Channel6;
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.Request = DMA_REQUEST_SPI3_TX;
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.PeriphInc = DMA_PINC_DISABLE;
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.MemInc = DMA_MINC_ENABLE;
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.Mode = DMA_NORMAL;
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.Priority = DMA_PRIORITY_HIGH;
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     HAL_DMA_Init(&hdma_spi3_tx);
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     __HAL_LINKDMA(spiHandle, hdmatx, hdma_spi3_tx);
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     // DMA完成中断优先级6(低于FOC ISR的5): DMA硬件已搬完数据无OVR风险, 完成�
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     HAL_NVIC_SetPriority(DMA1_Channel5_IRQn, 6, 0); HAL_NVIC_EnableIRQ(DMA1_Channel5_IRQn);
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     HAL_NVIC_SetPriority(DMA1_Channel6_IRQn, 6, 0); HAL_NVIC_EnableIRQ(DMA1_Channel6_IRQn);
+ 181:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     HAL_NVIC_SetPriority(SPI3_IRQn, 6, 0); HAL_NVIC_EnableIRQ(SPI3_IRQn); // SPI 错误中断
+ 182:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE END SPI3_MspInit 1 */
+ 183:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   }
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** }
+ARM GAS  /tmp/ccOowi6r.s 			page 8
+
+
+ 211              		.loc 1 184 1 view .LVU41
+ 212 0020 0DB0     		add	sp, sp, #52
+ 213              	.LCFI6:
+ 214              		.cfi_remember_state
+ 215              		.cfi_def_cfa_offset 28
+ 216              		@ sp needed
+ 217 0022 BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ 218              	.L18:
+ 219              	.LCFI7:
+ 220              		.cfi_restore_state
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 221              		.loc 1 111 5 is_stmt 1 view .LVU42
+ 222              	.LBB2:
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 223              		.loc 1 111 5 view .LVU43
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 224              		.loc 1 111 5 view .LVU44
+ 225 0026 4F4B     		ldr	r3, .L20+8
+ 226 0028 1A6E     		ldr	r2, [r3, #96]
+ 227 002a 42F48052 		orr	r2, r2, #4096
+ 228 002e 1A66     		str	r2, [r3, #96]
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 229              		.loc 1 111 5 view .LVU45
+ 230 0030 1A6E     		ldr	r2, [r3, #96]
+ 231 0032 02F48052 		and	r2, r2, #4096
+ 232 0036 0092     		str	r2, [sp]
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 233              		.loc 1 111 5 view .LVU46
+ 234 0038 009A     		ldr	r2, [sp]
+ 235              	.LBE2:
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 236              		.loc 1 111 5 view .LVU47
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /**SPI1 GPIO Configuration
+ 237              		.loc 1 113 5 view .LVU48
+ 238              	.LBB3:
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /**SPI1 GPIO Configuration
+ 239              		.loc 1 113 5 view .LVU49
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /**SPI1 GPIO Configuration
+ 240              		.loc 1 113 5 view .LVU50
+ 241 003a DA6C     		ldr	r2, [r3, #76]
+ 242 003c 42F00102 		orr	r2, r2, #1
+ 243 0040 DA64     		str	r2, [r3, #76]
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /**SPI1 GPIO Configuration
+ 244              		.loc 1 113 5 view .LVU51
+ 245 0042 DB6C     		ldr	r3, [r3, #76]
+ 246 0044 03F00103 		and	r3, r3, #1
+ 247 0048 0193     		str	r3, [sp, #4]
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /**SPI1 GPIO Configuration
+ 248              		.loc 1 113 5 view .LVU52
+ 249              	.LBE3:
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
+ 250              		.loc 1 122 27 is_stmt 0 view .LVU53
+ 251 004a 0322     		movs	r2, #3
+ 252 004c 0523     		movs	r3, #5
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 253              		.loc 1 119 25 view .LVU54
+ 254 004e E024     		movs	r4, #224
+ARM GAS  /tmp/ccOowi6r.s 			page 9
+
+
+ 255 0050 0225     		movs	r5, #2
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 256              		.loc 1 124 5 view .LVU55
+ 257 0052 06A9     		add	r1, sp, #24
+ 258 0054 4FF09040 		mov	r0, #1207959552
+ 259              	.LVL5:
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 260              		.loc 1 119 25 view .LVU56
+ 261 0058 CDE90645 		strd	r4, [sp, #24]
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
+ 262              		.loc 1 122 27 view .LVU57
+ 263 005c CDE90923 		strd	r2, r3, [sp, #36]
+ 264              	.LBB4:
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /**SPI1 GPIO Configuration
+ 265              		.loc 1 113 5 view .LVU58
+ 266 0060 019C     		ldr	r4, [sp, #4]
+ 267              	.LBE4:
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /**SPI1 GPIO Configuration
+ 268              		.loc 1 113 5 is_stmt 1 view .LVU59
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 269              		.loc 1 119 5 view .LVU60
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 270              		.loc 1 120 5 view .LVU61
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 271              		.loc 1 121 5 view .LVU62
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
+ 272              		.loc 1 122 5 view .LVU63
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+ 273              		.loc 1 123 5 view .LVU64
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 274              		.loc 1 124 5 view .LVU65
+ 275 0062 FFF7FEFF 		bl	HAL_GPIO_Init
+ 276              	.LVL6:
+ 277              		.loc 1 184 1 is_stmt 0 view .LVU66
+ 278 0066 0DB0     		add	sp, sp, #52
+ 279              	.LCFI8:
+ 280              		.cfi_remember_state
+ 281              		.cfi_def_cfa_offset 28
+ 282              		@ sp needed
+ 283 0068 BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ 284              	.LVL7:
+ 285              	.L19:
+ 286              	.LCFI9:
+ 287              		.cfi_restore_state
+ 288              	.LBB5:
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 289              		.loc 1 136 5 view .LVU67
+ 290 006c 3D4E     		ldr	r6, .L20+8
+ 291 006e B36D     		ldr	r3, [r6, #88]
+ 292 0070 43F40043 		orr	r3, r3, #32768
+ 293 0074 B365     		str	r3, [r6, #88]
+ 294 0076 B36D     		ldr	r3, [r6, #88]
+ 295 0078 03F40043 		and	r3, r3, #32768
+ 296 007c 0293     		str	r3, [sp, #8]
+ 297 007e 029B     		ldr	r3, [sp, #8]
+ 298              	.LBE5:
+ 299              	.LBB6:
+ARM GAS  /tmp/ccOowi6r.s 			page 10
+
+
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /**SPI3 GPIO Configuration
+ 300              		.loc 1 138 5 view .LVU68
+ 301 0080 F36C     		ldr	r3, [r6, #76]
+ 302 0082 43F00203 		orr	r3, r3, #2
+ 303 0086 F364     		str	r3, [r6, #76]
+ 304 0088 F36C     		ldr	r3, [r6, #76]
+ 305 008a 03F00203 		and	r3, r3, #2
+ 306 008e 0393     		str	r3, [sp, #12]
+ 307 0090 039B     		ldr	r3, [sp, #12]
+ 308              	.LBE6:
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 309              		.loc 1 144 25 view .LVU69
+ 310 0092 3822     		movs	r2, #56
+ 311 0094 0223     		movs	r3, #2
+ 312 0096 0546     		mov	r5, r0
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 313              		.loc 1 136 5 is_stmt 1 view .LVU70
+ 314              	.LBB7:
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 315              		.loc 1 136 5 view .LVU71
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 316              		.loc 1 136 5 view .LVU72
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 317              		.loc 1 136 5 view .LVU73
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 318              		.loc 1 136 5 view .LVU74
+ 319              	.LBE7:
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 320              		.loc 1 136 5 view .LVU75
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /**SPI3 GPIO Configuration
+ 321              		.loc 1 138 5 view .LVU76
+ 322              	.LBB8:
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /**SPI3 GPIO Configuration
+ 323              		.loc 1 138 5 view .LVU77
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /**SPI3 GPIO Configuration
+ 324              		.loc 1 138 5 view .LVU78
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /**SPI3 GPIO Configuration
+ 325              		.loc 1 138 5 view .LVU79
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /**SPI3 GPIO Configuration
+ 326              		.loc 1 138 5 view .LVU80
+ 327              	.LBE8:
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /**SPI3 GPIO Configuration
+ 328              		.loc 1 138 5 view .LVU81
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 329              		.loc 1 144 5 view .LVU82
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 330              		.loc 1 145 5 view .LVU83
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 331              		.loc 1 149 5 is_stmt 0 view .LVU84
+ 332 0098 06A9     		add	r1, sp, #24
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
+ 333              		.loc 1 147 27 view .LVU85
+ 334 009a 0627     		movs	r7, #6
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 335              		.loc 1 144 25 view .LVU86
+ 336 009c CDE90623 		strd	r2, [sp, #24]
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ARM GAS  /tmp/ccOowi6r.s 			page 11
+
+
+ 337              		.loc 1 146 5 is_stmt 1 view .LVU87
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
+ 338              		.loc 1 147 5 view .LVU88
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+ 339              		.loc 1 148 5 view .LVU89
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 340              		.loc 1 149 5 is_stmt 0 view .LVU90
+ 341 00a0 3148     		ldr	r0, .L20+12
+ 342              	.LVL8:
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
+ 343              		.loc 1 147 27 view .LVU91
+ 344 00a2 0323     		movs	r3, #3
+ 345 00a4 CDE90937 		strd	r3, r7, [sp, #36]
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 346              		.loc 1 149 5 is_stmt 1 view .LVU92
+ 347 00a8 FFF7FEFF 		bl	HAL_GPIO_Init
+ 348              	.LVL9:
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Instance = DMA1_Channel5;
+ 349              		.loc 1 155 5 view .LVU93
+ 350              	.LBB9:
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Instance = DMA1_Channel5;
+ 351              		.loc 1 155 5 view .LVU94
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Instance = DMA1_Channel5;
+ 352              		.loc 1 155 5 view .LVU95
+ 353 00ac B36C     		ldr	r3, [r6, #72]
+ 354 00ae 43F00103 		orr	r3, r3, #1
+ 355 00b2 B364     		str	r3, [r6, #72]
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Instance = DMA1_Channel5;
+ 356              		.loc 1 155 5 view .LVU96
+ 357 00b4 B36C     		ldr	r3, [r6, #72]
+ 358 00b6 03F00103 		and	r3, r3, #1
+ 359 00ba 0493     		str	r3, [sp, #16]
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Instance = DMA1_Channel5;
+ 360              		.loc 1 155 5 view .LVU97
+ 361 00bc 049B     		ldr	r3, [sp, #16]
+ 362              	.LBE9:
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Instance = DMA1_Channel5;
+ 363              		.loc 1 155 5 view .LVU98
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Instance = DMA1_Channel5;
+ 364              		.loc 1 155 34 view .LVU99
+ 365              	.LBB10:
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Instance = DMA1_Channel5;
+ 366              		.loc 1 155 34 view .LVU100
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Instance = DMA1_Channel5;
+ 367              		.loc 1 155 34 view .LVU101
+ 368 00be B36C     		ldr	r3, [r6, #72]
+ 369 00c0 43F00403 		orr	r3, r3, #4
+ 370 00c4 B364     		str	r3, [r6, #72]
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Instance = DMA1_Channel5;
+ 371              		.loc 1 155 34 view .LVU102
+ 372 00c6 B36C     		ldr	r3, [r6, #72]
+ 373              	.LBE10:
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Init.Request = DMA_REQUEST_SPI3_RX;
+ 374              		.loc 1 156 27 is_stmt 0 view .LVU103
+ 375 00c8 284E     		ldr	r6, .L20+16
+ 376              	.LBB11:
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Instance = DMA1_Channel5;
+ARM GAS  /tmp/ccOowi6r.s 			page 12
+
+
+ 377              		.loc 1 155 34 view .LVU104
+ 378 00ca 03F00403 		and	r3, r3, #4
+ 379 00ce 0593     		str	r3, [sp, #20]
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Instance = DMA1_Channel5;
+ 380              		.loc 1 155 34 is_stmt 1 view .LVU105
+ 381              	.LBE11:
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Init.Request = DMA_REQUEST_SPI3_RX;
+ 382              		.loc 1 156 27 is_stmt 0 view .LVU106
+ 383 00d0 274B     		ldr	r3, .L20+20
+ 384 00d2 3360     		str	r3, [r6]
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+ 385              		.loc 1 160 30 view .LVU107
+ 386 00d4 4FF08009 		mov	r9, #128
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
+ 387              		.loc 1 157 31 view .LVU108
+ 388 00d8 0E23     		movs	r3, #14
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     HAL_DMA_Init(&hdma_spi3_rx);
+ 389              		.loc 1 164 32 view .LVU109
+ 390 00da 4FF40058 		mov	r8, #8192
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     __HAL_LINKDMA(spiHandle, hdmarx, hdma_spi3_rx);
+ 391              		.loc 1 165 5 view .LVU110
+ 392 00de 3046     		mov	r0, r6
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+ 393              		.loc 1 161 43 view .LVU111
+ 394 00e0 C6E90494 		strd	r9, r4, [r6, #16]
+ 395              	.LBB12:
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Instance = DMA1_Channel5;
+ 396              		.loc 1 155 34 view .LVU112
+ 397 00e4 059A     		ldr	r2, [sp, #20]
+ 398              	.LBE12:
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Instance = DMA1_Channel5;
+ 399              		.loc 1 155 34 is_stmt 1 view .LVU113
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Init.Request = DMA_REQUEST_SPI3_RX;
+ 400              		.loc 1 156 5 view .LVU114
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
+ 401              		.loc 1 157 5 view .LVU115
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
+ 402              		.loc 1 157 31 is_stmt 0 view .LVU116
+ 403 00e6 7360     		str	r3, [r6, #4]
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Init.PeriphInc = DMA_PINC_DISABLE;
+ 404              		.loc 1 158 5 is_stmt 1 view .LVU117
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Init.MemInc = DMA_MINC_ENABLE;
+ 405              		.loc 1 159 33 is_stmt 0 view .LVU118
+ 406 00e8 C6E90244 		strd	r4, r4, [r6, #8]
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+ 407              		.loc 1 160 5 is_stmt 1 view .LVU119
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Init.Mode = DMA_NORMAL;
+ 408              		.loc 1 162 5 view .LVU120
+ 163:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_rx.Init.Priority = DMA_PRIORITY_HIGH;
+ 409              		.loc 1 163 28 is_stmt 0 view .LVU121
+ 410 00ec C6E90644 		strd	r4, r4, [r6, #24]
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     HAL_DMA_Init(&hdma_spi3_rx);
+ 411              		.loc 1 164 5 is_stmt 1 view .LVU122
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     HAL_DMA_Init(&hdma_spi3_rx);
+ 412              		.loc 1 164 32 is_stmt 0 view .LVU123
+ 413 00f0 C6F82080 		str	r8, [r6, #32]
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     __HAL_LINKDMA(spiHandle, hdmarx, hdma_spi3_rx);
+ARM GAS  /tmp/ccOowi6r.s 			page 13
+
+
+ 414              		.loc 1 165 5 is_stmt 1 view .LVU124
+ 415 00f4 FFF7FEFF 		bl	HAL_DMA_Init
+ 416              	.LVL10:
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Instance = DMA1_Channel6;
+ 417              		.loc 1 166 5 view .LVU125
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Instance = DMA1_Channel6;
+ 418              		.loc 1 166 5 view .LVU126
+ 419 00f8 AE65     		str	r6, [r5, #88]
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Instance = DMA1_Channel6;
+ 420              		.loc 1 166 5 view .LVU127
+ 421 00fa B562     		str	r5, [r6, #40]
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Instance = DMA1_Channel6;
+ 422              		.loc 1 166 5 view .LVU128
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.Request = DMA_REQUEST_SPI3_TX;
+ 423              		.loc 1 167 5 view .LVU129
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.Request = DMA_REQUEST_SPI3_TX;
+ 424              		.loc 1 167 27 is_stmt 0 view .LVU130
+ 425 00fc 1D4E     		ldr	r6, .L20+24
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
+ 426              		.loc 1 168 31 view .LVU131
+ 427 00fe 1E4B     		ldr	r3, .L20+28
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.MemInc = DMA_MINC_ENABLE;
+ 428              		.loc 1 170 33 view .LVU132
+ 429 0100 C6E90349 		strd	r4, r9, [r6, #12]
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     HAL_DMA_Init(&hdma_spi3_tx);
+ 430              		.loc 1 175 32 view .LVU133
+ 431 0104 C6E90748 		strd	r4, r8, [r6, #28]
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
+ 432              		.loc 1 168 31 view .LVU134
+ 433 0108 4FF00F09 		mov	r9, #15
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.PeriphInc = DMA_PINC_DISABLE;
+ 434              		.loc 1 169 33 view .LVU135
+ 435 010c 4FF01008 		mov	r8, #16
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     __HAL_LINKDMA(spiHandle, hdmatx, hdma_spi3_tx);
+ 436              		.loc 1 176 5 view .LVU136
+ 437 0110 3046     		mov	r0, r6
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
+ 438              		.loc 1 168 31 view .LVU137
+ 439 0112 C6E90039 		strd	r3, r9, [r6]
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.PeriphInc = DMA_PINC_DISABLE;
+ 440              		.loc 1 169 5 is_stmt 1 view .LVU138
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.Mode = DMA_NORMAL;
+ 441              		.loc 1 173 40 is_stmt 0 view .LVU139
+ 442 0116 C6E90544 		strd	r4, r4, [r6, #20]
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.PeriphInc = DMA_PINC_DISABLE;
+ 443              		.loc 1 169 33 view .LVU140
+ 444 011a C6F80880 		str	r8, [r6, #8]
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.MemInc = DMA_MINC_ENABLE;
+ 445              		.loc 1 170 5 is_stmt 1 view .LVU141
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+ 446              		.loc 1 171 5 view .LVU142
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+ 447              		.loc 1 172 5 view .LVU143
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.Mode = DMA_NORMAL;
+ 448              		.loc 1 173 5 view .LVU144
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     hdma_spi3_tx.Init.Priority = DMA_PRIORITY_HIGH;
+ 449              		.loc 1 174 5 view .LVU145
+ARM GAS  /tmp/ccOowi6r.s 			page 14
+
+
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     HAL_DMA_Init(&hdma_spi3_tx);
+ 450              		.loc 1 175 5 view .LVU146
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     __HAL_LINKDMA(spiHandle, hdmatx, hdma_spi3_tx);
+ 451              		.loc 1 176 5 view .LVU147
+ 452 011e FFF7FEFF 		bl	HAL_DMA_Init
+ 453              	.LVL11:
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     // DMA完成中断优先级6(低于FOC ISR的5): DMA硬件已搬完数据无OVR风险, 完成�
+ 454              		.loc 1 177 5 view .LVU148
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     // DMA完成中断优先级6(低于FOC ISR的5): DMA硬件已搬完数据无OVR风险, 完成�
+ 455              		.loc 1 177 5 view .LVU149
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     HAL_NVIC_SetPriority(DMA1_Channel6_IRQn, 6, 0); HAL_NVIC_EnableIRQ(DMA1_Channel6_IRQn);
+ 456              		.loc 1 179 5 is_stmt 0 view .LVU150
+ 457 0122 2246     		mov	r2, r4
+ 458 0124 3946     		mov	r1, r7
+ 459 0126 4846     		mov	r0, r9
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     // DMA完成中断优先级6(低于FOC ISR的5): DMA硬件已搬完数据无OVR风险, 完成�
+ 460              		.loc 1 177 5 view .LVU151
+ 461 0128 6E65     		str	r6, [r5, #84]
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     // DMA完成中断优先级6(低于FOC ISR的5): DMA硬件已搬完数据无OVR风险, 完成�
+ 462              		.loc 1 177 5 is_stmt 1 view .LVU152
+ 463 012a B562     		str	r5, [r6, #40]
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     // DMA完成中断优先级6(低于FOC ISR的5): DMA硬件已搬完数据无OVR风险, 完成�
+ 464              		.loc 1 177 5 view .LVU153
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     HAL_NVIC_SetPriority(DMA1_Channel6_IRQn, 6, 0); HAL_NVIC_EnableIRQ(DMA1_Channel6_IRQn);
+ 465              		.loc 1 179 5 view .LVU154
+ 466 012c FFF7FEFF 		bl	HAL_NVIC_SetPriority
+ 467              	.LVL12:
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     HAL_NVIC_SetPriority(DMA1_Channel6_IRQn, 6, 0); HAL_NVIC_EnableIRQ(DMA1_Channel6_IRQn);
+ 468              		.loc 1 179 53 discriminator 1 view .LVU155
+ 469 0130 4846     		mov	r0, r9
+ 470 0132 FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
+ 471              	.LVL13:
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     HAL_NVIC_SetPriority(SPI3_IRQn, 6, 0); HAL_NVIC_EnableIRQ(SPI3_IRQn); // SPI 错误中断
+ 472              		.loc 1 180 5 view .LVU156
+ 473 0136 2246     		mov	r2, r4
+ 474 0138 3946     		mov	r1, r7
+ 475 013a 4046     		mov	r0, r8
+ 476 013c FFF7FEFF 		bl	HAL_NVIC_SetPriority
+ 477              	.LVL14:
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     HAL_NVIC_SetPriority(SPI3_IRQn, 6, 0); HAL_NVIC_EnableIRQ(SPI3_IRQn); // SPI 错误中断
+ 478              		.loc 1 180 53 discriminator 1 view .LVU157
+ 479 0140 4046     		mov	r0, r8
+ 480 0142 FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
+ 481              	.LVL15:
+ 181:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE END SPI3_MspInit 1 */
+ 482              		.loc 1 181 5 view .LVU158
+ 483 0146 2246     		mov	r2, r4
+ 484 0148 3946     		mov	r1, r7
+ 485 014a 3320     		movs	r0, #51
+ 486 014c FFF7FEFF 		bl	HAL_NVIC_SetPriority
+ 487              	.LVL16:
+ 181:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE END SPI3_MspInit 1 */
+ 488              		.loc 1 181 44 discriminator 1 view .LVU159
+ 489 0150 3320     		movs	r0, #51
+ 490 0152 FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
+ 491              	.LVL17:
+ 492              		.loc 1 184 1 is_stmt 0 view .LVU160
+ARM GAS  /tmp/ccOowi6r.s 			page 15
+
+
+ 493 0156 0DB0     		add	sp, sp, #52
+ 494              	.LCFI10:
+ 495              		.cfi_def_cfa_offset 28
+ 496              		@ sp needed
+ 497 0158 BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ 498              	.LVL18:
+ 499              	.L21:
+ 500              		.loc 1 184 1 view .LVU161
+ 501              		.align	2
+ 502              	.L20:
+ 503 015c 00300140 		.word	1073819648
+ 504 0160 003C0040 		.word	1073757184
+ 505 0164 00100240 		.word	1073876992
+ 506 0168 00040048 		.word	1207960576
+ 507 016c 00000000 		.word	hdma_spi3_rx
+ 508 0170 58000240 		.word	1073872984
+ 509 0174 00000000 		.word	hdma_spi3_tx
+ 510 0178 6C000240 		.word	1073873004
+ 511              		.cfi_endproc
+ 512              	.LFE331:
+ 514              		.section	.text.HAL_SPI_MspDeInit,"ax",%progbits
+ 515              		.align	1
+ 516              		.p2align 2,,3
+ 517              		.global	HAL_SPI_MspDeInit
+ 518              		.syntax unified
+ 519              		.thumb
+ 520              		.thumb_func
+ 522              	HAL_SPI_MspDeInit:
+ 523              	.LVL19:
+ 524              	.LFB332:
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 186:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** void HAL_SPI_MspDeInit(SPI_HandleTypeDef* spiHandle)
+ 187:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** {
+ 525              		.loc 1 187 1 is_stmt 1 view -0
+ 526              		.cfi_startproc
+ 527              		@ args = 0, pretend = 0, frame = 0
+ 528              		@ frame_needed = 0, uses_anonymous_args = 0
+ 529              		@ link register save eliminated.
+ 188:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 189:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   if(spiHandle->Instance==SPI1)
+ 530              		.loc 1 189 3 view .LVU163
+ 531              		.loc 1 189 5 is_stmt 0 view .LVU164
+ 532 0000 0E4A     		ldr	r2, .L27
+ 533              		.loc 1 189 15 view .LVU165
+ 534 0002 0368     		ldr	r3, [r0]
+ 535              		.loc 1 189 5 view .LVU166
+ 536 0004 9342     		cmp	r3, r2
+ 537 0006 03D0     		beq	.L25
+ 190:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   {
+ 191:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE BEGIN SPI1_MspDeInit 0 */
+ 192:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 193:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE END SPI1_MspDeInit 0 */
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /* Peripheral clock disable */
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     __HAL_RCC_SPI1_CLK_DISABLE();
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 197:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /**SPI1 GPIO Configuration
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     PA5     ------> SPI1_SCK
+ARM GAS  /tmp/ccOowi6r.s 			page 16
+
+
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     PA6     ------> SPI1_MISO
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     PA7     ------> SPI1_MOSI
+ 201:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     */
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     HAL_GPIO_DeInit(GPIOA, GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7);
+ 203:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE BEGIN SPI1_MspDeInit 1 */
+ 205:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE END SPI1_MspDeInit 1 */
+ 207:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   }
+ 208:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   else if(spiHandle->Instance==SPI3)
+ 538              		.loc 1 208 8 is_stmt 1 view .LVU167
+ 539              		.loc 1 208 10 is_stmt 0 view .LVU168
+ 540 0008 0D4A     		ldr	r2, .L27+4
+ 541 000a 9342     		cmp	r3, r2
+ 542 000c 0BD0     		beq	.L26
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   {
+ 210:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE BEGIN SPI3_MspDeInit 0 */
+ 211:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 212:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE END SPI3_MspDeInit 0 */
+ 213:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /* Peripheral clock disable */
+ 214:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     __HAL_RCC_SPI3_CLK_DISABLE();
+ 215:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 216:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     /**SPI3 GPIO Configuration
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     PB3     ------> SPI3_SCK
+ 218:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     PB4     ------> SPI3_MISO
+ 219:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     PB5     ------> SPI3_MOSI
+ 220:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     */
+ 221:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****     HAL_GPIO_DeInit(GPIOB, GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5);
+ 222:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 223:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE BEGIN SPI3_MspDeInit 1 */
+ 224:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 225:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   /* USER CODE END SPI3_MspDeInit 1 */
+ 226:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c ****   }
+ 227:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** }
+ 543              		.loc 1 227 1 view .LVU169
+ 544 000e 7047     		bx	lr
+ 545              	.L25:
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 546              		.loc 1 195 5 is_stmt 1 view .LVU170
+ 547 0010 02F56042 		add	r2, r2, #57344
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 548              		.loc 1 202 5 is_stmt 0 view .LVU171
+ 549 0014 E021     		movs	r1, #224
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 550              		.loc 1 195 5 view .LVU172
+ 551 0016 136E     		ldr	r3, [r2, #96]
+ 552 0018 23F48053 		bic	r3, r3, #4096
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 553              		.loc 1 202 5 view .LVU173
+ 554 001c 4FF09040 		mov	r0, #1207959552
+ 555              	.LVL20:
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 556              		.loc 1 195 5 view .LVU174
+ 557 0020 1366     		str	r3, [r2, #96]
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 558              		.loc 1 202 5 is_stmt 1 view .LVU175
+ 559 0022 FFF7FEBF 		b	HAL_GPIO_DeInit
+ARM GAS  /tmp/ccOowi6r.s 			page 17
+
+
+ 560              	.LVL21:
+ 561              	.L26:
+ 214:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 562              		.loc 1 214 5 view .LVU176
+ 563 0026 02F5EA32 		add	r2, r2, #119808
+ 221:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 564              		.loc 1 221 5 is_stmt 0 view .LVU177
+ 565 002a 0648     		ldr	r0, .L27+8
+ 566              	.LVL22:
+ 214:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 567              		.loc 1 214 5 view .LVU178
+ 568 002c 936D     		ldr	r3, [r2, #88]
+ 569 002e 23F40043 		bic	r3, r3, #32768
+ 221:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 570              		.loc 1 221 5 view .LVU179
+ 571 0032 3821     		movs	r1, #56
+ 214:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 572              		.loc 1 214 5 view .LVU180
+ 573 0034 9365     		str	r3, [r2, #88]
+ 221:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/spi.c **** 
+ 574              		.loc 1 221 5 is_stmt 1 view .LVU181
+ 575 0036 FFF7FEBF 		b	HAL_GPIO_DeInit
+ 576              	.LVL23:
+ 577              	.L28:
+ 578 003a 00BF     		.align	2
+ 579              	.L27:
+ 580 003c 00300140 		.word	1073819648
+ 581 0040 003C0040 		.word	1073757184
+ 582 0044 00040048 		.word	1207960576
+ 583              		.cfi_endproc
+ 584              	.LFE332:
+ 586              		.global	hdma_spi3_tx
+ 587              		.section	.bss.hdma_spi3_tx,"aw",%nobits
+ 588              		.align	2
+ 591              	hdma_spi3_tx:
+ 592 0000 00000000 		.space	96
+ 592      00000000 
+ 592      00000000 
+ 592      00000000 
+ 592      00000000 
+ 593              		.global	hdma_spi3_rx
+ 594              		.section	.bss.hdma_spi3_rx,"aw",%nobits
+ 595              		.align	2
+ 598              	hdma_spi3_rx:
+ 599 0000 00000000 		.space	96
+ 599      00000000 
+ 599      00000000 
+ 599      00000000 
+ 599      00000000 
+ 600              		.global	hspi3
+ 601              		.section	.bss.hspi3,"aw",%nobits
+ 602              		.align	3
+ 605              	hspi3:
+ 606 0000 00000000 		.space	100
+ 606      00000000 
+ 606      00000000 
+ 606      00000000 
+ARM GAS  /tmp/ccOowi6r.s 			page 18
+
+
+ 606      00000000 
+ 607              		.global	hspi1
+ 608              		.section	.bss.hspi1,"aw",%nobits
+ 609              		.align	3
+ 612              	hspi1:
+ 613 0000 00000000 		.space	100
+ 613      00000000 
+ 613      00000000 
+ 613      00000000 
+ 613      00000000 
+ 614              		.text
+ 615              	.Letext0:
+ 616              		.file 2 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 617              		.file 3 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 618              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 619              		.file 5 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 620              		.file 6 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 621              		.file 7 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 622              		.file 8 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/spi.h"
+ 623              		.file 9 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 624              		.file 10 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/main.h"
+ARM GAS  /tmp/ccOowi6r.s 			page 19
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 spi.c
+     /tmp/ccOowi6r.s:21     .text.MX_SPI1_Init:00000000 $t
+     /tmp/ccOowi6r.s:28     .text.MX_SPI1_Init:00000000 MX_SPI1_Init
+     /tmp/ccOowi6r.s:85     .text.MX_SPI1_Init:00000048 $d
+     /tmp/ccOowi6r.s:612    .bss.hspi1:00000000 hspi1
+     /tmp/ccOowi6r.s:91     .text.MX_SPI3_Init:00000000 $t
+     /tmp/ccOowi6r.s:98     .text.MX_SPI3_Init:00000000 MX_SPI3_Init
+     /tmp/ccOowi6r.s:155    .text.MX_SPI3_Init:00000048 $d
+     /tmp/ccOowi6r.s:605    .bss.hspi3:00000000 hspi3
+     /tmp/ccOowi6r.s:161    .text.HAL_SPI_MspInit:00000000 $t
+     /tmp/ccOowi6r.s:168    .text.HAL_SPI_MspInit:00000000 HAL_SPI_MspInit
+     /tmp/ccOowi6r.s:503    .text.HAL_SPI_MspInit:0000015c $d
+     /tmp/ccOowi6r.s:598    .bss.hdma_spi3_rx:00000000 hdma_spi3_rx
+     /tmp/ccOowi6r.s:591    .bss.hdma_spi3_tx:00000000 hdma_spi3_tx
+     /tmp/ccOowi6r.s:515    .text.HAL_SPI_MspDeInit:00000000 $t
+     /tmp/ccOowi6r.s:522    .text.HAL_SPI_MspDeInit:00000000 HAL_SPI_MspDeInit
+     /tmp/ccOowi6r.s:580    .text.HAL_SPI_MspDeInit:0000003c $d
+     /tmp/ccOowi6r.s:588    .bss.hdma_spi3_tx:00000000 $d
+     /tmp/ccOowi6r.s:595    .bss.hdma_spi3_rx:00000000 $d
+     /tmp/ccOowi6r.s:602    .bss.hspi3:00000000 $d
+     /tmp/ccOowi6r.s:609    .bss.hspi1:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_SPI_Init
+Error_Handler
+HAL_GPIO_Init
+HAL_DMA_Init
+HAL_NVIC_SetPriority
+HAL_NVIC_EnableIRQ
+HAL_GPIO_DeInit

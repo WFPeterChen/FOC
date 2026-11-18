@@ -1,0 +1,20 @@
+# ========================================================
+# 把 SocketCAN(can0) 起到 1Mbps，准备测 DM 协议
+# 在另一个终端依次执行（需要 sudo 密码）
+# ========================================================
+
+# 1) 安装 can-utils (cansend/candump)
+sudo apt install -y can-utils
+
+# 2) 配置 can0 为经典CAN 1Mbps 并启用
+sudo ip link set can0 down 2>/dev/null
+sudo ip link set can0 type can bitrate 1000000
+sudo ip link set can0 up
+
+# 3) 确认状态(应显示 state ERROR-ACTIVE, bitrate 1000000)
+ip -details link show can0
+
+# ========================================================
+# 起好后回到 Claude，它会用 candump/cansend 发 DM 帧测试
+# (如果你的板子接的是 can1 而不是 can0，把上面 can0 改成 can1 并告诉我)
+# ========================================================

@@ -1,0 +1,913 @@
+ARM GAS  /tmp/ccx7GL3p.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"can_driver.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c"
+  20              		.section	.text.FDCANCommLostCallback,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	FDCANCommLostCallback:
+  28              	.LVL0:
+  29              	.LFB350:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** #include "can_driver.h" // °üº¬ CAN Çý¶¯µÄÍ·ÎÄ¼þ
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** #include "string.h"     // °üº¬×Ö·û´®´¦Àíº¯ÊýµÄÍ·ÎÄ¼þ
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** #include "stdlib.h"
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** #include "crc8.h"
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** /**
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****  * @brief ÖØÖÃCAN commµÄ½ÓÊÕ×´Ì¬ºÍbuffer
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****  *
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****  * @param ins ÐèÒªÖØÖÃµÄÊµÀý
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****  */
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** static void FDCANCommResetRx(FDCANCommInstance *ins)
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** {
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   // µ±Ç°ÒÑ¾­ÊÕµ½µÄbufferÇåÁã
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   memset(ins->raw_recvbuf, 0, ins->cur_recv_len);
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->recv_state   = 0; // ½ÓÊÕ×´Ì¬ÖØÖÃ
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->cur_recv_len = 0; // µ±Ç°ÒÑ¾­ÊÕµ½µÄ³¤¶ÈÖØÖÃ
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** }
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** /**
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****  * @brief fdcancommµÄ½ÓÊÕ»Øµ÷º¯Êý
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****  *
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****  * @param _instance
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****  */
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** static void FDCANCommRxCallback(FDCANInstance *_instance)
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** {
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   // id¿ÉÒÔ½« FDCANCommInstance µÄÊý¾Ý´«µÝ¸ø FDCANInstance µÄ»Øµ÷º¯Êý¡£
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   FDCANCommInstance *comm = (FDCANCommInstance *)_instance->id; // ×¢ÒâÐ´·¨,½«fdcan instanceµÄidÇ¿Ö
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   /* µ±Ç°½ÓÊÕ×´Ì¬ÅÐ¶Ï */
+ARM GAS  /tmp/ccx7GL3p.s 			page 2
+
+
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   if (_instance->rx_buff[0] == FDCAN_COMM_HEADER && comm->recv_state == 0) // Ö®Ç°ÉÐÎ´¿ªÊ¼½ÓÊÕÇÒ´Ë´
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   {
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     if (_instance->rx_buff[1] == comm->recv_data_len) // Èç¹ûÕâÒ»°üÀïµÄdatalenÒ²µÈÓÚÎÒÃÇÉè¶¨½ÓÊÕ³¤¶
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     {
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****       comm->recv_state = 1; // ÉèÖÃ½ÓÊÕ×´Ì¬Îª1,ËµÃ÷ÒÑ¾­¿ªÊ¼½ÓÊÕ
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     }
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     else
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****       return; // Ö±½ÓÌø¹ý¼´¿É
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   }
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   if (comm->recv_state) // ÒÑ¾­ÊÕµ½¹ýÖ¡Í·
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   {
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     // Èç¹ûÒÑ¾­½ÓÊÕµ½µÄ³¤¶È¼ÓÉÏµ±Ç°Ò»°üµÄ³¤¶È´óÓÚ×Übuf len,ËµÃ÷½ÓÊÕ´íÎó
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     if (comm->cur_recv_len + _instance->rx_len > comm->recv_buf_len)
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     {
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****       FDCANCommResetRx(comm);
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****       return; // ÖØÖÃ×´Ì¬È»ºó·µ»Ø
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     }
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     // Ö±½Ó°Ñµ±Ç°½ÓÊÕµ½µÄÊý¾Ý½Óµ½bufferºóÃæ
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     memcpy(comm->raw_recvbuf + comm->cur_recv_len, _instance->rx_buff, _instance->rx_len);
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     comm->cur_recv_len += _instance->rx_len;
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     // ÊÕÍêÕâÒ»°üÒÔºó¸ÕºÃµÈÓÚ×Übuf len,ËµÃ÷ÒÑ¾­ÊÕÍêÁË
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     if (comm->cur_recv_len == comm->recv_buf_len)
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     {
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****       // Èç¹ûbuffÀï±¾tailµÄÎ»ÖÃµÈÓÚCAN_COMM_TAIL
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****       if (comm->raw_recvbuf[comm->recv_buf_len - 1] == FDCAN_COMM_TAIL)
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****       { // Í¨¹ýÐ£Ñé,¸´ÖÆÊý¾Ýµ½unpack_dataÖÐ
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****         if (comm->raw_recvbuf[comm->recv_buf_len - 2] == crc_8(comm->raw_recvbuf + 2, comm->recv_da
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****         { // Êý¾ÝÁ¿´óµÄ»°¿¼ÂÇÊ¹ÓÃDMA
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****           memcpy(comm->unpacked_recv_data, comm->raw_recvbuf + 2, comm->recv_data_len);
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****           comm->update_flag = 1;           // Êý¾Ý¸üÐÂflagÖÃÎª1
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****           DaemonReload(comm->comm_daemon); // ÖØÔØdaemon,±ÜÃâÊý¾Ý¸üÐÂºóÒ»Ö±²»±»¶ÁÈ¡¶øµ¼ÖÂÊý¾Ý¸üÐÂ²»
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****         }
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****       }
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****       FDCANCommResetRx(comm);
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****       return; // ÖØÖÃ×´Ì¬È»ºó·µ»Ø
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     }
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   }
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** }
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** static void FDCANCommLostCallback(void *cancomm)
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** {
+  30              		.loc 1 73 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   FDCANCommInstance *comm = (FDCANCommInstance *)cancomm;
+  34              		.loc 1 74 3 view .LVU1
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   FDCANCommInstance *comm = (FDCANCommInstance *)cancomm;
+  35              		.loc 1 73 1 is_stmt 0 view .LVU2
+  36 0000 10B5     		push	{r4, lr}
+  37              	.LCFI0:
+  38              		.cfi_def_cfa_offset 8
+  39              		.cfi_offset 4, -8
+  40              		.cfi_offset 14, -4
+ARM GAS  /tmp/ccx7GL3p.s 			page 3
+
+
+  41              	.LBB4:
+  42              	.LBB5:
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->recv_state   = 0; // ½ÓÊÕ×´Ì¬ÖØÖÃ
+  43              		.loc 1 14 3 view .LVU3
+  44 0002 0021     		movs	r1, #0
+  45 0004 90F86922 		ldrb	r2, [r0, #617]	@ zero_extendqisi2
+  46              	.LBE5:
+  47              	.LBE4:
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   FDCANCommInstance *comm = (FDCANCommInstance *)cancomm;
+  48              		.loc 1 73 1 view .LVU4
+  49 0008 0446     		mov	r4, r0
+  50              	.LVL1:
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   FDCANCommResetRx(comm);
+  51              		.loc 1 75 3 is_stmt 1 view .LVU5
+  52              	.LBB7:
+  53              	.LBI4:
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** {
+  54              		.loc 1 11 13 view .LVU6
+  55              	.LBB6:
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->recv_state   = 0; // ½ÓÊÕ×´Ì¬ÖØÖÃ
+  56              		.loc 1 14 3 view .LVU7
+  57 000a D430     		adds	r0, r0, #212
+  58              	.LVL2:
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->recv_state   = 0; // ½ÓÊÕ×´Ì¬ÖØÖÃ
+  59              		.loc 1 14 3 is_stmt 0 view .LVU8
+  60 000c FFF7FEFF 		bl	memset
+  61              	.LVL3:
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->cur_recv_len = 0; // µ±Ç°ÒÑ¾­ÊÕµ½µÄ³¤¶ÈÖØÖÃ
+  62              		.loc 1 15 3 is_stmt 1 view .LVU9
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** }
+  63              		.loc 1 16 3 view .LVU10
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->cur_recv_len = 0; // µ±Ç°ÒÑ¾­ÊÕµ½µÄ³¤¶ÈÖØÖÃ
+  64              		.loc 1 15 21 is_stmt 0 view .LVU11
+  65 0010 0023     		movs	r3, #0
+  66 0012 A4F86832 		strh	r3, [r4, #616]	@ unaligned
+  67              	.LVL4:
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->cur_recv_len = 0; // µ±Ç°ÒÑ¾­ÊÕµ½µÄ³¤¶ÈÖØÖÃ
+  68              		.loc 1 15 21 view .LVU12
+  69              	.LBE6:
+  70              	.LBE7:
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** }
+  71              		.loc 1 76 1 view .LVU13
+  72 0016 10BD     		pop	{r4, pc}
+  73              		.loc 1 76 1 view .LVU14
+  74              		.cfi_endproc
+  75              	.LFE350:
+  77              		.section	.text.FDCANCommRxCallback,"ax",%progbits
+  78              		.align	1
+  79              		.p2align 2,,3
+  80              		.syntax unified
+  81              		.thumb
+  82              		.thumb_func
+  84              	FDCANCommRxCallback:
+  85              	.LVL5:
+  86              	.LFB349:
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   // id¿ÉÒÔ½« FDCANCommInstance µÄÊý¾Ý´«µÝ¸ø FDCANInstance µÄ»Øµ÷º¯Êý¡£
+  87              		.loc 1 25 1 is_stmt 1 view -0
+ARM GAS  /tmp/ccx7GL3p.s 			page 4
+
+
+  88              		.cfi_startproc
+  89              		@ args = 0, pretend = 0, frame = 0
+  90              		@ frame_needed = 0, uses_anonymous_args = 0
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+  91              		.loc 1 27 3 view .LVU16
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   // id¿ÉÒÔ½« FDCANCommInstance µÄÊý¾Ý´«µÝ¸ø FDCANInstance µÄ»Øµ÷º¯Êý¡£
+  92              		.loc 1 25 1 is_stmt 0 view .LVU17
+  93 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+  94              	.LCFI1:
+  95              		.cfi_def_cfa_offset 24
+  96              		.cfi_offset 3, -24
+  97              		.cfi_offset 4, -20
+  98              		.cfi_offset 5, -16
+  99              		.cfi_offset 6, -12
+ 100              		.cfi_offset 7, -8
+ 101              		.cfi_offset 14, -4
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   {
+ 102              		.loc 1 30 6 view .LVU18
+ 103 0002 90F83820 		ldrb	r2, [r0, #56]	@ zero_extendqisi2
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+ 104              		.loc 1 27 22 view .LVU19
+ 105 0006 C56C     		ldr	r5, [r0, #76]
+ 106              	.LVL6:
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   {
+ 107              		.loc 1 30 3 is_stmt 1 view .LVU20
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   {
+ 108              		.loc 1 30 6 is_stmt 0 view .LVU21
+ 109 0008 732A     		cmp	r2, #115
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   {
+ 110              		.loc 1 30 57 discriminator 1 view .LVU22
+ 111 000a 95F86832 		ldrb	r3, [r5, #616]	@ zero_extendqisi2
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   // id¿ÉÒÔ½« FDCANCommInstance µÄÊý¾Ý´«µÝ¸ø FDCANInstance µÄ»Øµ÷º¯Êý¡£
+ 112              		.loc 1 25 1 view .LVU23
+ 113 000e 0446     		mov	r4, r0
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   {
+ 114              		.loc 1 30 6 view .LVU24
+ 115 0010 01D0     		beq	.L17
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   {
+ 116              		.loc 1 40 3 is_stmt 1 view .LVU25
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   {
+ 117              		.loc 1 40 6 is_stmt 0 view .LVU26
+ 118 0012 0BB9     		cbnz	r3, .L6
+ 119              	.LVL7:
+ 120              	.L4:
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+ 121              		.loc 1 70 1 view .LVU27
+ 122 0014 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 123              	.LVL8:
+ 124              	.L17:
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   {
+ 125              		.loc 1 30 50 discriminator 1 view .LVU28
+ 126 0016 43B3     		cbz	r3, .L18
+ 127              	.L6:
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   {
+ 128              		.loc 1 40 3 is_stmt 1 view .LVU29
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     {
+ 129              		.loc 1 43 5 view .LVU30
+ARM GAS  /tmp/ccx7GL3p.s 			page 5
+
+
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     {
+ 130              		.loc 1 43 13 is_stmt 0 view .LVU31
+ 131 0018 95F86902 		ldrb	r0, [r5, #617]	@ zero_extendqisi2
+ 132              	.LVL9:
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     {
+ 133              		.loc 1 43 39 view .LVU32
+ 134 001c 94F84420 		ldrb	r2, [r4, #68]	@ zero_extendqisi2
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     {
+ 135              		.loc 1 43 54 view .LVU33
+ 136 0020 95F8D330 		ldrb	r3, [r5, #211]	@ zero_extendqisi2
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     {
+ 137              		.loc 1 43 28 view .LVU34
+ 138 0024 8118     		adds	r1, r0, r2
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     {
+ 139              		.loc 1 43 8 view .LVU35
+ 140 0026 9942     		cmp	r1, r3
+ 141 0028 29DC     		bgt	.L19
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     comm->cur_recv_len += _instance->rx_len;
+ 142              		.loc 1 50 5 is_stmt 1 view .LVU36
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     comm->cur_recv_len += _instance->rx_len;
+ 143              		.loc 1 50 12 is_stmt 0 view .LVU37
+ 144 002a 05F1D406 		add	r6, r5, #212
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     comm->cur_recv_len += _instance->rx_len;
+ 145              		.loc 1 50 5 view .LVU38
+ 146 002e 04F13801 		add	r1, r4, #56
+ 147 0032 3044     		add	r0, r0, r6
+ 148 0034 FFF7FEFF 		bl	memcpy
+ 149              	.LVL10:
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+ 150              		.loc 1 51 5 is_stmt 1 view .LVU39
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+ 151              		.loc 1 51 24 is_stmt 0 view .LVU40
+ 152 0038 95F86922 		ldrb	r2, [r5, #617]	@ zero_extendqisi2
+ 153 003c 94F84410 		ldrb	r1, [r4, #68]	@ zero_extendqisi2
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     {
+ 154              		.loc 1 54 35 view .LVU41
+ 155 0040 95F8D330 		ldrb	r3, [r5, #211]	@ zero_extendqisi2
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+ 156              		.loc 1 51 24 view .LVU42
+ 157 0044 0A44     		add	r2, r2, r1
+ 158 0046 D2B2     		uxtb	r2, r2
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     {
+ 159              		.loc 1 54 8 view .LVU43
+ 160 0048 9A42     		cmp	r2, r3
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+ 161              		.loc 1 51 24 view .LVU44
+ 162 004a 85F86922 		strb	r2, [r5, #617]
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     {
+ 163              		.loc 1 54 5 is_stmt 1 view .LVU45
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     {
+ 164              		.loc 1 54 8 is_stmt 0 view .LVU46
+ 165 004e E1D1     		bne	.L4
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****       { // Í¨¹ýÐ£Ñé,¸´ÖÆÊý¾Ýµ½unpack_dataÖÐ
+ 166              		.loc 1 57 7 is_stmt 1 view .LVU47
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****       { // Í¨¹ýÐ£Ñé,¸´ÖÆÊý¾Ýµ½unpack_dataÖÐ
+ 167              		.loc 1 57 28 is_stmt 0 view .LVU48
+ 168 0050 AB18     		adds	r3, r5, r2
+ARM GAS  /tmp/ccx7GL3p.s 			page 6
+
+
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****       { // Í¨¹ýÐ£Ñé,¸´ÖÆÊý¾Ýµ½unpack_dataÖÐ
+ 169              		.loc 1 57 10 view .LVU49
+ 170 0052 93F8D310 		ldrb	r1, [r3, #211]	@ zero_extendqisi2
+ 171 0056 6529     		cmp	r1, #101
+ 172 0058 1BD0     		beq	.L20
+ 173              	.LVL11:
+ 174              	.L10:
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****       return; // ÖØÖÃ×´Ì¬È»ºó·µ»Ø
+ 175              		.loc 1 66 7 is_stmt 1 view .LVU50
+ 176              	.LBB12:
+ 177              	.LBI12:
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** {
+ 178              		.loc 1 11 13 view .LVU51
+ 179              	.LBB13:
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->recv_state   = 0; // ½ÓÊÕ×´Ì¬ÖØÖÃ
+ 180              		.loc 1 14 3 view .LVU52
+ 181 005a 0021     		movs	r1, #0
+ 182 005c 3046     		mov	r0, r6
+ 183 005e FFF7FEFF 		bl	memset
+ 184              	.LVL12:
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->cur_recv_len = 0; // µ±Ç°ÒÑ¾­ÊÕµ½µÄ³¤¶ÈÖØÖÃ
+ 185              		.loc 1 15 3 view .LVU53
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** }
+ 186              		.loc 1 16 3 view .LVU54
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->cur_recv_len = 0; // µ±Ç°ÒÑ¾­ÊÕµ½µÄ³¤¶ÈÖØÖÃ
+ 187              		.loc 1 15 21 is_stmt 0 view .LVU55
+ 188 0062 0023     		movs	r3, #0
+ 189 0064 A5F86832 		strh	r3, [r5, #616]	@ unaligned
+ 190              	.LVL13:
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->cur_recv_len = 0; // µ±Ç°ÒÑ¾­ÊÕµ½µÄ³¤¶ÈÖØÖÃ
+ 191              		.loc 1 15 21 view .LVU56
+ 192              	.LBE13:
+ 193              	.LBE12:
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     }
+ 194              		.loc 1 67 7 is_stmt 1 view .LVU57
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+ 195              		.loc 1 70 1 is_stmt 0 view .LVU58
+ 196 0068 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 197              	.LVL14:
+ 198              	.L18:
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     {
+ 199              		.loc 1 32 5 is_stmt 1 view .LVU59
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     {
+ 200              		.loc 1 32 8 is_stmt 0 view .LVU60
+ 201 006a 90F83920 		ldrb	r2, [r0, #57]	@ zero_extendqisi2
+ 202 006e 95F8D230 		ldrb	r3, [r5, #210]	@ zero_extendqisi2
+ 203 0072 9A42     		cmp	r2, r3
+ 204 0074 CED1     		bne	.L4
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     }
+ 205              		.loc 1 34 7 is_stmt 1 view .LVU61
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     }
+ 206              		.loc 1 34 24 is_stmt 0 view .LVU62
+ 207 0076 0123     		movs	r3, #1
+ 208 0078 85F86832 		strb	r3, [r5, #616]
+ 209 007c CCE7     		b	.L6
+ 210              	.LVL15:
+ 211              	.L19:
+ARM GAS  /tmp/ccx7GL3p.s 			page 7
+
+
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****       return; // ÖØÖÃ×´Ì¬È»ºó·µ»Ø
+ 212              		.loc 1 45 7 is_stmt 1 view .LVU63
+ 213              	.LBB15:
+ 214              	.LBI15:
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** {
+ 215              		.loc 1 11 13 view .LVU64
+ 216              	.LBB16:
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->recv_state   = 0; // ½ÓÊÕ×´Ì¬ÖØÖÃ
+ 217              		.loc 1 14 3 view .LVU65
+ 218 007e 0246     		mov	r2, r0
+ 219 0080 0021     		movs	r1, #0
+ 220 0082 05F1D400 		add	r0, r5, #212
+ 221 0086 FFF7FEFF 		bl	memset
+ 222              	.LVL16:
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->cur_recv_len = 0; // µ±Ç°ÒÑ¾­ÊÕµ½µÄ³¤¶ÈÖØÖÃ
+ 223              		.loc 1 15 3 view .LVU66
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** }
+ 224              		.loc 1 16 3 view .LVU67
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->cur_recv_len = 0; // µ±Ç°ÒÑ¾­ÊÕµ½µÄ³¤¶ÈÖØÖÃ
+ 225              		.loc 1 15 21 is_stmt 0 view .LVU68
+ 226 008a 0023     		movs	r3, #0
+ 227 008c A5F86832 		strh	r3, [r5, #616]	@ unaligned
+ 228              	.LVL17:
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->cur_recv_len = 0; // µ±Ç°ÒÑ¾­ÊÕµ½µÄ³¤¶ÈÖØÖÃ
+ 229              		.loc 1 15 21 view .LVU69
+ 230              	.LBE16:
+ 231              	.LBE15:
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     }
+ 232              		.loc 1 46 7 is_stmt 1 view .LVU70
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+ 233              		.loc 1 70 1 is_stmt 0 view .LVU71
+ 234 0090 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 235              	.LVL18:
+ 236              	.L20:
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****         { // Êý¾ÝÁ¿´óµÄ»°¿¼ÂÇÊ¹ÓÃDMA
+ 237              		.loc 1 59 9 is_stmt 1 view .LVU72
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****         { // Êý¾ÝÁ¿´óµÄ»°¿¼ÂÇÊ¹ÓÃDMA
+ 238              		.loc 1 59 58 is_stmt 0 view .LVU73
+ 239 0092 05F1D604 		add	r4, r5, #214
+ 240              	.LVL19:
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****         { // Êý¾ÝÁ¿´óµÄ»°¿¼ÂÇÊ¹ÓÃDMA
+ 241              		.loc 1 59 58 view .LVU74
+ 242 0096 95F8D210 		ldrb	r1, [r5, #210]	@ zero_extendqisi2
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****         { // Êý¾ÝÁ¿´óµÄ»°¿¼ÂÇÊ¹ÓÃDMA
+ 243              		.loc 1 59 30 view .LVU75
+ 244 009a 93F8D270 		ldrb	r7, [r3, #210]	@ zero_extendqisi2
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****         { // Êý¾ÝÁ¿´óµÄ»°¿¼ÂÇÊ¹ÓÃDMA
+ 245              		.loc 1 59 58 view .LVU76
+ 246 009e 2046     		mov	r0, r4
+ 247 00a0 FFF7FEFF 		bl	crc_8
+ 248              	.LVL20:
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****         { // Êý¾ÝÁ¿´óµÄ»°¿¼ÂÇÊ¹ÓÃDMA
+ 249              		.loc 1 59 12 discriminator 1 view .LVU77
+ 250 00a4 8742     		cmp	r7, r0
+ 251 00a6 02D0     		beq	.L11
+ 252              	.L16:
+ 253              	.LBB17:
+ARM GAS  /tmp/ccx7GL3p.s 			page 8
+
+
+ 254              	.LBB14:
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->recv_state   = 0; // ½ÓÊÕ×´Ì¬ÖØÖÃ
+ 255              		.loc 1 14 34 view .LVU78
+ 256 00a8 95F86922 		ldrb	r2, [r5, #617]	@ zero_extendqisi2
+ 257 00ac D5E7     		b	.L10
+ 258              	.L11:
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->recv_state   = 0; // ½ÓÊÕ×´Ì¬ÖØÖÃ
+ 259              		.loc 1 14 34 view .LVU79
+ 260              	.LBE14:
+ 261              	.LBE17:
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****           comm->update_flag = 1;           // Êý¾Ý¸üÐÂflagÖÃÎª1
+ 262              		.loc 1 61 11 is_stmt 1 view .LVU80
+ 263 00ae 95F8D220 		ldrb	r2, [r5, #210]	@ zero_extendqisi2
+ 264 00b2 2146     		mov	r1, r4
+ 265 00b4 05F5D070 		add	r0, r5, #416
+ 266 00b8 FFF7FEFF 		bl	memcpy
+ 267              	.LVL21:
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****           DaemonReload(comm->comm_daemon); // ÖØÔØdaemon,±ÜÃâÊý¾Ý¸üÐÂºóÒ»Ö±²»±»¶ÁÈ¡¶øµ¼ÖÂÊý¾Ý¸üÐÂ²»
+ 268              		.loc 1 62 11 view .LVU81
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****           DaemonReload(comm->comm_daemon); // ÖØÔØdaemon,±ÜÃâÊý¾Ý¸üÐÂºóÒ»Ö±²»±»¶ÁÈ¡¶øµ¼ÖÂÊý¾Ý¸üÐÂ²»
+ 269              		.loc 1 62 29 is_stmt 0 view .LVU82
+ 270 00bc 0123     		movs	r3, #1
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****         }
+ 271              		.loc 1 63 11 view .LVU83
+ 272 00be D5F86B02 		ldr	r0, [r5, #619]	@ unaligned
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****           DaemonReload(comm->comm_daemon); // ÖØÔØdaemon,±ÜÃâÊý¾Ý¸üÐÂºóÒ»Ö±²»±»¶ÁÈ¡¶øµ¼ÖÂÊý¾Ý¸üÐÂ²»
+ 273              		.loc 1 62 29 view .LVU84
+ 274 00c2 85F86A32 		strb	r3, [r5, #618]
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****         }
+ 275              		.loc 1 63 11 is_stmt 1 view .LVU85
+ 276 00c6 FFF7FEFF 		bl	DaemonReload
+ 277              	.LVL22:
+ 278 00ca EDE7     		b	.L16
+ 279              		.cfi_endproc
+ 280              	.LFE349:
+ 282              		.section	.text.FDCANCommInit,"ax",%progbits
+ 283              		.align	1
+ 284              		.p2align 2,,3
+ 285              		.global	FDCANCommInit
+ 286              		.syntax unified
+ 287              		.thumb
+ 288              		.thumb_func
+ 290              	FDCANCommInit:
+ 291              	.LVL23:
+ 292              	.LFB351:
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** FDCANCommInstance *FDCANCommInit(FDCANComm_Init_Config_s *comm_config)
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** {
+ 293              		.loc 1 79 1 view -0
+ 294              		.cfi_startproc
+ 295              		@ args = 0, pretend = 0, frame = 16
+ 296              		@ frame_needed = 0, uses_anonymous_args = 0
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   FDCANCommInstance *ins = (FDCANCommInstance *)malloc(sizeof(FDCANCommInstance));
+ 297              		.loc 1 80 3 view .LVU87
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   FDCANCommInstance *ins = (FDCANCommInstance *)malloc(sizeof(FDCANCommInstance));
+ 298              		.loc 1 79 1 is_stmt 0 view .LVU88
+ 299 0000 30B5     		push	{r4, r5, lr}
+ARM GAS  /tmp/ccx7GL3p.s 			page 9
+
+
+ 300              	.LCFI2:
+ 301              		.cfi_def_cfa_offset 12
+ 302              		.cfi_offset 4, -12
+ 303              		.cfi_offset 5, -8
+ 304              		.cfi_offset 14, -4
+ 305 0002 0546     		mov	r5, r0
+ 306 0004 85B0     		sub	sp, sp, #20
+ 307              	.LCFI3:
+ 308              		.cfi_def_cfa_offset 32
+ 309              		.loc 1 80 49 view .LVU89
+ 310 0006 0121     		movs	r1, #1
+ 311 0008 40F26F20 		movw	r0, #623
+ 312              	.LVL24:
+ 313              		.loc 1 80 49 view .LVU90
+ 314 000c FFF7FEFF 		bl	calloc
+ 315              	.LVL25:
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   memset(ins, 0, sizeof(FDCANCommInstance));
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->recv_data_len  = comm_config->recv_data_len;
+ 316              		.loc 1 83 36 view .LVU91
+ 317 0010 6A7D     		ldrb	r2, [r5, #21]	@ zero_extendqisi2
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->recv_buf_len   = comm_config->recv_data_len + FDCAN_COMM_OFFSET_BYTES; // head + datalen + c
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->send_data_len  = comm_config->send_data_len;
+ 318              		.loc 1 85 36 view .LVU92
+ 319 0012 2B7D     		ldrb	r3, [r5, #20]	@ zero_extendqisi2
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->recv_buf_len   = comm_config->recv_data_len + FDCAN_COMM_OFFSET_BYTES; // head + datalen + c
+ 320              		.loc 1 83 23 view .LVU93
+ 321 0014 80F8D220 		strb	r2, [r0, #210]
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->recv_buf_len   = comm_config->recv_data_len + FDCAN_COMM_OFFSET_BYTES; // head + datalen + c
+ 322              		.loc 1 84 52 view .LVU94
+ 323 0018 111D     		adds	r1, r2, #4
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->recv_buf_len   = comm_config->recv_data_len + FDCAN_COMM_OFFSET_BYTES; // head + datalen + c
+ 324              		.loc 1 84 23 view .LVU95
+ 325 001a 80F8D310 		strb	r1, [r0, #211]
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->send_buf_len   = comm_config->send_data_len + FDCAN_COMM_OFFSET_BYTES;
+ 326              		.loc 1 86 52 view .LVU96
+ 327 001e 191D     		adds	r1, r3, #4
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   memset(ins, 0, sizeof(FDCANCommInstance));
+ 328              		.loc 1 80 49 view .LVU97
+ 329 0020 0446     		mov	r4, r0
+ 330              	.LVL26:
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+ 331              		.loc 1 81 3 is_stmt 1 view .LVU98
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->recv_buf_len   = comm_config->recv_data_len + FDCAN_COMM_OFFSET_BYTES; // head + datalen + c
+ 332              		.loc 1 83 3 view .LVU99
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->send_data_len  = comm_config->send_data_len;
+ 333              		.loc 1 84 3 view .LVU100
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->send_buf_len   = comm_config->send_data_len + FDCAN_COMM_OFFSET_BYTES;
+ 334              		.loc 1 85 3 view .LVU101
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->raw_sendbuf[0] = FDCAN_COMM_HEADER;          // head,Ö±½ÓÉèÖÃ±ÜÃâÃ¿´Î·¢ËÍ¶¼ÒªÖØÐÂ¸³Öµ,ÏÂÃæµÄ
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->raw_sendbuf[1] = comm_config->send_data_len; // datalen
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->raw_sendbuf[comm_config->send_data_len + FDCAN_COMM_OFFSET_BYTES - 1] = FDCAN_COMM_TAIL;
+ 335              		.loc 1 89 78 is_stmt 0 view .LVU102
+ 336 0022 C218     		adds	r2, r0, r3
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->raw_sendbuf[0] = FDCAN_COMM_HEADER;          // head,Ö±½ÓÉèÖÃ±ÜÃâÃ¿´Î·¢ËÍ¶¼ÒªÖØÐÂ¸³Öµ,ÏÂÃæµÄ
+ 337              		.loc 1 86 23 view .LVU103
+ 338 0024 4171     		strb	r1, [r0, #5]
+ARM GAS  /tmp/ccx7GL3p.s 			page 10
+
+
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->raw_sendbuf[0] = FDCAN_COMM_HEADER;          // head,Ö±½ÓÉèÖÃ±ÜÃâÃ¿´Î·¢ËÍ¶¼ÒªÖØÐÂ¸³Öµ,ÏÂÃæµÄ
+ 339              		.loc 1 87 23 view .LVU104
+ 340 0026 7321     		movs	r1, #115
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->send_buf_len   = comm_config->send_data_len + FDCAN_COMM_OFFSET_BYTES;
+ 341              		.loc 1 85 23 view .LVU105
+ 342 0028 0371     		strb	r3, [r0, #4]
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->raw_sendbuf[0] = FDCAN_COMM_HEADER;          // head,Ö±½ÓÉèÖÃ±ÜÃâÃ¿´Î·¢ËÍ¶¼ÒªÖØÐÂ¸³Öµ,ÏÂÃæµÄ
+ 343              		.loc 1 86 3 is_stmt 1 view .LVU106
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->raw_sendbuf[0] = FDCAN_COMM_HEADER;          // head,Ö±½ÓÉèÖÃ±ÜÃâÃ¿´Î·¢ËÍ¶¼ÒªÖØÐÂ¸³Öµ,ÏÂÃæµÄ
+ 344              		.loc 1 87 3 view .LVU107
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->raw_sendbuf[0] = FDCAN_COMM_HEADER;          // head,Ö±½ÓÉèÖÃ±ÜÃâÃ¿´Î·¢ËÍ¶¼ÒªÖØÐÂ¸³Öµ,ÏÂÃæµÄ
+ 345              		.loc 1 87 23 is_stmt 0 view .LVU108
+ 346 002a 8171     		strb	r1, [r0, #6]
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->raw_sendbuf[comm_config->send_data_len + FDCAN_COMM_OFFSET_BYTES - 1] = FDCAN_COMM_TAIL;
+ 347              		.loc 1 88 3 is_stmt 1 view .LVU109
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   // can instanceµÄÉèÖÃ
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   comm_config->can_config.id = ins;                                    // FDCANCommµÄÊµÀýÖ¸Õë×÷ÎªFD
+ 348              		.loc 1 91 30 is_stmt 0 view .LVU110
+ 349 002c 2861     		str	r0, [r5, #16]
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   // can instanceµÄÉèÖÃ
+ 350              		.loc 1 89 78 view .LVU111
+ 351 002e 6521     		movs	r1, #101
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   comm_config->can_config.fdcan_module_callback = FDCANCommRxCallback; // ½ÓÊÕ»Øµ÷º¯Êý
+ 352              		.loc 1 92 49 view .LVU112
+ 353 0030 0C48     		ldr	r0, .L23
+ 354              	.LVL27:
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->raw_sendbuf[comm_config->send_data_len + FDCAN_COMM_OFFSET_BYTES - 1] = FDCAN_COMM_TAIL;
+ 355              		.loc 1 88 23 view .LVU113
+ 356 0032 E371     		strb	r3, [r4, #7]
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   // can instanceµÄÉèÖÃ
+ 357              		.loc 1 89 3 is_stmt 1 view .LVU114
+ 358              		.loc 1 92 49 is_stmt 0 view .LVU115
+ 359 0034 E860     		str	r0, [r5, #12]
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   // can instanceµÄÉèÖÃ
+ 360              		.loc 1 89 78 view .LVU116
+ 361 0036 5172     		strb	r1, [r2, #9]
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   comm_config->can_config.fdcan_module_callback = FDCANCommRxCallback; // ½ÓÊÕ»Øµ÷º¯Êý
+ 362              		.loc 1 91 3 is_stmt 1 view .LVU117
+ 363              		.loc 1 92 3 view .LVU118
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->can_ins = FDCANRegister(&comm_config->can_config);              // ×¢²áCANÊµÀý
+ 364              		.loc 1 93 3 view .LVU119
+ 365              		.loc 1 93 18 is_stmt 0 view .LVU120
+ 366 0038 2846     		mov	r0, r5
+ 367 003a FFF7FEFF 		bl	FDCANRegister
+ 368              	.LVL28:
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   Daemon_Init_Config_s daemon_config = {
+ 369              		.loc 1 95 24 view .LVU121
+ 370 003e 0A4B     		ldr	r3, .L23+4
+ 371 0040 EA8A     		ldrh	r2, [r5, #22]
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->can_ins = FDCANRegister(&comm_config->can_config);              // ×¢²áCANÊµÀý
+ 372              		.loc 1 93 16 discriminator 1 view .LVU122
+ 373 0042 2060     		str	r0, [r4]
+ 374              		.loc 1 95 3 is_stmt 1 view .LVU123
+ 375              		.loc 1 95 24 is_stmt 0 view .LVU124
+ 376 0044 0021     		movs	r1, #0
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****       .callback     = FDCANCommLostCallback,
+ARM GAS  /tmp/ccx7GL3p.s 			page 11
+
+
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****       .owner_id     = (void *)ins,
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****       .reload_count = comm_config->daemon_count,
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   };
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   ins->comm_daemon  = DaemonRegister(&daemon_config);
+ 377              		.loc 1 100 23 view .LVU125
+ 378 0046 01A8     		add	r0, sp, #4
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****       .callback     = FDCANCommLostCallback,
+ 379              		.loc 1 95 24 view .LVU126
+ 380 0048 CDE90234 		strd	r3, r4, [sp, #8]
+ 381              		.loc 1 100 3 is_stmt 1 view .LVU127
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****       .callback     = FDCANCommLostCallback,
+ 382              		.loc 1 95 24 is_stmt 0 view .LVU128
+ 383 004c ADF80610 		strh	r1, [sp, #6]	@ movhi
+ 384 0050 ADF80420 		strh	r2, [sp, #4]	@ movhi
+ 385              		.loc 1 100 23 view .LVU129
+ 386 0054 FFF7FEFF 		bl	DaemonRegister
+ 387              	.LVL29:
+ 388              		.loc 1 100 21 discriminator 1 view .LVU130
+ 389 0058 C4F86B02 		str	r0, [r4, #619]	@ unaligned
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   return ins;
+ 390              		.loc 1 101 3 is_stmt 1 view .LVU131
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** }
+ 391              		.loc 1 102 1 is_stmt 0 view .LVU132
+ 392 005c 2046     		mov	r0, r4
+ 393 005e 05B0     		add	sp, sp, #20
+ 394              	.LCFI4:
+ 395              		.cfi_def_cfa_offset 12
+ 396              		@ sp needed
+ 397 0060 30BD     		pop	{r4, r5, pc}
+ 398              	.LVL30:
+ 399              	.L24:
+ 400              		.loc 1 102 1 view .LVU133
+ 401 0062 00BF     		.align	2
+ 402              	.L23:
+ 403 0064 00000000 		.word	FDCANCommRxCallback
+ 404 0068 00000000 		.word	FDCANCommLostCallback
+ 405              		.cfi_endproc
+ 406              	.LFE351:
+ 408              		.section	.text.FDCANCommSend,"ax",%progbits
+ 409              		.align	1
+ 410              		.p2align 2,,3
+ 411              		.global	FDCANCommSend
+ 412              		.syntax unified
+ 413              		.thumb
+ 414              		.thumb_func
+ 416              	FDCANCommSend:
+ 417              	.LVL31:
+ 418              	.LFB352:
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** void FDCANCommSend(FDCANCommInstance *instance, uint8_t *data)
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** {
+ 419              		.loc 1 105 1 is_stmt 1 view -0
+ 420              		.cfi_startproc
+ 421              		@ args = 0, pretend = 0, frame = 0
+ 422              		@ frame_needed = 0, uses_anonymous_args = 0
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   static uint8_t crc8;
+ 423              		.loc 1 106 3 view .LVU135
+ARM GAS  /tmp/ccx7GL3p.s 			page 12
+
+
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   static uint8_t send_len;
+ 424              		.loc 1 107 3 view .LVU136
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   // ½«data copyµ½raw_sendbufÖÐ,¼ÆËãcrc8
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   memcpy(instance->raw_sendbuf + 2, data, instance->send_data_len);
+ 425              		.loc 1 109 3 view .LVU137
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   static uint8_t crc8;
+ 426              		.loc 1 105 1 is_stmt 0 view .LVU138
+ 427 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 428              	.LCFI5:
+ 429              		.cfi_def_cfa_offset 24
+ 430              		.cfi_offset 3, -24
+ 431              		.cfi_offset 4, -20
+ 432              		.cfi_offset 5, -16
+ 433              		.cfi_offset 6, -12
+ 434              		.cfi_offset 7, -8
+ 435              		.cfi_offset 14, -4
+ 436              		.loc 1 109 51 view .LVU139
+ 437 0002 0679     		ldrb	r6, [r0, #4]	@ zero_extendqisi2
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   static uint8_t crc8;
+ 438              		.loc 1 105 1 view .LVU140
+ 439 0004 0546     		mov	r5, r0
+ 440 0006 0C46     		mov	r4, r1
+ 441              		.loc 1 109 3 view .LVU141
+ 442 0008 3246     		mov	r2, r6
+ 443 000a 0830     		adds	r0, r0, #8
+ 444              	.LVL32:
+ 445              		.loc 1 109 3 view .LVU142
+ 446 000c FFF7FEFF 		bl	memcpy
+ 447              	.LVL33:
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   crc8 = crc_8(data, instance->send_data_len);
+ 448              		.loc 1 110 3 is_stmt 1 view .LVU143
+ 449              		.loc 1 110 10 is_stmt 0 view .LVU144
+ 450 0010 3146     		mov	r1, r6
+ 451 0012 2046     		mov	r0, r4
+ 452 0014 FFF7FEFF 		bl	crc_8
+ 453              	.LVL34:
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   instance->raw_sendbuf[2 + instance->send_data_len] = crc8;
+ 454              		.loc 1 111 3 is_stmt 1 view .LVU145
+ 455              		.loc 1 111 37 is_stmt 0 view .LVU146
+ 456 0018 2B79     		ldrb	r3, [r5, #4]	@ zero_extendqisi2
+ 457              		.loc 1 111 54 view .LVU147
+ 458 001a 2B44     		add	r3, r3, r5
+ 459 001c 1872     		strb	r0, [r3, #8]
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   // CANµ¥´Î·¢ËÍ×î´óÎª8×Ö½Ú,Èç¹û³¬¹ý8×Ö½Ú,ÐèÒª·Ö°ü·¢ËÍ
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   for (size_t i = 0; i < instance->send_buf_len; i += 8)
+ 460              		.loc 1 114 3 is_stmt 1 view .LVU148
+ 461              	.LBB18:
+ 462              		.loc 1 114 8 view .LVU149
+ 463              	.LVL35:
+ 464              		.loc 1 114 24 discriminator 1 view .LVU150
+ 465              		.loc 1 114 34 is_stmt 0 discriminator 1 view .LVU151
+ 466 001e 6979     		ldrb	r1, [r5, #5]	@ zero_extendqisi2
+ 467              		.loc 1 114 24 discriminator 1 view .LVU152
+ 468 0020 D1B1     		cbz	r1, .L25
+ 469 0022 0E4E     		ldr	r6, .L33
+ 470              		.loc 1 114 15 view .LVU153
+ARM GAS  /tmp/ccx7GL3p.s 			page 13
+
+
+ 471 0024 0024     		movs	r4, #0
+ 472              	.LVL36:
+ 473              		.loc 1 114 15 view .LVU154
+ 474 0026 AF1D     		adds	r7, r5, #6
+ 475              	.LVL37:
+ 476              	.L27:
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   { // Èç¹ûÊÇ×îºóÒ»°ü,send len½«»áÐ¡ÓÚ8,ÒªÐÞ¸ÄCANµÄtxconfÖÐµÄDLCÎ»,µ÷ÓÃbsp_canÌá¹©µÄ½Ó¿Ú¼´¿É
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     send_len = instance->send_buf_len - i >= 8 ? 8 : instance->send_buf_len - i;
+ 477              		.loc 1 116 5 is_stmt 1 view .LVU155
+ 478              		.loc 1 116 39 is_stmt 0 view .LVU156
+ 479 0028 091B     		subs	r1, r1, r4
+ 480              		.loc 1 116 52 view .LVU157
+ 481 002a 0829     		cmp	r1, #8
+ 482 002c 28BF     		it	cs
+ 483 002e 0821     		movcs	r1, #8
+ 484              		.loc 1 116 14 view .LVU158
+ 485 0030 C9B2     		uxtb	r1, r1
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     FDCANSetDLC(instance->can_ins, send_len);
+ 486              		.loc 1 117 5 view .LVU159
+ 487 0032 2868     		ldr	r0, [r5]	@ unaligned
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     FDCANSetDLC(instance->can_ins, send_len);
+ 488              		.loc 1 116 14 view .LVU160
+ 489 0034 3170     		strb	r1, [r6]
+ 490              		.loc 1 117 5 is_stmt 1 view .LVU161
+ 491 0036 FFF7FEFF 		bl	FDCANSetDLC
+ 492              	.LVL38:
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     memcpy(instance->can_ins->tx_buff, instance->raw_sendbuf + i, send_len);
+ 493              		.loc 1 118 5 view .LVU162
+ 494              		.loc 1 118 20 is_stmt 0 view .LVU163
+ 495 003a 2868     		ldr	r0, [r5]	@ unaligned
+ 496              		.loc 1 118 5 view .LVU164
+ 497 003c 3278     		ldrb	r2, [r6]	@ zero_extendqisi2
+ 498 003e 3919     		adds	r1, r7, r4
+ 499 0040 3030     		adds	r0, r0, #48
+ 500 0042 FFF7FEFF 		bl	memcpy
+ 501              	.LVL39:
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****     FDCANTransmit(instance->can_ins, 2);
+ 502              		.loc 1 119 5 is_stmt 1 view .LVU165
+ 503 0046 2868     		ldr	r0, [r5]	@ unaligned
+ 504 0048 B0EE000A 		vmov.f32	s0, #2.0e+0
+ 505 004c FFF7FEFF 		bl	FDCANTransmit
+ 506              	.LVL40:
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   { // Èç¹ûÊÇ×îºóÒ»°ü,send len½«»áÐ¡ÓÚ8,ÒªÐÞ¸ÄCANµÄtxconfÖÐµÄDLCÎ»,µ÷ÓÃbsp_canÌá¹©µÄ½Ó¿Ú¼´¿É
+ 507              		.loc 1 114 52 discriminator 3 view .LVU166
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   { // Èç¹ûÊÇ×îºóÒ»°ü,send len½«»áÐ¡ÓÚ8,ÒªÐÞ¸ÄCANµÄtxconfÖÐµÄDLCÎ»,µ÷ÓÃbsp_canÌá¹©µÄ½Ó¿Ú¼´¿É
+ 508              		.loc 1 114 34 is_stmt 0 discriminator 1 view .LVU167
+ 509 0050 6979     		ldrb	r1, [r5, #5]	@ zero_extendqisi2
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   { // Èç¹ûÊÇ×îºóÒ»°ü,send len½«»áÐ¡ÓÚ8,ÒªÐÞ¸ÄCANµÄtxconfÖÐµÄDLCÎ»,µ÷ÓÃbsp_canÌá¹©µÄ½Ó¿Ú¼´¿É
+ 510              		.loc 1 114 52 discriminator 3 view .LVU168
+ 511 0052 0834     		adds	r4, r4, #8
+ 512              	.LVL41:
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   { // Èç¹ûÊÇ×îºóÒ»°ü,send len½«»áÐ¡ÓÚ8,ÒªÐÞ¸ÄCANµÄtxconfÖÐµÄDLCÎ»,µ÷ÓÃbsp_canÌá¹©µÄ½Ó¿Ú¼´¿É
+ 513              		.loc 1 114 24 is_stmt 1 discriminator 1 view .LVU169
+ 514 0054 A142     		cmp	r1, r4
+ 515 0056 E7D8     		bhi	.L27
+ 516              	.LVL42:
+ 517              	.L25:
+ARM GAS  /tmp/ccx7GL3p.s 			page 14
+
+
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   { // Èç¹ûÊÇ×îºóÒ»°ü,send len½«»áÐ¡ÓÚ8,ÒªÐÞ¸ÄCANµÄtxconfÖÐµÄDLCÎ»,µ÷ÓÃbsp_canÌá¹©µÄ½Ó¿Ú¼´¿É
+ 518              		.loc 1 114 24 is_stmt 0 discriminator 1 view .LVU170
+ 519              	.LBE18:
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   }
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** }
+ 520              		.loc 1 121 1 view .LVU171
+ 521 0058 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 522              	.LVL43:
+ 523              	.L34:
+ 524              		.loc 1 121 1 view .LVU172
+ 525 005a 00BF     		.align	2
+ 526              	.L33:
+ 527 005c 00000000 		.word	send_len.0
+ 528              		.cfi_endproc
+ 529              	.LFE352:
+ 531              		.section	.text.FDCANCommGet,"ax",%progbits
+ 532              		.align	1
+ 533              		.p2align 2,,3
+ 534              		.global	FDCANCommGet
+ 535              		.syntax unified
+ 536              		.thumb
+ 537              		.thumb_func
+ 539              	FDCANCommGet:
+ 540              	.LVL44:
+ 541              	.LFB353:
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** void *FDCANCommGet(FDCANCommInstance *instance)
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** {
+ 542              		.loc 1 124 1 is_stmt 1 view -0
+ 543              		.cfi_startproc
+ 544              		@ args = 0, pretend = 0, frame = 0
+ 545              		@ frame_needed = 0, uses_anonymous_args = 0
+ 546              		@ link register save eliminated.
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   instance->update_flag = 0; // ¶ÁÈ¡ºó½«¸üÐÂflagÖÃÎª0
+ 547              		.loc 1 125 3 view .LVU174
+ 548              		.loc 1 125 25 is_stmt 0 view .LVU175
+ 549 0000 0023     		movs	r3, #0
+ 550 0002 80F86A32 		strb	r3, [r0, #618]
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   return instance->unpacked_recv_data;
+ 551              		.loc 1 126 3 is_stmt 1 view .LVU176
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** }
+ 552              		.loc 1 127 1 is_stmt 0 view .LVU177
+ 553 0006 00F5D070 		add	r0, r0, #416
+ 554              	.LVL45:
+ 555              		.loc 1 127 1 view .LVU178
+ 556 000a 7047     		bx	lr
+ 557              		.cfi_endproc
+ 558              	.LFE353:
+ 560              		.section	.text.FDCANCommIsOnline,"ax",%progbits
+ 561              		.align	1
+ 562              		.p2align 2,,3
+ 563              		.global	FDCANCommIsOnline
+ 564              		.syntax unified
+ 565              		.thumb
+ 566              		.thumb_func
+ 568              	FDCANCommIsOnline:
+ 569              	.LVL46:
+ARM GAS  /tmp/ccx7GL3p.s 			page 15
+
+
+ 570              	.LFB354:
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** 
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** uint8_t FDCANCommIsOnline(FDCANCommInstance *instance)
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c **** {
+ 571              		.loc 1 130 1 is_stmt 1 view -0
+ 572              		.cfi_startproc
+ 573              		@ args = 0, pretend = 0, frame = 0
+ 574              		@ frame_needed = 0, uses_anonymous_args = 0
+ 575              		@ link register save eliminated.
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.c ****   return DaemonIsOnline(instance->comm_daemon);
+ 576              		.loc 1 131 3 view .LVU180
+ 577              		.loc 1 131 10 is_stmt 0 view .LVU181
+ 578 0000 D0F86B02 		ldr	r0, [r0, #619]	@ unaligned
+ 579              	.LVL47:
+ 580              		.loc 1 131 10 view .LVU182
+ 581 0004 FFF7FEBF 		b	DaemonIsOnline
+ 582              	.LVL48:
+ 583              		.cfi_endproc
+ 584              	.LFE354:
+ 586              		.section	.bss.send_len.0,"aw",%nobits
+ 589              	send_len.0:
+ 590 0000 00       		.space	1
+ 591              		.text
+ 592              	.Letext0:
+ 593              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 594              		.file 3 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stddef.h"
+ 595              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/daemon/daemon.h"
+ 596              		.file 5 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 597              		.file 6 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 598              		.file 7 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 599              		.file 8 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 600              		.file 9 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.h"
+ 601              		.file 10 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/can_driver.h"
+ 602              		.file 11 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.h"
+ 603              		.file 12 "/usr/include/newlib/string.h"
+ 604              		.file 13 "/usr/include/newlib/stdlib.h"
+ 605              		.file 14 "<built-in>"
+ARM GAS  /tmp/ccx7GL3p.s 			page 16
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 can_driver.c
+     /tmp/ccx7GL3p.s:21     .text.FDCANCommLostCallback:00000000 $t
+     /tmp/ccx7GL3p.s:27     .text.FDCANCommLostCallback:00000000 FDCANCommLostCallback
+     /tmp/ccx7GL3p.s:78     .text.FDCANCommRxCallback:00000000 $t
+     /tmp/ccx7GL3p.s:84     .text.FDCANCommRxCallback:00000000 FDCANCommRxCallback
+     /tmp/ccx7GL3p.s:283    .text.FDCANCommInit:00000000 $t
+     /tmp/ccx7GL3p.s:290    .text.FDCANCommInit:00000000 FDCANCommInit
+     /tmp/ccx7GL3p.s:403    .text.FDCANCommInit:00000064 $d
+     /tmp/ccx7GL3p.s:409    .text.FDCANCommSend:00000000 $t
+     /tmp/ccx7GL3p.s:416    .text.FDCANCommSend:00000000 FDCANCommSend
+     /tmp/ccx7GL3p.s:527    .text.FDCANCommSend:0000005c $d
+     /tmp/ccx7GL3p.s:589    .bss.send_len.0:00000000 send_len.0
+     /tmp/ccx7GL3p.s:532    .text.FDCANCommGet:00000000 $t
+     /tmp/ccx7GL3p.s:539    .text.FDCANCommGet:00000000 FDCANCommGet
+     /tmp/ccx7GL3p.s:561    .text.FDCANCommIsOnline:00000000 $t
+     /tmp/ccx7GL3p.s:568    .text.FDCANCommIsOnline:00000000 FDCANCommIsOnline
+     /tmp/ccx7GL3p.s:590    .bss.send_len.0:00000000 $d
+
+UNDEFINED SYMBOLS
+memset
+memcpy
+crc_8
+DaemonReload
+calloc
+FDCANRegister
+DaemonRegister
+FDCANSetDLC
+FDCANTransmit
+DaemonIsOnline

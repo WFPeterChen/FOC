@@ -1,0 +1,551 @@
+ARM GAS  /tmp/ccPnckVu.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"stm32g4xx_hal_crc_ex.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm3
+  20              		.section	.text.HAL_CRCEx_Polynomial_Set,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	HAL_CRCEx_Polynomial_Set
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	HAL_CRCEx_Polynomial_Set:
+  29              	.LVL0:
+  30              	.LFB329:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** /**
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   ******************************************************************************
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @file    stm32g4xx_hal_crc_ex.c
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @author  MCD Application Team
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @brief   Extended CRC HAL module driver.
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *          This file provides firmware functions to manage the extended
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *          functionalities of the CRC peripheral.
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   ******************************************************************************
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @attention
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * Copyright (c) 2019 STMicroelectronics.
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * All rights reserved.
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * in the root directory of this software component.
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   ******************************************************************************
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   @verbatim
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** ================================================================================
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****             ##### How to use this driver #####
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** ================================================================================
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****     [..]
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****          (+) Set user-defined generating polynomial through HAL_CRCEx_Polynomial_Set()
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****          (+) Configure Input or Output data inversion
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   @endverbatim
+ARM GAS  /tmp/ccPnckVu.s 			page 2
+
+
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   ******************************************************************************
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   */
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** /* Includes ------------------------------------------------------------------*/
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** #include "stm32g4xx_hal.h"
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** /** @addtogroup STM32G4xx_HAL_Driver
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @{
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   */
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** /** @defgroup CRCEx CRCEx
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @brief CRC Extended HAL module driver
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @{
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   */
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** #ifdef HAL_CRC_MODULE_ENABLED
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** /* Private typedef -----------------------------------------------------------*/
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** /* Private define ------------------------------------------------------------*/
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** /* Private macro -------------------------------------------------------------*/
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** /* Private variables ---------------------------------------------------------*/
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** /* Private function prototypes -----------------------------------------------*/
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** /* Exported functions --------------------------------------------------------*/
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** /** @defgroup CRCEx_Exported_Functions CRC Extended Exported Functions
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @{
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   */
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** /** @defgroup CRCEx_Exported_Functions_Group1 Extended Initialization/de-initialization functions
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @brief    Extended Initialization and Configuration functions.
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** @verbatim
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****  ===============================================================================
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****             ##### Extended configuration functions #####
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****  ===============================================================================
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****     [..]  This section provides functions allowing to:
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****       (+) Configure the generating polynomial
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****       (+) Configure the input data inversion
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****       (+) Configure the output data inversion
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** @endverbatim
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @{
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   */
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** /**
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @brief  Initialize the CRC polynomial if different from default one.
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @param  hcrc CRC handle
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @param  Pol CRC generating polynomial (7, 8, 16 or 32-bit long).
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *         This parameter is written in normal representation, e.g.
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *         @arg for a polynomial of degree 7, X^7 + X^6 + X^5 + X^2 + 1 is written 0x65
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *         @arg for a polynomial of degree 16, X^16 + X^12 + X^5 + 1 is written 0x1021
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @param  PolyLength CRC polynomial length.
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *         This parameter can be one of the following values:
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *          @arg @ref CRC_POLYLENGTH_7B  7-bit long CRC (generating polynomial of degree 7)
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *          @arg @ref CRC_POLYLENGTH_8B  8-bit long CRC (generating polynomial of degree 8)
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *          @arg @ref CRC_POLYLENGTH_16B 16-bit long CRC (generating polynomial of degree 16)
+ARM GAS  /tmp/ccPnckVu.s 			page 3
+
+
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *          @arg @ref CRC_POLYLENGTH_32B 32-bit long CRC (generating polynomial of degree 32)
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @retval HAL status
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   */
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** HAL_StatusTypeDef HAL_CRCEx_Polynomial_Set(CRC_HandleTypeDef *hcrc, uint32_t Pol, uint32_t PolyLeng
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** {
+  31              		.loc 1 90 1 view -0
+  32              		.cfi_startproc
+  33              		@ args = 0, pretend = 0, frame = 0
+  34              		@ frame_needed = 0, uses_anonymous_args = 0
+  35              		@ link register save eliminated.
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   HAL_StatusTypeDef status = HAL_OK;
+  36              		.loc 1 91 3 view .LVU1
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   uint32_t msb = 31U; /* polynomial degree is 32 at most, so msb is initialized to max value */
+  37              		.loc 1 92 3 view .LVU2
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   /* Check the parameters */
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   assert_param(IS_CRC_POL_LENGTH(PolyLength));
+  38              		.loc 1 95 3 view .LVU3
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   /* Ensure that the generating polynomial is odd */
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   if ((Pol & (uint32_t)(0x1U)) ==  0U)
+  39              		.loc 1 98 3 view .LVU4
+  40              		.loc 1 98 6 is_stmt 0 view .LVU5
+  41 0000 CB07     		lsls	r3, r1, #31
+  42 0002 1AD5     		bpl	.L10
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   HAL_StatusTypeDef status = HAL_OK;
+  43              		.loc 1 90 1 view .LVU6
+  44 0004 10B4     		push	{r4}
+  45              	.LCFI0:
+  46              		.cfi_def_cfa_offset 4
+  47              		.cfi_offset 4, -4
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+  48              		.loc 1 92 12 view .LVU7
+  49 0006 1F23     		movs	r3, #31
+  50              	.LVL1:
+  51              	.L4:
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   {
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****     status =  HAL_ERROR;
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   }
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   else
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   {
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****     /* check polynomial definition vs polynomial size:
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****      * polynomial length must be aligned with polynomial
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****      * definition. HAL_ERROR is reported if Pol degree is
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****      * larger than that indicated by PolyLength.
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****      * Look for MSB position: msb will contain the degree of
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****      *  the second to the largest polynomial member. E.g., for
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****      *  X^7 + X^6 + X^5 + X^2 + 1, msb = 6. */
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****     while ((msb-- > 0U) && ((Pol & ((uint32_t)(0x1U) << (msb & 0x1FU))) == 0U))
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****     {
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****     }
+  52              		.loc 1 113 5 is_stmt 1 view .LVU8
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****     {
+  53              		.loc 1 111 25 discriminator 2 view .LVU9
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****     {
+  54              		.loc 1 111 16 is_stmt 0 discriminator 2 view .LVU10
+  55 0008 013B     		subs	r3, r3, #1
+ARM GAS  /tmp/ccPnckVu.s 			page 4
+
+
+  56              	.LVL2:
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****     {
+  57              		.loc 1 111 25 discriminator 2 view .LVU11
+  58 000a 5C1C     		adds	r4, r3, #1
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****     {
+  59              		.loc 1 111 73 discriminator 1 view .LVU12
+  60 000c 21FA03FC 		lsr	ip, r1, r3
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****     {
+  61              		.loc 1 111 25 discriminator 2 view .LVU13
+  62 0010 15D0     		beq	.L3
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****     {
+  63              		.loc 1 111 25 discriminator 1 view .LVU14
+  64 0012 1CF0010F 		tst	ip, #1
+  65 0016 F7D0     		beq	.L4
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****     switch (PolyLength)
+  66              		.loc 1 115 5 is_stmt 1 view .LVU15
+  67 0018 182A     		cmp	r2, #24
+  68 001a 11D8     		bhi	.L27
+  69 001c DFE802F0 		tbb	[pc, r2]
+  70              	.L6:
+  71 0020 16       		.byte	(.L9-.L6)/2
+  72 0021 10       		.byte	(.L27-.L6)/2
+  73 0022 10       		.byte	(.L27-.L6)/2
+  74 0023 10       		.byte	(.L27-.L6)/2
+  75 0024 10       		.byte	(.L27-.L6)/2
+  76 0025 10       		.byte	(.L27-.L6)/2
+  77 0026 10       		.byte	(.L27-.L6)/2
+  78 0027 10       		.byte	(.L27-.L6)/2
+  79 0028 24       		.byte	(.L8-.L6)/2
+  80 0029 10       		.byte	(.L27-.L6)/2
+  81 002a 10       		.byte	(.L27-.L6)/2
+  82 002b 10       		.byte	(.L27-.L6)/2
+  83 002c 10       		.byte	(.L27-.L6)/2
+  84 002d 10       		.byte	(.L27-.L6)/2
+  85 002e 10       		.byte	(.L27-.L6)/2
+  86 002f 10       		.byte	(.L27-.L6)/2
+  87 0030 21       		.byte	(.L7-.L6)/2
+  88 0031 10       		.byte	(.L27-.L6)/2
+  89 0032 10       		.byte	(.L27-.L6)/2
+  90 0033 10       		.byte	(.L27-.L6)/2
+  91 0034 10       		.byte	(.L27-.L6)/2
+  92 0035 10       		.byte	(.L27-.L6)/2
+  93 0036 10       		.byte	(.L27-.L6)/2
+  94 0037 10       		.byte	(.L27-.L6)/2
+  95 0038 14       		.byte	(.L5-.L6)/2
+  96              	.LVL3:
+  97 0039 00       		.p2align 1
+  98              	.L10:
+  99              	.LCFI1:
+ 100              		.cfi_def_cfa_offset 0
+ 101              		.cfi_restore 4
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****     {
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****       case CRC_POLYLENGTH_7B:
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         if (msb >= HAL_CRC_LENGTH_7B)
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         {
+ARM GAS  /tmp/ccPnckVu.s 			page 5
+
+
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****           status =   HAL_ERROR;
+ 102              		.loc 1 121 18 is_stmt 0 view .LVU16
+ 103 003a 0120     		movs	r0, #1
+ 104              	.LVL4:
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         }
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         break;
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****       case CRC_POLYLENGTH_8B:
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         if (msb >= HAL_CRC_LENGTH_8B)
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         {
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****           status =   HAL_ERROR;
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         }
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         break;
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****       case CRC_POLYLENGTH_16B:
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         if (msb >= HAL_CRC_LENGTH_16B)
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         {
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****           status =   HAL_ERROR;
+ 134:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         }
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         break;
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****       case CRC_POLYLENGTH_32B:
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         /* no polynomial definition vs. polynomial length issue possible */
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         break;
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****       default:
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         status =  HAL_ERROR;
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         break;
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****     }
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   }
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   if (status == HAL_OK)
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   {
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****     /* set generating polynomial */
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****     WRITE_REG(hcrc->Instance->POL, Pol);
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****     /* set generating polynomial size */
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****     MODIFY_REG(hcrc->Instance->CR, CRC_CR_POLYSIZE, PolyLength);
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   }
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   /* Return function status */
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   return status;
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** }
+ 105              		.loc 1 155 1 view .LVU17
+ 106 003c 7047     		bx	lr
+ 107              	.LVL5:
+ 108              	.L3:
+ 109              	.LCFI2:
+ 110              		.cfi_def_cfa_offset 4
+ 111              		.cfi_offset 4, -4
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****     {
+ 112              		.loc 1 115 5 is_stmt 1 view .LVU18
+ 113 003e 2AB1     		cbz	r2, .L9
+ 114              	.L27:
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         }
+ 115              		.loc 1 121 18 is_stmt 0 view .LVU19
+ 116 0040 0120     		movs	r0, #1
+ 117              	.LVL6:
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** }
+ 118              		.loc 1 154 3 is_stmt 1 view .LVU20
+ 119              		.loc 1 155 1 is_stmt 0 view .LVU21
+ 120 0042 5DF8044B 		ldr	r4, [sp], #4
+ARM GAS  /tmp/ccPnckVu.s 			page 6
+
+
+ 121              	.LCFI3:
+ 122              		.cfi_remember_state
+ 123              		.cfi_restore 4
+ 124              		.cfi_def_cfa_offset 0
+ 125 0046 7047     		bx	lr
+ 126              	.LVL7:
+ 127              	.L5:
+ 128              	.LCFI4:
+ 129              		.cfi_restore_state
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         {
+ 130              		.loc 1 119 9 is_stmt 1 view .LVU22
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         {
+ 131              		.loc 1 119 12 is_stmt 0 view .LVU23
+ 132 0048 062B     		cmp	r3, #6
+ 133 004a F9D8     		bhi	.L27
+ 134              	.L9:
+ 135              	.LVL8:
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+ 136              		.loc 1 148 5 is_stmt 1 view .LVU24
+ 137 004c 0468     		ldr	r4, [r0]
+ 138 004e 6161     		str	r1, [r4, #20]
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   }
+ 139              		.loc 1 151 5 view .LVU25
+ 140 0050 A368     		ldr	r3, [r4, #8]
+ 141              	.LVL9:
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   }
+ 142              		.loc 1 151 5 is_stmt 0 view .LVU26
+ 143 0052 23F01803 		bic	r3, r3, #24
+ 144 0056 1343     		orrs	r3, r3, r2
+ 145 0058 0020     		movs	r0, #0
+ 146              	.LVL10:
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   }
+ 147              		.loc 1 151 5 view .LVU27
+ 148 005a A360     		str	r3, [r4, #8]
+ 149              		.loc 1 155 1 view .LVU28
+ 150 005c 5DF8044B 		ldr	r4, [sp], #4
+ 151              	.LCFI5:
+ 152              		.cfi_remember_state
+ 153              		.cfi_restore 4
+ 154              		.cfi_def_cfa_offset 0
+ 155 0060 7047     		bx	lr
+ 156              	.LVL11:
+ 157              	.L7:
+ 158              	.LCFI6:
+ 159              		.cfi_restore_state
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         {
+ 160              		.loc 1 125 9 is_stmt 1 view .LVU29
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         {
+ 161              		.loc 1 125 12 is_stmt 0 view .LVU30
+ 162 0062 072B     		cmp	r3, #7
+ 163 0064 F2D9     		bls	.L9
+ 164 0066 EBE7     		b	.L27
+ 165              	.L8:
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         {
+ 166              		.loc 1 131 9 is_stmt 1 view .LVU31
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****         {
+ 167              		.loc 1 131 12 is_stmt 0 view .LVU32
+ARM GAS  /tmp/ccPnckVu.s 			page 7
+
+
+ 168 0068 0F2B     		cmp	r3, #15
+ 169 006a EFD9     		bls	.L9
+ 170 006c E8E7     		b	.L27
+ 171              		.cfi_endproc
+ 172              	.LFE329:
+ 174 006e 00BF     		.section	.text.HAL_CRCEx_Input_Data_Reverse,"ax",%progbits
+ 175              		.align	1
+ 176              		.p2align 2,,3
+ 177              		.global	HAL_CRCEx_Input_Data_Reverse
+ 178              		.syntax unified
+ 179              		.thumb
+ 180              		.thumb_func
+ 182              	HAL_CRCEx_Input_Data_Reverse:
+ 183              	.LVL12:
+ 184              	.LFB330:
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** /**
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @brief  Set the Reverse Input data mode.
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @param  hcrc CRC handle
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @param  InputReverseMode Input Data inversion mode.
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *         This parameter can be one of the following values:
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *          @arg @ref CRC_INPUTDATA_INVERSION_NONE     no change in bit order (default value)
+ 163:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *          @arg @ref CRC_INPUTDATA_INVERSION_BYTE     Byte-wise bit reversal
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *          @arg @ref CRC_INPUTDATA_INVERSION_HALFWORD HalfWord-wise bit reversal
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *          @arg @ref CRC_INPUTDATA_INVERSION_WORD     Word-wise bit reversal
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @retval HAL status
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   */
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** HAL_StatusTypeDef HAL_CRCEx_Input_Data_Reverse(CRC_HandleTypeDef *hcrc, uint32_t InputReverseMode)
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** {
+ 185              		.loc 1 169 1 is_stmt 1 view -0
+ 186              		.cfi_startproc
+ 187              		@ args = 0, pretend = 0, frame = 0
+ 188              		@ frame_needed = 0, uses_anonymous_args = 0
+ 189              		@ link register save eliminated.
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   /* Check the parameters */
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   assert_param(IS_CRC_INPUTDATA_INVERSION_MODE(InputReverseMode));
+ 190              		.loc 1 171 3 view .LVU34
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   /* Change CRC peripheral state */
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   hcrc->State = HAL_CRC_STATE_BUSY;
+ 191              		.loc 1 174 3 view .LVU35
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   /* Check the parameters */
+ 192              		.loc 1 169 1 is_stmt 0 view .LVU36
+ 193 0000 0346     		mov	r3, r0
+ 194              		.loc 1 174 15 view .LVU37
+ 195 0002 0222     		movs	r2, #2
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   /* set input data inversion mode */
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   MODIFY_REG(hcrc->Instance->CR, CRC_CR_REV_IN, InputReverseMode);
+ 196              		.loc 1 177 3 view .LVU38
+ 197 0004 0068     		ldr	r0, [r0]
+ 198              	.LVL13:
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+ 199              		.loc 1 174 15 view .LVU39
+ 200 0006 5A77     		strb	r2, [r3, #29]
+ 201              		.loc 1 177 3 is_stmt 1 view .LVU40
+ 202 0008 8268     		ldr	r2, [r0, #8]
+ARM GAS  /tmp/ccPnckVu.s 			page 8
+
+
+ 203 000a 22F06002 		bic	r2, r2, #96
+ 204 000e 0A43     		orrs	r2, r2, r1
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   /* Change CRC peripheral state */
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   hcrc->State = HAL_CRC_STATE_READY;
+ 205              		.loc 1 179 15 is_stmt 0 view .LVU41
+ 206 0010 0121     		movs	r1, #1
+ 207              	.LVL14:
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   /* Change CRC peripheral state */
+ 208              		.loc 1 177 3 view .LVU42
+ 209 0012 8260     		str	r2, [r0, #8]
+ 210              		.loc 1 179 3 is_stmt 1 view .LVU43
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+ 181:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   /* Return function status */
+ 182:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   return HAL_OK;
+ 183:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** }
+ 211              		.loc 1 183 1 is_stmt 0 view .LVU44
+ 212 0014 0020     		movs	r0, #0
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+ 213              		.loc 1 179 15 view .LVU45
+ 214 0016 5977     		strb	r1, [r3, #29]
+ 182:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** }
+ 215              		.loc 1 182 3 is_stmt 1 view .LVU46
+ 216              		.loc 1 183 1 is_stmt 0 view .LVU47
+ 217 0018 7047     		bx	lr
+ 218              		.cfi_endproc
+ 219              	.LFE330:
+ 221 001a 00BF     		.section	.text.HAL_CRCEx_Output_Data_Reverse,"ax",%progbits
+ 222              		.align	1
+ 223              		.p2align 2,,3
+ 224              		.global	HAL_CRCEx_Output_Data_Reverse
+ 225              		.syntax unified
+ 226              		.thumb
+ 227              		.thumb_func
+ 229              	HAL_CRCEx_Output_Data_Reverse:
+ 230              	.LVL15:
+ 231              	.LFB331:
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** /**
+ 186:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @brief  Set the Reverse Output data mode.
+ 187:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @param  hcrc CRC handle
+ 188:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @param  OutputReverseMode Output Data inversion mode.
+ 189:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *         This parameter can be one of the following values:
+ 190:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *          @arg @ref CRC_OUTPUTDATA_INVERSION_DISABLE no CRC inversion (default value)
+ 191:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   *          @arg @ref CRC_OUTPUTDATA_INVERSION_ENABLE  bit-level inversion (e.g. for a 8-bit CRC: 
+ 192:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   * @retval HAL status
+ 193:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   */
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** HAL_StatusTypeDef HAL_CRCEx_Output_Data_Reverse(CRC_HandleTypeDef *hcrc, uint32_t OutputReverseMode
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** {
+ 232              		.loc 1 195 1 is_stmt 1 view -0
+ 233              		.cfi_startproc
+ 234              		@ args = 0, pretend = 0, frame = 0
+ 235              		@ frame_needed = 0, uses_anonymous_args = 0
+ 236              		@ link register save eliminated.
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   /* Check the parameters */
+ 197:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   assert_param(IS_CRC_OUTPUTDATA_INVERSION_MODE(OutputReverseMode));
+ 237              		.loc 1 197 3 view .LVU49
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+ARM GAS  /tmp/ccPnckVu.s 			page 9
+
+
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   /* Change CRC peripheral state */
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   hcrc->State = HAL_CRC_STATE_BUSY;
+ 238              		.loc 1 200 3 view .LVU50
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   /* Check the parameters */
+ 239              		.loc 1 195 1 is_stmt 0 view .LVU51
+ 240 0000 0346     		mov	r3, r0
+ 241              		.loc 1 200 15 view .LVU52
+ 242 0002 0222     		movs	r2, #2
+ 201:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   /* set output data inversion mode */
+ 203:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   MODIFY_REG(hcrc->Instance->CR, CRC_CR_REV_OUT, OutputReverseMode);
+ 243              		.loc 1 203 3 view .LVU53
+ 244 0004 0068     		ldr	r0, [r0]
+ 245              	.LVL16:
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+ 246              		.loc 1 200 15 view .LVU54
+ 247 0006 5A77     		strb	r2, [r3, #29]
+ 248              		.loc 1 203 3 is_stmt 1 view .LVU55
+ 249 0008 8268     		ldr	r2, [r0, #8]
+ 250 000a 22F08002 		bic	r2, r2, #128
+ 251 000e 0A43     		orrs	r2, r2, r1
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+ 205:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   /* Change CRC peripheral state */
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   hcrc->State = HAL_CRC_STATE_READY;
+ 252              		.loc 1 206 15 is_stmt 0 view .LVU56
+ 253 0010 0121     		movs	r1, #1
+ 254              	.LVL17:
+ 203:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+ 255              		.loc 1 203 3 view .LVU57
+ 256 0012 8260     		str	r2, [r0, #8]
+ 257              		.loc 1 206 3 is_stmt 1 view .LVU58
+ 207:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+ 208:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   /* Return function status */
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c ****   return HAL_OK;
+ 210:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** }
+ 258              		.loc 1 210 1 is_stmt 0 view .LVU59
+ 259 0014 0020     		movs	r0, #0
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** 
+ 260              		.loc 1 206 15 view .LVU60
+ 261 0016 5977     		strb	r1, [r3, #29]
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_crc_ex.c **** }
+ 262              		.loc 1 209 3 is_stmt 1 view .LVU61
+ 263              		.loc 1 210 1 is_stmt 0 view .LVU62
+ 264 0018 7047     		bx	lr
+ 265              		.cfi_endproc
+ 266              	.LFE331:
+ 268 001a 00BF     		.text
+ 269              	.Letext0:
+ 270              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 271              		.file 3 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 272              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 273              		.file 5 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ARM GAS  /tmp/ccPnckVu.s 			page 10
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32g4xx_hal_crc_ex.c
+     /tmp/ccPnckVu.s:21     .text.HAL_CRCEx_Polynomial_Set:00000000 $t
+     /tmp/ccPnckVu.s:28     .text.HAL_CRCEx_Polynomial_Set:00000000 HAL_CRCEx_Polynomial_Set
+     /tmp/ccPnckVu.s:71     .text.HAL_CRCEx_Polynomial_Set:00000020 $d
+     /tmp/ccPnckVu.s:175    .text.HAL_CRCEx_Input_Data_Reverse:00000000 $t
+     /tmp/ccPnckVu.s:182    .text.HAL_CRCEx_Input_Data_Reverse:00000000 HAL_CRCEx_Input_Data_Reverse
+     /tmp/ccPnckVu.s:222    .text.HAL_CRCEx_Output_Data_Reverse:00000000 $t
+     /tmp/ccPnckVu.s:229    .text.HAL_CRCEx_Output_Data_Reverse:00000000 HAL_CRCEx_Output_Data_Reverse
+     /tmp/ccPnckVu.s:97     .text.HAL_CRCEx_Polynomial_Set:00000039 $d
+     /tmp/ccPnckVu.s:97     .text.HAL_CRCEx_Polynomial_Set:0000003a $t
+
+NO UNDEFINED SYMBOLS

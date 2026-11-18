@@ -1,0 +1,2338 @@
+ARM GAS  /tmp/ccnxD9jo.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"usbd_core.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Libra
+  20              		.section	.text.USBD_Init,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	USBD_Init
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	USBD_Init:
+  29              	.LVL0:
+  30              	.LFB333:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   ******************************************************************************
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @file    usbd_core.c
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @author  MCD Application Team
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief   This file provides all the USBD core functions.
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   ******************************************************************************
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @attention
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * <h2><center>&copy; Copyright (c) 2015 STMicroelectronics.
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * All rights reserved.</center></h2>
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * This software component is licensed by ST under Ultimate Liberty license
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * SLA0044, the "License"; You may not use this file except in compliance with
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * the License. You may obtain a copy of the License at:
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *                      www.st.com/SLA0044
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   ******************************************************************************
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /* Includes ------------------------------------------------------------------*/
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** #include "usbd_core.h"
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /** @addtogroup STM32_USBD_DEVICE_LIBRARY
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @{
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /** @defgroup USBD_CORE
+ARM GAS  /tmp/ccnxD9jo.s 			page 2
+
+
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief usbd core module
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @{
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /** @defgroup USBD_CORE_Private_TypesDefinitions
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @{
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @}
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /** @defgroup USBD_CORE_Private_Defines
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @{
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @}
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /** @defgroup USBD_CORE_Private_Macros
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @{
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @}
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /** @defgroup USBD_CORE_Private_FunctionPrototypes
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @{
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @}
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /** @defgroup USBD_CORE_Private_Variables
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @{
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @}
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /** @defgroup USBD_CORE_Private_Functions
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @{
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief  USBD_Init
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *         Initializes the device stack and load the class driver
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pdev: device instance
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pdesc: Descriptor structure address
+ARM GAS  /tmp/ccnxD9jo.s 			page 3
+
+
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  id: Low level core index
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @retval None
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** USBD_StatusTypeDef USBD_Init(USBD_HandleTypeDef *pdev,
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****                              USBD_DescriptorsTypeDef *pdesc, uint8_t id)
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** {
+  31              		.loc 1 91 1 view -0
+  32              		.cfi_startproc
+  33              		@ args = 0, pretend = 0, frame = 0
+  34              		@ frame_needed = 0, uses_anonymous_args = 0
+  35              		@ link register save eliminated.
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   USBD_StatusTypeDef ret;
+  36              		.loc 1 92 3 view .LVU1
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Check whether the USB Host handle is valid */
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pdev == NULL)
+  37              		.loc 1 95 3 view .LVU2
+  38              		.loc 1 95 6 is_stmt 0 view .LVU3
+  39 0000 78B1     		cbz	r0, .L2
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** #if (USBD_DEBUG_LEVEL > 1U)
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     USBD_ErrLog("Invalid Device handle");
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** #endif
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     return USBD_FAIL;
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Unlink previous class resources */
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->pClass = NULL;
+  40              		.loc 1 104 3 is_stmt 1 view .LVU4
+  41              		.loc 1 104 16 is_stmt 0 view .LVU5
+  42 0002 0023     		movs	r3, #0
+  43 0004 C0F8B832 		str	r3, [r0, #696]
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->pUserData = NULL;
+  44              		.loc 1 105 3 is_stmt 1 view .LVU6
+  45              		.loc 1 105 19 is_stmt 0 view .LVU7
+  46 0008 C0F8C032 		str	r3, [r0, #704]
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->pConfDesc = NULL;
+  47              		.loc 1 106 3 is_stmt 1 view .LVU8
+  48              		.loc 1 106 19 is_stmt 0 view .LVU9
+  49 000c C0F8CC32 		str	r3, [r0, #716]
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Assign USBD Descriptors */
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pdesc != NULL)
+  50              		.loc 1 109 3 is_stmt 1 view .LVU10
+  51              		.loc 1 109 6 is_stmt 0 view .LVU11
+  52 0010 09B1     		cbz	r1, .L3
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     pdev->pDesc = pdesc;
+  53              		.loc 1 111 5 is_stmt 1 view .LVU12
+  54              		.loc 1 111 17 is_stmt 0 view .LVU13
+  55 0012 C0F8B412 		str	r1, [r0, #692]
+  56              	.L3:
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Set Device initial State */
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->dev_state = USBD_STATE_DEFAULT;
+  57              		.loc 1 115 3 is_stmt 1 view .LVU14
+ARM GAS  /tmp/ccnxD9jo.s 			page 4
+
+
+  58              		.loc 1 115 19 is_stmt 0 view .LVU15
+  59 0016 0123     		movs	r3, #1
+  60 0018 80F89C32 		strb	r3, [r0, #668]
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->id = id;
+  61              		.loc 1 116 3 is_stmt 1 view .LVU16
+  62              		.loc 1 116 12 is_stmt 0 view .LVU17
+  63 001c 0270     		strb	r2, [r0]
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Initialize low level driver */
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   ret = USBD_LL_Init(pdev);
+  64              		.loc 1 119 3 is_stmt 1 view .LVU18
+  65              		.loc 1 119 9 is_stmt 0 view .LVU19
+  66 001e FFF7FEBF 		b	USBD_LL_Init
+  67              	.LVL1:
+  68              	.L2:
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   return ret;
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+  69              		.loc 1 122 1 view .LVU20
+  70 0022 0320     		movs	r0, #3
+  71              	.LVL2:
+  72              		.loc 1 122 1 view .LVU21
+  73 0024 7047     		bx	lr
+  74              		.cfi_endproc
+  75              	.LFE333:
+  77 0026 00BF     		.section	.text.USBD_DeInit,"ax",%progbits
+  78              		.align	1
+  79              		.p2align 2,,3
+  80              		.global	USBD_DeInit
+  81              		.syntax unified
+  82              		.thumb
+  83              		.thumb_func
+  85              	USBD_DeInit:
+  86              	.LVL3:
+  87              	.LFB334:
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief  USBD_DeInit
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *         Re-Initialize the device library
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pdev: device instance
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @retval status: status
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** USBD_StatusTypeDef USBD_DeInit(USBD_HandleTypeDef *pdev)
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** {
+  88              		.loc 1 131 1 is_stmt 1 view -0
+  89              		.cfi_startproc
+  90              		@ args = 0, pretend = 0, frame = 0
+  91              		@ frame_needed = 0, uses_anonymous_args = 0
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   USBD_StatusTypeDef ret;
+  92              		.loc 1 132 3 view .LVU23
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 134:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Disconnect the USB Device */
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   (void)USBD_LL_Stop(pdev);
+  93              		.loc 1 135 3 view .LVU24
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   USBD_StatusTypeDef ret;
+  94              		.loc 1 131 1 is_stmt 0 view .LVU25
+  95 0000 10B5     		push	{r4, lr}
+ARM GAS  /tmp/ccnxD9jo.s 			page 5
+
+
+  96              	.LCFI0:
+  97              		.cfi_def_cfa_offset 8
+  98              		.cfi_offset 4, -8
+  99              		.cfi_offset 14, -4
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   USBD_StatusTypeDef ret;
+ 100              		.loc 1 131 1 view .LVU26
+ 101 0002 0446     		mov	r4, r0
+ 102              		.loc 1 135 9 view .LVU27
+ 103 0004 FFF7FEFF 		bl	USBD_LL_Stop
+ 104              	.LVL4:
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Set Default State */
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->dev_state = USBD_STATE_DEFAULT;
+ 105              		.loc 1 138 3 is_stmt 1 view .LVU28
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Free Class Resources */
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pdev->pClass != NULL)
+ 106              		.loc 1 141 11 is_stmt 0 view .LVU29
+ 107 0008 D4F8B832 		ldr	r3, [r4, #696]
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 108              		.loc 1 138 19 view .LVU30
+ 109 000c 0122     		movs	r2, #1
+ 110 000e 84F89C22 		strb	r2, [r4, #668]
+ 111              		.loc 1 141 3 is_stmt 1 view .LVU31
+ 112              		.loc 1 141 6 is_stmt 0 view .LVU32
+ 113 0012 43B1     		cbz	r3, .L9
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     pdev->pClass->DeInit(pdev, (uint8_t)pdev->dev_config);
+ 114              		.loc 1 143 5 is_stmt 1 view .LVU33
+ 115 0014 5B68     		ldr	r3, [r3, #4]
+ 116 0016 2179     		ldrb	r1, [r4, #4]	@ zero_extendqisi2
+ 117 0018 2046     		mov	r0, r4
+ 118 001a 9847     		blx	r3
+ 119              	.LVL5:
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     pdev->pClass = NULL;
+ 120              		.loc 1 144 5 view .LVU34
+ 121              		.loc 1 144 18 is_stmt 0 view .LVU35
+ 122 001c 0023     		movs	r3, #0
+ 123 001e C4F8B832 		str	r3, [r4, #696]
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     pdev->pUserData = NULL;
+ 124              		.loc 1 145 5 is_stmt 1 view .LVU36
+ 125              		.loc 1 145 21 is_stmt 0 view .LVU37
+ 126 0022 C4F8C032 		str	r3, [r4, #704]
+ 127              	.L9:
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Free Device descriptors resources */
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->pDesc = NULL;
+ 128              		.loc 1 149 3 is_stmt 1 view .LVU38
+ 129              		.loc 1 149 15 is_stmt 0 view .LVU39
+ 130 0026 0023     		movs	r3, #0
+ 131 0028 C4F8B432 		str	r3, [r4, #692]
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->pConfDesc = NULL;
+ 132              		.loc 1 150 3 is_stmt 1 view .LVU40
+ 133              		.loc 1 150 19 is_stmt 0 view .LVU41
+ 134 002c C4F8CC32 		str	r3, [r4, #716]
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ARM GAS  /tmp/ccnxD9jo.s 			page 6
+
+
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* DeInitialize low level driver */
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   ret = USBD_LL_DeInit(pdev);
+ 135              		.loc 1 153 3 is_stmt 1 view .LVU42
+ 136              		.loc 1 153 9 is_stmt 0 view .LVU43
+ 137 0030 2046     		mov	r0, r4
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   return ret;
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 138              		.loc 1 156 1 view .LVU44
+ 139 0032 BDE81040 		pop	{r4, lr}
+ 140              	.LCFI1:
+ 141              		.cfi_restore 14
+ 142              		.cfi_restore 4
+ 143              		.cfi_def_cfa_offset 0
+ 144              	.LVL6:
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 145              		.loc 1 153 9 view .LVU45
+ 146 0036 FFF7FEBF 		b	USBD_LL_DeInit
+ 147              	.LVL7:
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 148              		.loc 1 153 9 view .LVU46
+ 149              		.cfi_endproc
+ 150              	.LFE334:
+ 152 003a 00BF     		.section	.text.USBD_RegisterClass,"ax",%progbits
+ 153              		.align	1
+ 154              		.p2align 2,,3
+ 155              		.global	USBD_RegisterClass
+ 156              		.syntax unified
+ 157              		.thumb
+ 158              		.thumb_func
+ 160              	USBD_RegisterClass:
+ 161              	.LVL8:
+ 162              	.LFB335:
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief  USBD_RegisterClass
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *         Link class driver to Device Core.
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pDevice : Device Handle
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pclass: Class handle
+ 163:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @retval USBD Status
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** USBD_StatusTypeDef USBD_RegisterClass(USBD_HandleTypeDef *pdev, USBD_ClassTypeDef *pclass)
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** {
+ 163              		.loc 1 166 1 is_stmt 1 view -0
+ 164              		.cfi_startproc
+ 165              		@ args = 0, pretend = 0, frame = 8
+ 166              		@ frame_needed = 0, uses_anonymous_args = 0
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   uint16_t len = 0U;
+ 167              		.loc 1 167 3 view .LVU48
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   uint16_t len = 0U;
+ 168              		.loc 1 166 1 is_stmt 0 view .LVU49
+ 169 0000 10B5     		push	{r4, lr}
+ 170              	.LCFI2:
+ 171              		.cfi_def_cfa_offset 8
+ 172              		.cfi_offset 4, -8
+ 173              		.cfi_offset 14, -4
+ 174 0002 82B0     		sub	sp, sp, #8
+ARM GAS  /tmp/ccnxD9jo.s 			page 7
+
+
+ 175              	.LCFI3:
+ 176              		.cfi_def_cfa_offset 16
+ 177              		.loc 1 167 12 view .LVU50
+ 178 0004 0023     		movs	r3, #0
+ 179 0006 ADF80630 		strh	r3, [sp, #6]	@ movhi
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pclass == NULL)
+ 180              		.loc 1 169 3 is_stmt 1 view .LVU51
+ 181              		.loc 1 169 6 is_stmt 0 view .LVU52
+ 182 000a 61B1     		cbz	r1, .L18
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** #if (USBD_DEBUG_LEVEL > 1U)
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     USBD_ErrLog("Invalid Class handle");
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** #endif
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     return USBD_FAIL;
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* link the class to the USB Device handle */
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->pClass = pclass;
+ 183              		.loc 1 178 3 is_stmt 1 view .LVU53
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Get Device Configuration Descriptor */
+ 181:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** #ifdef USE_USB_HS
+ 182:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pdev->pClass->GetHSConfigDescriptor != NULL)
+ 183:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     pdev->pConfDesc = (void *)pdev->pClass->GetHSConfigDescriptor(&len);
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 186:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** #else /* Default USE_USB_FS */
+ 187:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pdev->pClass->GetFSConfigDescriptor != NULL)
+ 184              		.loc 1 187 19 is_stmt 0 view .LVU54
+ 185 000c CB6A     		ldr	r3, [r1, #44]
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 186              		.loc 1 178 16 view .LVU55
+ 187 000e C0F8B812 		str	r1, [r0, #696]
+ 188              		.loc 1 187 3 is_stmt 1 view .LVU56
+ 189 0012 0446     		mov	r4, r0
+ 190              		.loc 1 187 6 is_stmt 0 view .LVU57
+ 191 0014 23B1     		cbz	r3, .L17
+ 188:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 189:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     pdev->pConfDesc = (void *)pdev->pClass->GetFSConfigDescriptor(&len);
+ 192              		.loc 1 189 5 is_stmt 1 view .LVU58
+ 193              		.loc 1 189 31 is_stmt 0 view .LVU59
+ 194 0016 0DF10600 		add	r0, sp, #6
+ 195              	.LVL9:
+ 196              		.loc 1 189 31 view .LVU60
+ 197 001a 9847     		blx	r3
+ 198              	.LVL10:
+ 199              		.loc 1 189 21 discriminator 1 view .LVU61
+ 200 001c C4F8CC02 		str	r0, [r4, #716]
+ 201              	.L17:
+ 190:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 191:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** #endif /* USE_USB_FS */
+ 192:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 193:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   return USBD_OK;
+ 202              		.loc 1 193 10 view .LVU62
+ 203 0020 0020     		movs	r0, #0
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ARM GAS  /tmp/ccnxD9jo.s 			page 8
+
+
+ 204              		.loc 1 194 1 view .LVU63
+ 205 0022 02B0     		add	sp, sp, #8
+ 206              	.LCFI4:
+ 207              		.cfi_remember_state
+ 208              		.cfi_def_cfa_offset 8
+ 209              		@ sp needed
+ 210 0024 10BD     		pop	{r4, pc}
+ 211              	.LVL11:
+ 212              	.L18:
+ 213              	.LCFI5:
+ 214              		.cfi_restore_state
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 215              		.loc 1 174 12 view .LVU64
+ 216 0026 0320     		movs	r0, #3
+ 217              	.LVL12:
+ 218              		.loc 1 194 1 view .LVU65
+ 219 0028 02B0     		add	sp, sp, #8
+ 220              	.LCFI6:
+ 221              		.cfi_def_cfa_offset 8
+ 222              		@ sp needed
+ 223 002a 10BD     		pop	{r4, pc}
+ 224              		.cfi_endproc
+ 225              	.LFE335:
+ 227              		.section	.text.USBD_Start,"ax",%progbits
+ 228              		.align	1
+ 229              		.p2align 2,,3
+ 230              		.global	USBD_Start
+ 231              		.syntax unified
+ 232              		.thumb
+ 233              		.thumb_func
+ 235              	USBD_Start:
+ 236              	.LVL13:
+ 237              	.LFB336:
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+ 197:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief  USBD_Start
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *         Start the USB Device Core.
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pdev: Device Handle
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @retval USBD Status
+ 201:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** USBD_StatusTypeDef USBD_Start(USBD_HandleTypeDef *pdev)
+ 203:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** {
+ 238              		.loc 1 203 1 is_stmt 1 view -0
+ 239              		.cfi_startproc
+ 240              		@ args = 0, pretend = 0, frame = 0
+ 241              		@ frame_needed = 0, uses_anonymous_args = 0
+ 242              		@ link register save eliminated.
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Start the low level driver  */
+ 205:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   return USBD_LL_Start(pdev);
+ 243              		.loc 1 205 3 view .LVU67
+ 244              		.loc 1 205 10 is_stmt 0 view .LVU68
+ 245 0000 FFF7FEBF 		b	USBD_LL_Start
+ 246              	.LVL14:
+ 247              		.loc 1 205 10 view .LVU69
+ 248              		.cfi_endproc
+ 249              	.LFE336:
+ 251              		.section	.text.USBD_Stop,"ax",%progbits
+ARM GAS  /tmp/ccnxD9jo.s 			page 9
+
+
+ 252              		.align	1
+ 253              		.p2align 2,,3
+ 254              		.global	USBD_Stop
+ 255              		.syntax unified
+ 256              		.thumb
+ 257              		.thumb_func
+ 259              	USBD_Stop:
+ 260              	.LVL15:
+ 261              	.LFB337:
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 207:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 208:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief  USBD_Stop
+ 210:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *         Stop the USB Device Core.
+ 211:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pdev: Device Handle
+ 212:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @retval USBD Status
+ 213:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+ 214:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** USBD_StatusTypeDef USBD_Stop(USBD_HandleTypeDef *pdev)
+ 215:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** {
+ 262              		.loc 1 215 1 is_stmt 1 view -0
+ 263              		.cfi_startproc
+ 264              		@ args = 0, pretend = 0, frame = 0
+ 265              		@ frame_needed = 0, uses_anonymous_args = 0
+ 216:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Disconnect USB Device */
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   (void)USBD_LL_Stop(pdev);
+ 266              		.loc 1 217 3 view .LVU71
+ 215:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Disconnect USB Device */
+ 267              		.loc 1 215 1 is_stmt 0 view .LVU72
+ 268 0000 10B5     		push	{r4, lr}
+ 269              	.LCFI7:
+ 270              		.cfi_def_cfa_offset 8
+ 271              		.cfi_offset 4, -8
+ 272              		.cfi_offset 14, -4
+ 215:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Disconnect USB Device */
+ 273              		.loc 1 215 1 view .LVU73
+ 274 0002 0446     		mov	r4, r0
+ 275              		.loc 1 217 9 view .LVU74
+ 276 0004 FFF7FEFF 		bl	USBD_LL_Stop
+ 277              	.LVL16:
+ 218:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 219:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Free Class Resources */
+ 220:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pdev->pClass != NULL)
+ 278              		.loc 1 220 3 is_stmt 1 view .LVU75
+ 279              		.loc 1 220 11 is_stmt 0 view .LVU76
+ 280 0008 D4F8B832 		ldr	r3, [r4, #696]
+ 281              		.loc 1 220 6 view .LVU77
+ 282 000c 1BB1     		cbz	r3, .L22
+ 221:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 222:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     (void)pdev->pClass->DeInit(pdev, (uint8_t)pdev->dev_config);
+ 283              		.loc 1 222 5 is_stmt 1 view .LVU78
+ 284              		.loc 1 222 11 is_stmt 0 view .LVU79
+ 285 000e 5B68     		ldr	r3, [r3, #4]
+ 286 0010 2179     		ldrb	r1, [r4, #4]	@ zero_extendqisi2
+ 287 0012 2046     		mov	r0, r4
+ 288 0014 9847     		blx	r3
+ 289              	.LVL17:
+ 290              	.L22:
+ARM GAS  /tmp/ccnxD9jo.s 			page 10
+
+
+ 223:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 224:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 225:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   return USBD_OK;
+ 291              		.loc 1 225 3 is_stmt 1 view .LVU80
+ 226:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 292              		.loc 1 226 1 is_stmt 0 view .LVU81
+ 293 0016 0020     		movs	r0, #0
+ 294 0018 10BD     		pop	{r4, pc}
+ 295              		.loc 1 226 1 view .LVU82
+ 296              		.cfi_endproc
+ 297              	.LFE337:
+ 299 001a 00BF     		.section	.text.USBD_RunTestMode,"ax",%progbits
+ 300              		.align	1
+ 301              		.p2align 2,,3
+ 302              		.global	USBD_RunTestMode
+ 303              		.syntax unified
+ 304              		.thumb
+ 305              		.thumb_func
+ 307              	USBD_RunTestMode:
+ 308              	.LVL18:
+ 309              	.LFB338:
+ 227:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 228:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+ 229:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief  USBD_RunTestMode
+ 230:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *         Launch test mode process
+ 231:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pdev: device instance
+ 232:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @retval status
+ 233:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+ 234:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** USBD_StatusTypeDef USBD_RunTestMode(USBD_HandleTypeDef  *pdev)
+ 235:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** {
+ 310              		.loc 1 235 1 is_stmt 1 view -0
+ 311              		.cfi_startproc
+ 312              		@ args = 0, pretend = 0, frame = 0
+ 313              		@ frame_needed = 0, uses_anonymous_args = 0
+ 314              		@ link register save eliminated.
+ 236:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Prevent unused argument compilation warning */
+ 237:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   UNUSED(pdev);
+ 315              		.loc 1 237 3 view .LVU84
+ 238:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 239:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   return USBD_OK;
+ 316              		.loc 1 239 3 view .LVU85
+ 240:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 317              		.loc 1 240 1 is_stmt 0 view .LVU86
+ 318 0000 0020     		movs	r0, #0
+ 319              	.LVL19:
+ 320              		.loc 1 240 1 view .LVU87
+ 321 0002 7047     		bx	lr
+ 322              		.cfi_endproc
+ 323              	.LFE338:
+ 325              		.section	.text.USBD_SetClassConfig,"ax",%progbits
+ 326              		.align	1
+ 327              		.p2align 2,,3
+ 328              		.global	USBD_SetClassConfig
+ 329              		.syntax unified
+ 330              		.thumb
+ 331              		.thumb_func
+ 333              	USBD_SetClassConfig:
+ARM GAS  /tmp/ccnxD9jo.s 			page 11
+
+
+ 334              	.LVL20:
+ 335              	.LFB339:
+ 241:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 242:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+ 243:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief  USBD_SetClassConfig
+ 244:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *        Configure device and start the interface
+ 245:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pdev: device instance
+ 246:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  cfgidx: configuration index
+ 247:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @retval status
+ 248:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+ 249:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 250:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** USBD_StatusTypeDef USBD_SetClassConfig(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
+ 251:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** {
+ 336              		.loc 1 251 1 is_stmt 1 view -0
+ 337              		.cfi_startproc
+ 338              		@ args = 0, pretend = 0, frame = 0
+ 339              		@ frame_needed = 0, uses_anonymous_args = 0
+ 340              		@ link register save eliminated.
+ 252:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   USBD_StatusTypeDef ret = USBD_FAIL;
+ 341              		.loc 1 252 3 view .LVU89
+ 253:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 254:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pdev->pClass != NULL)
+ 342              		.loc 1 254 3 view .LVU90
+ 343              		.loc 1 254 11 is_stmt 0 view .LVU91
+ 344 0000 D0F8B832 		ldr	r3, [r0, #696]
+ 345              		.loc 1 254 6 view .LVU92
+ 346 0004 0BB1     		cbz	r3, .L29
+ 255:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 256:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     /* Set configuration and Start the Class */
+ 257:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     ret = (USBD_StatusTypeDef)pdev->pClass->Init(pdev, cfgidx);
+ 347              		.loc 1 257 5 is_stmt 1 view .LVU93
+ 348              		.loc 1 257 31 is_stmt 0 view .LVU94
+ 349 0006 1B68     		ldr	r3, [r3]
+ 350 0008 1847     		bx	r3
+ 351              	.LVL21:
+ 352              	.L29:
+ 258:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 259:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 260:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   return ret;
+ 353              		.loc 1 260 3 is_stmt 1 view .LVU95
+ 261:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 354              		.loc 1 261 1 is_stmt 0 view .LVU96
+ 355 000a 0320     		movs	r0, #3
+ 356              	.LVL22:
+ 357              		.loc 1 261 1 view .LVU97
+ 358 000c 7047     		bx	lr
+ 359              		.cfi_endproc
+ 360              	.LFE339:
+ 362 000e 00BF     		.section	.text.USBD_ClrClassConfig,"ax",%progbits
+ 363              		.align	1
+ 364              		.p2align 2,,3
+ 365              		.global	USBD_ClrClassConfig
+ 366              		.syntax unified
+ 367              		.thumb
+ 368              		.thumb_func
+ 370              	USBD_ClrClassConfig:
+ 371              	.LVL23:
+ARM GAS  /tmp/ccnxD9jo.s 			page 12
+
+
+ 372              	.LFB340:
+ 262:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 263:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+ 264:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief  USBD_ClrClassConfig
+ 265:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *         Clear current configuration
+ 266:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pdev: device instance
+ 267:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  cfgidx: configuration index
+ 268:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @retval status: USBD_StatusTypeDef
+ 269:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+ 270:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** USBD_StatusTypeDef USBD_ClrClassConfig(USBD_HandleTypeDef *pdev, uint8_t cfgidx)
+ 271:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** {
+ 373              		.loc 1 271 1 is_stmt 1 view -0
+ 374              		.cfi_startproc
+ 375              		@ args = 0, pretend = 0, frame = 0
+ 376              		@ frame_needed = 0, uses_anonymous_args = 0
+ 272:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Clear configuration and De-initialize the Class process */
+ 273:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pdev->pClass != NULL)
+ 377              		.loc 1 273 3 view .LVU99
+ 271:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Clear configuration and De-initialize the Class process */
+ 378              		.loc 1 271 1 is_stmt 0 view .LVU100
+ 379 0000 08B5     		push	{r3, lr}
+ 380              	.LCFI8:
+ 381              		.cfi_def_cfa_offset 8
+ 382              		.cfi_offset 3, -8
+ 383              		.cfi_offset 14, -4
+ 384              		.loc 1 273 11 view .LVU101
+ 385 0002 D0F8B832 		ldr	r3, [r0, #696]
+ 386              		.loc 1 273 6 view .LVU102
+ 387 0006 0BB1     		cbz	r3, .L31
+ 274:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 275:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     pdev->pClass->DeInit(pdev, cfgidx);
+ 388              		.loc 1 275 5 is_stmt 1 view .LVU103
+ 389 0008 5B68     		ldr	r3, [r3, #4]
+ 390 000a 9847     		blx	r3
+ 391              	.LVL24:
+ 392              	.L31:
+ 276:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 277:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 278:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   return USBD_OK;
+ 393              		.loc 1 278 3 view .LVU104
+ 279:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 394              		.loc 1 279 1 is_stmt 0 view .LVU105
+ 395 000c 0020     		movs	r0, #0
+ 396 000e 08BD     		pop	{r3, pc}
+ 397              		.cfi_endproc
+ 398              	.LFE340:
+ 400              		.section	.text.USBD_LL_SetupStage,"ax",%progbits
+ 401              		.align	1
+ 402              		.p2align 2,,3
+ 403              		.global	USBD_LL_SetupStage
+ 404              		.syntax unified
+ 405              		.thumb
+ 406              		.thumb_func
+ 408              	USBD_LL_SetupStage:
+ 409              	.LVL25:
+ 410              	.LFB341:
+ 280:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ARM GAS  /tmp/ccnxD9jo.s 			page 13
+
+
+ 281:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 282:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+ 283:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief  USBD_LL_SetupStage
+ 284:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *         Handle the setup stage
+ 285:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pdev: device instance
+ 286:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @retval status
+ 287:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+ 288:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** USBD_StatusTypeDef USBD_LL_SetupStage(USBD_HandleTypeDef *pdev, uint8_t *psetup)
+ 289:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** {
+ 411              		.loc 1 289 1 is_stmt 1 view -0
+ 412              		.cfi_startproc
+ 413              		@ args = 0, pretend = 0, frame = 0
+ 414              		@ frame_needed = 0, uses_anonymous_args = 0
+ 290:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   USBD_StatusTypeDef ret;
+ 415              		.loc 1 290 3 view .LVU107
+ 291:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 292:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   USBD_ParseSetupRequest(&pdev->request, psetup);
+ 416              		.loc 1 292 3 view .LVU108
+ 289:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   USBD_StatusTypeDef ret;
+ 417              		.loc 1 289 1 is_stmt 0 view .LVU109
+ 418 0000 38B5     		push	{r3, r4, r5, lr}
+ 419              	.LCFI9:
+ 420              		.cfi_def_cfa_offset 16
+ 421              		.cfi_offset 3, -16
+ 422              		.cfi_offset 4, -12
+ 423              		.cfi_offset 5, -8
+ 424              		.cfi_offset 14, -4
+ 289:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   USBD_StatusTypeDef ret;
+ 425              		.loc 1 289 1 view .LVU110
+ 426 0002 0446     		mov	r4, r0
+ 427              		.loc 1 292 3 view .LVU111
+ 428 0004 00F2AA25 		addw	r5, r0, #682
+ 429 0008 2846     		mov	r0, r5
+ 430              	.LVL26:
+ 431              		.loc 1 292 3 view .LVU112
+ 432 000a FFF7FEFF 		bl	USBD_ParseSetupRequest
+ 433              	.LVL27:
+ 293:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 294:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->ep0_state = USBD_EP0_SETUP;
+ 434              		.loc 1 294 3 is_stmt 1 view .LVU113
+ 295:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 296:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->ep0_data_len = pdev->request.wLength;
+ 297:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 298:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   switch (pdev->request.bmRequest & 0x1FU)
+ 435              		.loc 1 298 24 is_stmt 0 view .LVU114
+ 436 000e 94F8AA12 		ldrb	r1, [r4, #682]	@ zero_extendqisi2
+ 296:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 437              		.loc 1 296 37 view .LVU115
+ 438 0012 B4F8B022 		ldrh	r2, [r4, #688]
+ 439 0016 C4F89822 		str	r2, [r4, #664]
+ 294:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 440              		.loc 1 294 19 view .LVU116
+ 441 001a 0123     		movs	r3, #1
+ 442 001c C4F89432 		str	r3, [r4, #660]
+ 296:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 443              		.loc 1 296 3 is_stmt 1 view .LVU117
+ 444              		.loc 1 298 3 view .LVU118
+ARM GAS  /tmp/ccnxD9jo.s 			page 14
+
+
+ 445 0020 01F01F03 		and	r3, r1, #31
+ 446 0024 012B     		cmp	r3, #1
+ 447 0026 0ED0     		beq	.L37
+ 448 0028 022B     		cmp	r3, #2
+ 449 002a 06D0     		beq	.L38
+ 450 002c 8BB9     		cbnz	r3, .L39
+ 299:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 300:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     case USB_REQ_RECIPIENT_DEVICE:
+ 301:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       ret = USBD_StdDevReq(pdev, &pdev->request);
+ 451              		.loc 1 301 7 view .LVU119
+ 452              		.loc 1 301 13 is_stmt 0 view .LVU120
+ 453 002e 2946     		mov	r1, r5
+ 454 0030 2046     		mov	r0, r4
+ 302:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       break;
+ 303:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 304:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     case USB_REQ_RECIPIENT_INTERFACE:
+ 305:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       ret = USBD_StdItfReq(pdev, &pdev->request);
+ 306:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       break;
+ 307:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 308:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     case USB_REQ_RECIPIENT_ENDPOINT:
+ 309:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       ret = USBD_StdEPReq(pdev, &pdev->request);
+ 310:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       break;
+ 311:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 312:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     default:
+ 313:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       ret = USBD_LL_StallEP(pdev, (pdev->request.bmRequest & 0x80U));
+ 314:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       break;
+ 315:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 316:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 317:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   return ret;
+ 318:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 455              		.loc 1 318 1 view .LVU121
+ 456 0032 BDE83840 		pop	{r3, r4, r5, lr}
+ 457              	.LCFI10:
+ 458              		.cfi_remember_state
+ 459              		.cfi_restore 14
+ 460              		.cfi_restore 5
+ 461              		.cfi_restore 4
+ 462              		.cfi_restore 3
+ 463              		.cfi_def_cfa_offset 0
+ 464              	.LVL28:
+ 301:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       break;
+ 465              		.loc 1 301 13 view .LVU122
+ 466 0036 FFF7FEBF 		b	USBD_StdDevReq
+ 467              	.LVL29:
+ 468              	.L38:
+ 469              	.LCFI11:
+ 470              		.cfi_restore_state
+ 309:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       break;
+ 471              		.loc 1 309 7 is_stmt 1 view .LVU123
+ 309:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       break;
+ 472              		.loc 1 309 13 is_stmt 0 view .LVU124
+ 473 003a 2946     		mov	r1, r5
+ 474 003c 2046     		mov	r0, r4
+ 475              		.loc 1 318 1 view .LVU125
+ 476 003e BDE83840 		pop	{r3, r4, r5, lr}
+ 477              	.LCFI12:
+ 478              		.cfi_remember_state
+ARM GAS  /tmp/ccnxD9jo.s 			page 15
+
+
+ 479              		.cfi_restore 14
+ 480              		.cfi_restore 5
+ 481              		.cfi_restore 4
+ 482              		.cfi_restore 3
+ 483              		.cfi_def_cfa_offset 0
+ 484              	.LVL30:
+ 309:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       break;
+ 485              		.loc 1 309 13 view .LVU126
+ 486 0042 FFF7FEBF 		b	USBD_StdEPReq
+ 487              	.LVL31:
+ 488              	.L37:
+ 489              	.LCFI13:
+ 490              		.cfi_restore_state
+ 305:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       break;
+ 491              		.loc 1 305 7 is_stmt 1 view .LVU127
+ 305:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       break;
+ 492              		.loc 1 305 13 is_stmt 0 view .LVU128
+ 493 0046 2946     		mov	r1, r5
+ 494 0048 2046     		mov	r0, r4
+ 495              		.loc 1 318 1 view .LVU129
+ 496 004a BDE83840 		pop	{r3, r4, r5, lr}
+ 497              	.LCFI14:
+ 498              		.cfi_remember_state
+ 499              		.cfi_restore 14
+ 500              		.cfi_restore 5
+ 501              		.cfi_restore 4
+ 502              		.cfi_restore 3
+ 503              		.cfi_def_cfa_offset 0
+ 504              	.LVL32:
+ 305:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       break;
+ 505              		.loc 1 305 13 view .LVU130
+ 506 004e FFF7FEBF 		b	USBD_StdItfReq
+ 507              	.LVL33:
+ 508              	.L39:
+ 509              	.LCFI15:
+ 510              		.cfi_restore_state
+ 313:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       break;
+ 511              		.loc 1 313 7 is_stmt 1 view .LVU131
+ 313:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       break;
+ 512              		.loc 1 313 13 is_stmt 0 view .LVU132
+ 513 0052 2046     		mov	r0, r4
+ 514 0054 01F08001 		and	r1, r1, #128
+ 515              		.loc 1 318 1 view .LVU133
+ 516 0058 BDE83840 		pop	{r3, r4, r5, lr}
+ 517              	.LCFI16:
+ 518              		.cfi_restore 14
+ 519              		.cfi_restore 5
+ 520              		.cfi_restore 4
+ 521              		.cfi_restore 3
+ 522              		.cfi_def_cfa_offset 0
+ 523              	.LVL34:
+ 313:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       break;
+ 524              		.loc 1 313 13 view .LVU134
+ 525 005c FFF7FEBF 		b	USBD_LL_StallEP
+ 526              	.LVL35:
+ 313:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       break;
+ 527              		.loc 1 313 13 view .LVU135
+ARM GAS  /tmp/ccnxD9jo.s 			page 16
+
+
+ 528              		.cfi_endproc
+ 529              	.LFE341:
+ 531              		.section	.text.USBD_LL_DataOutStage,"ax",%progbits
+ 532              		.align	1
+ 533              		.p2align 2,,3
+ 534              		.global	USBD_LL_DataOutStage
+ 535              		.syntax unified
+ 536              		.thumb
+ 537              		.thumb_func
+ 539              	USBD_LL_DataOutStage:
+ 540              	.LVL36:
+ 541              	.LFB342:
+ 319:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 320:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+ 321:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief  USBD_LL_DataOutStage
+ 322:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *         Handle data OUT stage
+ 323:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pdev: device instance
+ 324:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  epnum: endpoint index
+ 325:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pdata: data pointer
+ 326:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @retval status
+ 327:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+ 328:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** USBD_StatusTypeDef USBD_LL_DataOutStage(USBD_HandleTypeDef *pdev,
+ 329:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****                                         uint8_t epnum, uint8_t *pdata)
+ 330:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** {
+ 542              		.loc 1 330 1 is_stmt 1 view -0
+ 543              		.cfi_startproc
+ 544              		@ args = 0, pretend = 0, frame = 0
+ 545              		@ frame_needed = 0, uses_anonymous_args = 0
+ 331:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   USBD_EndpointTypeDef *pep;
+ 546              		.loc 1 331 3 view .LVU137
+ 332:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   USBD_StatusTypeDef ret;
+ 547              		.loc 1 332 3 view .LVU138
+ 333:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 334:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (epnum == 0U)
+ 548              		.loc 1 334 3 view .LVU139
+ 330:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   USBD_EndpointTypeDef *pep;
+ 549              		.loc 1 330 1 is_stmt 0 view .LVU140
+ 550 0000 10B5     		push	{r4, lr}
+ 551              	.LCFI17:
+ 552              		.cfi_def_cfa_offset 8
+ 553              		.cfi_offset 4, -8
+ 554              		.cfi_offset 14, -4
+ 330:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   USBD_EndpointTypeDef *pep;
+ 555              		.loc 1 330 1 view .LVU141
+ 556 0002 0446     		mov	r4, r0
+ 557              		.loc 1 334 6 view .LVU142
+ 558 0004 31B9     		cbnz	r1, .L42
+ 559 0006 1346     		mov	r3, r2
+ 335:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 336:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     pep = &pdev->ep_out[0];
+ 560              		.loc 1 336 5 is_stmt 1 view .LVU143
+ 561              	.LVL37:
+ 337:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 338:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     if (pdev->ep0_state == USBD_EP0_DATA_OUT)
+ 562              		.loc 1 338 5 view .LVU144
+ 563              		.loc 1 338 13 is_stmt 0 view .LVU145
+ 564 0008 D0F89422 		ldr	r2, [r0, #660]
+ARM GAS  /tmp/ccnxD9jo.s 			page 17
+
+
+ 565              	.LVL38:
+ 566              		.loc 1 338 8 view .LVU146
+ 567 000c 032A     		cmp	r2, #3
+ 568 000e 0DD0     		beq	.L54
+ 569              	.LVL39:
+ 570              	.L46:
+ 339:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 340:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       if (pep->rem_length > pep->maxpacket)
+ 341:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       {
+ 342:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         pep->rem_length -= pep->maxpacket;
+ 343:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 344:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         (void)USBD_CtlContinueRx(pdev, pdata, MIN(pep->rem_length, pep->maxpacket));
+ 345:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       }
+ 346:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       else
+ 347:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       {
+ 348:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         if (pdev->dev_state == USBD_STATE_CONFIGURED)
+ 349:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         {
+ 350:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           if (pdev->pClass->EP0_RxReady != NULL)
+ 351:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           {
+ 352:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****             pdev->pClass->EP0_RxReady(pdev);
+ 353:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           }
+ 354:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         }
+ 355:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 356:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         (void)USBD_CtlSendStatus(pdev);
+ 357:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       }
+ 358:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     }
+ 359:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     else
+ 360:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 361:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** #if 0
+ 362:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       if (pdev->ep0_state == USBD_EP0_STATUS_OUT)
+ 363:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       {
+ 364:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         /*
+ 365:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           * STATUS PHASE completed, update ep0_state to idle
+ 366:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           */
+ 367:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         pdev->ep0_state = USBD_EP0_IDLE;
+ 368:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         (void)USBD_LL_StallEP(pdev, 0U);
+ 369:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       }
+ 370:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** #endif
+ 371:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     }
+ 372:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 373:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   else
+ 374:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 375:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     if (pdev->dev_state == USBD_STATE_CONFIGURED)
+ 376:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 377:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       if (pdev->pClass->DataOut != NULL)
+ 378:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       {
+ 379:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         ret = (USBD_StatusTypeDef)pdev->pClass->DataOut(pdev, epnum);
+ 380:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 381:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         if (ret != USBD_OK)
+ 382:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         {
+ 383:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           return ret;
+ 384:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         }
+ 385:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       }
+ 386:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     }
+ 387:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 388:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 389:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   return USBD_OK;
+ARM GAS  /tmp/ccnxD9jo.s 			page 18
+
+
+ 390:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 571              		.loc 1 390 1 view .LVU147
+ 572 0010 0020     		movs	r0, #0
+ 573 0012 10BD     		pop	{r4, pc}
+ 574              	.LVL40:
+ 575              	.L42:
+ 375:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 576              		.loc 1 375 5 is_stmt 1 view .LVU148
+ 375:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 577              		.loc 1 375 13 is_stmt 0 view .LVU149
+ 578 0014 90F89C32 		ldrb	r3, [r0, #668]	@ zero_extendqisi2
+ 375:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 579              		.loc 1 375 8 view .LVU150
+ 580 0018 032B     		cmp	r3, #3
+ 581 001a F9D1     		bne	.L46
+ 377:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       {
+ 582              		.loc 1 377 7 is_stmt 1 view .LVU151
+ 377:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       {
+ 583              		.loc 1 377 23 is_stmt 0 view .LVU152
+ 584 001c D0F8B832 		ldr	r3, [r0, #696]
+ 585 0020 9B69     		ldr	r3, [r3, #24]
+ 377:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       {
+ 586              		.loc 1 377 10 view .LVU153
+ 587 0022 002B     		cmp	r3, #0
+ 588 0024 F4D0     		beq	.L46
+ 379:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 589              		.loc 1 379 9 is_stmt 1 view .LVU154
+ 590              		.loc 1 390 1 is_stmt 0 view .LVU155
+ 591 0026 BDE81040 		pop	{r4, lr}
+ 592              	.LCFI18:
+ 593              		.cfi_remember_state
+ 594              		.cfi_restore 14
+ 595              		.cfi_restore 4
+ 596              		.cfi_def_cfa_offset 0
+ 379:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 597              		.loc 1 379 35 view .LVU156
+ 598 002a 1847     		bx	r3
+ 599              	.LVL41:
+ 600              	.L54:
+ 601              	.LCFI19:
+ 602              		.cfi_restore_state
+ 340:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       {
+ 603              		.loc 1 340 7 is_stmt 1 view .LVU157
+ 340:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       {
+ 604              		.loc 1 340 32 is_stmt 0 view .LVU158
+ 605 002c D0E95712 		ldrd	r1, r2, [r0, #348]
+ 606              	.LVL42:
+ 340:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       {
+ 607              		.loc 1 340 10 view .LVU159
+ 608 0030 9142     		cmp	r1, r2
+ 609 0032 08D8     		bhi	.L55
+ 348:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         {
+ 610              		.loc 1 348 9 is_stmt 1 view .LVU160
+ 348:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         {
+ 611              		.loc 1 348 17 is_stmt 0 view .LVU161
+ 612 0034 90F89C32 		ldrb	r3, [r0, #668]	@ zero_extendqisi2
+ 613              	.LVL43:
+ARM GAS  /tmp/ccnxD9jo.s 			page 19
+
+
+ 348:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         {
+ 614              		.loc 1 348 12 view .LVU162
+ 615 0038 032B     		cmp	r3, #3
+ 616 003a 0ED0     		beq	.L56
+ 617              	.LVL44:
+ 618              	.L45:
+ 356:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       }
+ 619              		.loc 1 356 9 is_stmt 1 view .LVU163
+ 356:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       }
+ 620              		.loc 1 356 15 is_stmt 0 view .LVU164
+ 621 003c 2046     		mov	r0, r4
+ 622 003e FFF7FEFF 		bl	USBD_CtlSendStatus
+ 623              	.LVL45:
+ 624              		.loc 1 390 1 view .LVU165
+ 625 0042 0020     		movs	r0, #0
+ 626 0044 10BD     		pop	{r4, pc}
+ 627              	.LVL46:
+ 628              	.L55:
+ 342:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 629              		.loc 1 342 9 is_stmt 1 view .LVU166
+ 342:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 630              		.loc 1 342 25 is_stmt 0 view .LVU167
+ 631 0046 891A     		subs	r1, r1, r2
+ 344:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       }
+ 632              		.loc 1 344 15 view .LVU168
+ 633 0048 8A42     		cmp	r2, r1
+ 634 004a 28BF     		it	cs
+ 635 004c 0A46     		movcs	r2, r1
+ 342:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 636              		.loc 1 342 25 view .LVU169
+ 637 004e C0F85C11 		str	r1, [r0, #348]
+ 344:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       }
+ 638              		.loc 1 344 9 is_stmt 1 view .LVU170
+ 344:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       }
+ 639              		.loc 1 344 15 is_stmt 0 view .LVU171
+ 640 0052 1946     		mov	r1, r3
+ 641 0054 FFF7FEFF 		bl	USBD_CtlContinueRx
+ 642              	.LVL47:
+ 344:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       }
+ 643              		.loc 1 344 15 view .LVU172
+ 644 0058 DAE7     		b	.L46
+ 645              	.LVL48:
+ 646              	.L56:
+ 350:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           {
+ 647              		.loc 1 350 11 is_stmt 1 view .LVU173
+ 350:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           {
+ 648              		.loc 1 350 27 is_stmt 0 view .LVU174
+ 649 005a D0F8B832 		ldr	r3, [r0, #696]
+ 650 005e 1B69     		ldr	r3, [r3, #16]
+ 350:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           {
+ 651              		.loc 1 350 14 view .LVU175
+ 652 0060 002B     		cmp	r3, #0
+ 653 0062 EBD0     		beq	.L45
+ 352:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           }
+ 654              		.loc 1 352 13 is_stmt 1 view .LVU176
+ 655 0064 9847     		blx	r3
+ 656              	.LVL49:
+ARM GAS  /tmp/ccnxD9jo.s 			page 20
+
+
+ 352:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           }
+ 657              		.loc 1 352 13 is_stmt 0 view .LVU177
+ 658 0066 E9E7     		b	.L45
+ 659              		.cfi_endproc
+ 660              	.LFE342:
+ 662              		.section	.text.USBD_LL_DataInStage,"ax",%progbits
+ 663              		.align	1
+ 664              		.p2align 2,,3
+ 665              		.global	USBD_LL_DataInStage
+ 666              		.syntax unified
+ 667              		.thumb
+ 668              		.thumb_func
+ 670              	USBD_LL_DataInStage:
+ 671              	.LVL50:
+ 672              	.LFB343:
+ 391:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 392:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+ 393:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief  USBD_LL_DataInStage
+ 394:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *         Handle data in stage
+ 395:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pdev: device instance
+ 396:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  epnum: endpoint index
+ 397:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @retval status
+ 398:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+ 399:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** USBD_StatusTypeDef USBD_LL_DataInStage(USBD_HandleTypeDef *pdev,
+ 400:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****                                        uint8_t epnum, uint8_t *pdata)
+ 401:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** {
+ 673              		.loc 1 401 1 is_stmt 1 view -0
+ 674              		.cfi_startproc
+ 675              		@ args = 0, pretend = 0, frame = 0
+ 676              		@ frame_needed = 0, uses_anonymous_args = 0
+ 402:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   USBD_EndpointTypeDef *pep;
+ 677              		.loc 1 402 3 view .LVU179
+ 403:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   USBD_StatusTypeDef ret;
+ 678              		.loc 1 403 3 view .LVU180
+ 404:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 405:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (epnum == 0U)
+ 679              		.loc 1 405 3 view .LVU181
+ 401:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   USBD_EndpointTypeDef *pep;
+ 680              		.loc 1 401 1 is_stmt 0 view .LVU182
+ 681 0000 70B5     		push	{r4, r5, r6, lr}
+ 682              	.LCFI20:
+ 683              		.cfi_def_cfa_offset 16
+ 684              		.cfi_offset 4, -16
+ 685              		.cfi_offset 5, -12
+ 686              		.cfi_offset 6, -8
+ 687              		.cfi_offset 14, -4
+ 401:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   USBD_EndpointTypeDef *pep;
+ 688              		.loc 1 401 1 view .LVU183
+ 689 0002 0446     		mov	r4, r0
+ 690              		.loc 1 405 6 view .LVU184
+ 691 0004 51B9     		cbnz	r1, .L58
+ 692 0006 1346     		mov	r3, r2
+ 406:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 407:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     pep = &pdev->ep_in[0];
+ 693              		.loc 1 407 5 is_stmt 1 view .LVU185
+ 694              	.LVL51:
+ 408:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ARM GAS  /tmp/ccnxD9jo.s 			page 21
+
+
+ 409:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     if (pdev->ep0_state == USBD_EP0_DATA_IN)
+ 695              		.loc 1 409 5 view .LVU186
+ 696              		.loc 1 409 13 is_stmt 0 view .LVU187
+ 697 0008 D0F89422 		ldr	r2, [r0, #660]
+ 698              	.LVL52:
+ 699              		.loc 1 409 8 view .LVU188
+ 700 000c 022A     		cmp	r2, #2
+ 701 000e 11D0     		beq	.L75
+ 702              	.LVL53:
+ 703              	.L59:
+ 410:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 411:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       if (pep->rem_length > pep->maxpacket)
+ 412:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       {
+ 413:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         pep->rem_length -= pep->maxpacket;
+ 414:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 415:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         (void)USBD_CtlContinueSendData(pdev, pdata, pep->rem_length);
+ 416:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 417:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         /* Prepare endpoint for premature end of transfer */
+ 418:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         (void)USBD_LL_PrepareReceive(pdev, 0U, NULL, 0U);
+ 419:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       }
+ 420:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       else
+ 421:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       {
+ 422:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         /* last packet is MPS multiple, so send ZLP packet */
+ 423:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         if ((pep->maxpacket == pep->rem_length) &&
+ 424:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****             (pep->total_length >= pep->maxpacket) &&
+ 425:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****             (pep->total_length < pdev->ep0_data_len))
+ 426:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         {
+ 427:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           (void)USBD_CtlContinueSendData(pdev, NULL, 0U);
+ 428:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           pdev->ep0_data_len = 0U;
+ 429:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 430:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           /* Prepare endpoint for premature end of transfer */
+ 431:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           (void)USBD_LL_PrepareReceive(pdev, 0U, NULL, 0U);
+ 432:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         }
+ 433:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         else
+ 434:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         {
+ 435:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           if (pdev->dev_state == USBD_STATE_CONFIGURED)
+ 436:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           {
+ 437:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****             if (pdev->pClass->EP0_TxSent != NULL)
+ 438:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****             {
+ 439:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****               pdev->pClass->EP0_TxSent(pdev);
+ 440:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****             }
+ 441:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           }
+ 442:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           (void)USBD_LL_StallEP(pdev, 0x80U);
+ 443:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           (void)USBD_CtlReceiveStatus(pdev);
+ 444:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         }
+ 445:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       }
+ 446:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     }
+ 447:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     else
+ 448:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 449:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** #if 0
+ 450:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       if ((pdev->ep0_state == USBD_EP0_STATUS_IN) ||
+ 451:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           (pdev->ep0_state == USBD_EP0_IDLE))
+ 452:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       {
+ 453:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         (void)USBD_LL_StallEP(pdev, 0x80U);
+ 454:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       }
+ 455:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** #endif
+ 456:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     }
+ARM GAS  /tmp/ccnxD9jo.s 			page 22
+
+
+ 704              		.loc 1 456 5 is_stmt 1 view .LVU189
+ 457:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 458:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     if (pdev->dev_test_mode == 1U)
+ 705              		.loc 1 458 5 view .LVU190
+ 706              		.loc 1 458 8 is_stmt 0 view .LVU191
+ 707 0010 94F8A032 		ldrb	r3, [r4, #672]	@ zero_extendqisi2
+ 708 0014 012B     		cmp	r3, #1
+ 709 0016 22D0     		beq	.L76
+ 710              	.LVL54:
+ 711              	.L65:
+ 459:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 460:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       (void)USBD_RunTestMode(pdev);
+ 461:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       pdev->dev_test_mode = 0U;
+ 462:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     }
+ 463:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 464:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   else
+ 465:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 466:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     if (pdev->dev_state == USBD_STATE_CONFIGURED)
+ 467:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 468:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       if (pdev->pClass->DataIn != NULL)
+ 469:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       {
+ 470:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         ret = (USBD_StatusTypeDef)pdev->pClass->DataIn(pdev, epnum);
+ 471:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 472:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         if (ret != USBD_OK)
+ 473:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         {
+ 474:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           return ret;
+ 475:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         }
+ 476:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       }
+ 477:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     }
+ 478:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 479:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 480:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   return USBD_OK;
+ 481:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 712              		.loc 1 481 1 view .LVU192
+ 713 0018 0020     		movs	r0, #0
+ 714 001a 70BD     		pop	{r4, r5, r6, pc}
+ 715              	.LVL55:
+ 716              	.L58:
+ 466:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 717              		.loc 1 466 5 is_stmt 1 view .LVU193
+ 466:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 718              		.loc 1 466 13 is_stmt 0 view .LVU194
+ 719 001c 90F89C32 		ldrb	r3, [r0, #668]	@ zero_extendqisi2
+ 466:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 720              		.loc 1 466 8 view .LVU195
+ 721 0020 032B     		cmp	r3, #3
+ 722 0022 F9D1     		bne	.L65
+ 468:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       {
+ 723              		.loc 1 468 7 is_stmt 1 view .LVU196
+ 468:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       {
+ 724              		.loc 1 468 23 is_stmt 0 view .LVU197
+ 725 0024 D0F8B832 		ldr	r3, [r0, #696]
+ 726 0028 5B69     		ldr	r3, [r3, #20]
+ 468:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       {
+ 727              		.loc 1 468 10 view .LVU198
+ 728 002a 002B     		cmp	r3, #0
+ 729 002c F4D0     		beq	.L65
+ARM GAS  /tmp/ccnxD9jo.s 			page 23
+
+
+ 470:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 730              		.loc 1 470 9 is_stmt 1 view .LVU199
+ 731              		.loc 1 481 1 is_stmt 0 view .LVU200
+ 732 002e BDE87040 		pop	{r4, r5, r6, lr}
+ 733              	.LCFI21:
+ 734              		.cfi_remember_state
+ 735              		.cfi_restore 14
+ 736              		.cfi_restore 6
+ 737              		.cfi_restore 5
+ 738              		.cfi_restore 4
+ 739              		.cfi_def_cfa_offset 0
+ 470:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 740              		.loc 1 470 35 view .LVU201
+ 741 0032 1847     		bx	r3
+ 742              	.LVL56:
+ 743              	.L75:
+ 744              	.LCFI22:
+ 745              		.cfi_restore_state
+ 411:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       {
+ 746              		.loc 1 411 32 view .LVU202
+ 747 0034 D0E90726 		ldrd	r2, r6, [r0, #28]
+ 411:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       {
+ 748              		.loc 1 411 10 view .LVU203
+ 749 0038 B242     		cmp	r2, r6
+ 750 003a 0D46     		mov	r5, r1
+ 411:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       {
+ 751              		.loc 1 411 7 is_stmt 1 view .LVU204
+ 411:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       {
+ 752              		.loc 1 411 10 is_stmt 0 view .LVU205
+ 753 003c 14D8     		bhi	.L77
+ 423:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****             (pep->total_length >= pep->maxpacket) &&
+ 754              		.loc 1 423 9 is_stmt 1 view .LVU206
+ 423:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****             (pep->total_length >= pep->maxpacket) &&
+ 755              		.loc 1 423 12 is_stmt 0 view .LVU207
+ 756 003e 1FD0     		beq	.L78
+ 757              	.LVL57:
+ 758              	.L61:
+ 435:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           {
+ 759              		.loc 1 435 11 is_stmt 1 view .LVU208
+ 435:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           {
+ 760              		.loc 1 435 19 is_stmt 0 view .LVU209
+ 761 0040 94F89C32 		ldrb	r3, [r4, #668]	@ zero_extendqisi2
+ 435:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           {
+ 762              		.loc 1 435 14 view .LVU210
+ 763 0044 032B     		cmp	r3, #3
+ 764 0046 28D0     		beq	.L79
+ 765              	.LVL58:
+ 766              	.L62:
+ 442:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           (void)USBD_CtlReceiveStatus(pdev);
+ 767              		.loc 1 442 11 is_stmt 1 view .LVU211
+ 442:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           (void)USBD_CtlReceiveStatus(pdev);
+ 768              		.loc 1 442 17 is_stmt 0 view .LVU212
+ 769 0048 8021     		movs	r1, #128
+ 770 004a 2046     		mov	r0, r4
+ 771 004c FFF7FEFF 		bl	USBD_LL_StallEP
+ 772              	.LVL59:
+ 443:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         }
+ARM GAS  /tmp/ccnxD9jo.s 			page 24
+
+
+ 773              		.loc 1 443 11 is_stmt 1 view .LVU213
+ 443:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         }
+ 774              		.loc 1 443 17 is_stmt 0 view .LVU214
+ 775 0050 2046     		mov	r0, r4
+ 776 0052 FFF7FEFF 		bl	USBD_CtlReceiveStatus
+ 777              	.LVL60:
+ 456:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 778              		.loc 1 456 5 is_stmt 1 view .LVU215
+ 458:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 779              		.loc 1 458 5 view .LVU216
+ 458:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 780              		.loc 1 458 8 is_stmt 0 view .LVU217
+ 781 0056 94F8A032 		ldrb	r3, [r4, #672]	@ zero_extendqisi2
+ 782 005a 012B     		cmp	r3, #1
+ 783 005c DCD1     		bne	.L65
+ 784              	.L76:
+ 460:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       pdev->dev_test_mode = 0U;
+ 785              		.loc 1 460 7 is_stmt 1 view .LVU218
+ 461:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     }
+ 786              		.loc 1 461 7 view .LVU219
+ 461:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     }
+ 787              		.loc 1 461 27 is_stmt 0 view .LVU220
+ 788 005e 0023     		movs	r3, #0
+ 789 0060 84F8A032 		strb	r3, [r4, #672]
+ 790              		.loc 1 481 1 view .LVU221
+ 791 0064 0020     		movs	r0, #0
+ 792 0066 70BD     		pop	{r4, r5, r6, pc}
+ 793              	.LVL61:
+ 794              	.L77:
+ 413:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 795              		.loc 1 413 9 is_stmt 1 view .LVU222
+ 413:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 796              		.loc 1 413 25 is_stmt 0 view .LVU223
+ 797 0068 921B     		subs	r2, r2, r6
+ 798 006a C261     		str	r2, [r0, #28]
+ 415:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 799              		.loc 1 415 9 is_stmt 1 view .LVU224
+ 415:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 800              		.loc 1 415 15 is_stmt 0 view .LVU225
+ 801 006c 1946     		mov	r1, r3
+ 802              	.LVL62:
+ 415:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 803              		.loc 1 415 15 view .LVU226
+ 804 006e FFF7FEFF 		bl	USBD_CtlContinueSendData
+ 805              	.LVL63:
+ 418:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       }
+ 806              		.loc 1 418 9 is_stmt 1 view .LVU227
+ 807              	.L74:
+ 431:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         }
+ 808              		.loc 1 431 11 view .LVU228
+ 431:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         }
+ 809              		.loc 1 431 17 is_stmt 0 view .LVU229
+ 810 0072 2B46     		mov	r3, r5
+ 811 0074 2A46     		mov	r2, r5
+ 812 0076 2946     		mov	r1, r5
+ 813 0078 2046     		mov	r0, r4
+ 814 007a FFF7FEFF 		bl	USBD_LL_PrepareReceive
+ARM GAS  /tmp/ccnxD9jo.s 			page 25
+
+
+ 815              	.LVL64:
+ 431:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****         }
+ 816              		.loc 1 431 11 view .LVU230
+ 817 007e C7E7     		b	.L59
+ 818              	.LVL65:
+ 819              	.L78:
+ 424:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****             (pep->total_length < pdev->ep0_data_len))
+ 820              		.loc 1 424 17 view .LVU231
+ 821 0080 8369     		ldr	r3, [r0, #24]
+ 822              	.LVL66:
+ 423:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****             (pep->total_length >= pep->maxpacket) &&
+ 823              		.loc 1 423 49 discriminator 1 view .LVU232
+ 824 0082 9A42     		cmp	r2, r3
+ 825 0084 DCD8     		bhi	.L61
+ 424:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****             (pep->total_length < pdev->ep0_data_len))
+ 826              		.loc 1 424 51 view .LVU233
+ 827 0086 D0F89822 		ldr	r2, [r0, #664]
+ 828 008a 9342     		cmp	r3, r2
+ 829 008c D8D2     		bcs	.L61
+ 427:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           pdev->ep0_data_len = 0U;
+ 830              		.loc 1 427 11 is_stmt 1 view .LVU234
+ 427:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****           pdev->ep0_data_len = 0U;
+ 831              		.loc 1 427 17 is_stmt 0 view .LVU235
+ 832 008e 0A46     		mov	r2, r1
+ 833 0090 FFF7FEFF 		bl	USBD_CtlContinueSendData
+ 834              	.LVL67:
+ 428:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 835              		.loc 1 428 11 is_stmt 1 view .LVU236
+ 428:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 836              		.loc 1 428 30 is_stmt 0 view .LVU237
+ 837 0094 C4F89852 		str	r5, [r4, #664]
+ 838 0098 EBE7     		b	.L74
+ 839              	.LVL68:
+ 840              	.L79:
+ 437:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****             {
+ 841              		.loc 1 437 13 is_stmt 1 view .LVU238
+ 437:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****             {
+ 842              		.loc 1 437 29 is_stmt 0 view .LVU239
+ 843 009a D4F8B832 		ldr	r3, [r4, #696]
+ 844 009e DB68     		ldr	r3, [r3, #12]
+ 437:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****             {
+ 845              		.loc 1 437 16 view .LVU240
+ 846 00a0 002B     		cmp	r3, #0
+ 847 00a2 D1D0     		beq	.L62
+ 439:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****             }
+ 848              		.loc 1 439 15 is_stmt 1 view .LVU241
+ 849 00a4 2046     		mov	r0, r4
+ 850              	.LVL69:
+ 439:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****             }
+ 851              		.loc 1 439 15 is_stmt 0 view .LVU242
+ 852 00a6 9847     		blx	r3
+ 853              	.LVL70:
+ 439:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****             }
+ 854              		.loc 1 439 15 view .LVU243
+ 855 00a8 CEE7     		b	.L62
+ 856              		.cfi_endproc
+ 857              	.LFE343:
+ARM GAS  /tmp/ccnxD9jo.s 			page 26
+
+
+ 859 00aa 00BF     		.section	.text.USBD_LL_Reset,"ax",%progbits
+ 860              		.align	1
+ 861              		.p2align 2,,3
+ 862              		.global	USBD_LL_Reset
+ 863              		.syntax unified
+ 864              		.thumb
+ 865              		.thumb_func
+ 867              	USBD_LL_Reset:
+ 868              	.LVL71:
+ 869              	.LFB344:
+ 482:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 483:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+ 484:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief  USBD_LL_Reset
+ 485:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *         Handle Reset event
+ 486:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pdev: device instance
+ 487:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @retval status
+ 488:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+ 489:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 490:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** USBD_StatusTypeDef USBD_LL_Reset(USBD_HandleTypeDef *pdev)
+ 491:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** {
+ 870              		.loc 1 491 1 is_stmt 1 view -0
+ 871              		.cfi_startproc
+ 872              		@ args = 0, pretend = 0, frame = 0
+ 873              		@ frame_needed = 0, uses_anonymous_args = 0
+ 492:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Upon Reset call user call back */
+ 493:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->dev_state = USBD_STATE_DEFAULT;
+ 874              		.loc 1 493 3 view .LVU245
+ 494:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->ep0_state = USBD_EP0_IDLE;
+ 495:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->dev_config = 0U;
+ 496:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->dev_remote_wakeup = 0U;
+ 497:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 498:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pdev->pClass == NULL)
+ 875              		.loc 1 498 11 is_stmt 0 view .LVU246
+ 876 0000 D0F8B832 		ldr	r3, [r0, #696]
+ 494:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->ep0_state = USBD_EP0_IDLE;
+ 877              		.loc 1 494 19 view .LVU247
+ 878 0004 0021     		movs	r1, #0
+ 493:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->ep0_state = USBD_EP0_IDLE;
+ 879              		.loc 1 493 19 view .LVU248
+ 880 0006 0122     		movs	r2, #1
+ 881 0008 80F89C22 		strb	r2, [r0, #668]
+ 494:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->ep0_state = USBD_EP0_IDLE;
+ 882              		.loc 1 494 3 is_stmt 1 view .LVU249
+ 495:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->dev_remote_wakeup = 0U;
+ 883              		.loc 1 495 20 is_stmt 0 view .LVU250
+ 884 000c 4160     		str	r1, [r0, #4]
+ 494:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->ep0_state = USBD_EP0_IDLE;
+ 885              		.loc 1 494 19 view .LVU251
+ 886 000e C0F89412 		str	r1, [r0, #660]
+ 495:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->dev_remote_wakeup = 0U;
+ 887              		.loc 1 495 3 is_stmt 1 view .LVU252
+ 496:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 888              		.loc 1 496 3 view .LVU253
+ 496:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 889              		.loc 1 496 27 is_stmt 0 view .LVU254
+ 890 0012 C0F8A412 		str	r1, [r0, #676]
+ 891              		.loc 1 498 3 is_stmt 1 view .LVU255
+ARM GAS  /tmp/ccnxD9jo.s 			page 27
+
+
+ 892              		.loc 1 498 6 is_stmt 0 view .LVU256
+ 893 0016 EBB1     		cbz	r3, .L83
+ 499:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 500:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     return USBD_FAIL;
+ 501:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 502:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 503:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pdev->pClassData != NULL)
+ 894              		.loc 1 503 3 is_stmt 1 view .LVU257
+ 895              		.loc 1 503 6 is_stmt 0 view .LVU258
+ 896 0018 D0F8BC22 		ldr	r2, [r0, #700]
+ 491:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Upon Reset call user call back */
+ 897              		.loc 1 491 1 view .LVU259
+ 898 001c 70B5     		push	{r4, r5, r6, lr}
+ 899              	.LCFI23:
+ 900              		.cfi_def_cfa_offset 16
+ 901              		.cfi_offset 4, -16
+ 902              		.cfi_offset 5, -12
+ 903              		.cfi_offset 6, -8
+ 904              		.cfi_offset 14, -4
+ 905 001e 0446     		mov	r4, r0
+ 906              		.loc 1 503 6 view .LVU260
+ 907 0020 12B1     		cbz	r2, .L82
+ 504:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 505:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     if (pdev->pClass->DeInit != NULL)
+ 908              		.loc 1 505 5 is_stmt 1 view .LVU261
+ 909              		.loc 1 505 21 is_stmt 0 view .LVU262
+ 910 0022 5B68     		ldr	r3, [r3, #4]
+ 911              		.loc 1 505 8 view .LVU263
+ 912 0024 03B1     		cbz	r3, .L82
+ 506:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 507:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       (void)pdev->pClass->DeInit(pdev, (uint8_t)pdev->dev_config);
+ 913              		.loc 1 507 7 is_stmt 1 view .LVU264
+ 914              		.loc 1 507 13 is_stmt 0 view .LVU265
+ 915 0026 9847     		blx	r3
+ 916              	.LVL72:
+ 917              	.L82:
+ 508:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     }
+ 509:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 510:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 511:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Open EP0 OUT */
+ 512:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   (void)USBD_LL_OpenEP(pdev, 0x00U, USBD_EP_TYPE_CTRL, USB_MAX_EP0_SIZE);
+ 918              		.loc 1 512 3 is_stmt 1 view .LVU266
+ 919              		.loc 1 512 9 is_stmt 0 view .LVU267
+ 920 0028 0022     		movs	r2, #0
+ 513:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->ep_out[0x00U & 0xFU].is_used = 1U;
+ 514:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 515:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->ep_out[0].maxpacket = USB_MAX_EP0_SIZE;
+ 921              		.loc 1 515 29 view .LVU268
+ 922 002a 4025     		movs	r5, #64
+ 512:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->ep_out[0x00U & 0xFU].is_used = 1U;
+ 923              		.loc 1 512 9 view .LVU269
+ 924 002c 1146     		mov	r1, r2
+ 513:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->ep_out[0x00U & 0xFU].is_used = 1U;
+ 925              		.loc 1 513 38 view .LVU270
+ 926 002e 0126     		movs	r6, #1
+ 512:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->ep_out[0x00U & 0xFU].is_used = 1U;
+ 927              		.loc 1 512 9 view .LVU271
+ARM GAS  /tmp/ccnxD9jo.s 			page 28
+
+
+ 928 0030 4023     		movs	r3, #64
+ 929 0032 2046     		mov	r0, r4
+ 930 0034 FFF7FEFF 		bl	USBD_LL_OpenEP
+ 931              	.LVL73:
+ 513:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->ep_out[0x00U & 0xFU].is_used = 1U;
+ 932              		.loc 1 513 3 is_stmt 1 view .LVU272
+ 513:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->ep_out[0x00U & 0xFU].is_used = 1U;
+ 933              		.loc 1 513 38 is_stmt 0 view .LVU273
+ 934 0038 A4F86461 		strh	r6, [r4, #356]	@ movhi
+ 935              		.loc 1 515 3 is_stmt 1 view .LVU274
+ 936              		.loc 1 515 29 is_stmt 0 view .LVU275
+ 937 003c C4F86051 		str	r5, [r4, #352]
+ 516:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 517:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Open EP0 IN */
+ 518:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   (void)USBD_LL_OpenEP(pdev, 0x80U, USBD_EP_TYPE_CTRL, USB_MAX_EP0_SIZE);
+ 938              		.loc 1 518 3 is_stmt 1 view .LVU276
+ 939              		.loc 1 518 9 is_stmt 0 view .LVU277
+ 940 0040 2B46     		mov	r3, r5
+ 941 0042 0022     		movs	r2, #0
+ 942 0044 8021     		movs	r1, #128
+ 943 0046 2046     		mov	r0, r4
+ 944 0048 FFF7FEFF 		bl	USBD_LL_OpenEP
+ 945              	.LVL74:
+ 519:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->ep_in[0x80U & 0xFU].is_used = 1U;
+ 946              		.loc 1 519 3 is_stmt 1 view .LVU278
+ 520:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 521:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->ep_in[0].maxpacket = USB_MAX_EP0_SIZE;
+ 522:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 523:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   return USBD_OK;
+ 947              		.loc 1 523 10 is_stmt 0 view .LVU279
+ 948 004c 0020     		movs	r0, #0
+ 519:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->ep_in[0x80U & 0xFU].is_used = 1U;
+ 949              		.loc 1 519 37 view .LVU280
+ 950 004e A684     		strh	r6, [r4, #36]	@ movhi
+ 521:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 951              		.loc 1 521 3 is_stmt 1 view .LVU281
+ 521:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 952              		.loc 1 521 28 is_stmt 0 view .LVU282
+ 953 0050 2562     		str	r5, [r4, #32]
+ 954              		.loc 1 523 3 is_stmt 1 view .LVU283
+ 524:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 955              		.loc 1 524 1 is_stmt 0 view .LVU284
+ 956 0052 70BD     		pop	{r4, r5, r6, pc}
+ 957              	.LVL75:
+ 958              	.L83:
+ 959              	.LCFI24:
+ 960              		.cfi_def_cfa_offset 0
+ 961              		.cfi_restore 4
+ 962              		.cfi_restore 5
+ 963              		.cfi_restore 6
+ 964              		.cfi_restore 14
+ 500:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 965              		.loc 1 500 12 view .LVU285
+ 966 0054 0320     		movs	r0, #3
+ 967              	.LVL76:
+ 968              		.loc 1 524 1 view .LVU286
+ 969 0056 7047     		bx	lr
+ARM GAS  /tmp/ccnxD9jo.s 			page 29
+
+
+ 970              		.cfi_endproc
+ 971              	.LFE344:
+ 973              		.section	.text.USBD_LL_SetSpeed,"ax",%progbits
+ 974              		.align	1
+ 975              		.p2align 2,,3
+ 976              		.global	USBD_LL_SetSpeed
+ 977              		.syntax unified
+ 978              		.thumb
+ 979              		.thumb_func
+ 981              	USBD_LL_SetSpeed:
+ 982              	.LVL77:
+ 983              	.LFB345:
+ 525:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 526:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+ 527:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief  USBD_LL_SetSpeed
+ 528:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *         Handle Reset event
+ 529:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pdev: device instance
+ 530:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @retval status
+ 531:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+ 532:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** USBD_StatusTypeDef USBD_LL_SetSpeed(USBD_HandleTypeDef *pdev,
+ 533:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****                                     USBD_SpeedTypeDef speed)
+ 534:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** {
+ 984              		.loc 1 534 1 is_stmt 1 view -0
+ 985              		.cfi_startproc
+ 986              		@ args = 0, pretend = 0, frame = 0
+ 987              		@ frame_needed = 0, uses_anonymous_args = 0
+ 988              		@ link register save eliminated.
+ 535:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->dev_speed = speed;
+ 989              		.loc 1 535 3 view .LVU288
+ 990              		.loc 1 535 19 is_stmt 0 view .LVU289
+ 991 0000 0174     		strb	r1, [r0, #16]
+ 536:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 537:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   return USBD_OK;
+ 992              		.loc 1 537 3 is_stmt 1 view .LVU290
+ 538:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 993              		.loc 1 538 1 is_stmt 0 view .LVU291
+ 994 0002 0020     		movs	r0, #0
+ 995              	.LVL78:
+ 996              		.loc 1 538 1 view .LVU292
+ 997 0004 7047     		bx	lr
+ 998              		.cfi_endproc
+ 999              	.LFE345:
+ 1001 0006 00BF     		.section	.text.USBD_LL_Suspend,"ax",%progbits
+ 1002              		.align	1
+ 1003              		.p2align 2,,3
+ 1004              		.global	USBD_LL_Suspend
+ 1005              		.syntax unified
+ 1006              		.thumb
+ 1007              		.thumb_func
+ 1009              	USBD_LL_Suspend:
+ 1010              	.LVL79:
+ 1011              	.LFB346:
+ 539:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 540:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+ 541:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief  USBD_LL_Suspend
+ 542:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *         Handle Suspend event
+ 543:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pdev: device instance
+ARM GAS  /tmp/ccnxD9jo.s 			page 30
+
+
+ 544:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @retval status
+ 545:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+ 546:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 547:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** USBD_StatusTypeDef USBD_LL_Suspend(USBD_HandleTypeDef *pdev)
+ 548:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** {
+ 1012              		.loc 1 548 1 is_stmt 1 view -0
+ 1013              		.cfi_startproc
+ 1014              		@ args = 0, pretend = 0, frame = 0
+ 1015              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1016              		@ link register save eliminated.
+ 549:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->dev_old_state = pdev->dev_state;
+ 1017              		.loc 1 549 3 view .LVU294
+ 1018              		.loc 1 549 29 is_stmt 0 view .LVU295
+ 1019 0000 90F89C22 		ldrb	r2, [r0, #668]	@ zero_extendqisi2
+ 548:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->dev_old_state = pdev->dev_state;
+ 1020              		.loc 1 548 1 view .LVU296
+ 1021 0004 0346     		mov	r3, r0
+ 550:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->dev_state = USBD_STATE_SUSPENDED;
+ 1022              		.loc 1 550 19 view .LVU297
+ 1023 0006 0421     		movs	r1, #4
+ 549:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->dev_old_state = pdev->dev_state;
+ 1024              		.loc 1 549 29 view .LVU298
+ 1025 0008 D2B2     		uxtb	r2, r2
+ 549:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->dev_old_state = pdev->dev_state;
+ 1026              		.loc 1 549 23 view .LVU299
+ 1027 000a 83F89D22 		strb	r2, [r3, #669]
+ 1028              		.loc 1 550 3 is_stmt 1 view .LVU300
+ 551:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 552:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   return USBD_OK;
+ 553:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 1029              		.loc 1 553 1 is_stmt 0 view .LVU301
+ 1030 000e 0020     		movs	r0, #0
+ 1031              	.LVL80:
+ 550:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->dev_state = USBD_STATE_SUSPENDED;
+ 1032              		.loc 1 550 19 view .LVU302
+ 1033 0010 83F89C12 		strb	r1, [r3, #668]
+ 552:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 1034              		.loc 1 552 3 is_stmt 1 view .LVU303
+ 1035              		.loc 1 553 1 is_stmt 0 view .LVU304
+ 1036 0014 7047     		bx	lr
+ 1037              		.cfi_endproc
+ 1038              	.LFE346:
+ 1040 0016 00BF     		.section	.text.USBD_LL_Resume,"ax",%progbits
+ 1041              		.align	1
+ 1042              		.p2align 2,,3
+ 1043              		.global	USBD_LL_Resume
+ 1044              		.syntax unified
+ 1045              		.thumb
+ 1046              		.thumb_func
+ 1048              	USBD_LL_Resume:
+ 1049              	.LVL81:
+ 1050              	.LFB347:
+ 554:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 555:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+ 556:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief  USBD_LL_Resume
+ 557:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *         Handle Resume event
+ 558:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pdev: device instance
+ARM GAS  /tmp/ccnxD9jo.s 			page 31
+
+
+ 559:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @retval status
+ 560:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+ 561:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 562:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** USBD_StatusTypeDef USBD_LL_Resume(USBD_HandleTypeDef *pdev)
+ 563:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** {
+ 1051              		.loc 1 563 1 is_stmt 1 view -0
+ 1052              		.cfi_startproc
+ 1053              		@ args = 0, pretend = 0, frame = 0
+ 1054              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1055              		@ link register save eliminated.
+ 564:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pdev->dev_state == USBD_STATE_SUSPENDED)
+ 1056              		.loc 1 564 3 view .LVU306
+ 1057              		.loc 1 564 11 is_stmt 0 view .LVU307
+ 1058 0000 90F89C32 		ldrb	r3, [r0, #668]	@ zero_extendqisi2
+ 1059              		.loc 1 564 6 view .LVU308
+ 1060 0004 042B     		cmp	r3, #4
+ 1061 0006 04D1     		bne	.L97
+ 565:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 566:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     pdev->dev_state = pdev->dev_old_state;
+ 1062              		.loc 1 566 5 is_stmt 1 view .LVU309
+ 1063              		.loc 1 566 27 is_stmt 0 view .LVU310
+ 1064 0008 90F89D32 		ldrb	r3, [r0, #669]	@ zero_extendqisi2
+ 1065 000c DBB2     		uxtb	r3, r3
+ 1066              		.loc 1 566 21 view .LVU311
+ 1067 000e 80F89C32 		strb	r3, [r0, #668]
+ 1068              	.L97:
+ 567:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 568:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 569:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   return USBD_OK;
+ 1069              		.loc 1 569 3 is_stmt 1 view .LVU312
+ 570:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 1070              		.loc 1 570 1 is_stmt 0 view .LVU313
+ 1071 0012 0020     		movs	r0, #0
+ 1072              	.LVL82:
+ 1073              		.loc 1 570 1 view .LVU314
+ 1074 0014 7047     		bx	lr
+ 1075              		.cfi_endproc
+ 1076              	.LFE347:
+ 1078 0016 00BF     		.section	.text.USBD_LL_SOF,"ax",%progbits
+ 1079              		.align	1
+ 1080              		.p2align 2,,3
+ 1081              		.global	USBD_LL_SOF
+ 1082              		.syntax unified
+ 1083              		.thumb
+ 1084              		.thumb_func
+ 1086              	USBD_LL_SOF:
+ 1087              	.LVL83:
+ 1088              	.LFB348:
+ 571:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 572:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+ 573:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief  USBD_LL_SOF
+ 574:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *         Handle SOF event
+ 575:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pdev: device instance
+ 576:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @retval status
+ 577:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+ 578:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 579:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** USBD_StatusTypeDef USBD_LL_SOF(USBD_HandleTypeDef *pdev)
+ARM GAS  /tmp/ccnxD9jo.s 			page 32
+
+
+ 580:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** {
+ 1089              		.loc 1 580 1 is_stmt 1 view -0
+ 1090              		.cfi_startproc
+ 1091              		@ args = 0, pretend = 0, frame = 0
+ 1092              		@ frame_needed = 0, uses_anonymous_args = 0
+ 581:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pdev->pClass == NULL)
+ 1093              		.loc 1 581 3 view .LVU316
+ 1094              		.loc 1 581 11 is_stmt 0 view .LVU317
+ 1095 0000 D0F8B822 		ldr	r2, [r0, #696]
+ 1096              		.loc 1 581 6 view .LVU318
+ 1097 0004 62B1     		cbz	r2, .L102
+ 582:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 583:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     return USBD_FAIL;
+ 584:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 585:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 586:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pdev->dev_state == USBD_STATE_CONFIGURED)
+ 1098              		.loc 1 586 3 is_stmt 1 view .LVU319
+ 580:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pdev->pClass == NULL)
+ 1099              		.loc 1 580 1 is_stmt 0 view .LVU320
+ 1100 0006 08B5     		push	{r3, lr}
+ 1101              	.LCFI25:
+ 1102              		.cfi_def_cfa_offset 8
+ 1103              		.cfi_offset 3, -8
+ 1104              		.cfi_offset 14, -4
+ 1105              		.loc 1 586 11 view .LVU321
+ 1106 0008 90F89C32 		ldrb	r3, [r0, #668]	@ zero_extendqisi2
+ 1107              		.loc 1 586 6 view .LVU322
+ 1108 000c 032B     		cmp	r3, #3
+ 1109 000e 01D0     		beq	.L107
+ 1110              	.L100:
+ 587:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 588:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     if (pdev->pClass->SOF != NULL)
+ 589:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 590:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       (void)pdev->pClass->SOF(pdev);
+ 591:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     }
+ 592:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 593:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 594:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   return USBD_OK;
+ 1111              		.loc 1 594 10 view .LVU323
+ 1112 0010 0020     		movs	r0, #0
+ 1113              	.LVL84:
+ 595:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 1114              		.loc 1 595 1 view .LVU324
+ 1115 0012 08BD     		pop	{r3, pc}
+ 1116              	.LVL85:
+ 1117              	.L107:
+ 588:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 1118              		.loc 1 588 5 is_stmt 1 view .LVU325
+ 588:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 1119              		.loc 1 588 21 is_stmt 0 view .LVU326
+ 1120 0014 D369     		ldr	r3, [r2, #28]
+ 588:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 1121              		.loc 1 588 8 view .LVU327
+ 1122 0016 002B     		cmp	r3, #0
+ 1123 0018 FAD0     		beq	.L100
+ 590:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     }
+ 1124              		.loc 1 590 7 is_stmt 1 view .LVU328
+ARM GAS  /tmp/ccnxD9jo.s 			page 33
+
+
+ 590:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     }
+ 1125              		.loc 1 590 13 is_stmt 0 view .LVU329
+ 1126 001a 9847     		blx	r3
+ 1127              	.LVL86:
+ 594:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 1128              		.loc 1 594 10 view .LVU330
+ 1129 001c 0020     		movs	r0, #0
+ 1130              		.loc 1 595 1 view .LVU331
+ 1131 001e 08BD     		pop	{r3, pc}
+ 1132              	.LVL87:
+ 1133              	.L102:
+ 1134              	.LCFI26:
+ 1135              		.cfi_def_cfa_offset 0
+ 1136              		.cfi_restore 3
+ 1137              		.cfi_restore 14
+ 583:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 1138              		.loc 1 583 12 view .LVU332
+ 1139 0020 0320     		movs	r0, #3
+ 1140              	.LVL88:
+ 1141              		.loc 1 595 1 view .LVU333
+ 1142 0022 7047     		bx	lr
+ 1143              		.cfi_endproc
+ 1144              	.LFE348:
+ 1146              		.section	.text.USBD_LL_IsoINIncomplete,"ax",%progbits
+ 1147              		.align	1
+ 1148              		.p2align 2,,3
+ 1149              		.global	USBD_LL_IsoINIncomplete
+ 1150              		.syntax unified
+ 1151              		.thumb
+ 1152              		.thumb_func
+ 1154              	USBD_LL_IsoINIncomplete:
+ 1155              	.LVL89:
+ 1156              	.LFB349:
+ 596:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 597:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+ 598:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief  USBD_LL_IsoINIncomplete
+ 599:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *         Handle iso in incomplete event
+ 600:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pdev: device instance
+ 601:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @retval status
+ 602:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+ 603:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** USBD_StatusTypeDef USBD_LL_IsoINIncomplete(USBD_HandleTypeDef *pdev,
+ 604:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****                                            uint8_t epnum)
+ 605:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** {
+ 1157              		.loc 1 605 1 is_stmt 1 view -0
+ 1158              		.cfi_startproc
+ 1159              		@ args = 0, pretend = 0, frame = 0
+ 1160              		@ frame_needed = 0, uses_anonymous_args = 0
+ 606:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pdev->pClass == NULL)
+ 1161              		.loc 1 606 3 view .LVU335
+ 1162              		.loc 1 606 11 is_stmt 0 view .LVU336
+ 1163 0000 D0F8B822 		ldr	r2, [r0, #696]
+ 1164              		.loc 1 606 6 view .LVU337
+ 1165 0004 62B1     		cbz	r2, .L112
+ 607:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 608:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     return USBD_FAIL;
+ 609:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 610:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ARM GAS  /tmp/ccnxD9jo.s 			page 34
+
+
+ 611:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pdev->dev_state == USBD_STATE_CONFIGURED)
+ 1166              		.loc 1 611 3 is_stmt 1 view .LVU338
+ 605:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pdev->pClass == NULL)
+ 1167              		.loc 1 605 1 is_stmt 0 view .LVU339
+ 1168 0006 08B5     		push	{r3, lr}
+ 1169              	.LCFI27:
+ 1170              		.cfi_def_cfa_offset 8
+ 1171              		.cfi_offset 3, -8
+ 1172              		.cfi_offset 14, -4
+ 1173              		.loc 1 611 11 view .LVU340
+ 1174 0008 90F89C32 		ldrb	r3, [r0, #668]	@ zero_extendqisi2
+ 1175              		.loc 1 611 6 view .LVU341
+ 1176 000c 032B     		cmp	r3, #3
+ 1177 000e 01D0     		beq	.L117
+ 1178              	.L110:
+ 612:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 613:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     if (pdev->pClass->IsoINIncomplete != NULL)
+ 614:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 615:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       (void)pdev->pClass->IsoINIncomplete(pdev, epnum);
+ 616:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     }
+ 617:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 618:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 619:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   return USBD_OK;
+ 1179              		.loc 1 619 10 view .LVU342
+ 1180 0010 0020     		movs	r0, #0
+ 1181              	.LVL90:
+ 620:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 1182              		.loc 1 620 1 view .LVU343
+ 1183 0012 08BD     		pop	{r3, pc}
+ 1184              	.LVL91:
+ 1185              	.L117:
+ 613:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 1186              		.loc 1 613 5 is_stmt 1 view .LVU344
+ 613:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 1187              		.loc 1 613 21 is_stmt 0 view .LVU345
+ 1188 0014 136A     		ldr	r3, [r2, #32]
+ 613:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 1189              		.loc 1 613 8 view .LVU346
+ 1190 0016 002B     		cmp	r3, #0
+ 1191 0018 FAD0     		beq	.L110
+ 615:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     }
+ 1192              		.loc 1 615 7 is_stmt 1 view .LVU347
+ 615:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     }
+ 1193              		.loc 1 615 13 is_stmt 0 view .LVU348
+ 1194 001a 9847     		blx	r3
+ 1195              	.LVL92:
+ 619:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 1196              		.loc 1 619 10 view .LVU349
+ 1197 001c 0020     		movs	r0, #0
+ 1198              		.loc 1 620 1 view .LVU350
+ 1199 001e 08BD     		pop	{r3, pc}
+ 1200              	.LVL93:
+ 1201              	.L112:
+ 1202              	.LCFI28:
+ 1203              		.cfi_def_cfa_offset 0
+ 1204              		.cfi_restore 3
+ 1205              		.cfi_restore 14
+ARM GAS  /tmp/ccnxD9jo.s 			page 35
+
+
+ 608:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 1206              		.loc 1 608 12 view .LVU351
+ 1207 0020 0320     		movs	r0, #3
+ 1208              	.LVL94:
+ 1209              		.loc 1 620 1 view .LVU352
+ 1210 0022 7047     		bx	lr
+ 1211              		.cfi_endproc
+ 1212              	.LFE349:
+ 1214              		.section	.text.USBD_LL_IsoOUTIncomplete,"ax",%progbits
+ 1215              		.align	1
+ 1216              		.p2align 2,,3
+ 1217              		.global	USBD_LL_IsoOUTIncomplete
+ 1218              		.syntax unified
+ 1219              		.thumb
+ 1220              		.thumb_func
+ 1222              	USBD_LL_IsoOUTIncomplete:
+ 1223              	.LVL95:
+ 1224              	.LFB350:
+ 621:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 622:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+ 623:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief  USBD_LL_IsoOUTIncomplete
+ 624:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *         Handle iso out incomplete event
+ 625:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pdev: device instance
+ 626:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @retval status
+ 627:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+ 628:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** USBD_StatusTypeDef USBD_LL_IsoOUTIncomplete(USBD_HandleTypeDef *pdev,
+ 629:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****                                             uint8_t epnum)
+ 630:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** {
+ 1225              		.loc 1 630 1 is_stmt 1 view -0
+ 1226              		.cfi_startproc
+ 1227              		@ args = 0, pretend = 0, frame = 0
+ 1228              		@ frame_needed = 0, uses_anonymous_args = 0
+ 631:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pdev->pClass == NULL)
+ 1229              		.loc 1 631 3 view .LVU354
+ 1230              		.loc 1 631 11 is_stmt 0 view .LVU355
+ 1231 0000 D0F8B822 		ldr	r2, [r0, #696]
+ 1232              		.loc 1 631 6 view .LVU356
+ 1233 0004 62B1     		cbz	r2, .L122
+ 632:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 633:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     return USBD_FAIL;
+ 634:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 635:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 636:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pdev->dev_state == USBD_STATE_CONFIGURED)
+ 1234              		.loc 1 636 3 is_stmt 1 view .LVU357
+ 630:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pdev->pClass == NULL)
+ 1235              		.loc 1 630 1 is_stmt 0 view .LVU358
+ 1236 0006 08B5     		push	{r3, lr}
+ 1237              	.LCFI29:
+ 1238              		.cfi_def_cfa_offset 8
+ 1239              		.cfi_offset 3, -8
+ 1240              		.cfi_offset 14, -4
+ 1241              		.loc 1 636 11 view .LVU359
+ 1242 0008 90F89C32 		ldrb	r3, [r0, #668]	@ zero_extendqisi2
+ 1243              		.loc 1 636 6 view .LVU360
+ 1244 000c 032B     		cmp	r3, #3
+ 1245 000e 01D0     		beq	.L127
+ 1246              	.L120:
+ARM GAS  /tmp/ccnxD9jo.s 			page 36
+
+
+ 637:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 638:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     if (pdev->pClass->IsoOUTIncomplete != NULL)
+ 639:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 640:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****       (void)pdev->pClass->IsoOUTIncomplete(pdev, epnum);
+ 641:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     }
+ 642:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 643:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 644:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   return USBD_OK;
+ 1247              		.loc 1 644 10 view .LVU361
+ 1248 0010 0020     		movs	r0, #0
+ 1249              	.LVL96:
+ 645:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 1250              		.loc 1 645 1 view .LVU362
+ 1251 0012 08BD     		pop	{r3, pc}
+ 1252              	.LVL97:
+ 1253              	.L127:
+ 638:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 1254              		.loc 1 638 5 is_stmt 1 view .LVU363
+ 638:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 1255              		.loc 1 638 21 is_stmt 0 view .LVU364
+ 1256 0014 536A     		ldr	r3, [r2, #36]
+ 638:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     {
+ 1257              		.loc 1 638 8 view .LVU365
+ 1258 0016 002B     		cmp	r3, #0
+ 1259 0018 FAD0     		beq	.L120
+ 640:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     }
+ 1260              		.loc 1 640 7 is_stmt 1 view .LVU366
+ 640:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     }
+ 1261              		.loc 1 640 13 is_stmt 0 view .LVU367
+ 1262 001a 9847     		blx	r3
+ 1263              	.LVL98:
+ 644:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 1264              		.loc 1 644 10 view .LVU368
+ 1265 001c 0020     		movs	r0, #0
+ 1266              		.loc 1 645 1 view .LVU369
+ 1267 001e 08BD     		pop	{r3, pc}
+ 1268              	.LVL99:
+ 1269              	.L122:
+ 1270              	.LCFI30:
+ 1271              		.cfi_def_cfa_offset 0
+ 1272              		.cfi_restore 3
+ 1273              		.cfi_restore 14
+ 633:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 1274              		.loc 1 633 12 view .LVU370
+ 1275 0020 0320     		movs	r0, #3
+ 1276              	.LVL100:
+ 1277              		.loc 1 645 1 view .LVU371
+ 1278 0022 7047     		bx	lr
+ 1279              		.cfi_endproc
+ 1280              	.LFE350:
+ 1282              		.section	.text.USBD_LL_DevConnected,"ax",%progbits
+ 1283              		.align	1
+ 1284              		.p2align 2,,3
+ 1285              		.global	USBD_LL_DevConnected
+ 1286              		.syntax unified
+ 1287              		.thumb
+ 1288              		.thumb_func
+ARM GAS  /tmp/ccnxD9jo.s 			page 37
+
+
+ 1290              	USBD_LL_DevConnected:
+ 1291              	.LFB354:
+ 1292              		.cfi_startproc
+ 646:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 647:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+ 648:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief  USBD_LL_DevConnected
+ 649:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *         Handle device connection event
+ 650:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pdev: device instance
+ 651:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @retval status
+ 652:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+ 653:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** USBD_StatusTypeDef USBD_LL_DevConnected(USBD_HandleTypeDef *pdev)
+ 1293              		.loc 1 653 20 is_stmt 1 view -0
+ 1294              		@ args = 0, pretend = 0, frame = 0
+ 1295              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1296              		@ link register save eliminated.
+ 1297 0000 0020     		movs	r0, #0
+ 1298 0002 7047     		bx	lr
+ 1299              		.cfi_endproc
+ 1300              	.LFE354:
+ 1302              		.section	.text.USBD_LL_DevDisconnected,"ax",%progbits
+ 1303              		.align	1
+ 1304              		.p2align 2,,3
+ 1305              		.global	USBD_LL_DevDisconnected
+ 1306              		.syntax unified
+ 1307              		.thumb
+ 1308              		.thumb_func
+ 1310              	USBD_LL_DevDisconnected:
+ 1311              	.LVL101:
+ 1312              	.LFB352:
+ 654:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** {
+ 655:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Prevent unused argument compilation warning */
+ 656:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   UNUSED(pdev);
+ 657:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 658:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   return USBD_OK;
+ 659:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 660:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 661:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** /**
+ 662:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @brief  USBD_LL_DevDisconnected
+ 663:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   *         Handle device disconnection event
+ 664:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @param  pdev: device instance
+ 665:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   * @retval status
+ 666:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   */
+ 667:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** USBD_StatusTypeDef USBD_LL_DevDisconnected(USBD_HandleTypeDef *pdev)
+ 668:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** {
+ 1313              		.loc 1 668 1 view -0
+ 1314              		.cfi_startproc
+ 1315              		@ args = 0, pretend = 0, frame = 0
+ 1316              		@ frame_needed = 0, uses_anonymous_args = 0
+ 669:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Free Class Resources */
+ 670:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   pdev->dev_state = USBD_STATE_DEFAULT;
+ 1317              		.loc 1 670 3 view .LVU374
+ 671:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 672:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   if (pdev->pClass != NULL)
+ 1318              		.loc 1 672 11 is_stmt 0 view .LVU375
+ 1319 0000 D0F8B822 		ldr	r2, [r0, #696]
+ 670:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 1320              		.loc 1 670 19 view .LVU376
+ARM GAS  /tmp/ccnxD9jo.s 			page 38
+
+
+ 1321 0004 0121     		movs	r1, #1
+ 1322 0006 80F89C12 		strb	r1, [r0, #668]
+ 1323              		.loc 1 672 3 is_stmt 1 view .LVU377
+ 1324              		.loc 1 672 6 is_stmt 0 view .LVU378
+ 1325 000a 2AB1     		cbz	r2, .L135
+ 673:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   {
+ 674:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****     (void)pdev->pClass->DeInit(pdev, (uint8_t)pdev->dev_config);
+ 1326              		.loc 1 674 5 is_stmt 1 view .LVU379
+ 668:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   /* Free Class Resources */
+ 1327              		.loc 1 668 1 is_stmt 0 view .LVU380
+ 1328 000c 08B5     		push	{r3, lr}
+ 1329              	.LCFI31:
+ 1330              		.cfi_def_cfa_offset 8
+ 1331              		.cfi_offset 3, -8
+ 1332              		.cfi_offset 14, -4
+ 1333              		.loc 1 674 11 view .LVU381
+ 1334 000e 5268     		ldr	r2, [r2, #4]
+ 1335 0010 0179     		ldrb	r1, [r0, #4]	@ zero_extendqisi2
+ 1336 0012 9047     		blx	r2
+ 1337              	.LVL102:
+ 675:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   }
+ 676:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** 
+ 677:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c ****   return USBD_OK;
+ 1338              		.loc 1 677 3 is_stmt 1 view .LVU382
+ 678:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 1339              		.loc 1 678 1 is_stmt 0 view .LVU383
+ 1340 0014 0020     		movs	r0, #0
+ 1341 0016 08BD     		pop	{r3, pc}
+ 1342              	.LVL103:
+ 1343              	.L135:
+ 1344              	.LCFI32:
+ 1345              		.cfi_def_cfa_offset 0
+ 1346              		.cfi_restore 3
+ 1347              		.cfi_restore 14
+ 677:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c **** }
+ 1348              		.loc 1 677 3 is_stmt 1 view .LVU384
+ 1349              		.loc 1 678 1 is_stmt 0 view .LVU385
+ 1350 0018 0020     		movs	r0, #0
+ 1351              	.LVL104:
+ 1352              		.loc 1 678 1 view .LVU386
+ 1353 001a 7047     		bx	lr
+ 1354              		.cfi_endproc
+ 1355              	.LFE352:
+ 1357              		.text
+ 1358              	.Letext0:
+ 1359              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 1360              		.file 3 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Libra
+ 1361              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Libra
+ 1362              		.file 5 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Libra
+ 1363              		.file 6 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Libra
+ARM GAS  /tmp/ccnxD9jo.s 			page 39
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 usbd_core.c
+     /tmp/ccnxD9jo.s:21     .text.USBD_Init:00000000 $t
+     /tmp/ccnxD9jo.s:28     .text.USBD_Init:00000000 USBD_Init
+     /tmp/ccnxD9jo.s:78     .text.USBD_DeInit:00000000 $t
+     /tmp/ccnxD9jo.s:85     .text.USBD_DeInit:00000000 USBD_DeInit
+     /tmp/ccnxD9jo.s:153    .text.USBD_RegisterClass:00000000 $t
+     /tmp/ccnxD9jo.s:160    .text.USBD_RegisterClass:00000000 USBD_RegisterClass
+     /tmp/ccnxD9jo.s:228    .text.USBD_Start:00000000 $t
+     /tmp/ccnxD9jo.s:235    .text.USBD_Start:00000000 USBD_Start
+     /tmp/ccnxD9jo.s:252    .text.USBD_Stop:00000000 $t
+     /tmp/ccnxD9jo.s:259    .text.USBD_Stop:00000000 USBD_Stop
+     /tmp/ccnxD9jo.s:300    .text.USBD_RunTestMode:00000000 $t
+     /tmp/ccnxD9jo.s:307    .text.USBD_RunTestMode:00000000 USBD_RunTestMode
+     /tmp/ccnxD9jo.s:326    .text.USBD_SetClassConfig:00000000 $t
+     /tmp/ccnxD9jo.s:333    .text.USBD_SetClassConfig:00000000 USBD_SetClassConfig
+     /tmp/ccnxD9jo.s:363    .text.USBD_ClrClassConfig:00000000 $t
+     /tmp/ccnxD9jo.s:370    .text.USBD_ClrClassConfig:00000000 USBD_ClrClassConfig
+     /tmp/ccnxD9jo.s:401    .text.USBD_LL_SetupStage:00000000 $t
+     /tmp/ccnxD9jo.s:408    .text.USBD_LL_SetupStage:00000000 USBD_LL_SetupStage
+     /tmp/ccnxD9jo.s:532    .text.USBD_LL_DataOutStage:00000000 $t
+     /tmp/ccnxD9jo.s:539    .text.USBD_LL_DataOutStage:00000000 USBD_LL_DataOutStage
+     /tmp/ccnxD9jo.s:663    .text.USBD_LL_DataInStage:00000000 $t
+     /tmp/ccnxD9jo.s:670    .text.USBD_LL_DataInStage:00000000 USBD_LL_DataInStage
+     /tmp/ccnxD9jo.s:860    .text.USBD_LL_Reset:00000000 $t
+     /tmp/ccnxD9jo.s:867    .text.USBD_LL_Reset:00000000 USBD_LL_Reset
+     /tmp/ccnxD9jo.s:974    .text.USBD_LL_SetSpeed:00000000 $t
+     /tmp/ccnxD9jo.s:981    .text.USBD_LL_SetSpeed:00000000 USBD_LL_SetSpeed
+     /tmp/ccnxD9jo.s:1002   .text.USBD_LL_Suspend:00000000 $t
+     /tmp/ccnxD9jo.s:1009   .text.USBD_LL_Suspend:00000000 USBD_LL_Suspend
+     /tmp/ccnxD9jo.s:1041   .text.USBD_LL_Resume:00000000 $t
+     /tmp/ccnxD9jo.s:1048   .text.USBD_LL_Resume:00000000 USBD_LL_Resume
+     /tmp/ccnxD9jo.s:1079   .text.USBD_LL_SOF:00000000 $t
+     /tmp/ccnxD9jo.s:1086   .text.USBD_LL_SOF:00000000 USBD_LL_SOF
+     /tmp/ccnxD9jo.s:1147   .text.USBD_LL_IsoINIncomplete:00000000 $t
+     /tmp/ccnxD9jo.s:1154   .text.USBD_LL_IsoINIncomplete:00000000 USBD_LL_IsoINIncomplete
+     /tmp/ccnxD9jo.s:1215   .text.USBD_LL_IsoOUTIncomplete:00000000 $t
+     /tmp/ccnxD9jo.s:1222   .text.USBD_LL_IsoOUTIncomplete:00000000 USBD_LL_IsoOUTIncomplete
+     /tmp/ccnxD9jo.s:1283   .text.USBD_LL_DevConnected:00000000 $t
+     /tmp/ccnxD9jo.s:1290   .text.USBD_LL_DevConnected:00000000 USBD_LL_DevConnected
+     /tmp/ccnxD9jo.s:1303   .text.USBD_LL_DevDisconnected:00000000 $t
+     /tmp/ccnxD9jo.s:1310   .text.USBD_LL_DevDisconnected:00000000 USBD_LL_DevDisconnected
+
+UNDEFINED SYMBOLS
+USBD_LL_Init
+USBD_LL_Stop
+USBD_LL_DeInit
+USBD_LL_Start
+USBD_ParseSetupRequest
+USBD_StdDevReq
+USBD_StdEPReq
+USBD_StdItfReq
+USBD_LL_StallEP
+USBD_CtlSendStatus
+USBD_CtlContinueRx
+USBD_CtlReceiveStatus
+USBD_CtlContinueSendData
+ARM GAS  /tmp/ccnxD9jo.s 			page 40
+
+
+USBD_LL_PrepareReceive
+USBD_LL_OpenEP

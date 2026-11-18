@@ -1,0 +1,214 @@
+ARM GAS  /tmp/ccsBCC4V.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"flash_driver.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c"
+  20              		.section	.text.flash_erase_page,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	flash_erase_page
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	flash_erase_page:
+  29              	.LVL0:
+  30              	.LFB348:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** #include "flash_driver.h"
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** /**
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** ***********************************************************************
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** * @brief:      flash_erase_page(uint8_t page)
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** * @param:		   page：flash页面
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** * @retval:     i 0：失败 1：成功
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** * @details:    按页面擦除，擦单页
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** ***********************************************************************
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** **/
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** uint8_t flash_erase_page(uint32_t page)
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** {
+  31              		.loc 1 11 1 view -0
+  32              		.cfi_startproc
+  33              		@ args = 0, pretend = 0, frame = 0
+  34              		@ frame_needed = 0, uses_anonymous_args = 0
+  35              		@ link register save eliminated.
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** 	uint8_t i;
+  36              		.loc 1 12 2 view .LVU1
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** 	i = flash_bsp_erase_page(page);
+  37              		.loc 1 13 2 view .LVU2
+  38              		.loc 1 13 6 is_stmt 0 view .LVU3
+  39 0000 C0B2     		uxtb	r0, r0
+  40              	.LVL1:
+  41              		.loc 1 13 6 view .LVU4
+  42 0002 FFF7FEBF 		b	flash_bsp_erase_page
+  43              	.LVL2:
+  44              		.cfi_endproc
+  45              	.LFE348:
+ARM GAS  /tmp/ccsBCC4V.s 			page 2
+
+
+  47 0006 00BF     		.section	.text.flash_erase_pages,"ax",%progbits
+  48              		.align	1
+  49              		.p2align 2,,3
+  50              		.global	flash_erase_pages
+  51              		.syntax unified
+  52              		.thumb
+  53              		.thumb_func
+  55              	flash_erase_pages:
+  56              	.LVL3:
+  57              	.LFB349:
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** 	return i;
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** }
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** /**
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** ***********************************************************************
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** * @brief:      flash_erase_pages(uint32_t start_addr, uint32_t end_addr)
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** * @param:		   start_addr：flash首地址
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** * @param:		   end_addr：flash尾地址
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** * @retval:     i 0：失败 1：成功
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** * @details:    按页面地址擦除，擦多页
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** ***********************************************************************
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** **/
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** uint8_t flash_erase_pages(uint32_t start_add, uint32_t end_add)
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** {
+  58              		.loc 1 26 1 is_stmt 1 view -0
+  59              		.cfi_startproc
+  60              		@ args = 0, pretend = 0, frame = 0
+  61              		@ frame_needed = 0, uses_anonymous_args = 0
+  62              		@ link register save eliminated.
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** 	uint8_t i;
+  63              		.loc 1 27 2 view .LVU6
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** 	i = flash_bsp_erase_pages(start_add, end_add);
+  64              		.loc 1 28 2 view .LVU7
+  65              		.loc 1 28 6 is_stmt 0 view .LVU8
+  66 0000 FFF7FEBF 		b	flash_bsp_erase_pages
+  67              	.LVL4:
+  68              		.loc 1 28 6 view .LVU9
+  69              		.cfi_endproc
+  70              	.LFE349:
+  72              		.section	.text.flash_write_data,"ax",%progbits
+  73              		.align	1
+  74              		.p2align 2,,3
+  75              		.global	flash_write_data
+  76              		.syntax unified
+  77              		.thumb
+  78              		.thumb_func
+  80              	flash_write_data:
+  81              	.LVL5:
+  82              	.LFB350:
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** 	return i;
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** }
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** /**
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** ***********************************************************************
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** * @brief:      flash_write_data(uint32_t addr, void *data, uint32_t size)
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** * @param:		   addr：flash 地址
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** * @param:		   data：写入的数据
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** * @param:		   size：写入的数据的字节数
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** * @retval:     void
+ARM GAS  /tmp/ccsBCC4V.s 			page 3
+
+
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** * @details:    向flash中存入数据
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** ***********************************************************************
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** **/
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** void flash_write_data(uint32_t addr, void *data, uint32_t size)
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** {
+  83              		.loc 1 42 1 is_stmt 1 view -0
+  84              		.cfi_startproc
+  85              		@ args = 0, pretend = 0, frame = 0
+  86              		@ frame_needed = 0, uses_anonymous_args = 0
+  87              		@ link register save eliminated.
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** 	flash_bsp_write_data(addr, data, size);
+  88              		.loc 1 43 2 view .LVU11
+  89 0000 FFF7FEBF 		b	flash_bsp_write_data
+  90              	.LVL6:
+  91              		.loc 1 43 2 is_stmt 0 view .LVU12
+  92              		.cfi_endproc
+  93              	.LFE350:
+  95              		.section	.text.flash_read_data,"ax",%progbits
+  96              		.align	1
+  97              		.p2align 2,,3
+  98              		.global	flash_read_data
+  99              		.syntax unified
+ 100              		.thumb
+ 101              		.thumb_func
+ 103              	flash_read_data:
+ 104              	.LVL7:
+ 105              	.LFB351:
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** }
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** /**
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** ***********************************************************************
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** * @brief:      flash_read_data(uint32_t addr, void *data, uint32_t size)
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** * @param:		   addr：flash 地址
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** * @param:		   data：读取的数据
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** * @param:		   size：读取的数据字节数
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** * @retval:     void
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** * @details:    从flash中读取数据
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** ***********************************************************************
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** **/
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** void flash_read_data(uint32_t addr, uint32_t *data, uint32_t size)
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** {
+ 106              		.loc 1 56 1 is_stmt 1 view -0
+ 107              		.cfi_startproc
+ 108              		@ args = 0, pretend = 0, frame = 0
+ 109              		@ frame_needed = 0, uses_anonymous_args = 0
+ 110              		@ link register save eliminated.
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** 	memcpy(data, (uint32_t *)addr, size);
+ 111              		.loc 1 57 2 view .LVU14
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/flash/flash_driver.c **** 	memcpy(data, (uint32_t *)addr, size);
+ 112              		.loc 1 56 1 is_stmt 0 view .LVU15
+ 113 0000 0346     		mov	r3, r0
+ 114              		.loc 1 57 2 view .LVU16
+ 115 0002 0846     		mov	r0, r1
+ 116              	.LVL8:
+ 117              		.loc 1 57 2 view .LVU17
+ 118 0004 1946     		mov	r1, r3
+ 119              	.LVL9:
+ 120              		.loc 1 57 2 view .LVU18
+ARM GAS  /tmp/ccsBCC4V.s 			page 4
+
+
+ 121 0006 FFF7FEBF 		b	memcpy
+ 122              	.LVL10:
+ 123              		.loc 1 57 2 view .LVU19
+ 124              		.cfi_endproc
+ 125              	.LFE351:
+ 127 000a 00BF     		.text
+ 128              	.Letext0:
+ 129              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 130              		.file 3 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stddef.h"
+ 131              		.file 4 "/usr/include/newlib/string.h"
+ 132              		.file 5 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/flash/bsp_flash.h"
+ 133              		.file 6 "<built-in>"
+ARM GAS  /tmp/ccsBCC4V.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 flash_driver.c
+     /tmp/ccsBCC4V.s:21     .text.flash_erase_page:00000000 $t
+     /tmp/ccsBCC4V.s:28     .text.flash_erase_page:00000000 flash_erase_page
+     /tmp/ccsBCC4V.s:48     .text.flash_erase_pages:00000000 $t
+     /tmp/ccsBCC4V.s:55     .text.flash_erase_pages:00000000 flash_erase_pages
+     /tmp/ccsBCC4V.s:73     .text.flash_write_data:00000000 $t
+     /tmp/ccsBCC4V.s:80     .text.flash_write_data:00000000 flash_write_data
+     /tmp/ccsBCC4V.s:96     .text.flash_read_data:00000000 $t
+     /tmp/ccsBCC4V.s:103    .text.flash_read_data:00000000 flash_read_data
+
+UNDEFINED SYMBOLS
+flash_bsp_erase_page
+flash_bsp_erase_pages
+flash_bsp_write_data
+memcpy

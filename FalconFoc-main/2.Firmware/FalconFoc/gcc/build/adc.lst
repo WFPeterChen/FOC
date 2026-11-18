@@ -1,0 +1,1599 @@
+ARM GAS  /tmp/cc4C07Vh.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"adc.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c"
+  20              		.section	.text.MX_ADC1_Init,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	MX_ADC1_Init
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	MX_ADC1_Init:
+  29              	.LFB329:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** /* USER CODE BEGIN Header */
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** /**
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   ******************************************************************************
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   * @file    adc.c
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   * @brief   This file provides code for the configuration
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   *          of the ADC instances.
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   ******************************************************************************
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   * @attention
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   *
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   * Copyright (c) 2024 STMicroelectronics.
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   * All rights reserved.
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   *
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   * in the root directory of this software component.
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   *
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   ******************************************************************************
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   */
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** /* USER CODE END Header */
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** /* Includes ------------------------------------------------------------------*/
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** #include "adc.h"
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** /* USER CODE BEGIN 0 */
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** /* USER CODE END 0 */
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** ADC_HandleTypeDef hadc1;
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** ADC_HandleTypeDef hadc2;
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** DMA_HandleTypeDef hdma_adc2;
+ARM GAS  /tmp/cc4C07Vh.s 			page 2
+
+
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** /* ADC1 init function */
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** void MX_ADC1_Init(void)
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** {
+  30              		.loc 1 33 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 72
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE BEGIN ADC1_Init 0 */
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE END ADC1_Init 0 */
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   ADC_MultiModeTypeDef multimode = {0};
+  34              		.loc 1 39 3 view .LVU1
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+  35              		.loc 1 33 1 is_stmt 0 view .LVU2
+  36 0000 10B5     		push	{r4, lr}
+  37              	.LCFI0:
+  38              		.cfi_def_cfa_offset 8
+  39              		.cfi_offset 4, -8
+  40              		.cfi_offset 14, -4
+  41              		.loc 1 39 24 view .LVU3
+  42 0002 0024     		movs	r4, #0
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+  43              		.loc 1 33 1 view .LVU4
+  44 0004 92B0     		sub	sp, sp, #72
+  45              	.LCFI1:
+  46              		.cfi_def_cfa_offset 80
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   ADC_InjectionConfTypeDef sConfigInjected = {0};
+  47              		.loc 1 40 28 view .LVU5
+  48 0006 3C22     		movs	r2, #60
+  49 0008 2146     		mov	r1, r4
+  50 000a 03A8     		add	r0, sp, #12
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   ADC_InjectionConfTypeDef sConfigInjected = {0};
+  51              		.loc 1 39 24 view .LVU6
+  52 000c CDE90044 		strd	r4, r4, [sp]
+  53 0010 0294     		str	r4, [sp, #8]
+  54              		.loc 1 40 3 is_stmt 1 view .LVU7
+  55              		.loc 1 40 28 is_stmt 0 view .LVU8
+  56 0012 FFF7FEFF 		bl	memset
+  57              	.LVL0:
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE BEGIN ADC1_Init 1 */
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE END ADC1_Init 1 */
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /** Common config
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   */
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Instance = ADC1;
+  58              		.loc 1 48 3 is_stmt 1 view .LVU9
+  59              		.loc 1 48 18 is_stmt 0 view .LVU10
+  60 0016 3948     		ldr	r0, .L34
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  61              		.loc 1 49 29 view .LVU11
+  62 0018 4FF44033 		mov	r3, #196608
+  63 001c 4FF0A042 		mov	r2, #1342177280
+ARM GAS  /tmp/cc4C07Vh.s 			page 3
+
+
+  64 0020 C0E90023 		strd	r2, r3, [r0]
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+  65              		.loc 1 50 3 is_stmt 1 view .LVU12
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.GainCompensation = 0;
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
+  66              		.loc 1 53 27 is_stmt 0 view .LVU13
+  67 0024 0123     		movs	r3, #1
+  68 0026 C0E90443 		strd	r4, r3, [r0, #16]
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.LowPowerAutoWait = DISABLE;
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.ContinuousConvMode = DISABLE;
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.NbrOfConversion = 1;
+  69              		.loc 1 57 30 view .LVU14
+  70 002a 0362     		str	r3, [r0, #32]
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  71              		.loc 1 54 27 view .LVU15
+  72 002c 0423     		movs	r3, #4
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  73              		.loc 1 51 24 view .LVU16
+  74 002e C0E90244 		strd	r4, r4, [r0, #8]
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
+  75              		.loc 1 52 3 is_stmt 1 view .LVU17
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  76              		.loc 1 54 3 view .LVU18
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.ContinuousConvMode = DISABLE;
+  77              		.loc 1 55 31 is_stmt 0 view .LVU19
+  78 0032 8483     		strh	r4, [r0, #28]	@ movhi
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.DiscontinuousConvMode = DISABLE;
+  79              		.loc 1 58 36 view .LVU20
+  80 0034 80F82440 		strb	r4, [r0, #36]
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.DMAContinuousRequests = DISABLE;
+  81              		.loc 1 59 36 view .LVU21
+  82 0038 80F83840 		strb	r4, [r0, #56]
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.Overrun = ADC_OVR_DATA_PRESERVED;
+  83              		.loc 1 60 22 view .LVU22
+  84 003c C463     		str	r4, [r0, #60]
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.OversamplingMode = DISABLE;
+  85              		.loc 1 61 31 view .LVU23
+  86 003e 80F84040 		strb	r4, [r0, #64]
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.LowPowerAutoWait = DISABLE;
+  87              		.loc 1 54 27 view .LVU24
+  88 0042 8361     		str	r3, [r0, #24]
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.ContinuousConvMode = DISABLE;
+  89              		.loc 1 55 3 is_stmt 1 view .LVU25
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.NbrOfConversion = 1;
+  90              		.loc 1 56 3 view .LVU26
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.DiscontinuousConvMode = DISABLE;
+  91              		.loc 1 57 3 view .LVU27
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.DMAContinuousRequests = DISABLE;
+  92              		.loc 1 58 3 view .LVU28
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.Overrun = ADC_OVR_DATA_PRESERVED;
+  93              		.loc 1 59 3 view .LVU29
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc1.Init.OversamplingMode = DISABLE;
+  94              		.loc 1 60 3 view .LVU30
+  95              		.loc 1 61 3 view .LVU31
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   if (HAL_ADC_Init(&hadc1) != HAL_OK)
+ARM GAS  /tmp/cc4C07Vh.s 			page 4
+
+
+  96              		.loc 1 62 3 view .LVU32
+  97              		.loc 1 62 7 is_stmt 0 view .LVU33
+  98 0044 FFF7FEFF 		bl	HAL_ADC_Init
+  99              	.LVL1:
+ 100              		.loc 1 62 6 discriminator 1 view .LVU34
+ 101 0048 0028     		cmp	r0, #0
+ 102 004a 43D1     		bne	.L28
+ 103              	.L2:
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   {
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     Error_Handler();
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   }
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /** Configure the ADC multi-mode
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   */
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   multimode.Mode = ADC_MODE_INDEPENDENT;
+ 104              		.loc 1 69 3 is_stmt 1 view .LVU35
+ 105              		.loc 1 69 18 is_stmt 0 view .LVU36
+ 106 004c 0023     		movs	r3, #0
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   if (HAL_ADCEx_MultiModeConfigChannel(&hadc1, &multimode) != HAL_OK)
+ 107              		.loc 1 70 7 view .LVU37
+ 108 004e 2B48     		ldr	r0, .L34
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   if (HAL_ADCEx_MultiModeConfigChannel(&hadc1, &multimode) != HAL_OK)
+ 109              		.loc 1 69 18 view .LVU38
+ 110 0050 0093     		str	r3, [sp]
+ 111              		.loc 1 70 3 is_stmt 1 view .LVU39
+ 112              		.loc 1 70 7 is_stmt 0 view .LVU40
+ 113 0052 6946     		mov	r1, sp
+ 114 0054 FFF7FEFF 		bl	HAL_ADCEx_MultiModeConfigChannel
+ 115              	.LVL2:
+ 116              		.loc 1 70 6 discriminator 1 view .LVU41
+ 117 0058 0028     		cmp	r0, #0
+ 118 005a 4BD1     		bne	.L29
+ 119              	.L3:
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   {
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     Error_Handler();
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   }
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /** Configure Injected Channel
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   */
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedChannel = ADC_CHANNEL_1;
+ 120              		.loc 1 77 3 is_stmt 1 view .LVU42
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedRank = ADC_INJECTED_RANK_1;
+ 121              		.loc 1 78 32 is_stmt 0 view .LVU43
+ 122 005c 2848     		ldr	r0, .L34+4
+ 123 005e 0921     		movs	r1, #9
+ 124 0060 CDE90301 		strd	r0, r1, [sp, #12]
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedSamplingTime = ADC_SAMPLETIME_6CYCLES_5;
+ 125              		.loc 1 79 3 is_stmt 1 view .LVU44
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedSingleDiff = ADC_SINGLE_ENDED;
+ 126              		.loc 1 80 38 is_stmt 0 view .LVU45
+ 127 0064 0120     		movs	r0, #1
+ 128 0066 7F21     		movs	r1, #127
+ 129 0068 CDE90501 		strd	r0, r1, [sp, #20]
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedOffsetNumber = ADC_OFFSET_NONE;
+ 130              		.loc 1 81 3 is_stmt 1 view .LVU46
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedOffset = 0;
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedNbrOfConversion = 4;
+ARM GAS  /tmp/cc4C07Vh.s 			page 5
+
+
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedDiscontinuousConvMode = DISABLE;
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.AutoInjectedConv = DISABLE;
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.QueueInjectedContext = DISABLE;
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.ExternalTrigInjecConv = ADC_EXTERNALTRIGINJEC_T1_CC4;
+ 131              		.loc 1 87 41 is_stmt 0 view .LVU47
+ 132 006c 8421     		movs	r1, #132
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedOffset = 0;
+ 133              		.loc 1 82 34 view .LVU48
+ 134 006e 0023     		movs	r3, #0
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedOffsetNumber = ADC_OFFSET_NONE;
+ 135              		.loc 1 81 40 view .LVU49
+ 136 0070 0422     		movs	r2, #4
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.ExternalTrigInjecConvEdge = ADC_EXTERNALTRIGINJECCONV_EDGE_RISING;
+ 137              		.loc 1 88 45 view .LVU50
+ 138 0072 8024     		movs	r4, #128
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.ExternalTrigInjecConvEdge = ADC_EXTERNALTRIGINJECCONV_EDGE_RISING;
+ 139              		.loc 1 87 41 view .LVU51
+ 140 0074 0D91     		str	r1, [sp, #52]
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjecOversamplingMode = DISABLE;
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected) != HAL_OK)
+ 141              		.loc 1 90 7 view .LVU52
+ 142 0076 2148     		ldr	r0, .L34
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedDiscontinuousConvMode = DISABLE;
+ 143              		.loc 1 83 43 view .LVU53
+ 144 0078 0B92     		str	r2, [sp, #44]
+ 145              		.loc 1 90 7 view .LVU54
+ 146 007a 03A9     		add	r1, sp, #12
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedNbrOfConversion = 4;
+ 147              		.loc 1 82 34 view .LVU55
+ 148 007c CDE90723 		strd	r2, r3, [sp, #28]
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedDiscontinuousConvMode = DISABLE;
+ 149              		.loc 1 83 3 is_stmt 1 view .LVU56
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.AutoInjectedConv = DISABLE;
+ 150              		.loc 1 84 3 view .LVU57
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.QueueInjectedContext = DISABLE;
+ 151              		.loc 1 85 3 view .LVU58
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.AutoInjectedConv = DISABLE;
+ 152              		.loc 1 84 49 is_stmt 0 view .LVU59
+ 153 0080 ADF83030 		strh	r3, [sp, #48]	@ movhi
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.ExternalTrigInjecConv = ADC_EXTERNALTRIGINJEC_T1_CC4;
+ 154              		.loc 1 86 3 is_stmt 1 view .LVU60
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.ExternalTrigInjecConv = ADC_EXTERNALTRIGINJEC_T1_CC4;
+ 155              		.loc 1 86 40 is_stmt 0 view .LVU61
+ 156 0084 8DF83230 		strb	r3, [sp, #50]
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.ExternalTrigInjecConvEdge = ADC_EXTERNALTRIGINJECCONV_EDGE_RISING;
+ 157              		.loc 1 87 3 is_stmt 1 view .LVU62
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjecOversamplingMode = DISABLE;
+ 158              		.loc 1 88 3 view .LVU63
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjecOversamplingMode = DISABLE;
+ 159              		.loc 1 88 45 is_stmt 0 view .LVU64
+ 160 0088 0E94     		str	r4, [sp, #56]
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected) != HAL_OK)
+ 161              		.loc 1 89 3 is_stmt 1 view .LVU65
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected) != HAL_OK)
+ 162              		.loc 1 89 41 is_stmt 0 view .LVU66
+ 163 008a 8DF83C30 		strb	r3, [sp, #60]
+ 164              		.loc 1 90 3 is_stmt 1 view .LVU67
+ARM GAS  /tmp/cc4C07Vh.s 			page 6
+
+
+ 165              		.loc 1 90 7 is_stmt 0 view .LVU68
+ 166 008e FFF7FEFF 		bl	HAL_ADCEx_InjectedConfigChannel
+ 167              	.LVL3:
+ 168              		.loc 1 90 6 discriminator 1 view .LVU69
+ 169 0092 60BB     		cbnz	r0, .L30
+ 170              	.L4:
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   {
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     Error_Handler();
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   }
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /** Configure Injected Channel
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   */
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedChannel = ADC_CHANNEL_2;
+ 171              		.loc 1 97 3 is_stmt 1 view .LVU70
+ 172              		.loc 1 97 35 is_stmt 0 view .LVU71
+ 173 0094 1B4A     		ldr	r2, .L34+8
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedRank = ADC_INJECTED_RANK_2;
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected) != HAL_OK)
+ 174              		.loc 1 99 7 view .LVU72
+ 175 0096 1948     		ldr	r0, .L34
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedRank = ADC_INJECTED_RANK_2;
+ 176              		.loc 1 98 32 view .LVU73
+ 177 0098 40F20F13 		movw	r3, #271
+ 178              		.loc 1 99 7 view .LVU74
+ 179 009c 03A9     		add	r1, sp, #12
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedRank = ADC_INJECTED_RANK_2;
+ 180              		.loc 1 98 32 view .LVU75
+ 181 009e CDE90323 		strd	r2, r3, [sp, #12]
+ 182              		.loc 1 99 3 is_stmt 1 view .LVU76
+ 183              		.loc 1 99 7 is_stmt 0 view .LVU77
+ 184 00a2 FFF7FEFF 		bl	HAL_ADCEx_InjectedConfigChannel
+ 185              	.LVL4:
+ 186              		.loc 1 99 6 discriminator 1 view .LVU78
+ 187 00a6 F8B9     		cbnz	r0, .L31
+ 188              	.L5:
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   {
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     Error_Handler();
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   }
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /** Configure Injected Channel
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   */
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedChannel = ADC_CHANNEL_3;
+ 189              		.loc 1 106 3 is_stmt 1 view .LVU79
+ 190              		.loc 1 106 35 is_stmt 0 view .LVU80
+ 191 00a8 174A     		ldr	r2, .L34+12
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedRank = ADC_INJECTED_RANK_3;
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected) != HAL_OK)
+ 192              		.loc 1 108 7 view .LVU81
+ 193 00aa 1448     		ldr	r0, .L34
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedRank = ADC_INJECTED_RANK_3;
+ 194              		.loc 1 107 32 view .LVU82
+ 195 00ac 40F21523 		movw	r3, #533
+ 196              		.loc 1 108 7 view .LVU83
+ 197 00b0 03A9     		add	r1, sp, #12
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedRank = ADC_INJECTED_RANK_3;
+ 198              		.loc 1 107 32 view .LVU84
+ 199 00b2 CDE90323 		strd	r2, r3, [sp, #12]
+ARM GAS  /tmp/cc4C07Vh.s 			page 7
+
+
+ 200              		.loc 1 108 3 is_stmt 1 view .LVU85
+ 201              		.loc 1 108 7 is_stmt 0 view .LVU86
+ 202 00b6 FFF7FEFF 		bl	HAL_ADCEx_InjectedConfigChannel
+ 203              	.LVL5:
+ 204              		.loc 1 108 6 discriminator 1 view .LVU87
+ 205 00ba 90B9     		cbnz	r0, .L32
+ 206              	.L6:
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   {
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     Error_Handler();
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   }
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /** Configure Injected Channel
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   */
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedChannel = ADC_CHANNEL_4;
+ 207              		.loc 1 115 3 is_stmt 1 view .LVU88
+ 208              		.loc 1 115 35 is_stmt 0 view .LVU89
+ 209 00bc 134A     		ldr	r2, .L34+16
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedRank = ADC_INJECTED_RANK_4;
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   if (HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected) != HAL_OK)
+ 210              		.loc 1 117 7 view .LVU90
+ 211 00be 0F48     		ldr	r0, .L34
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedRank = ADC_INJECTED_RANK_4;
+ 212              		.loc 1 116 32 view .LVU91
+ 213 00c0 40F21B33 		movw	r3, #795
+ 214              		.loc 1 117 7 view .LVU92
+ 215 00c4 03A9     		add	r1, sp, #12
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfigInjected.InjectedRank = ADC_INJECTED_RANK_4;
+ 216              		.loc 1 116 32 view .LVU93
+ 217 00c6 CDE90323 		strd	r2, r3, [sp, #12]
+ 218              		.loc 1 117 3 is_stmt 1 view .LVU94
+ 219              		.loc 1 117 7 is_stmt 0 view .LVU95
+ 220 00ca FFF7FEFF 		bl	HAL_ADCEx_InjectedConfigChannel
+ 221              	.LVL6:
+ 222              		.loc 1 117 6 discriminator 1 view .LVU96
+ 223 00ce 20B9     		cbnz	r0, .L33
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   {
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     Error_Handler();
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   }
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE BEGIN ADC1_Init 2 */
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE END ADC1_Init 2 */
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** }
+ 224              		.loc 1 125 1 view .LVU97
+ 225 00d0 12B0     		add	sp, sp, #72
+ 226              	.LCFI2:
+ 227              		.cfi_remember_state
+ 228              		.cfi_def_cfa_offset 8
+ 229              		@ sp needed
+ 230 00d2 10BD     		pop	{r4, pc}
+ 231              	.L28:
+ 232              	.LCFI3:
+ 233              		.cfi_restore_state
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   }
+ 234              		.loc 1 64 5 is_stmt 1 view .LVU98
+ 235 00d4 FFF7FEFF 		bl	Error_Handler
+ 236              	.LVL7:
+ARM GAS  /tmp/cc4C07Vh.s 			page 8
+
+
+ 237 00d8 B8E7     		b	.L2
+ 238              	.L33:
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   }
+ 239              		.loc 1 119 5 view .LVU99
+ 240 00da FFF7FEFF 		bl	Error_Handler
+ 241              	.LVL8:
+ 242              		.loc 1 125 1 is_stmt 0 view .LVU100
+ 243 00de 12B0     		add	sp, sp, #72
+ 244              	.LCFI4:
+ 245              		.cfi_remember_state
+ 246              		.cfi_def_cfa_offset 8
+ 247              		@ sp needed
+ 248 00e0 10BD     		pop	{r4, pc}
+ 249              	.L32:
+ 250              	.LCFI5:
+ 251              		.cfi_restore_state
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   }
+ 252              		.loc 1 110 5 is_stmt 1 view .LVU101
+ 253 00e2 FFF7FEFF 		bl	Error_Handler
+ 254              	.LVL9:
+ 255 00e6 E9E7     		b	.L6
+ 256              	.L31:
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   }
+ 257              		.loc 1 101 5 view .LVU102
+ 258 00e8 FFF7FEFF 		bl	Error_Handler
+ 259              	.LVL10:
+ 260 00ec DCE7     		b	.L5
+ 261              	.L30:
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   }
+ 262              		.loc 1 92 5 view .LVU103
+ 263 00ee FFF7FEFF 		bl	Error_Handler
+ 264              	.LVL11:
+ 265 00f2 CFE7     		b	.L4
+ 266              	.L29:
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   }
+ 267              		.loc 1 72 5 view .LVU104
+ 268 00f4 FFF7FEFF 		bl	Error_Handler
+ 269              	.LVL12:
+ 270 00f8 B0E7     		b	.L3
+ 271              	.L35:
+ 272 00fa 00BF     		.align	2
+ 273              	.L34:
+ 274 00fc 00000000 		.word	hadc1
+ 275 0100 02003004 		.word	70254594
+ 276 0104 04006008 		.word	140509188
+ 277 0108 0800900C 		.word	210763784
+ 278 010c 1000C010 		.word	281018384
+ 279              		.cfi_endproc
+ 280              	.LFE329:
+ 282              		.section	.text.MX_ADC2_Init,"ax",%progbits
+ 283              		.align	1
+ 284              		.p2align 2,,3
+ 285              		.global	MX_ADC2_Init
+ 286              		.syntax unified
+ 287              		.thumb
+ 288              		.thumb_func
+ 290              	MX_ADC2_Init:
+ARM GAS  /tmp/cc4C07Vh.s 			page 9
+
+
+ 291              	.LFB330:
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** /* ADC2 init function */
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** void MX_ADC2_Init(void)
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** {
+ 292              		.loc 1 128 1 view -0
+ 293              		.cfi_startproc
+ 294              		@ args = 0, pretend = 0, frame = 32
+ 295              		@ frame_needed = 0, uses_anonymous_args = 0
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE BEGIN ADC2_Init 0 */
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE END ADC2_Init 0 */
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 134:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   ADC_ChannelConfTypeDef sConfig = {0};
+ 296              		.loc 1 134 3 view .LVU106
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 297              		.loc 1 128 1 is_stmt 0 view .LVU107
+ 298 0000 10B5     		push	{r4, lr}
+ 299              	.LCFI6:
+ 300              		.cfi_def_cfa_offset 8
+ 301              		.cfi_offset 4, -8
+ 302              		.cfi_offset 14, -4
+ 303 0002 88B0     		sub	sp, sp, #32
+ 304              	.LCFI7:
+ 305              		.cfi_def_cfa_offset 40
+ 306              		.loc 1 134 26 view .LVU108
+ 307 0004 2022     		movs	r2, #32
+ 308 0006 0021     		movs	r1, #0
+ 309 0008 6846     		mov	r0, sp
+ 310 000a FFF7FEFF 		bl	memset
+ 311              	.LVL13:
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE BEGIN ADC2_Init 1 */
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE END ADC2_Init 1 */
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /** Common config
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   */
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Instance = ADC2;
+ 312              		.loc 1 142 3 is_stmt 1 view .LVU109
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+ 313              		.loc 1 143 29 is_stmt 0 view .LVU110
+ 314 000e 1B4C     		ldr	r4, .L48
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+ 315              		.loc 1 142 18 view .LVU111
+ 316 0010 1B48     		ldr	r0, .L48+4
+ 317              		.loc 1 143 29 view .LVU112
+ 318 0012 4FF44031 		mov	r1, #196608
+ 319 0016 C0E90041 		strd	r4, r1, [r0]
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.Resolution = ADC_RESOLUTION_12B;
+ 320              		.loc 1 144 3 is_stmt 1 view .LVU113
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.GainCompensation = 0;
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.ScanConvMode = ADC_SCAN_DISABLE;
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+ 321              		.loc 1 148 27 is_stmt 0 view .LVU114
+ 322 001a 0421     		movs	r1, #4
+ARM GAS  /tmp/cc4C07Vh.s 			page 10
+
+
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.Resolution = ADC_RESOLUTION_12B;
+ 323              		.loc 1 144 25 view .LVU115
+ 324 001c 0023     		movs	r3, #0
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.LowPowerAutoWait = DISABLE;
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.ContinuousConvMode = ENABLE;
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.NbrOfConversion = 1;
+ 325              		.loc 1 151 30 view .LVU116
+ 326 001e 0122     		movs	r2, #1
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.LowPowerAutoWait = DISABLE;
+ 327              		.loc 1 148 27 view .LVU117
+ 328 0020 8161     		str	r1, [r0, #24]
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.LowPowerAutoWait = DISABLE;
+ 329              		.loc 1 149 31 view .LVU118
+ 330 0022 4FF48071 		mov	r1, #256
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+ 331              		.loc 1 145 24 view .LVU119
+ 332 0026 C0E90233 		strd	r3, r3, [r0, #8]
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.ScanConvMode = ADC_SCAN_DISABLE;
+ 333              		.loc 1 146 3 is_stmt 1 view .LVU120
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+ 334              		.loc 1 147 27 is_stmt 0 view .LVU121
+ 335 002a C0E90433 		strd	r3, r3, [r0, #16]
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.LowPowerAutoWait = DISABLE;
+ 336              		.loc 1 148 3 is_stmt 1 view .LVU122
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.ContinuousConvMode = ENABLE;
+ 337              		.loc 1 149 3 view .LVU123
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.NbrOfConversion = 1;
+ 338              		.loc 1 150 3 view .LVU124
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.DiscontinuousConvMode = DISABLE;
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+ 339              		.loc 1 154 35 is_stmt 0 view .LVU125
+ 340 002e C0E90B33 		strd	r3, r3, [r0, #44]
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.ContinuousConvMode = ENABLE;
+ 341              		.loc 1 149 31 view .LVU126
+ 342 0032 8183     		strh	r1, [r0, #28]	@ movhi
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.DiscontinuousConvMode = DISABLE;
+ 343              		.loc 1 151 3 is_stmt 1 view .LVU127
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.DiscontinuousConvMode = DISABLE;
+ 344              		.loc 1 151 30 is_stmt 0 view .LVU128
+ 345 0034 0262     		str	r2, [r0, #32]
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.DiscontinuousConvMode = DISABLE;
+ 346              		.loc 1 152 3 is_stmt 1 view .LVU129
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.DiscontinuousConvMode = DISABLE;
+ 347              		.loc 1 152 36 is_stmt 0 view .LVU130
+ 348 0036 80F82430 		strb	r3, [r0, #36]
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+ 349              		.loc 1 153 3 is_stmt 1 view .LVU131
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.DMAContinuousRequests = ENABLE;
+ 350              		.loc 1 155 3 view .LVU132
+ 351              		.loc 1 155 36 is_stmt 0 view .LVU133
+ 352 003a 80F83820 		strb	r2, [r0, #56]
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.Overrun = ADC_OVR_DATA_PRESERVED;
+ 353              		.loc 1 156 3 is_stmt 1 view .LVU134
+ 354              		.loc 1 156 22 is_stmt 0 view .LVU135
+ 355 003e C363     		str	r3, [r0, #60]
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   hadc2.Init.OversamplingMode = DISABLE;
+ARM GAS  /tmp/cc4C07Vh.s 			page 11
+
+
+ 356              		.loc 1 157 3 is_stmt 1 view .LVU136
+ 357              		.loc 1 157 31 is_stmt 0 view .LVU137
+ 358 0040 80F84030 		strb	r3, [r0, #64]
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   if (HAL_ADC_Init(&hadc2) != HAL_OK)
+ 359              		.loc 1 158 3 is_stmt 1 view .LVU138
+ 360              		.loc 1 158 7 is_stmt 0 view .LVU139
+ 361 0044 FFF7FEFF 		bl	HAL_ADC_Init
+ 362              	.LVL14:
+ 363              		.loc 1 158 6 discriminator 1 view .LVU140
+ 364 0048 88B9     		cbnz	r0, .L46
+ 365              	.L37:
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   {
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     Error_Handler();
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   }
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 163:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /** Configure Regular Channel
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   */
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfig.Channel = ADC_CHANNEL_12;
+ 366              		.loc 1 165 3 is_stmt 1 view .LVU141
+ 367              		.loc 1 165 19 is_stmt 0 view .LVU142
+ 368 004a 0E48     		ldr	r0, .L48+8
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfig.Rank = ADC_REGULAR_RANK_1;
+ 369              		.loc 1 166 16 view .LVU143
+ 370 004c 0622     		movs	r2, #6
+ 371 004e CDE90002 		strd	r0, r2, [sp]
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfig.SamplingTime = ADC_SAMPLETIME_47CYCLES_5;
+ 372              		.loc 1 167 3 is_stmt 1 view .LVU144
+ 373              		.loc 1 167 24 is_stmt 0 view .LVU145
+ 374 0052 0423     		movs	r3, #4
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfig.SingleDiff = ADC_SINGLE_ENDED;
+ 375              		.loc 1 168 22 view .LVU146
+ 376 0054 7F24     		movs	r4, #127
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfig.OffsetNumber = ADC_OFFSET_NONE;
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfig.Offset = 0;
+ 377              		.loc 1 170 18 view .LVU147
+ 378 0056 0022     		movs	r2, #0
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   if (HAL_ADC_ConfigChannel(&hadc2, &sConfig) != HAL_OK)
+ 379              		.loc 1 171 7 view .LVU148
+ 380 0058 0948     		ldr	r0, .L48+4
+ 381 005a 6946     		mov	r1, sp
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfig.SingleDiff = ADC_SINGLE_ENDED;
+ 382              		.loc 1 168 22 view .LVU149
+ 383 005c CDE90234 		strd	r3, r4, [sp, #8]
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   sConfig.OffsetNumber = ADC_OFFSET_NONE;
+ 384              		.loc 1 169 3 is_stmt 1 view .LVU150
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   if (HAL_ADC_ConfigChannel(&hadc2, &sConfig) != HAL_OK)
+ 385              		.loc 1 170 18 is_stmt 0 view .LVU151
+ 386 0060 CDE90432 		strd	r3, r2, [sp, #16]
+ 387              		.loc 1 171 3 is_stmt 1 view .LVU152
+ 388              		.loc 1 171 7 is_stmt 0 view .LVU153
+ 389 0064 FFF7FEFF 		bl	HAL_ADC_ConfigChannel
+ 390              	.LVL15:
+ 391              		.loc 1 171 6 discriminator 1 view .LVU154
+ 392 0068 20B9     		cbnz	r0, .L47
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   {
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     Error_Handler();
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   }
+ARM GAS  /tmp/cc4C07Vh.s 			page 12
+
+
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE BEGIN ADC2_Init 2 */
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE END ADC2_Init 2 */
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** }
+ 393              		.loc 1 179 1 view .LVU155
+ 394 006a 08B0     		add	sp, sp, #32
+ 395              	.LCFI8:
+ 396              		.cfi_remember_state
+ 397              		.cfi_def_cfa_offset 8
+ 398              		@ sp needed
+ 399 006c 10BD     		pop	{r4, pc}
+ 400              	.L46:
+ 401              	.LCFI9:
+ 402              		.cfi_restore_state
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   }
+ 403              		.loc 1 160 5 is_stmt 1 view .LVU156
+ 404 006e FFF7FEFF 		bl	Error_Handler
+ 405              	.LVL16:
+ 406 0072 EAE7     		b	.L37
+ 407              	.L47:
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   }
+ 408              		.loc 1 173 5 view .LVU157
+ 409 0074 FFF7FEFF 		bl	Error_Handler
+ 410              	.LVL17:
+ 411              		.loc 1 179 1 is_stmt 0 view .LVU158
+ 412 0078 08B0     		add	sp, sp, #32
+ 413              	.LCFI10:
+ 414              		.cfi_def_cfa_offset 8
+ 415              		@ sp needed
+ 416 007a 10BD     		pop	{r4, pc}
+ 417              	.L49:
+ 418              		.align	2
+ 419              	.L48:
+ 420 007c 00010050 		.word	1342177536
+ 421 0080 00000000 		.word	hadc2
+ 422 0084 00106032 		.word	845156352
+ 423              		.cfi_endproc
+ 424              	.LFE330:
+ 426              		.section	.text.HAL_ADC_MspInit,"ax",%progbits
+ 427              		.align	1
+ 428              		.p2align 2,,3
+ 429              		.global	HAL_ADC_MspInit
+ 430              		.syntax unified
+ 431              		.thumb
+ 432              		.thumb_func
+ 434              	HAL_ADC_MspInit:
+ 435              	.LVL18:
+ 436              	.LFB331:
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 181:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** static uint32_t HAL_RCC_ADC12_CLK_ENABLED=0;
+ 182:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 183:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** {
+ 437              		.loc 1 184 1 is_stmt 1 view -0
+ 438              		.cfi_startproc
+ 439              		@ args = 0, pretend = 0, frame = 104
+ARM GAS  /tmp/cc4C07Vh.s 			page 13
+
+
+ 440              		@ frame_needed = 0, uses_anonymous_args = 0
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 186:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   GPIO_InitTypeDef GPIO_InitStruct = {0};
+ 441              		.loc 1 186 3 view .LVU160
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 442              		.loc 1 184 1 is_stmt 0 view .LVU161
+ 443 0000 70B5     		push	{r4, r5, r6, lr}
+ 444              	.LCFI11:
+ 445              		.cfi_def_cfa_offset 16
+ 446              		.cfi_offset 4, -16
+ 447              		.cfi_offset 5, -12
+ 448              		.cfi_offset 6, -8
+ 449              		.cfi_offset 14, -4
+ 450 0002 0446     		mov	r4, r0
+ 451 0004 9AB0     		sub	sp, sp, #104
+ 452              	.LCFI12:
+ 453              		.cfi_def_cfa_offset 120
+ 454              		.loc 1 186 20 view .LVU162
+ 455 0006 0021     		movs	r1, #0
+ 187:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
+ 456              		.loc 1 187 28 view .LVU163
+ 457 0008 4422     		movs	r2, #68
+ 458 000a 09A8     		add	r0, sp, #36
+ 459              	.LVL19:
+ 186:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
+ 460              		.loc 1 186 20 view .LVU164
+ 461 000c CDE90411 		strd	r1, r1, [sp, #16]
+ 462 0010 CDE90611 		strd	r1, r1, [sp, #24]
+ 463 0014 0891     		str	r1, [sp, #32]
+ 464              		.loc 1 187 3 is_stmt 1 view .LVU165
+ 465              		.loc 1 187 28 is_stmt 0 view .LVU166
+ 466 0016 FFF7FEFF 		bl	memset
+ 467              	.LVL20:
+ 188:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   if(adcHandle->Instance==ADC1)
+ 468              		.loc 1 188 3 is_stmt 1 view .LVU167
+ 469              		.loc 1 188 15 is_stmt 0 view .LVU168
+ 470 001a 2368     		ldr	r3, [r4]
+ 471              		.loc 1 188 5 view .LVU169
+ 472 001c B3F1A04F 		cmp	r3, #1342177280
+ 473 0020 04D0     		beq	.L68
+ 189:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   {
+ 190:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE BEGIN ADC1_MspInit 0 */
+ 191:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 192:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE END ADC1_MspInit 0 */
+ 193:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /** Initializes the peripherals clocks
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   */
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC12;
+ 197:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     PeriphClkInit.Adc12ClockSelection = RCC_ADC12CLKSOURCE_PLL;
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     {
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****       Error_Handler();
+ 201:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 203:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /* ADC1 clock enable */
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_RCC_ADC12_CLK_ENABLED++;
+ 205:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if(HAL_RCC_ADC12_CLK_ENABLED==1){
+ARM GAS  /tmp/cc4C07Vh.s 			page 14
+
+
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****       __HAL_RCC_ADC12_CLK_ENABLE();
+ 207:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 208:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     __HAL_RCC_GPIOA_CLK_ENABLE();
+ 210:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC1 GPIO Configuration
+ 211:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     PA0     ------> ADC1_IN1
+ 212:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     PA1     ------> ADC1_IN2
+ 213:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     PA2     ------> ADC1_IN3
+ 214:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     PA3     ------> ADC1_IN4
+ 215:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     */
+ 216:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     GPIO_InitStruct.Pin = Current_Ic_Pin|Current_Ib_Pin|Current_Ia_Pin|Current_IBUS_Pin;
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+ 218:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 219:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+ 220:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 221:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /* ADC1 interrupt Init */
+ 222:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_NVIC_SetPriority(ADC1_2_IRQn, 5, 0);
+ 223:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_NVIC_EnableIRQ(ADC1_2_IRQn);
+ 224:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE BEGIN ADC1_MspInit 1 */
+ 225:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 226:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE END ADC1_MspInit 1 */
+ 227:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   }
+ 228:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   else if(adcHandle->Instance==ADC2)
+ 474              		.loc 1 228 8 is_stmt 1 view .LVU170
+ 475              		.loc 1 228 10 is_stmt 0 view .LVU171
+ 476 0022 4E4A     		ldr	r2, .L73
+ 477 0024 9342     		cmp	r3, r2
+ 478 0026 3CD0     		beq	.L69
+ 229:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   {
+ 230:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE BEGIN ADC2_MspInit 0 */
+ 231:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 232:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE END ADC2_MspInit 0 */
+ 233:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 234:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /** Initializes the peripherals clocks
+ 235:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   */
+ 236:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC12;
+ 237:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     PeriphClkInit.Adc12ClockSelection = RCC_ADC12CLKSOURCE_PLL;
+ 238:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+ 239:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     {
+ 240:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****       Error_Handler();
+ 241:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 242:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 243:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /* ADC2 clock enable */
+ 244:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_RCC_ADC12_CLK_ENABLED++;
+ 245:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if(HAL_RCC_ADC12_CLK_ENABLED==1){
+ 246:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****       __HAL_RCC_ADC12_CLK_ENABLE();
+ 247:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 248:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 249:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     __HAL_RCC_GPIOB_CLK_ENABLE();
+ 250:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC2 GPIO Configuration
+ 251:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     PB2     ------> ADC2_IN12
+ 252:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     */
+ 253:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     GPIO_InitStruct.Pin = TEMP_Pin;
+ 254:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+ 255:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 256:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_GPIO_Init(TEMP_GPIO_Port, &GPIO_InitStruct);
+ 257:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ARM GAS  /tmp/cc4C07Vh.s 			page 15
+
+
+ 258:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /* ADC2 DMA Init */
+ 259:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /* ADC2 Init */
+ 260:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Instance = DMA1_Channel2;
+ 261:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Init.Request = DMA_REQUEST_ADC2;
+ 262:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Init.Direction = DMA_PERIPH_TO_MEMORY;
+ 263:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Init.PeriphInc = DMA_PINC_DISABLE;
+ 264:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Init.MemInc = DMA_MINC_ENABLE;
+ 265:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
+ 266:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
+ 267:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Init.Mode = DMA_CIRCULAR;
+ 268:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Init.Priority = DMA_PRIORITY_MEDIUM;
+ 269:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if (HAL_DMA_Init(&hdma_adc2) != HAL_OK)
+ 270:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     {
+ 271:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****       Error_Handler();
+ 272:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 273:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 274:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     __HAL_LINKDMA(adcHandle,DMA_Handle,hdma_adc2);
+ 275:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 276:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /* ADC2 interrupt Init */
+ 277:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_NVIC_SetPriority(ADC1_2_IRQn, 5, 0);
+ 278:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_NVIC_EnableIRQ(ADC1_2_IRQn);
+ 279:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE BEGIN ADC2_MspInit 1 */
+ 280:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 281:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE END ADC2_MspInit 1 */
+ 282:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   }
+ 283:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** }
+ 479              		.loc 1 283 1 view .LVU172
+ 480 0028 1AB0     		add	sp, sp, #104
+ 481              	.LCFI13:
+ 482              		.cfi_remember_state
+ 483              		.cfi_def_cfa_offset 16
+ 484              		@ sp needed
+ 485 002a 70BD     		pop	{r4, r5, r6, pc}
+ 486              	.LVL21:
+ 487              	.L68:
+ 488              	.LCFI14:
+ 489              		.cfi_restore_state
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     PeriphClkInit.Adc12ClockSelection = RCC_ADC12CLKSOURCE_PLL;
+ 490              		.loc 1 196 5 is_stmt 1 view .LVU173
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     PeriphClkInit.Adc12ClockSelection = RCC_ADC12CLKSOURCE_PLL;
+ 491              		.loc 1 196 40 is_stmt 0 view .LVU174
+ 492 002c 4FF40042 		mov	r2, #32768
+ 197:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+ 493              		.loc 1 197 39 view .LVU175
+ 494 0030 4FF08053 		mov	r3, #268435456
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     {
+ 495              		.loc 1 198 9 view .LVU176
+ 496 0034 09A8     		add	r0, sp, #36
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     PeriphClkInit.Adc12ClockSelection = RCC_ADC12CLKSOURCE_PLL;
+ 497              		.loc 1 196 40 view .LVU177
+ 498 0036 0992     		str	r2, [sp, #36]
+ 197:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+ 499              		.loc 1 197 5 is_stmt 1 view .LVU178
+ 197:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+ 500              		.loc 1 197 39 is_stmt 0 view .LVU179
+ 501 0038 1893     		str	r3, [sp, #96]
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     {
+ARM GAS  /tmp/cc4C07Vh.s 			page 16
+
+
+ 502              		.loc 1 198 5 is_stmt 1 view .LVU180
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     {
+ 503              		.loc 1 198 9 is_stmt 0 view .LVU181
+ 504 003a FFF7FEFF 		bl	HAL_RCCEx_PeriphCLKConfig
+ 505              	.LVL22:
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     {
+ 506              		.loc 1 198 8 discriminator 1 view .LVU182
+ 507 003e 0028     		cmp	r0, #0
+ 508 0040 40F08280 		bne	.L70
+ 509              	.L52:
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if(HAL_RCC_ADC12_CLK_ENABLED==1){
+ 510              		.loc 1 204 5 is_stmt 1 view .LVU183
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if(HAL_RCC_ADC12_CLK_ENABLED==1){
+ 511              		.loc 1 204 30 is_stmt 0 view .LVU184
+ 512 0044 464A     		ldr	r2, .L73+4
+ 513 0046 1368     		ldr	r3, [r2]
+ 514 0048 0133     		adds	r3, r3, #1
+ 205:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****       __HAL_RCC_ADC12_CLK_ENABLE();
+ 515              		.loc 1 205 7 view .LVU185
+ 516 004a 012B     		cmp	r3, #1
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if(HAL_RCC_ADC12_CLK_ENABLED==1){
+ 517              		.loc 1 204 30 view .LVU186
+ 518 004c 1360     		str	r3, [r2]
+ 205:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****       __HAL_RCC_ADC12_CLK_ENABLE();
+ 519              		.loc 1 205 5 is_stmt 1 view .LVU187
+ 205:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****       __HAL_RCC_ADC12_CLK_ENABLE();
+ 520              		.loc 1 205 7 is_stmt 0 view .LVU188
+ 521 004e 09D1     		bne	.L53
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 522              		.loc 1 206 7 is_stmt 1 view .LVU189
+ 523              	.LBB2:
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 524              		.loc 1 206 7 view .LVU190
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 525              		.loc 1 206 7 view .LVU191
+ 526 0050 444B     		ldr	r3, .L73+8
+ 527 0052 DA6C     		ldr	r2, [r3, #76]
+ 528 0054 42F40052 		orr	r2, r2, #8192
+ 529 0058 DA64     		str	r2, [r3, #76]
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 530              		.loc 1 206 7 view .LVU192
+ 531 005a DB6C     		ldr	r3, [r3, #76]
+ 532 005c 03F40053 		and	r3, r3, #8192
+ 533 0060 0093     		str	r3, [sp]
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 534              		.loc 1 206 7 view .LVU193
+ 535 0062 009B     		ldr	r3, [sp]
+ 536              	.L53:
+ 537              	.LBE2:
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 538              		.loc 1 206 7 discriminator 1 view .LVU194
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC1 GPIO Configuration
+ 539              		.loc 1 209 5 view .LVU195
+ 540              	.LBB3:
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC1 GPIO Configuration
+ 541              		.loc 1 209 5 view .LVU196
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC1 GPIO Configuration
+ARM GAS  /tmp/cc4C07Vh.s 			page 17
+
+
+ 542              		.loc 1 209 5 view .LVU197
+ 543 0064 3F4B     		ldr	r3, .L73+8
+ 544 0066 DA6C     		ldr	r2, [r3, #76]
+ 545 0068 42F00102 		orr	r2, r2, #1
+ 546 006c DA64     		str	r2, [r3, #76]
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC1 GPIO Configuration
+ 547              		.loc 1 209 5 view .LVU198
+ 548 006e DB6C     		ldr	r3, [r3, #76]
+ 549              	.LBE3:
+ 216:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+ 550              		.loc 1 216 25 is_stmt 0 view .LVU199
+ 551 0070 0F24     		movs	r4, #15
+ 552              	.LVL23:
+ 216:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+ 553              		.loc 1 216 25 view .LVU200
+ 554 0072 0325     		movs	r5, #3
+ 555              	.LBB4:
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC1 GPIO Configuration
+ 556              		.loc 1 209 5 view .LVU201
+ 557 0074 03F00103 		and	r3, r3, #1
+ 558              	.LBE4:
+ 216:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+ 559              		.loc 1 216 25 view .LVU202
+ 560 0078 CDE90445 		strd	r4, [sp, #16]
+ 219:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 561              		.loc 1 219 5 view .LVU203
+ 562 007c 04A9     		add	r1, sp, #16
+ 563              	.LBB5:
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC1 GPIO Configuration
+ 564              		.loc 1 209 5 view .LVU204
+ 565 007e 0193     		str	r3, [sp, #4]
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC1 GPIO Configuration
+ 566              		.loc 1 209 5 is_stmt 1 view .LVU205
+ 567              	.LBE5:
+ 218:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+ 568              		.loc 1 218 26 is_stmt 0 view .LVU206
+ 569 0080 0024     		movs	r4, #0
+ 219:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 570              		.loc 1 219 5 view .LVU207
+ 571 0082 4FF09040 		mov	r0, #1207959552
+ 572              	.LBB6:
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC1 GPIO Configuration
+ 573              		.loc 1 209 5 view .LVU208
+ 574 0086 019B     		ldr	r3, [sp, #4]
+ 575              	.LBE6:
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC1 GPIO Configuration
+ 576              		.loc 1 209 5 is_stmt 1 view .LVU209
+ 216:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+ 577              		.loc 1 216 5 view .LVU210
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 578              		.loc 1 217 5 view .LVU211
+ 218:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+ 579              		.loc 1 218 5 view .LVU212
+ 218:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+ 580              		.loc 1 218 26 is_stmt 0 view .LVU213
+ 581 0088 0694     		str	r4, [sp, #24]
+ 219:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ARM GAS  /tmp/cc4C07Vh.s 			page 18
+
+
+ 582              		.loc 1 219 5 is_stmt 1 view .LVU214
+ 583 008a FFF7FEFF 		bl	HAL_GPIO_Init
+ 584              	.LVL24:
+ 222:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_NVIC_EnableIRQ(ADC1_2_IRQn);
+ 585              		.loc 1 222 5 view .LVU215
+ 586 008e 2246     		mov	r2, r4
+ 587 0090 0521     		movs	r1, #5
+ 588 0092 1220     		movs	r0, #18
+ 589 0094 FFF7FEFF 		bl	HAL_NVIC_SetPriority
+ 590              	.LVL25:
+ 223:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE BEGIN ADC1_MspInit 1 */
+ 591              		.loc 1 223 5 view .LVU216
+ 592 0098 1220     		movs	r0, #18
+ 593 009a FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
+ 594              	.LVL26:
+ 595              		.loc 1 283 1 is_stmt 0 view .LVU217
+ 596 009e 1AB0     		add	sp, sp, #104
+ 597              	.LCFI15:
+ 598              		.cfi_remember_state
+ 599              		.cfi_def_cfa_offset 16
+ 600              		@ sp needed
+ 601 00a0 70BD     		pop	{r4, r5, r6, pc}
+ 602              	.LVL27:
+ 603              	.L69:
+ 604              	.LCFI16:
+ 605              		.cfi_restore_state
+ 236:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     PeriphClkInit.Adc12ClockSelection = RCC_ADC12CLKSOURCE_PLL;
+ 606              		.loc 1 236 5 is_stmt 1 view .LVU218
+ 236:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     PeriphClkInit.Adc12ClockSelection = RCC_ADC12CLKSOURCE_PLL;
+ 607              		.loc 1 236 40 is_stmt 0 view .LVU219
+ 608 00a2 4FF40042 		mov	r2, #32768
+ 237:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+ 609              		.loc 1 237 39 view .LVU220
+ 610 00a6 4FF08053 		mov	r3, #268435456
+ 238:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     {
+ 611              		.loc 1 238 9 view .LVU221
+ 612 00aa 09A8     		add	r0, sp, #36
+ 236:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     PeriphClkInit.Adc12ClockSelection = RCC_ADC12CLKSOURCE_PLL;
+ 613              		.loc 1 236 40 view .LVU222
+ 614 00ac 0992     		str	r2, [sp, #36]
+ 237:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+ 615              		.loc 1 237 5 is_stmt 1 view .LVU223
+ 237:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+ 616              		.loc 1 237 39 is_stmt 0 view .LVU224
+ 617 00ae 1893     		str	r3, [sp, #96]
+ 238:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     {
+ 618              		.loc 1 238 5 is_stmt 1 view .LVU225
+ 238:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     {
+ 619              		.loc 1 238 9 is_stmt 0 view .LVU226
+ 620 00b0 FFF7FEFF 		bl	HAL_RCCEx_PeriphCLKConfig
+ 621              	.LVL28:
+ 238:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     {
+ 622              		.loc 1 238 8 discriminator 1 view .LVU227
+ 623 00b4 0028     		cmp	r0, #0
+ 624 00b6 4AD1     		bne	.L71
+ 625              	.L55:
+ 244:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if(HAL_RCC_ADC12_CLK_ENABLED==1){
+ARM GAS  /tmp/cc4C07Vh.s 			page 19
+
+
+ 626              		.loc 1 244 5 is_stmt 1 view .LVU228
+ 244:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if(HAL_RCC_ADC12_CLK_ENABLED==1){
+ 627              		.loc 1 244 30 is_stmt 0 view .LVU229
+ 628 00b8 294A     		ldr	r2, .L73+4
+ 629 00ba 1368     		ldr	r3, [r2]
+ 630 00bc 0133     		adds	r3, r3, #1
+ 245:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****       __HAL_RCC_ADC12_CLK_ENABLE();
+ 631              		.loc 1 245 7 view .LVU230
+ 632 00be 012B     		cmp	r3, #1
+ 244:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if(HAL_RCC_ADC12_CLK_ENABLED==1){
+ 633              		.loc 1 244 30 view .LVU231
+ 634 00c0 1360     		str	r3, [r2]
+ 245:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****       __HAL_RCC_ADC12_CLK_ENABLE();
+ 635              		.loc 1 245 5 is_stmt 1 view .LVU232
+ 245:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****       __HAL_RCC_ADC12_CLK_ENABLE();
+ 636              		.loc 1 245 7 is_stmt 0 view .LVU233
+ 637 00c2 09D1     		bne	.L56
+ 246:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 638              		.loc 1 246 7 is_stmt 1 view .LVU234
+ 639              	.LBB7:
+ 246:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 640              		.loc 1 246 7 view .LVU235
+ 246:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 641              		.loc 1 246 7 view .LVU236
+ 642 00c4 274B     		ldr	r3, .L73+8
+ 643 00c6 DA6C     		ldr	r2, [r3, #76]
+ 644 00c8 42F40052 		orr	r2, r2, #8192
+ 645 00cc DA64     		str	r2, [r3, #76]
+ 246:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 646              		.loc 1 246 7 view .LVU237
+ 647 00ce DB6C     		ldr	r3, [r3, #76]
+ 648 00d0 03F40053 		and	r3, r3, #8192
+ 649 00d4 0293     		str	r3, [sp, #8]
+ 246:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 650              		.loc 1 246 7 view .LVU238
+ 651 00d6 029B     		ldr	r3, [sp, #8]
+ 652              	.L56:
+ 653              	.LBE7:
+ 246:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 654              		.loc 1 246 7 discriminator 1 view .LVU239
+ 249:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC2 GPIO Configuration
+ 655              		.loc 1 249 5 view .LVU240
+ 656              	.LBB8:
+ 249:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC2 GPIO Configuration
+ 657              		.loc 1 249 5 view .LVU241
+ 249:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC2 GPIO Configuration
+ 658              		.loc 1 249 5 view .LVU242
+ 659 00d8 224B     		ldr	r3, .L73+8
+ 660              	.LBE8:
+ 256:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 661              		.loc 1 256 5 is_stmt 0 view .LVU243
+ 662 00da 2348     		ldr	r0, .L73+12
+ 663              	.LBB9:
+ 249:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC2 GPIO Configuration
+ 664              		.loc 1 249 5 view .LVU244
+ 665 00dc DA6C     		ldr	r2, [r3, #76]
+ 666              	.LBE9:
+ARM GAS  /tmp/cc4C07Vh.s 			page 20
+
+
+ 260:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Init.Request = DMA_REQUEST_ADC2;
+ 667              		.loc 1 260 24 view .LVU245
+ 668 00de 234D     		ldr	r5, .L73+16
+ 669              	.LBB10:
+ 249:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC2 GPIO Configuration
+ 670              		.loc 1 249 5 view .LVU246
+ 671 00e0 42F00202 		orr	r2, r2, #2
+ 672 00e4 DA64     		str	r2, [r3, #76]
+ 249:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC2 GPIO Configuration
+ 673              		.loc 1 249 5 is_stmt 1 view .LVU247
+ 674 00e6 DB6C     		ldr	r3, [r3, #76]
+ 675 00e8 03F00203 		and	r3, r3, #2
+ 676 00ec 0393     		str	r3, [sp, #12]
+ 249:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC2 GPIO Configuration
+ 677              		.loc 1 249 5 view .LVU248
+ 678              	.LBE10:
+ 253:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+ 679              		.loc 1 253 25 is_stmt 0 view .LVU249
+ 680 00ee 0422     		movs	r2, #4
+ 256:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 681              		.loc 1 256 5 view .LVU250
+ 682 00f0 04A9     		add	r1, sp, #16
+ 253:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+ 683              		.loc 1 253 25 view .LVU251
+ 684 00f2 0323     		movs	r3, #3
+ 255:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_GPIO_Init(TEMP_GPIO_Port, &GPIO_InitStruct);
+ 685              		.loc 1 255 26 view .LVU252
+ 686 00f4 0026     		movs	r6, #0
+ 253:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+ 687              		.loc 1 253 25 view .LVU253
+ 688 00f6 CDE90423 		strd	r2, [sp, #16]
+ 255:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_GPIO_Init(TEMP_GPIO_Port, &GPIO_InitStruct);
+ 689              		.loc 1 255 26 view .LVU254
+ 690 00fa 0696     		str	r6, [sp, #24]
+ 691              	.LBB11:
+ 249:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC2 GPIO Configuration
+ 692              		.loc 1 249 5 view .LVU255
+ 693 00fc 039B     		ldr	r3, [sp, #12]
+ 694              	.LBE11:
+ 249:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC2 GPIO Configuration
+ 695              		.loc 1 249 5 is_stmt 1 view .LVU256
+ 253:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+ 696              		.loc 1 253 5 view .LVU257
+ 254:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 697              		.loc 1 254 5 view .LVU258
+ 255:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_GPIO_Init(TEMP_GPIO_Port, &GPIO_InitStruct);
+ 698              		.loc 1 255 5 view .LVU259
+ 256:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 699              		.loc 1 256 5 view .LVU260
+ 700 00fe FFF7FEFF 		bl	HAL_GPIO_Init
+ 701              	.LVL29:
+ 260:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Init.Request = DMA_REQUEST_ADC2;
+ 702              		.loc 1 260 5 view .LVU261
+ 261:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Init.Direction = DMA_PERIPH_TO_MEMORY;
+ 703              		.loc 1 261 28 is_stmt 0 view .LVU262
+ 704 0102 1B4A     		ldr	r2, .L73+20
+ 705 0104 2423     		movs	r3, #36
+ARM GAS  /tmp/cc4C07Vh.s 			page 21
+
+
+ 706 0106 C5E90023 		strd	r2, r3, [r5]
+ 262:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Init.PeriphInc = DMA_PINC_DISABLE;
+ 707              		.loc 1 262 5 is_stmt 1 view .LVU263
+ 264:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
+ 708              		.loc 1 264 27 is_stmt 0 view .LVU264
+ 709 010a 8023     		movs	r3, #128
+ 265:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
+ 710              		.loc 1 265 40 view .LVU265
+ 711 010c 4FF48071 		mov	r1, #256
+ 264:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
+ 712              		.loc 1 264 27 view .LVU266
+ 713 0110 2B61     		str	r3, [r5, #16]
+ 266:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Init.Mode = DMA_CIRCULAR;
+ 714              		.loc 1 266 37 view .LVU267
+ 715 0112 4FF48063 		mov	r3, #1024
+ 716 0116 C5E90513 		strd	r1, r3, [r5, #20]
+ 267:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Init.Priority = DMA_PRIORITY_MEDIUM;
+ 717              		.loc 1 267 25 view .LVU268
+ 718 011a 2022     		movs	r2, #32
+ 268:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if (HAL_DMA_Init(&hdma_adc2) != HAL_OK)
+ 719              		.loc 1 268 29 view .LVU269
+ 720 011c 4FF48053 		mov	r3, #4096
+ 269:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     {
+ 721              		.loc 1 269 9 view .LVU270
+ 722 0120 2846     		mov	r0, r5
+ 263:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Init.MemInc = DMA_MINC_ENABLE;
+ 723              		.loc 1 263 30 view .LVU271
+ 724 0122 C5E90266 		strd	r6, r6, [r5, #8]
+ 264:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
+ 725              		.loc 1 264 5 is_stmt 1 view .LVU272
+ 265:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
+ 726              		.loc 1 265 5 view .LVU273
+ 267:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     hdma_adc2.Init.Priority = DMA_PRIORITY_MEDIUM;
+ 727              		.loc 1 267 5 view .LVU274
+ 268:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if (HAL_DMA_Init(&hdma_adc2) != HAL_OK)
+ 728              		.loc 1 268 29 is_stmt 0 view .LVU275
+ 729 0126 C5E90723 		strd	r2, r3, [r5, #28]
+ 269:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     {
+ 730              		.loc 1 269 5 is_stmt 1 view .LVU276
+ 269:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     {
+ 731              		.loc 1 269 9 is_stmt 0 view .LVU277
+ 732 012a FFF7FEFF 		bl	HAL_DMA_Init
+ 733              	.LVL30:
+ 269:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     {
+ 734              		.loc 1 269 8 discriminator 1 view .LVU278
+ 735 012e 88B9     		cbnz	r0, .L72
+ 736              	.L57:
+ 274:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 737              		.loc 1 274 5 is_stmt 1 view .LVU279
+ 274:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 738              		.loc 1 274 5 view .LVU280
+ 277:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_NVIC_EnableIRQ(ADC1_2_IRQn);
+ 739              		.loc 1 277 5 is_stmt 0 view .LVU281
+ 740 0130 0022     		movs	r2, #0
+ 741 0132 0521     		movs	r1, #5
+ 274:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 742              		.loc 1 274 5 view .LVU282
+ARM GAS  /tmp/cc4C07Vh.s 			page 22
+
+
+ 743 0134 6565     		str	r5, [r4, #84]
+ 274:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 744              		.loc 1 274 5 is_stmt 1 view .LVU283
+ 277:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_NVIC_EnableIRQ(ADC1_2_IRQn);
+ 745              		.loc 1 277 5 is_stmt 0 view .LVU284
+ 746 0136 1220     		movs	r0, #18
+ 274:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 747              		.loc 1 274 5 view .LVU285
+ 748 0138 AC62     		str	r4, [r5, #40]
+ 274:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 749              		.loc 1 274 5 is_stmt 1 view .LVU286
+ 277:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_NVIC_EnableIRQ(ADC1_2_IRQn);
+ 750              		.loc 1 277 5 view .LVU287
+ 751 013a FFF7FEFF 		bl	HAL_NVIC_SetPriority
+ 752              	.LVL31:
+ 278:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE BEGIN ADC2_MspInit 1 */
+ 753              		.loc 1 278 5 view .LVU288
+ 754 013e 1220     		movs	r0, #18
+ 755 0140 FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
+ 756              	.LVL32:
+ 757              		.loc 1 283 1 is_stmt 0 view .LVU289
+ 758 0144 1AB0     		add	sp, sp, #104
+ 759              	.LCFI17:
+ 760              		.cfi_remember_state
+ 761              		.cfi_def_cfa_offset 16
+ 762              		@ sp needed
+ 763 0146 70BD     		pop	{r4, r5, r6, pc}
+ 764              	.LVL33:
+ 765              	.L70:
+ 766              	.LCFI18:
+ 767              		.cfi_restore_state
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 768              		.loc 1 200 7 is_stmt 1 view .LVU290
+ 769 0148 FFF7FEFF 		bl	Error_Handler
+ 770              	.LVL34:
+ 771 014c 7AE7     		b	.L52
+ 772              	.L71:
+ 240:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 773              		.loc 1 240 7 view .LVU291
+ 774 014e FFF7FEFF 		bl	Error_Handler
+ 775              	.LVL35:
+ 776 0152 B1E7     		b	.L55
+ 777              	.L72:
+ 271:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 778              		.loc 1 271 7 view .LVU292
+ 779 0154 FFF7FEFF 		bl	Error_Handler
+ 780              	.LVL36:
+ 781 0158 EAE7     		b	.L57
+ 782              	.L74:
+ 783 015a 00BF     		.align	2
+ 784              	.L73:
+ 785 015c 00010050 		.word	1342177536
+ 786 0160 00000000 		.word	HAL_RCC_ADC12_CLK_ENABLED
+ 787 0164 00100240 		.word	1073876992
+ 788 0168 00040048 		.word	1207960576
+ 789 016c 00000000 		.word	hdma_adc2
+ 790 0170 1C000240 		.word	1073872924
+ARM GAS  /tmp/cc4C07Vh.s 			page 23
+
+
+ 791              		.cfi_endproc
+ 792              	.LFE331:
+ 794              		.section	.text.HAL_ADC_MspDeInit,"ax",%progbits
+ 795              		.align	1
+ 796              		.p2align 2,,3
+ 797              		.global	HAL_ADC_MspDeInit
+ 798              		.syntax unified
+ 799              		.thumb
+ 800              		.thumb_func
+ 802              	HAL_ADC_MspDeInit:
+ 803              	.LVL37:
+ 804              	.LFB332:
+ 284:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 285:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
+ 286:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** {
+ 805              		.loc 1 286 1 view -0
+ 806              		.cfi_startproc
+ 807              		@ args = 0, pretend = 0, frame = 0
+ 808              		@ frame_needed = 0, uses_anonymous_args = 0
+ 287:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 288:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   if(adcHandle->Instance==ADC1)
+ 809              		.loc 1 288 3 view .LVU294
+ 810              		.loc 1 288 15 is_stmt 0 view .LVU295
+ 811 0000 0368     		ldr	r3, [r0]
+ 812              		.loc 1 288 5 view .LVU296
+ 813 0002 B3F1A04F 		cmp	r3, #1342177280
+ 814 0006 18D0     		beq	.L83
+ 289:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   {
+ 290:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE BEGIN ADC1_MspDeInit 0 */
+ 291:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 292:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE END ADC1_MspDeInit 0 */
+ 293:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /* Peripheral clock disable */
+ 294:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_RCC_ADC12_CLK_ENABLED--;
+ 295:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if(HAL_RCC_ADC12_CLK_ENABLED==0){
+ 296:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****       __HAL_RCC_ADC12_CLK_DISABLE();
+ 297:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 298:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 299:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC1 GPIO Configuration
+ 300:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     PA0     ------> ADC1_IN1
+ 301:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     PA1     ------> ADC1_IN2
+ 302:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     PA2     ------> ADC1_IN3
+ 303:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     PA3     ------> ADC1_IN4
+ 304:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     */
+ 305:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_GPIO_DeInit(GPIOA, Current_Ic_Pin|Current_Ib_Pin|Current_Ia_Pin|Current_IBUS_Pin);
+ 306:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 307:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /* ADC1 interrupt Deinit */
+ 308:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE BEGIN ADC1:ADC1_2_IRQn disable */
+ 309:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**
+ 310:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     * Uncomment the line below to disable the "ADC1_2_IRQn" interrupt
+ 311:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     * Be aware, disabling shared interrupt may affect other IPs
+ 312:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     */
+ 313:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /* HAL_NVIC_DisableIRQ(ADC1_2_IRQn); */
+ 314:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE END ADC1:ADC1_2_IRQn disable */
+ 315:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 316:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE BEGIN ADC1_MspDeInit 1 */
+ 317:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 318:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE END ADC1_MspDeInit 1 */
+ARM GAS  /tmp/cc4C07Vh.s 			page 24
+
+
+ 319:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   }
+ 320:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   else if(adcHandle->Instance==ADC2)
+ 815              		.loc 1 320 8 is_stmt 1 view .LVU297
+ 816              		.loc 1 320 10 is_stmt 0 view .LVU298
+ 817 0008 134A     		ldr	r2, .L85
+ 818 000a 9342     		cmp	r3, r2
+ 819 000c 00D0     		beq	.L84
+ 820 000e 7047     		bx	lr
+ 821              	.L84:
+ 321:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   {
+ 322:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE BEGIN ADC2_MspDeInit 0 */
+ 323:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 324:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE END ADC2_MspDeInit 0 */
+ 325:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /* Peripheral clock disable */
+ 326:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_RCC_ADC12_CLK_ENABLED--;
+ 822              		.loc 1 326 5 is_stmt 1 view .LVU299
+ 823              		.loc 1 326 30 is_stmt 0 view .LVU300
+ 824 0010 124A     		ldr	r2, .L85+4
+ 825 0012 1368     		ldr	r3, [r2]
+ 826 0014 013B     		subs	r3, r3, #1
+ 286:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 827              		.loc 1 286 1 view .LVU301
+ 828 0016 10B5     		push	{r4, lr}
+ 829              	.LCFI19:
+ 830              		.cfi_def_cfa_offset 8
+ 831              		.cfi_offset 4, -8
+ 832              		.cfi_offset 14, -4
+ 833 0018 0446     		mov	r4, r0
+ 834              		.loc 1 326 30 view .LVU302
+ 835 001a 1360     		str	r3, [r2]
+ 327:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if(HAL_RCC_ADC12_CLK_ENABLED==0){
+ 836              		.loc 1 327 5 is_stmt 1 view .LVU303
+ 837              		.loc 1 327 7 is_stmt 0 view .LVU304
+ 838 001c 23B9     		cbnz	r3, .L79
+ 328:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****       __HAL_RCC_ADC12_CLK_DISABLE();
+ 839              		.loc 1 328 7 is_stmt 1 view .LVU305
+ 840 001e 104A     		ldr	r2, .L85+8
+ 841 0020 D36C     		ldr	r3, [r2, #76]
+ 842 0022 23F40053 		bic	r3, r3, #8192
+ 843 0026 D364     		str	r3, [r2, #76]
+ 844              	.L79:
+ 329:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 330:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 331:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**ADC2 GPIO Configuration
+ 332:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     PB2     ------> ADC2_IN12
+ 333:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     */
+ 334:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_GPIO_DeInit(TEMP_GPIO_Port, TEMP_Pin);
+ 845              		.loc 1 334 5 view .LVU306
+ 846 0028 0E48     		ldr	r0, .L85+12
+ 847              	.LVL38:
+ 848              		.loc 1 334 5 is_stmt 0 view .LVU307
+ 849 002a 0421     		movs	r1, #4
+ 850 002c FFF7FEFF 		bl	HAL_GPIO_DeInit
+ 851              	.LVL39:
+ 335:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 336:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /* ADC2 DMA DeInit */
+ 337:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     HAL_DMA_DeInit(adcHandle->DMA_Handle);
+ARM GAS  /tmp/cc4C07Vh.s 			page 25
+
+
+ 852              		.loc 1 337 5 is_stmt 1 view .LVU308
+ 853 0030 606D     		ldr	r0, [r4, #84]
+ 338:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 339:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /* ADC2 interrupt Deinit */
+ 340:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE BEGIN ADC2:ADC1_2_IRQn disable */
+ 341:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /**
+ 342:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     * Uncomment the line below to disable the "ADC1_2_IRQn" interrupt
+ 343:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     * Be aware, disabling shared interrupt may affect other IPs
+ 344:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     */
+ 345:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     /* HAL_NVIC_DisableIRQ(ADC1_2_IRQn); */
+ 346:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE END ADC2:ADC1_2_IRQn disable */
+ 347:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 348:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE BEGIN ADC2_MspDeInit 1 */
+ 349:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 350:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   /* USER CODE END ADC2_MspDeInit 1 */
+ 351:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****   }
+ 352:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** }
+ 854              		.loc 1 352 1 is_stmt 0 view .LVU309
+ 855 0032 BDE81040 		pop	{r4, lr}
+ 856              	.LCFI20:
+ 857              		.cfi_restore 14
+ 858              		.cfi_restore 4
+ 859              		.cfi_def_cfa_offset 0
+ 860              	.LVL40:
+ 337:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 861              		.loc 1 337 5 view .LVU310
+ 862 0036 FFF7FEBF 		b	HAL_DMA_DeInit
+ 863              	.LVL41:
+ 864              	.L83:
+ 294:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if(HAL_RCC_ADC12_CLK_ENABLED==0){
+ 865              		.loc 1 294 5 is_stmt 1 view .LVU311
+ 294:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     if(HAL_RCC_ADC12_CLK_ENABLED==0){
+ 866              		.loc 1 294 30 is_stmt 0 view .LVU312
+ 867 003a 084A     		ldr	r2, .L85+4
+ 868 003c 1368     		ldr	r3, [r2]
+ 869 003e 013B     		subs	r3, r3, #1
+ 870 0040 1360     		str	r3, [r2]
+ 295:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****       __HAL_RCC_ADC12_CLK_DISABLE();
+ 871              		.loc 1 295 5 is_stmt 1 view .LVU313
+ 295:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****       __HAL_RCC_ADC12_CLK_DISABLE();
+ 872              		.loc 1 295 7 is_stmt 0 view .LVU314
+ 873 0042 23B9     		cbnz	r3, .L77
+ 296:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c ****     }
+ 874              		.loc 1 296 7 is_stmt 1 view .LVU315
+ 875 0044 064A     		ldr	r2, .L85+8
+ 876 0046 D36C     		ldr	r3, [r2, #76]
+ 877 0048 23F40053 		bic	r3, r3, #8192
+ 878 004c D364     		str	r3, [r2, #76]
+ 879              	.L77:
+ 305:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 880              		.loc 1 305 5 view .LVU316
+ 881 004e 0F21     		movs	r1, #15
+ 882 0050 4FF09040 		mov	r0, #1207959552
+ 883              	.LVL42:
+ 305:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/adc.c **** 
+ 884              		.loc 1 305 5 is_stmt 0 view .LVU317
+ 885 0054 FFF7FEBF 		b	HAL_GPIO_DeInit
+ARM GAS  /tmp/cc4C07Vh.s 			page 26
+
+
+ 886              	.LVL43:
+ 887              	.L86:
+ 888              		.align	2
+ 889              	.L85:
+ 890 0058 00010050 		.word	1342177536
+ 891 005c 00000000 		.word	HAL_RCC_ADC12_CLK_ENABLED
+ 892 0060 00100240 		.word	1073876992
+ 893 0064 00040048 		.word	1207960576
+ 894              		.cfi_endproc
+ 895              	.LFE332:
+ 897              		.section	.bss.HAL_RCC_ADC12_CLK_ENABLED,"aw",%nobits
+ 898              		.align	2
+ 901              	HAL_RCC_ADC12_CLK_ENABLED:
+ 902 0000 00000000 		.space	4
+ 903              		.global	hdma_adc2
+ 904              		.section	.bss.hdma_adc2,"aw",%nobits
+ 905              		.align	2
+ 908              	hdma_adc2:
+ 909 0000 00000000 		.space	96
+ 909      00000000 
+ 909      00000000 
+ 909      00000000 
+ 909      00000000 
+ 910              		.global	hadc2
+ 911              		.section	.bss.hadc2,"aw",%nobits
+ 912              		.align	2
+ 915              	hadc2:
+ 916 0000 00000000 		.space	108
+ 916      00000000 
+ 916      00000000 
+ 916      00000000 
+ 916      00000000 
+ 917              		.global	hadc1
+ 918              		.section	.bss.hadc1,"aw",%nobits
+ 919              		.align	2
+ 922              	hadc1:
+ 923 0000 00000000 		.space	108
+ 923      00000000 
+ 923      00000000 
+ 923      00000000 
+ 923      00000000 
+ 924              		.text
+ 925              	.Letext0:
+ 926              		.file 2 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 927              		.file 3 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 928              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 929              		.file 5 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 930              		.file 6 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 931              		.file 7 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 932              		.file 8 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 933              		.file 9 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 934              		.file 10 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm
+ 935              		.file 11 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/adc.h"
+ 936              		.file 12 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm
+ 937              		.file 13 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/main.h"
+ 938              		.file 14 "<built-in>"
+ARM GAS  /tmp/cc4C07Vh.s 			page 27
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 adc.c
+     /tmp/cc4C07Vh.s:21     .text.MX_ADC1_Init:00000000 $t
+     /tmp/cc4C07Vh.s:28     .text.MX_ADC1_Init:00000000 MX_ADC1_Init
+     /tmp/cc4C07Vh.s:274    .text.MX_ADC1_Init:000000fc $d
+     /tmp/cc4C07Vh.s:922    .bss.hadc1:00000000 hadc1
+     /tmp/cc4C07Vh.s:283    .text.MX_ADC2_Init:00000000 $t
+     /tmp/cc4C07Vh.s:290    .text.MX_ADC2_Init:00000000 MX_ADC2_Init
+     /tmp/cc4C07Vh.s:420    .text.MX_ADC2_Init:0000007c $d
+     /tmp/cc4C07Vh.s:915    .bss.hadc2:00000000 hadc2
+     /tmp/cc4C07Vh.s:427    .text.HAL_ADC_MspInit:00000000 $t
+     /tmp/cc4C07Vh.s:434    .text.HAL_ADC_MspInit:00000000 HAL_ADC_MspInit
+     /tmp/cc4C07Vh.s:785    .text.HAL_ADC_MspInit:0000015c $d
+     /tmp/cc4C07Vh.s:901    .bss.HAL_RCC_ADC12_CLK_ENABLED:00000000 HAL_RCC_ADC12_CLK_ENABLED
+     /tmp/cc4C07Vh.s:908    .bss.hdma_adc2:00000000 hdma_adc2
+     /tmp/cc4C07Vh.s:795    .text.HAL_ADC_MspDeInit:00000000 $t
+     /tmp/cc4C07Vh.s:802    .text.HAL_ADC_MspDeInit:00000000 HAL_ADC_MspDeInit
+     /tmp/cc4C07Vh.s:890    .text.HAL_ADC_MspDeInit:00000058 $d
+     /tmp/cc4C07Vh.s:898    .bss.HAL_RCC_ADC12_CLK_ENABLED:00000000 $d
+     /tmp/cc4C07Vh.s:905    .bss.hdma_adc2:00000000 $d
+     /tmp/cc4C07Vh.s:912    .bss.hadc2:00000000 $d
+     /tmp/cc4C07Vh.s:919    .bss.hadc1:00000000 $d
+
+UNDEFINED SYMBOLS
+memset
+HAL_ADC_Init
+HAL_ADCEx_MultiModeConfigChannel
+HAL_ADCEx_InjectedConfigChannel
+Error_Handler
+HAL_ADC_ConfigChannel
+HAL_RCCEx_PeriphCLKConfig
+HAL_GPIO_Init
+HAL_NVIC_SetPriority
+HAL_NVIC_EnableIRQ
+HAL_DMA_Init
+HAL_GPIO_DeInit
+HAL_DMA_DeInit

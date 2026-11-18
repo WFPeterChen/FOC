@@ -1,0 +1,574 @@
+ARM GAS  /tmp/ccoR1rTj.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"crc16.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c"
+  20              		.section	.text.init_crc16_tab,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	init_crc16_tab
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	init_crc16_tab:
+  29              	.LFB332:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** #include "crc16.h"
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** 
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** static uint8_t crc_tab16_init = 0;
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** static uint16_t crc_tab16[256];
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** 
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** /*
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  * uint16_t crc_16( const unsigned char *input_str, size_t num_bytes );
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  *
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  *函数crc_16()一次计算一个字节的16位CRC16
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  *其开头已传递给函数的字符串。的数量
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  *要检查的字节也是一个参数。字符串中的字节数为
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  *受恒定大小最大值的限制。
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  */
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** uint16_t crc_16(const uint8_t *input_str, uint16_t num_bytes)
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** {
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     uint16_t crc;
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     const uint8_t *ptr;
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     uint16_t a;
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     if (!crc_tab16_init)
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         init_crc16_tab();
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     crc = CRC_START_16;
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     ptr = input_str;
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     if (ptr != NULL)
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         for (a = 0; a < num_bytes; a++)
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         {
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****             crc = (crc >> 8) ^ crc_tab16[(crc ^ (uint16_t)*ptr++) & 0x00FF];
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         }
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     return crc;
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** }
+ARM GAS  /tmp/ccoR1rTj.s 			page 2
+
+
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** 
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** /*
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  * uint16_t crc_modbus( const unsigned char *input_str, size_t num_bytes );
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  *
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  *函数crc_modbus()一次计算16位modbus循环冗余校验
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  *一个字节字符串，其开头已被传递给函数。这
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  *要检查的字节数也是一个参数。
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  */
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** 
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** uint16_t crc_modbus(const uint8_t *input_str, uint16_t num_bytes)
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** {
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     uint16_t crc;
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     const uint8_t *ptr;
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     uint16_t a;
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** 
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     if (!crc_tab16_init)
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         init_crc16_tab();
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** 
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     crc = CRC_START_MODBUS;
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     ptr = input_str;
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     if (ptr != NULL)
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         for (a = 0; a < num_bytes; a++)
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         {
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** 
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****             crc = (crc >> 8) ^ crc_tab16[(crc ^ (uint16_t)*ptr++) & 0x00FF];
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         }
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     return crc;
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** }
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** 
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** /*
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  * uint16_t update_crc_16( uint16_t crc, unsigned char c );
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  *
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  *函数update_crc_16()根据
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  *前一个循环冗余校验值和下一个要检查的数据字节。
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  */
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** uint16_t update_crc_16(uint16_t crc, uint8_t c)
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** {
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     if (!crc_tab16_init)
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         init_crc16_tab();
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     return (crc >> 8) ^ crc_tab16[(crc ^ (uint16_t)c) & 0x00FF];
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** }
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** 
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** /*
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  * static void init_crc16_tab( void );
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  *
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  *为了获得最佳性能，使用CRC16例程查找带有值的表
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  *可以直接在异或算法中使用的算法。
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  *查找表首次由init_crc16_tab()例程计算
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  *调用循环冗余校验函数。
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****  */
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** void init_crc16_tab(void)
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** {
+  30              		.loc 1 81 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+ARM GAS  /tmp/ccoR1rTj.s 			page 3
+
+
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     uint16_t i;
+  35              		.loc 1 82 5 view .LVU1
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     uint16_t j;
+  36              		.loc 1 83 5 view .LVU2
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     uint16_t crc;
+  37              		.loc 1 84 5 view .LVU3
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     uint16_t c;
+  38              		.loc 1 85 5 view .LVU4
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     for (i = 0; i < 256; i++)
+  39              		.loc 1 86 5 view .LVU5
+  40              	.LVL0:
+  41              		.loc 1 86 19 discriminator 1 view .LVU6
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     uint16_t i;
+  42              		.loc 1 81 1 is_stmt 0 view .LVU7
+  43 0000 F0B4     		push	{r4, r5, r6, r7}
+  44              	.LCFI0:
+  45              		.cfi_def_cfa_offset 16
+  46              		.cfi_offset 4, -16
+  47              		.cfi_offset 5, -12
+  48              		.cfi_offset 6, -8
+  49              		.cfi_offset 7, -4
+  50 0002 104E     		ldr	r6, .L8
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     {
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         crc = 0;
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         c = i;
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         for (j = 0; j < 8; j++)
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         {
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****             if ((crc ^ c) & 0x0001)
+  51              		.loc 1 92 16 view .LVU8
+  52 0004 104F     		ldr	r7, .L8+4
+  53 0006 06F50075 		add	r5, r6, #512
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     uint16_t i;
+  54              		.loc 1 81 1 view .LVU9
+  55 000a 0024     		movs	r4, #0
+  56              	.LVL1:
+  57              	.L3:
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     uint16_t i;
+  58              		.loc 1 81 1 view .LVU10
+  59 000c A0B2     		uxth	r0, r4
+  60              	.LVL2:
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         {
+  61              		.loc 1 90 23 is_stmt 1 discriminator 1 view .LVU11
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     uint16_t i;
+  62              		.loc 1 81 1 is_stmt 0 view .LVU12
+  63 000e 0821     		movs	r1, #8
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         c = i;
+  64              		.loc 1 88 13 view .LVU13
+  65 0010 0022     		movs	r2, #0
+  66              	.LVL3:
+  67              	.L2:
+  68              		.loc 1 92 13 is_stmt 1 view .LVU14
+  69              		.loc 1 92 27 is_stmt 0 view .LVU15
+  70 0012 82EA0003 		eor	r3, r2, r0
+  71              		.loc 1 92 16 view .LVU16
+  72 0016 43F30003 		sbfx	r3, r3, #0, #1
+  73 001a 3B40     		ands	r3, r3, r7
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         {
+ARM GAS  /tmp/ccoR1rTj.s 			page 4
+
+
+  74              		.loc 1 90 23 discriminator 1 view .LVU17
+  75 001c 0139     		subs	r1, r1, #1
+  76              		.loc 1 92 16 view .LVU18
+  77 001e 83EA5202 		eor	r2, r3, r2, lsr #1
+  78              	.LVL4:
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         {
+  79              		.loc 1 90 23 discriminator 1 view .LVU19
+  80 0022 89B2     		uxth	r1, r1
+  81              		.loc 1 92 16 view .LVU20
+  82 0024 92B2     		uxth	r2, r2
+  83              	.LVL5:
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****                 crc = (crc >> 1) ^ CRC_POLY_16;
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****             else
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****                 crc = crc >> 1;
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****             c = c >> 1;
+  84              		.loc 1 96 13 is_stmt 1 view .LVU21
+  85              		.loc 1 96 15 is_stmt 0 view .LVU22
+  86 0026 4008     		lsrs	r0, r0, #1
+  87              	.LVL6:
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         {
+  88              		.loc 1 90 29 is_stmt 1 discriminator 2 view .LVU23
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         {
+  89              		.loc 1 90 23 discriminator 1 view .LVU24
+  90 0028 0029     		cmp	r1, #0
+  91 002a F2D1     		bne	.L2
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         }
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         crc_tab16[i] = crc;
+  92              		.loc 1 98 9 view .LVU25
+  93              		.loc 1 98 22 is_stmt 0 view .LVU26
+  94 002c 26F8022F 		strh	r2, [r6, #2]!	@ movhi
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     {
+  95              		.loc 1 86 27 is_stmt 1 discriminator 2 view .LVU27
+  96              	.LVL7:
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     {
+  97              		.loc 1 86 19 discriminator 1 view .LVU28
+  98 0030 B542     		cmp	r5, r6
+  99 0032 04F10104 		add	r4, r4, #1
+ 100              	.LVL8:
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     {
+ 101              		.loc 1 86 19 is_stmt 0 discriminator 1 view .LVU29
+ 102 0036 E9D1     		bne	.L3
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     }
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     crc_tab16_init = 1;
+ 103              		.loc 1 100 5 is_stmt 1 view .LVU30
+ 104              		.loc 1 100 20 is_stmt 0 view .LVU31
+ 105 0038 044B     		ldr	r3, .L8+8
+ 106 003a 0122     		movs	r2, #1
+ 107              	.LVL9:
+ 108              		.loc 1 100 20 view .LVU32
+ 109 003c 1A70     		strb	r2, [r3]
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** }
+ 110              		.loc 1 101 1 view .LVU33
+ 111 003e F0BC     		pop	{r4, r5, r6, r7}
+ 112              	.LCFI1:
+ 113              		.cfi_restore 7
+ 114              		.cfi_restore 6
+ 115              		.cfi_restore 5
+ARM GAS  /tmp/ccoR1rTj.s 			page 5
+
+
+ 116              		.cfi_restore 4
+ 117              		.cfi_def_cfa_offset 0
+ 118              	.LVL10:
+ 119              		.loc 1 101 1 view .LVU34
+ 120 0040 7047     		bx	lr
+ 121              	.L9:
+ 122 0042 00BF     		.align	2
+ 123              	.L8:
+ 124 0044 FEFFFFFF 		.word	crc_tab16-2
+ 125 0048 01A0FFFF 		.word	-24575
+ 126 004c 00000000 		.word	crc_tab16_init
+ 127              		.cfi_endproc
+ 128              	.LFE332:
+ 130              		.section	.text.crc_16,"ax",%progbits
+ 131              		.align	1
+ 132              		.p2align 2,,3
+ 133              		.global	crc_16
+ 134              		.syntax unified
+ 135              		.thumb
+ 136              		.thumb_func
+ 138              	crc_16:
+ 139              	.LVL11:
+ 140              	.LFB329:
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     uint16_t crc;
+ 141              		.loc 1 15 1 is_stmt 1 view -0
+ 142              		.cfi_startproc
+ 143              		@ args = 0, pretend = 0, frame = 0
+ 144              		@ frame_needed = 0, uses_anonymous_args = 0
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     const uint8_t *ptr;
+ 145              		.loc 1 16 5 view .LVU36
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     uint16_t a;
+ 146              		.loc 1 17 5 view .LVU37
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     if (!crc_tab16_init)
+ 147              		.loc 1 18 5 view .LVU38
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         init_crc16_tab();
+ 148              		.loc 1 19 5 view .LVU39
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     uint16_t crc;
+ 149              		.loc 1 15 1 is_stmt 0 view .LVU40
+ 150 0000 38B5     		push	{r3, r4, r5, lr}
+ 151              	.LCFI2:
+ 152              		.cfi_def_cfa_offset 16
+ 153              		.cfi_offset 3, -16
+ 154              		.cfi_offset 4, -12
+ 155              		.cfi_offset 5, -8
+ 156              		.cfi_offset 14, -4
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         init_crc16_tab();
+ 157              		.loc 1 19 9 view .LVU41
+ 158 0002 0E4B     		ldr	r3, .L20
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         init_crc16_tab();
+ 159              		.loc 1 19 8 view .LVU42
+ 160 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     uint16_t crc;
+ 161              		.loc 1 15 1 view .LVU43
+ 162 0006 0446     		mov	r4, r0
+ 163 0008 0D46     		mov	r5, r1
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         init_crc16_tab();
+ 164              		.loc 1 19 8 view .LVU44
+ARM GAS  /tmp/ccoR1rTj.s 			page 6
+
+
+ 165 000a 83B1     		cbz	r3, .L18
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     ptr = input_str;
+ 166              		.loc 1 21 5 is_stmt 1 view .LVU45
+ 167              	.LVL12:
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     if (ptr != NULL)
+ 168              		.loc 1 22 5 view .LVU46
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         for (a = 0; a < num_bytes; a++)
+ 169              		.loc 1 23 5 view .LVU47
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         for (a = 0; a < num_bytes; a++)
+ 170              		.loc 1 23 8 is_stmt 0 view .LVU48
+ 171 000c 9CB1     		cbz	r4, .L15
+ 172              	.LVL13:
+ 173              	.L19:
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         {
+ 174              		.loc 1 24 23 is_stmt 1 discriminator 1 view .LVU49
+ 175 000e 95B1     		cbz	r5, .L15
+ 176 0010 0B4A     		ldr	r2, .L20+4
+ 177 0012 6119     		adds	r1, r4, r5
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     ptr = input_str;
+ 178              		.loc 1 21 9 is_stmt 0 view .LVU50
+ 179 0014 4FF6FF70 		movw	r0, #65535
+ 180              	.LVL14:
+ 181              	.L13:
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         }
+ 182              		.loc 1 26 13 is_stmt 1 view .LVU51
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         }
+ 183              		.loc 1 26 49 is_stmt 0 view .LVU52
+ 184 0018 14F8013B 		ldrb	r3, [r4], #1	@ zero_extendqisi2
+ 185              	.LVL15:
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         }
+ 186              		.loc 1 26 47 view .LVU53
+ 187 001c 4340     		eors	r3, r3, r0
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         }
+ 188              		.loc 1 26 67 view .LVU54
+ 189 001e DBB2     		uxtb	r3, r3
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         {
+ 190              		.loc 1 24 23 discriminator 1 view .LVU55
+ 191 0020 8C42     		cmp	r4, r1
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         }
+ 192              		.loc 1 26 41 view .LVU56
+ 193 0022 32F81330 		ldrh	r3, [r2, r3, lsl #1]
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         }
+ 194              		.loc 1 26 17 view .LVU57
+ 195 0026 83EA1020 		eor	r0, r3, r0, lsr #8
+ 196              	.LVL16:
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         {
+ 197              		.loc 1 24 37 is_stmt 1 discriminator 3 view .LVU58
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         {
+ 198              		.loc 1 24 23 discriminator 1 view .LVU59
+ 199 002a F5D1     		bne	.L13
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** }
+ 200              		.loc 1 28 5 view .LVU60
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** 
+ 201              		.loc 1 29 1 is_stmt 0 view .LVU61
+ 202 002c 38BD     		pop	{r3, r4, r5, pc}
+ 203              	.LVL17:
+ 204              	.L18:
+ARM GAS  /tmp/ccoR1rTj.s 			page 7
+
+
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     crc = CRC_START_16;
+ 205              		.loc 1 20 9 is_stmt 1 view .LVU62
+ 206 002e FFF7FEFF 		bl	init_crc16_tab
+ 207              	.LVL18:
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     ptr = input_str;
+ 208              		.loc 1 21 5 view .LVU63
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     if (ptr != NULL)
+ 209              		.loc 1 22 5 view .LVU64
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         for (a = 0; a < num_bytes; a++)
+ 210              		.loc 1 23 5 view .LVU65
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         for (a = 0; a < num_bytes; a++)
+ 211              		.loc 1 23 8 is_stmt 0 view .LVU66
+ 212 0032 002C     		cmp	r4, #0
+ 213 0034 EBD1     		bne	.L19
+ 214              	.L15:
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     ptr = input_str;
+ 215              		.loc 1 21 9 view .LVU67
+ 216 0036 4FF6FF70 		movw	r0, #65535
+ 217              	.LVL19:
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** }
+ 218              		.loc 1 28 5 is_stmt 1 view .LVU68
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** 
+ 219              		.loc 1 29 1 is_stmt 0 view .LVU69
+ 220 003a 38BD     		pop	{r3, r4, r5, pc}
+ 221              	.LVL20:
+ 222              	.L21:
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** 
+ 223              		.loc 1 29 1 view .LVU70
+ 224              		.align	2
+ 225              	.L20:
+ 226 003c 00000000 		.word	crc_tab16_init
+ 227 0040 00000000 		.word	crc_tab16
+ 228              		.cfi_endproc
+ 229              	.LFE329:
+ 231              		.section	.text.update_crc_16,"ax",%progbits
+ 232              		.align	1
+ 233              		.p2align 2,,3
+ 234              		.global	update_crc_16
+ 235              		.syntax unified
+ 236              		.thumb
+ 237              		.thumb_func
+ 239              	update_crc_16:
+ 240              	.LVL21:
+ 241              	.LFB331:
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     if (!crc_tab16_init)
+ 242              		.loc 1 66 1 is_stmt 1 view -0
+ 243              		.cfi_startproc
+ 244              		@ args = 0, pretend = 0, frame = 0
+ 245              		@ frame_needed = 0, uses_anonymous_args = 0
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         init_crc16_tab();
+ 246              		.loc 1 67 5 view .LVU72
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     if (!crc_tab16_init)
+ 247              		.loc 1 66 1 is_stmt 0 view .LVU73
+ 248 0000 38B5     		push	{r3, r4, r5, lr}
+ 249              	.LCFI3:
+ 250              		.cfi_def_cfa_offset 16
+ 251              		.cfi_offset 3, -16
+ARM GAS  /tmp/ccoR1rTj.s 			page 8
+
+
+ 252              		.cfi_offset 4, -12
+ 253              		.cfi_offset 5, -8
+ 254              		.cfi_offset 14, -4
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         init_crc16_tab();
+ 255              		.loc 1 67 9 view .LVU74
+ 256 0002 084B     		ldr	r3, .L26
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         init_crc16_tab();
+ 257              		.loc 1 67 8 view .LVU75
+ 258 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     if (!crc_tab16_init)
+ 259              		.loc 1 66 1 view .LVU76
+ 260 0006 0546     		mov	r5, r0
+ 261 0008 0C46     		mov	r4, r1
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****         init_crc16_tab();
+ 262              		.loc 1 67 8 view .LVU77
+ 263 000a 3BB1     		cbz	r3, .L25
+ 264              	.LVL22:
+ 265              	.L23:
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** }
+ 266              		.loc 1 69 5 is_stmt 1 view .LVU78
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** }
+ 267              		.loc 1 69 40 is_stmt 0 view .LVU79
+ 268 000c 6C40     		eors	r4, r4, r5
+ 269              	.LVL23:
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** }
+ 270              		.loc 1 69 34 view .LVU80
+ 271 000e 064B     		ldr	r3, .L26+4
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** }
+ 272              		.loc 1 69 55 view .LVU81
+ 273 0010 E4B2     		uxtb	r4, r4
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** }
+ 274              		.loc 1 69 23 view .LVU82
+ 275 0012 33F81400 		ldrh	r0, [r3, r4, lsl #1]
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** 
+ 276              		.loc 1 70 1 view .LVU83
+ 277 0016 80EA1520 		eor	r0, r0, r5, lsr #8
+ 278 001a 38BD     		pop	{r3, r4, r5, pc}
+ 279              	.LVL24:
+ 280              	.L25:
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     return (crc >> 8) ^ crc_tab16[(crc ^ (uint16_t)c) & 0x00FF];
+ 281              		.loc 1 68 9 is_stmt 1 view .LVU84
+ 282 001c FFF7FEFF 		bl	init_crc16_tab
+ 283              	.LVL25:
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c ****     return (crc >> 8) ^ crc_tab16[(crc ^ (uint16_t)c) & 0x00FF];
+ 284              		.loc 1 68 9 is_stmt 0 view .LVU85
+ 285 0020 F4E7     		b	.L23
+ 286              	.L27:
+ 287 0022 00BF     		.align	2
+ 288              	.L26:
+ 289 0024 00000000 		.word	crc_tab16_init
+ 290 0028 00000000 		.word	crc_tab16
+ 291              		.cfi_endproc
+ 292              	.LFE331:
+ 294              		.section	.text.crc_modbus,"ax",%progbits
+ 295              		.align	1
+ 296              		.p2align 2,,3
+ 297              		.global	crc_modbus
+ARM GAS  /tmp/ccoR1rTj.s 			page 9
+
+
+ 298              		.syntax unified
+ 299              		.thumb
+ 300              		.thumb_func
+ 302              	crc_modbus:
+ 303              	.LFB334:
+ 304              		.cfi_startproc
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc16.c **** {
+ 305              		.loc 1 39 10 is_stmt 1 view -0
+ 306              		@ args = 0, pretend = 0, frame = 0
+ 307              		@ frame_needed = 0, uses_anonymous_args = 0
+ 308 0000 38B5     		push	{r3, r4, r5, lr}
+ 309              	.LCFI4:
+ 310              		.cfi_def_cfa_offset 16
+ 311              		.cfi_offset 3, -16
+ 312              		.cfi_offset 4, -12
+ 313              		.cfi_offset 5, -8
+ 314              		.cfi_offset 14, -4
+ 315 0002 0E4B     		ldr	r3, .L38
+ 316 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 317 0006 0446     		mov	r4, r0
+ 318 0008 0D46     		mov	r5, r1
+ 319 000a 83B1     		cbz	r3, .L36
+ 320 000c 9CB1     		cbz	r4, .L33
+ 321              	.L37:
+ 322 000e 95B1     		cbz	r5, .L33
+ 323 0010 0B4A     		ldr	r2, .L38+4
+ 324 0012 6119     		adds	r1, r4, r5
+ 325 0014 4FF6FF70 		movw	r0, #65535
+ 326              	.L31:
+ 327 0018 14F8013B 		ldrb	r3, [r4], #1	@ zero_extendqisi2
+ 328 001c 4340     		eors	r3, r3, r0
+ 329 001e DBB2     		uxtb	r3, r3
+ 330 0020 8C42     		cmp	r4, r1
+ 331 0022 32F81330 		ldrh	r3, [r2, r3, lsl #1]
+ 332 0026 83EA1020 		eor	r0, r3, r0, lsr #8
+ 333 002a F5D1     		bne	.L31
+ 334 002c 38BD     		pop	{r3, r4, r5, pc}
+ 335              	.L36:
+ 336 002e FFF7FEFF 		bl	init_crc16_tab
+ 337 0032 002C     		cmp	r4, #0
+ 338 0034 EBD1     		bne	.L37
+ 339              	.L33:
+ 340 0036 4FF6FF70 		movw	r0, #65535
+ 341 003a 38BD     		pop	{r3, r4, r5, pc}
+ 342              	.L39:
+ 343              		.align	2
+ 344              	.L38:
+ 345 003c 00000000 		.word	crc_tab16_init
+ 346 0040 00000000 		.word	crc_tab16
+ 347              		.cfi_endproc
+ 348              	.LFE334:
+ 350              		.section	.bss.crc_tab16,"aw",%nobits
+ 351              		.align	2
+ 354              	crc_tab16:
+ 355 0000 00000000 		.space	512
+ 355      00000000 
+ 355      00000000 
+ARM GAS  /tmp/ccoR1rTj.s 			page 10
+
+
+ 355      00000000 
+ 355      00000000 
+ 356              		.section	.bss.crc_tab16_init,"aw",%nobits
+ 359              	crc_tab16_init:
+ 360 0000 00       		.space	1
+ 361              		.text
+ 362              	.Letext0:
+ 363              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ARM GAS  /tmp/ccoR1rTj.s 			page 11
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 crc16.c
+     /tmp/ccoR1rTj.s:21     .text.init_crc16_tab:00000000 $t
+     /tmp/ccoR1rTj.s:28     .text.init_crc16_tab:00000000 init_crc16_tab
+     /tmp/ccoR1rTj.s:124    .text.init_crc16_tab:00000044 $d
+     /tmp/ccoR1rTj.s:354    .bss.crc_tab16:00000000 crc_tab16
+     /tmp/ccoR1rTj.s:359    .bss.crc_tab16_init:00000000 crc_tab16_init
+     /tmp/ccoR1rTj.s:131    .text.crc_16:00000000 $t
+     /tmp/ccoR1rTj.s:138    .text.crc_16:00000000 crc_16
+     /tmp/ccoR1rTj.s:226    .text.crc_16:0000003c $d
+     /tmp/ccoR1rTj.s:232    .text.update_crc_16:00000000 $t
+     /tmp/ccoR1rTj.s:239    .text.update_crc_16:00000000 update_crc_16
+     /tmp/ccoR1rTj.s:289    .text.update_crc_16:00000024 $d
+     /tmp/ccoR1rTj.s:295    .text.crc_modbus:00000000 $t
+     /tmp/ccoR1rTj.s:302    .text.crc_modbus:00000000 crc_modbus
+     /tmp/ccoR1rTj.s:345    .text.crc_modbus:0000003c $d
+     /tmp/ccoR1rTj.s:351    .bss.crc_tab16:00000000 $d
+     /tmp/ccoR1rTj.s:360    .bss.crc_tab16_init:00000000 $d
+
+NO UNDEFINED SYMBOLS

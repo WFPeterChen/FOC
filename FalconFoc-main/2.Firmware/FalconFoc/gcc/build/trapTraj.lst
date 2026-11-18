@@ -1,0 +1,1035 @@
+ARM GAS  /tmp/ccNJePQ6.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"trapTraj.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c"
+  20              		.section	.text.sign_hard,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	sign_hard
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	sign_hard:
+  29              	.LVL0:
+  30              	.LFB348:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** /*
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Copyright 2021 codenocold 1107795287@qq.com
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Address : https://github.com/codenocold/dgm
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     This file is part of the dgm firmware.
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     The dgm firmware is free software: you can redistribute it and/or modify
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     it under the terms of the GNU General Public License as published by
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     the Free Software Foundation, either version 3 of the License, or
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     (at your option) any later version.
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     The dgm firmware is distributed in the hope that it will be useful,
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     GNU General Public License for more details.
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     You should have received a copy of the GNU General Public License
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** */
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** 
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** #include "trapTraj.h"
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** #include <math.h>
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** #include "general_def.h"
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** 
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** tTraj Traj;
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** 
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** static float Xi_;
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** static float Xf_;
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** static float Vi_;
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** 
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** static float Ar_;
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** static float Vr_;
+ARM GAS  /tmp/ccNJePQ6.s 			page 2
+
+
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** static float Dr_;
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** 
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** static float Ta_;
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** static float Tv_;
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** static float Td_;
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** // static float Tf_;
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** 
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** static float yAccel_;
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** 
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** // A sign function where input 0 has positive sign (not 0)
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** float sign_hard(float val)
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** {
+  31              		.loc 1 40 1 view -0
+  32              		.cfi_startproc
+  33              		@ args = 0, pretend = 0, frame = 8
+  34              		@ frame_needed = 0, uses_anonymous_args = 0
+  35              		@ link register save eliminated.
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     return (signbit(val)) ? -1.0f : 1.0f;
+  36              		.loc 1 41 5 view .LVU1
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     return (signbit(val)) ? -1.0f : 1.0f;
+  37              		.loc 1 40 1 is_stmt 0 view .LVU2
+  38 0000 82B0     		sub	sp, sp, #8
+  39              	.LCFI0:
+  40              		.cfi_def_cfa_offset 8
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     return (signbit(val)) ? -1.0f : 1.0f;
+  41              		.loc 1 40 1 view .LVU3
+  42 0002 8DED010A 		vstr.32	s0, [sp, #4]
+  43              		.loc 1 41 13 view .LVU4
+  44 0006 019B     		ldr	r3, [sp, #4]
+  45              		.loc 1 41 35 discriminator 1 view .LVU5
+  46 0008 FFEE007A 		vmov.f32	s15, #-1.0e+0
+  47 000c 002B     		cmp	r3, #0
+  48 000e B7EE000A 		vmov.f32	s0, #1.0e+0
+  49              	.LVL1:
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** }
+  50              		.loc 1 42 1 view .LVU6
+  51 0012 B8BF     		it	lt
+  52 0014 B0EE670A 		vmovlt.f32	s0, s15
+  53 0018 02B0     		add	sp, sp, #8
+  54              	.LCFI1:
+  55              		.cfi_def_cfa_offset 0
+  56              	.LVL2:
+  57              		.loc 1 42 1 view .LVU7
+  58              		@ sp needed
+  59 001a 7047     		bx	lr
+  60              		.cfi_endproc
+  61              	.LFE348:
+  63              		.global	__aeabi_f2d
+  64              		.global	__aeabi_d2f
+  65              		.section	.text.TRAJ_plan,"ax",%progbits
+  66              		.align	1
+  67              		.p2align 2,,3
+  68              		.global	TRAJ_plan
+  69              		.syntax unified
+  70              		.thumb
+  71              		.thumb_func
+  73              	TRAJ_plan:
+ARM GAS  /tmp/ccNJePQ6.s 			page 3
+
+
+  74              	.LVL3:
+  75              	.LFB349:
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** 
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** // Symbol                     Description
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** // Ta, Tv and Td              Duration of the stages of the AL profile
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** // Xi and Vi                  Adapted initial conditions for the AL profile
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** // Xf                         Position set-point
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** // s                          Direction (sign) of the trajectory
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** // Vmax, Amax, Dmax and jmax  Kinematic bounds
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** // Ar, Dr and Vr              Reached values of acceleration and velocity
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** 
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** void TRAJ_plan(float Xf, float Xi, float Vi,
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****                float Vmax, float Amax, float Dmax)
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** {
+  76              		.loc 1 54 1 is_stmt 1 view -0
+  77              		.cfi_startproc
+  78              		@ args = 0, pretend = 0, frame = 0
+  79              		@ frame_needed = 0, uses_anonymous_args = 0
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     float dX = Xf - Xi;                          // Distance to travel
+  80              		.loc 1 55 5 view .LVU9
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     float dX = Xf - Xi;                          // Distance to travel
+  81              		.loc 1 54 1 is_stmt 0 view .LVU10
+  82 0000 70B5     		push	{r4, r5, r6, lr}
+  83              	.LCFI2:
+  84              		.cfi_def_cfa_offset 16
+  85              		.cfi_offset 4, -16
+  86              		.cfi_offset 5, -12
+  87              		.cfi_offset 6, -8
+  88              		.cfi_offset 14, -4
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     float stop_dist = (Vi * Vi) / (2.0f * Dmax); // Minimum stopping distance
+  89              		.loc 1 56 41 view .LVU11
+  90 0002 72EEA27A 		vadd.f32	s15, s5, s5
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     float dX = Xf - Xi;                          // Distance to travel
+  91              		.loc 1 54 1 view .LVU12
+  92 0006 2DED0A8B 		vpush.64	{d8, d9, d10, d11, d12}
+  93              	.LCFI3:
+  94              		.cfi_def_cfa_offset 56
+  95              		.cfi_offset 80, -56
+  96              		.cfi_offset 81, -52
+  97              		.cfi_offset 82, -48
+  98              		.cfi_offset 83, -44
+  99              		.cfi_offset 84, -40
+ 100              		.cfi_offset 85, -36
+ 101              		.cfi_offset 86, -32
+ 102              		.cfi_offset 87, -28
+ 103              		.cfi_offset 88, -24
+ 104              		.cfi_offset 89, -20
+ 105              		.loc 1 56 27 view .LVU13
+ 106 000a 21EE01CA 		vmul.f32	s24, s2, s2
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     float dX = Xf - Xi;                          // Distance to travel
+ 107              		.loc 1 55 11 view .LVU14
+ 108 000e 70EE60AA 		vsub.f32	s21, s0, s1
+ 109              	.LVL4:
+ 110              		.loc 1 56 5 is_stmt 1 view .LVU15
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     float dXstop = copysign(stop_dist, Vi);      // Minimum stopping displacement
+ 111              		.loc 1 57 20 is_stmt 0 view .LVU16
+ 112 0012 CCEE277A 		vdiv.f32	s15, s24, s15
+ARM GAS  /tmp/ccNJePQ6.s 			page 4
+
+
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     float dX = Xf - Xi;                          // Distance to travel
+ 113              		.loc 1 54 1 view .LVU17
+ 114 0016 B0EE419A 		vmov.f32	s18, s2
+ 115              		.loc 1 57 20 view .LVU18
+ 116 001a 17EE900A 		vmov	r0, s15
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     float dX = Xf - Xi;                          // Distance to travel
+ 117              		.loc 1 54 1 view .LVU19
+ 118 001e F0EE629A 		vmov.f32	s19, s5
+ 119              	.LVL5:
+ 120              		.loc 1 57 5 is_stmt 1 view .LVU20
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     float dX = Xf - Xi;                          // Distance to travel
+ 121              		.loc 1 54 1 is_stmt 0 view .LVU21
+ 122 0022 B0EE40BA 		vmov.f32	s22, s0
+ 123 0026 B0EE60AA 		vmov.f32	s20, s1
+ 124 002a B0EE618A 		vmov.f32	s16, s3
+ 125 002e F0EE428A 		vmov.f32	s17, s4
+ 126              		.loc 1 57 20 view .LVU22
+ 127 0032 FFF7FEFF 		bl	__aeabi_f2d
+ 128              	.LVL6:
+ 129              		.loc 1 57 20 view .LVU23
+ 130 0036 0446     		mov	r4, r0
+ 131 0038 19EE100A 		vmov	r0, s18
+ 132 003c 0D46     		mov	r5, r1
+ 133 003e FFF7FEFF 		bl	__aeabi_f2d
+ 134              	.LVL7:
+ 135              		.loc 1 57 11 discriminator 1 view .LVU24
+ 136 0042 2046     		mov	r0, r4
+ 137              		.loc 1 57 20 view .LVU25
+ 138 0044 65F31E01 		bfi	r1, r5, #0, #31
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     float s = sign_hard(dX - dXstop);            // Sign of coast velocity (if any)
+ 139              		.loc 1 58 5 is_stmt 1 view .LVU26
+ 140              	.LBB4:
+ 141              	.LBI4:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** {
+ 142              		.loc 1 39 7 view .LVU27
+ 143              	.LBB5:
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** }
+ 144              		.loc 1 41 5 view .LVU28
+ 145              	.LBE5:
+ 146              	.LBE4:
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     float s = sign_hard(dX - dXstop);            // Sign of coast velocity (if any)
+ 147              		.loc 1 57 11 is_stmt 0 discriminator 1 view .LVU29
+ 148 0048 FFF7FEFF 		bl	__aeabi_d2f
+ 149              	.LVL8:
+ 150 004c 07EE900A 		vmov	s15, r0
+ 151              	.LBB8:
+ 152              	.LBB6:
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** }
+ 153              		.loc 1 41 13 view .LVU30
+ 154 0050 7AEEE77A 		vsub.f32	s15, s21, s15
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** }
+ 155              		.loc 1 41 35 discriminator 1 view .LVU31
+ 156 0054 17EE903A 		vmov	r3, s15	@ int
+ 157 0058 002B     		cmp	r3, #0
+ 158 005a 66DA     		bge	.L7
+ 159 005c F1EE688A 		vneg.f32	s17, s17
+ 160              	.LVL9:
+ARM GAS  /tmp/ccNJePQ6.s 			page 5
+
+
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** }
+ 161              		.loc 1 41 35 discriminator 1 view .LVU32
+ 162 0060 F1EE487A 		vneg.f32	s15, s16
+ 163 0064 B1EE497A 		vneg.f32	s14, s18
+ 164 0068 B1EE6A5A 		vneg.f32	s10, s21
+ 165 006c FFEE00BA 		vmov.f32	s23, #-1.0e+0
+ 166              	.LVL10:
+ 167              	.L8:
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** }
+ 168              		.loc 1 41 35 discriminator 1 view .LVU33
+ 169              	.LBE6:
+ 170              	.LBE8:
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Ar_ = s * Amax;                              // Maximum Acceleration (signed)
+ 171              		.loc 1 59 5 is_stmt 1 view .LVU34
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Dr_ = -s * Dmax;                             // Maximum Deceleration (signed)
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Vr_ = s * Vmax;                              // Maximum Velocity (signed)
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** 
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     // If we start with a speed faster than cruising, then we need to decel instead of accel
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     // aka "double deceleration move" in the paper
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     if ((s * Vi) > (s * Vr_))
+ 172              		.loc 1 65 8 is_stmt 0 view .LVU35
+ 173 0070 B4EEC78A 		vcmpe.f32	s16, s14
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Ar_ = s * Amax;                              // Maximum Acceleration (signed)
+ 174              		.loc 1 59 9 view .LVU36
+ 175 0074 624B     		ldr	r3, .L24+8
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Dr_ = -s * Dmax;                             // Maximum Deceleration (signed)
+ 176              		.loc 1 60 9 view .LVU37
+ 177 0076 634A     		ldr	r2, .L24+12
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Ar_ = s * Amax;                              // Maximum Acceleration (signed)
+ 178              		.loc 1 59 9 view .LVU38
+ 179 0078 C3ED008A 		vstr.32	s17, [r3]
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Dr_ = -s * Dmax;                             // Maximum Deceleration (signed)
+ 180              		.loc 1 60 5 is_stmt 1 view .LVU39
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     {
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Ar_ = -s * Amax;
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     }
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** 
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     // Time to accel/decel to/from Vr (cruise speed)
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Ta_ = (Vr_ - Vi) / Ar_;
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Td_ = -Vr_ / Dr_;
+ 181              		.loc 1 72 11 is_stmt 0 view .LVU40
+ 182 007c B1EE677A 		vneg.f32	s14, s15
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     {
+ 183              		.loc 1 65 8 view .LVU41
+ 184 0080 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 185              		.loc 1 72 16 view .LVU42
+ 186 0084 C7EE296A 		vdiv.f32	s13, s14, s19
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** 
+ 187              		.loc 1 61 9 view .LVU43
+ 188 0088 5F4E     		ldr	r6, .L24+16
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Td_ = -Vr_ / Dr_;
+ 189              		.loc 1 71 9 view .LVU44
+ 190 008a 604D     		ldr	r5, .L24+20
+ 191              		.loc 1 72 9 view .LVU45
+ 192 008c 604C     		ldr	r4, .L24+24
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Td_ = -Vr_ / Dr_;
+ 193              		.loc 1 71 16 view .LVU46
+ARM GAS  /tmp/ccNJePQ6.s 			page 6
+
+
+ 194 008e 37EEC97A 		vsub.f32	s14, s15, s18
+ 195 0092 48BF     		it	mi
+ 196 0094 F1EE688A 		vnegmi.f32	s17, s17
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Td_ = -Vr_ / Dr_;
+ 197              		.loc 1 71 22 view .LVU47
+ 198 0098 87EE288A 		vdiv.f32	s16, s14, s17
+ 199              	.LVL11:
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** 
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     // Integral of velocity ramps over the full accel and decel times to get
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     // minimum displacement required to reach cuising speed
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     float dXmin = 0.5f * Ta_ * (Vr_ + Vi) + 0.5f * Td_ * Vr_;
+ 200              		.loc 1 76 24 view .LVU48
+ 201 009c B6EE006A 		vmov.f32	s12, #5.0e-1
+ 202              		.loc 1 76 50 view .LVU49
+ 203 00a0 26EE867A 		vmul.f32	s14, s13, s12
+ 204              		.loc 1 76 37 view .LVU50
+ 205 00a4 79EE275A 		vadd.f32	s11, s18, s15
+ 206              		.loc 1 76 24 view .LVU51
+ 207 00a8 28EE066A 		vmul.f32	s12, s16, s12
+ 208              		.loc 1 76 56 view .LVU52
+ 209 00ac 27EE277A 		vmul.f32	s14, s14, s15
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     }
+ 210              		.loc 1 67 13 view .LVU53
+ 211 00b0 48BF     		it	mi
+ 212 00b2 C3ED008A 		vstrmi.32	s17, [r3]
+ 213              		.loc 1 76 11 view .LVU54
+ 214 00b6 A6EE257A 		vfma.f32	s14, s12, s11
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Vr_ = s * Vmax;                              // Maximum Velocity (signed)
+ 215              		.loc 1 60 9 view .LVU55
+ 216 00ba C2ED009A 		vstr.32	s19, [r2]
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** 
+ 217              		.loc 1 61 5 is_stmt 1 view .LVU56
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** 
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     // Are we displacing enough to reach cruising speed?
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     if (s * dX < s * dXmin)
+ 218              		.loc 1 79 20 is_stmt 0 view .LVU57
+ 219 00be 27EE2B6A 		vmul.f32	s12, s14, s23
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** 
+ 220              		.loc 1 61 9 view .LVU58
+ 221 00c2 C6ED007A 		vstr.32	s15, [r6]
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     {
+ 222              		.loc 1 65 5 is_stmt 1 view .LVU59
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     }
+ 223              		.loc 1 67 9 view .LVU60
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Td_ = -Vr_ / Dr_;
+ 224              		.loc 1 71 5 view .LVU61
+ 225              		.loc 1 79 8 is_stmt 0 view .LVU62
+ 226 00c6 B4EEC56A 		vcmpe.f32	s12, s10
+ 227 00ca F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** 
+ 228              		.loc 1 72 9 view .LVU63
+ 229 00ce C4ED006A 		vstr.32	s13, [r4]
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Td_ = -Vr_ / Dr_;
+ 230              		.loc 1 71 9 view .LVU64
+ 231 00d2 85ED008A 		vstr.32	s16, [r5]
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** 
+ 232              		.loc 1 72 5 is_stmt 1 view .LVU65
+ARM GAS  /tmp/ccNJePQ6.s 			page 7
+
+
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** 
+ 233              		.loc 1 76 5 view .LVU66
+ 234              	.LVL12:
+ 235              		.loc 1 79 5 view .LVU67
+ 236              		.loc 1 79 8 is_stmt 0 view .LVU68
+ 237 00d6 33DC     		bgt	.L23
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     {
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         // Short move (triangle profile)
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Vr_ = s * sqrtf(fmax((Dr_ * SQ(Vi) + 2 * Ar_ * Dr_ * dX) / (Dr_ - Ar_), 0.0f));
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Ta_ = fmax(0.0f, (Vr_ - Vi) / Ar_);
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Td_ = fmax(0.0f, -Vr_ / Dr_);
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Tv_ = 0.0f;
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     }
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     else
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     {
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         // Long move (trapezoidal profile)
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Tv_ = (dX - dXmin) / Vr_;
+ 238              		.loc 1 90 9 is_stmt 1 view .LVU69
+ 239              		.loc 1 90 19 is_stmt 0 view .LVU70
+ 240 00d8 7AEEC7AA 		vsub.f32	s21, s21, s14
+ 241              	.LVL13:
+ 242              		.loc 1 90 28 view .LVU71
+ 243 00dc 8AEEA77A 		vdiv.f32	s14, s21, s15
+ 244              	.LVL14:
+ 245              	.L16:
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     }
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** 
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     // Fill in the rest of the values used at evaluation-time
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Traj.Tf_ = Ta_ + Tv_ + Td_;
+ 246              		.loc 1 94 14 view .LVU72
+ 247 00e0 4C4B     		ldr	r3, .L24+28
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Xi_ = Xi;
+ 248              		.loc 1 95 9 view .LVU73
+ 249 00e2 4D48     		ldr	r0, .L24+32
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Xf_ = Xf;
+ 250              		.loc 1 96 9 view .LVU74
+ 251 00e4 4D49     		ldr	r1, .L24+36
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Vi_ = Vi;
+ 252              		.loc 1 97 9 view .LVU75
+ 253 00e6 4E4A     		ldr	r2, .L24+40
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     }
+ 254              		.loc 1 85 13 view .LVU76
+ 255 00e8 4E4C     		ldr	r4, .L24+44
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     yAccel_ = Xi + Vi * Ta_ + 0.5f * Ar_ * SQ(Ta_); // pos at end of accel phase
+ 256              		.loc 1 98 18 view .LVU77
+ 257 00ea F0EE4A7A 		vmov.f32	s15, s20
+ 258              		.loc 1 98 36 view .LVU78
+ 259 00ee B6EE006A 		vmov.f32	s12, #5.0e-1
+ 260              		.loc 1 98 18 view .LVU79
+ 261 00f2 E9EE087A 		vfma.f32	s15, s18, s16
+ 262              		.loc 1 98 36 view .LVU80
+ 263 00f6 68EE868A 		vmul.f32	s17, s17, s12
+ 264              		.loc 1 98 44 view .LVU81
+ 265 00fa 28EE086A 		vmul.f32	s12, s16, s16
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Xi_ = Xi;
+ 266              		.loc 1 94 20 view .LVU82
+ 267 00fe 38EE078A 		vadd.f32	s16, s16, s14
+ARM GAS  /tmp/ccNJePQ6.s 			page 8
+
+
+ 268              		.loc 1 98 29 view .LVU83
+ 269 0102 E8EE867A 		vfma.f32	s15, s17, s12
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Xi_ = Xi;
+ 270              		.loc 1 94 26 view .LVU84
+ 271 0106 38EE268A 		vadd.f32	s16, s16, s13
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Xf_ = Xf;
+ 272              		.loc 1 95 9 view .LVU85
+ 273 010a 80ED00AA 		vstr.32	s20, [r0]
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Xi_ = Xi;
+ 274              		.loc 1 94 14 view .LVU86
+ 275 010e 83ED038A 		vstr.32	s16, [r3, #12]
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Vi_ = Vi;
+ 276              		.loc 1 96 9 view .LVU87
+ 277 0112 81ED00BA 		vstr.32	s22, [r1]
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     yAccel_ = Xi + Vi * Ta_ + 0.5f * Ar_ * SQ(Ta_); // pos at end of accel phase
+ 278              		.loc 1 97 9 view .LVU88
+ 279 0116 82ED009A 		vstr.32	s18, [r2]
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** }
+ 280              		.loc 1 99 1 view .LVU89
+ 281 011a BDEC0A8B 		vldm	sp!, {d8-d12}
+ 282              	.LCFI4:
+ 283              		.cfi_remember_state
+ 284              		.cfi_restore 88
+ 285              		.cfi_restore 89
+ 286              		.cfi_restore 86
+ 287              		.cfi_restore 87
+ 288              		.cfi_restore 84
+ 289              		.cfi_restore 85
+ 290              		.cfi_restore 82
+ 291              		.cfi_restore 83
+ 292              		.cfi_restore 80
+ 293              		.cfi_restore 81
+ 294              		.cfi_def_cfa_offset 16
+ 295              	.LVL15:
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** }
+ 296              		.loc 1 98 13 view .LVU90
+ 297 011e 424B     		ldr	r3, .L24+48
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     }
+ 298              		.loc 1 85 13 view .LVU91
+ 299 0120 84ED007A 		vstr.32	s14, [r4]
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Xi_ = Xi;
+ 300              		.loc 1 94 5 is_stmt 1 view .LVU92
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Xf_ = Xf;
+ 301              		.loc 1 95 5 view .LVU93
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     Vi_ = Vi;
+ 302              		.loc 1 96 5 view .LVU94
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     yAccel_ = Xi + Vi * Ta_ + 0.5f * Ar_ * SQ(Ta_); // pos at end of accel phase
+ 303              		.loc 1 97 5 view .LVU95
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** }
+ 304              		.loc 1 98 5 view .LVU96
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** }
+ 305              		.loc 1 98 13 is_stmt 0 view .LVU97
+ 306 0124 C3ED007A 		vstr.32	s15, [r3]
+ 307              		.loc 1 99 1 view .LVU98
+ 308 0128 70BD     		pop	{r4, r5, r6, pc}
+ 309              	.LVL16:
+ 310              	.L7:
+ARM GAS  /tmp/ccNJePQ6.s 			page 9
+
+
+ 311              	.LCFI5:
+ 312              		.cfi_restore_state
+ 313              	.LBB9:
+ 314              	.LBB7:
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** }
+ 315              		.loc 1 41 35 discriminator 1 view .LVU99
+ 316 012a B0EE6A5A 		vmov.f32	s10, s21
+ 317 012e B0EE497A 		vmov.f32	s14, s18
+ 318 0132 F0EE487A 		vmov.f32	s15, s16
+ 319 0136 F1EE699A 		vneg.f32	s19, s19
+ 320              	.LVL17:
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** }
+ 321              		.loc 1 41 35 discriminator 2 view .LVU100
+ 322 013a F7EE00BA 		vmov.f32	s23, #1.0e+0
+ 323 013e 97E7     		b	.L8
+ 324              	.LVL18:
+ 325              	.L23:
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** }
+ 326              		.loc 1 41 35 discriminator 2 view .LVU101
+ 327              	.LBE7:
+ 328              	.LBE9:
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Ta_ = fmax(0.0f, (Vr_ - Vi) / Ar_);
+ 329              		.loc 1 82 9 is_stmt 1 view .LVU102
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Ta_ = fmax(0.0f, (Vr_ - Vi) / Ar_);
+ 330              		.loc 1 82 48 is_stmt 0 view .LVU103
+ 331 0140 78EEA87A 		vadd.f32	s15, s17, s17
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Ta_ = fmax(0.0f, (Vr_ - Vi) / Ar_);
+ 332              		.loc 1 82 73 view .LVU104
+ 333 0144 39EEE87A 		vsub.f32	s14, s19, s17
+ 334              	.LVL19:
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Ta_ = fmax(0.0f, (Vr_ - Vi) / Ar_);
+ 335              		.loc 1 82 54 view .LVU105
+ 336 0148 67EEA97A 		vmul.f32	s15, s15, s19
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Ta_ = fmax(0.0f, (Vr_ - Vi) / Ar_);
+ 337              		.loc 1 82 60 view .LVU106
+ 338 014c 67EEAA7A 		vmul.f32	s15, s15, s21
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Ta_ = fmax(0.0f, (Vr_ - Vi) / Ar_);
+ 339              		.loc 1 82 44 view .LVU107
+ 340 0150 ECEE297A 		vfma.f32	s15, s24, s19
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Ta_ = fmax(0.0f, (Vr_ - Vi) / Ar_);
+ 341              		.loc 1 82 25 view .LVU108
+ 342 0154 C7EE877A 		vdiv.f32	s15, s15, s14
+ 343 0158 17EE900A 		vmov	r0, s15
+ 344 015c FFF7FEFF 		bl	__aeabi_f2d
+ 345              	.LVL20:
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Ta_ = fmax(0.0f, (Vr_ - Vi) / Ar_);
+ 346              		.loc 1 82 25 view .LVU109
+ 347 0160 9FED251B 		vldr.64	d1, .L24
+ 348 0164 41EC100B 		vmov	d0, r0, r1
+ 349 0168 FFF7FEFF 		bl	fmax
+ 350              	.LVL21:
+ 351 016c 51EC100B 		vmov	r0, r1, d0
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Ta_ = fmax(0.0f, (Vr_ - Vi) / Ar_);
+ 352              		.loc 1 82 19 discriminator 1 view .LVU110
+ 353 0170 FFF7FEFF 		bl	__aeabi_d2f
+ 354              	.LVL22:
+ 355 0174 00EE100A 		vmov	s0, r0
+ARM GAS  /tmp/ccNJePQ6.s 			page 10
+
+
+ 356 0178 B5EE400A 		vcmp.f32	s0, #0
+ 357 017c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 358 0180 33D4     		bmi	.L21
+ 359 0182 F1EEC07A 		vsqrt.f32	s15, s0
+ 360              	.L15:
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Ta_ = fmax(0.0f, (Vr_ - Vi) / Ar_);
+ 361              		.loc 1 82 17 discriminator 2 view .LVU111
+ 362 0186 6BEEA7BA 		vmul.f32	s23, s23, s15
+ 363              	.LVL23:
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Td_ = fmax(0.0f, -Vr_ / Dr_);
+ 364              		.loc 1 83 31 view .LVU112
+ 365 018a 7BEEC97A 		vsub.f32	s15, s23, s18
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Ta_ = fmax(0.0f, (Vr_ - Vi) / Ar_);
+ 366              		.loc 1 82 13 discriminator 2 view .LVU113
+ 367 018e C6ED00BA 		vstr.32	s23, [r6]
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Td_ = fmax(0.0f, -Vr_ / Dr_);
+ 368              		.loc 1 83 9 is_stmt 1 view .LVU114
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Td_ = fmax(0.0f, -Vr_ / Dr_);
+ 369              		.loc 1 83 15 is_stmt 0 view .LVU115
+ 370 0192 C7EEA87A 		vdiv.f32	s15, s15, s17
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Tv_ = 0.0f;
+ 371              		.loc 1 84 26 view .LVU116
+ 372 0196 F1EE6BBA 		vneg.f32	s23, s23
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Td_ = fmax(0.0f, -Vr_ / Dr_);
+ 373              		.loc 1 83 15 view .LVU117
+ 374 019a 17EE900A 		vmov	r0, s15
+ 375 019e FFF7FEFF 		bl	__aeabi_f2d
+ 376              	.LVL24:
+ 377 01a2 9FED151B 		vldr.64	d1, .L24
+ 378 01a6 41EC100B 		vmov	d0, r0, r1
+ 379 01aa FFF7FEFF 		bl	fmax
+ 380              	.LVL25:
+ 381 01ae 51EC100B 		vmov	r0, r1, d0
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Td_ = fmax(0.0f, -Vr_ / Dr_);
+ 382              		.loc 1 83 15 discriminator 1 view .LVU118
+ 383 01b2 FFF7FEFF 		bl	__aeabi_d2f
+ 384              	.LVL26:
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Tv_ = 0.0f;
+ 385              		.loc 1 84 15 view .LVU119
+ 386 01b6 CBEEA97A 		vdiv.f32	s15, s23, s19
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Td_ = fmax(0.0f, -Vr_ / Dr_);
+ 387              		.loc 1 83 15 discriminator 1 view .LVU120
+ 388 01ba 08EE100A 		vmov	s16, r0
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Tv_ = 0.0f;
+ 389              		.loc 1 84 15 view .LVU121
+ 390 01be 17EE900A 		vmov	r0, s15
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Td_ = fmax(0.0f, -Vr_ / Dr_);
+ 391              		.loc 1 83 13 discriminator 1 view .LVU122
+ 392 01c2 85ED008A 		vstr.32	s16, [r5]
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Tv_ = 0.0f;
+ 393              		.loc 1 84 9 is_stmt 1 view .LVU123
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Tv_ = 0.0f;
+ 394              		.loc 1 84 15 is_stmt 0 view .LVU124
+ 395 01c6 FFF7FEFF 		bl	__aeabi_f2d
+ 396              	.LVL27:
+ 397 01ca 9FED0B1B 		vldr.64	d1, .L24
+ 398 01ce 41EC100B 		vmov	d0, r0, r1
+ARM GAS  /tmp/ccNJePQ6.s 			page 11
+
+
+ 399 01d2 FFF7FEFF 		bl	fmax
+ 400              	.LVL28:
+ 401 01d6 51EC100B 		vmov	r0, r1, d0
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Tv_ = 0.0f;
+ 402              		.loc 1 84 15 discriminator 1 view .LVU125
+ 403 01da FFF7FEFF 		bl	__aeabi_d2f
+ 404              	.LVL29:
+ 405 01de 9FED137A 		vldr.32	s14, .L24+52
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Tv_ = 0.0f;
+ 406              		.loc 1 84 13 discriminator 1 view .LVU126
+ 407 01e2 2060     		str	r0, [r4]	@ float
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     }
+ 408              		.loc 1 85 9 is_stmt 1 view .LVU127
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Tv_ = 0.0f;
+ 409              		.loc 1 84 15 is_stmt 0 discriminator 1 view .LVU128
+ 410 01e4 06EE900A 		vmov	s13, r0
+ 411 01e8 7AE7     		b	.L16
+ 412              	.LVL30:
+ 413              	.L21:
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Ta_ = fmax(0.0f, (Vr_ - Vi) / Ar_);
+ 414              		.loc 1 82 19 discriminator 1 view .LVU129
+ 415 01ea FFF7FEFF 		bl	sqrtf
+ 416              	.LVL31:
+ 417 01ee F0EE407A 		vmov.f32	s15, s0
+ 418 01f2 C8E7     		b	.L15
+ 419              	.L25:
+ 420 01f4 AFF30080 		.align	3
+ 421              	.L24:
+ 422 01f8 00000000 		.word	0
+ 423 01fc 00000000 		.word	0
+ 424 0200 00000000 		.word	Ar_
+ 425 0204 00000000 		.word	Dr_
+ 426 0208 00000000 		.word	Vr_
+ 427 020c 00000000 		.word	Ta_
+ 428 0210 00000000 		.word	Td_
+ 429 0214 00000000 		.word	Traj
+ 430 0218 00000000 		.word	Xi_
+ 431 021c 00000000 		.word	Xf_
+ 432 0220 00000000 		.word	Vi_
+ 433 0224 00000000 		.word	Tv_
+ 434 0228 00000000 		.word	yAccel_
+ 435 022c 00000000 		.word	0
+ 436              		.cfi_endproc
+ 437              	.LFE349:
+ 439              		.section	.text.TRAJ_eval,"ax",%progbits
+ 440              		.align	1
+ 441              		.p2align 2,,3
+ 442              		.global	TRAJ_eval
+ 443              		.syntax unified
+ 444              		.thumb
+ 445              		.thumb_func
+ 447              	TRAJ_eval:
+ 448              	.LVL32:
+ 449              	.LFB350:
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** 
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** void TRAJ_eval(float t)
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** {
+ARM GAS  /tmp/ccNJePQ6.s 			page 12
+
+
+ 450              		.loc 1 102 1 is_stmt 1 view -0
+ 451              		.cfi_startproc
+ 452              		@ args = 0, pretend = 0, frame = 0
+ 453              		@ frame_needed = 0, uses_anonymous_args = 0
+ 454              		@ link register save eliminated.
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     if (t < 0.0f)
+ 455              		.loc 1 103 5 view .LVU131
+ 456              		.loc 1 103 8 is_stmt 0 view .LVU132
+ 457 0000 B5EEC00A 		vcmpe.f32	s0, #0
+ 458 0004 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 459 0008 4FF00002 		mov	r2, #0
+ 460 000c 4FD4     		bmi	.L46
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     { // Initial Condition
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Y = Xi_;
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Vi_;
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Ydd = 0.0f;
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     }
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     else if (t < Ta_)
+ 461              		.loc 1 109 10 is_stmt 1 view .LVU133
+ 462              		.loc 1 109 16 is_stmt 0 view .LVU134
+ 463 000e 384B     		ldr	r3, .L48
+ 464 0010 D3ED007A 		vldr.32	s15, [r3]
+ 465              		.loc 1 109 13 view .LVU135
+ 466 0014 F4EEC07A 		vcmpe.f32	s15, s0
+ 467 0018 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 468 001c 1CDD     		ble	.L43
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     { // Accelerating
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Y = Xi_ + Vi_ * t + 0.5f * Ar_ * SQ(t);
+ 469              		.loc 1 111 9 is_stmt 1 view .LVU136
+ 470              		.loc 1 111 22 is_stmt 0 view .LVU137
+ 471 001e 354B     		ldr	r3, .L48+4
+ 472              		.loc 1 111 28 view .LVU138
+ 473 0020 354A     		ldr	r2, .L48+8
+ 474              		.loc 1 111 22 view .LVU139
+ 475 0022 D3ED007A 		vldr.32	s15, [r3]
+ 476              		.loc 1 111 28 view .LVU140
+ 477 0026 92ED007A 		vldr.32	s14, [r2]
+ 478              		.loc 1 111 39 view .LVU141
+ 479 002a 344B     		ldr	r3, .L48+12
+ 480              		.loc 1 111 22 view .LVU142
+ 481 002c E7EE007A 		vfma.f32	s15, s14, s0
+ 482              		.loc 1 111 39 view .LVU143
+ 483 0030 D3ED006A 		vldr.32	s13, [r3]
+ 484              		.loc 1 111 16 view .LVU144
+ 485 0034 324B     		ldr	r3, .L48+16
+ 486              		.loc 1 111 39 view .LVU145
+ 487 0036 B6EE006A 		vmov.f32	s12, #5.0e-1
+ 488 003a 26EE866A 		vmul.f32	s12, s13, s12
+ 489              		.loc 1 111 47 view .LVU146
+ 490 003e 60EE005A 		vmul.f32	s11, s0, s0
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Vi_ + Ar_ * t;
+ 491              		.loc 1 112 23 view .LVU147
+ 492 0042 A6EE807A 		vfma.f32	s14, s13, s0
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Vi_ + Ar_ * t;
+ 493              		.loc 1 111 32 view .LVU148
+ 494 0046 E6EE257A 		vfma.f32	s15, s12, s11
+ 495              		.loc 1 112 17 view .LVU149
+ARM GAS  /tmp/ccNJePQ6.s 			page 13
+
+
+ 496 004a 83ED017A 		vstr.32	s14, [r3, #4]
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Vi_ + Ar_ * t;
+ 497              		.loc 1 111 16 view .LVU150
+ 498 004e C3ED007A 		vstr.32	s15, [r3]
+ 499              		.loc 1 112 9 is_stmt 1 view .LVU151
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Ydd = Ar_;
+ 500              		.loc 1 113 9 view .LVU152
+ 501              		.loc 1 113 18 is_stmt 0 view .LVU153
+ 502 0052 C3ED026A 		vstr.32	s13, [r3, #8]
+ 503 0056 7047     		bx	lr
+ 504              	.L43:
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     }
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     else if (t < Ta_ + Tv_)
+ 505              		.loc 1 115 10 is_stmt 1 view .LVU154
+ 506              		.loc 1 115 22 is_stmt 0 view .LVU155
+ 507 0058 2A4B     		ldr	r3, .L48+20
+ 508 005a 93ED007A 		vldr.32	s14, [r3]
+ 509 005e 37EE877A 		vadd.f32	s14, s15, s14
+ 510              		.loc 1 115 13 view .LVU156
+ 511 0062 B4EEC07A 		vcmpe.f32	s14, s0
+ 512 0066 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 513 006a 29DC     		bgt	.L47
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     { // Coasting
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Y = yAccel_ + Vr_ * (t - Ta_);
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Vr_;
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Ydd = 0.0f;
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     }
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     else if (t < Traj.Tf_)
+ 514              		.loc 1 121 10 is_stmt 1 view .LVU157
+ 515              		.loc 1 121 22 is_stmt 0 view .LVU158
+ 516 006c 244B     		ldr	r3, .L48+16
+ 517 006e D3ED037A 		vldr.32	s15, [r3, #12]
+ 518              		.loc 1 121 13 view .LVU159
+ 519 0072 F4EEC07A 		vcmpe.f32	s15, s0
+ 520 0076 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 521 007a 32DD     		ble	.L45
+ 522              	.LBB10:
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     { // Deceleration
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         float td = t - Traj.Tf_;
+ 523              		.loc 1 123 9 is_stmt 1 view .LVU160
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Y = Xf_ + 0.5f * Dr_ * SQ(td);
+ 524              		.loc 1 124 29 is_stmt 0 view .LVU161
+ 525 007c 224A     		ldr	r2, .L48+24
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Y = Xf_ + 0.5f * Dr_ * SQ(td);
+ 526              		.loc 1 123 15 view .LVU162
+ 527 007e 30EE670A 		vsub.f32	s0, s0, s15
+ 528              	.LVL33:
+ 529              		.loc 1 124 9 is_stmt 1 view .LVU163
+ 530              		.loc 1 124 29 is_stmt 0 view .LVU164
+ 531 0082 92ED007A 		vldr.32	s14, [r2]
+ 532              		.loc 1 124 22 view .LVU165
+ 533 0086 214A     		ldr	r2, .L48+28
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Dr_ * td;
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Ydd = Dr_;
+ 534              		.loc 1 126 18 view .LVU166
+ 535 0088 83ED027A 		vstr.32	s14, [r3, #8]
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Dr_ * td;
+ARM GAS  /tmp/ccNJePQ6.s 			page 14
+
+
+ 536              		.loc 1 124 29 view .LVU167
+ 537 008c F6EE006A 		vmov.f32	s13, #5.0e-1
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Dr_ * td;
+ 538              		.loc 1 124 37 view .LVU168
+ 539 0090 20EE006A 		vmul.f32	s12, s0, s0
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Dr_ * td;
+ 540              		.loc 1 124 29 view .LVU169
+ 541 0094 67EE266A 		vmul.f32	s13, s14, s13
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Dr_ * td;
+ 542              		.loc 1 124 22 view .LVU170
+ 543 0098 D2ED007A 		vldr.32	s15, [r2]
+ 544 009c E6EE867A 		vfma.f32	s15, s13, s12
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Dr_ * td;
+ 545              		.loc 1 125 23 view .LVU171
+ 546 00a0 27EE000A 		vmul.f32	s0, s14, s0
+ 547              	.LVL34:
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Dr_ * td;
+ 548              		.loc 1 124 16 view .LVU172
+ 549 00a4 C3ED007A 		vstr.32	s15, [r3]
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Dr_ * td;
+ 550              		.loc 1 125 9 is_stmt 1 view .LVU173
+ 551              		.loc 1 126 9 view .LVU174
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Dr_ * td;
+ 552              		.loc 1 125 17 is_stmt 0 view .LVU175
+ 553 00a8 83ED010A 		vstr.32	s0, [r3, #4]
+ 554              	.LBE10:
+ 555 00ac 7047     		bx	lr
+ 556              	.LVL35:
+ 557              	.L46:
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Vi_;
+ 558              		.loc 1 105 9 is_stmt 1 view .LVU176
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Vi_;
+ 559              		.loc 1 105 16 is_stmt 0 view .LVU177
+ 560 00ae 1148     		ldr	r0, .L48+4
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Ydd = 0.0f;
+ 561              		.loc 1 106 17 view .LVU178
+ 562 00b0 1149     		ldr	r1, .L48+8
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Vi_;
+ 563              		.loc 1 105 16 view .LVU179
+ 564 00b2 134B     		ldr	r3, .L48+16
+ 565 00b4 0068     		ldr	r0, [r0]	@ float
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Ydd = 0.0f;
+ 566              		.loc 1 106 17 view .LVU180
+ 567 00b6 0968     		ldr	r1, [r1]	@ float
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Vi_;
+ 568              		.loc 1 105 16 view .LVU181
+ 569 00b8 1860     		str	r0, [r3]	@ float
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Ydd = 0.0f;
+ 570              		.loc 1 106 9 is_stmt 1 view .LVU182
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Ydd = 0.0f;
+ 571              		.loc 1 106 17 is_stmt 0 view .LVU183
+ 572 00ba 5960     		str	r1, [r3, #4]	@ float
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     }
+ 573              		.loc 1 107 9 is_stmt 1 view .LVU184
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     }
+ 574              		.loc 1 107 18 is_stmt 0 view .LVU185
+ 575 00bc 9A60     		str	r2, [r3, #8]	@ float
+ARM GAS  /tmp/ccNJePQ6.s 			page 15
+
+
+ 576 00be 7047     		bx	lr
+ 577              	.L47:
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Vr_;
+ 578              		.loc 1 117 9 is_stmt 1 view .LVU186
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Vr_;
+ 579              		.loc 1 117 26 is_stmt 0 view .LVU187
+ 580 00c0 134B     		ldr	r3, .L48+32
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Vr_;
+ 581              		.loc 1 117 32 view .LVU188
+ 582 00c2 1449     		ldr	r1, .L48+36
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Vr_;
+ 583              		.loc 1 117 37 view .LVU189
+ 584 00c4 30EE670A 		vsub.f32	s0, s0, s15
+ 585              	.LVL36:
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Vr_;
+ 586              		.loc 1 117 32 view .LVU190
+ 587 00c8 91ED007A 		vldr.32	s14, [r1]
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Vr_;
+ 588              		.loc 1 117 26 view .LVU191
+ 589 00cc D3ED007A 		vldr.32	s15, [r3]
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Vr_;
+ 590              		.loc 1 117 16 view .LVU192
+ 591 00d0 0B4B     		ldr	r3, .L48+16
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Vr_;
+ 592              		.loc 1 117 26 view .LVU193
+ 593 00d2 E0EE077A 		vfma.f32	s15, s0, s14
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     }
+ 594              		.loc 1 119 18 view .LVU194
+ 595 00d6 9A60     		str	r2, [r3, #8]	@ float
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Ydd = 0.0f;
+ 596              		.loc 1 118 17 view .LVU195
+ 597 00d8 83ED017A 		vstr.32	s14, [r3, #4]
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = Vr_;
+ 598              		.loc 1 117 16 view .LVU196
+ 599 00dc C3ED007A 		vstr.32	s15, [r3]
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Ydd = 0.0f;
+ 600              		.loc 1 118 9 is_stmt 1 view .LVU197
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     }
+ 601              		.loc 1 119 9 view .LVU198
+ 602 00e0 7047     		bx	lr
+ 603              	.LVL37:
+ 604              	.L45:
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     }
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     else if (t >= Traj.Tf_)
+ 605              		.loc 1 128 10 view .LVU199
+ 606              		.loc 1 128 13 is_stmt 0 view .LVU200
+ 607 00e2 04D8     		bhi	.L26
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     { // Final Condition
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Y = Xf_;
+ 608              		.loc 1 130 9 is_stmt 1 view .LVU201
+ 609              		.loc 1 130 16 is_stmt 0 view .LVU202
+ 610 00e4 0949     		ldr	r1, .L48+28
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = 0.0f;
+ 611              		.loc 1 131 17 view .LVU203
+ 612 00e6 5A60     		str	r2, [r3, #4]	@ float
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = 0.0f;
+ 613              		.loc 1 130 16 view .LVU204
+ARM GAS  /tmp/ccNJePQ6.s 			page 16
+
+
+ 614 00e8 0968     		ldr	r1, [r1]	@ float
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Ydd = 0.0f;
+ 615              		.loc 1 132 18 view .LVU205
+ 616 00ea 9A60     		str	r2, [r3, #8]	@ float
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = 0.0f;
+ 617              		.loc 1 130 16 view .LVU206
+ 618 00ec 1960     		str	r1, [r3]	@ float
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         Traj.Yd = 0.0f;
+ 619              		.loc 1 131 9 is_stmt 1 view .LVU207
+ 620              		.loc 1 132 9 view .LVU208
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     }
+ 134:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     else
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     {
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****         // TODO: report error here
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c ****     }
+ 621              		.loc 1 137 5 view .LVU209
+ 622              	.L26:
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.c **** }
+ 623              		.loc 1 138 1 is_stmt 0 view .LVU210
+ 624 00ee 7047     		bx	lr
+ 625              	.L49:
+ 626              		.align	2
+ 627              	.L48:
+ 628 00f0 00000000 		.word	Ta_
+ 629 00f4 00000000 		.word	Xi_
+ 630 00f8 00000000 		.word	Vi_
+ 631 00fc 00000000 		.word	Ar_
+ 632 0100 00000000 		.word	Traj
+ 633 0104 00000000 		.word	Tv_
+ 634 0108 00000000 		.word	Dr_
+ 635 010c 00000000 		.word	Xf_
+ 636 0110 00000000 		.word	yAccel_
+ 637 0114 00000000 		.word	Vr_
+ 638              		.cfi_endproc
+ 639              	.LFE350:
+ 641              		.section	.bss.yAccel_,"aw",%nobits
+ 642              		.align	2
+ 645              	yAccel_:
+ 646 0000 00000000 		.space	4
+ 647              		.section	.bss.Td_,"aw",%nobits
+ 648              		.align	2
+ 651              	Td_:
+ 652 0000 00000000 		.space	4
+ 653              		.section	.bss.Tv_,"aw",%nobits
+ 654              		.align	2
+ 657              	Tv_:
+ 658 0000 00000000 		.space	4
+ 659              		.section	.bss.Ta_,"aw",%nobits
+ 660              		.align	2
+ 663              	Ta_:
+ 664 0000 00000000 		.space	4
+ 665              		.section	.bss.Dr_,"aw",%nobits
+ 666              		.align	2
+ 669              	Dr_:
+ 670 0000 00000000 		.space	4
+ 671              		.section	.bss.Vr_,"aw",%nobits
+ 672              		.align	2
+ARM GAS  /tmp/ccNJePQ6.s 			page 17
+
+
+ 675              	Vr_:
+ 676 0000 00000000 		.space	4
+ 677              		.section	.bss.Ar_,"aw",%nobits
+ 678              		.align	2
+ 681              	Ar_:
+ 682 0000 00000000 		.space	4
+ 683              		.section	.bss.Vi_,"aw",%nobits
+ 684              		.align	2
+ 687              	Vi_:
+ 688 0000 00000000 		.space	4
+ 689              		.section	.bss.Xf_,"aw",%nobits
+ 690              		.align	2
+ 693              	Xf_:
+ 694 0000 00000000 		.space	4
+ 695              		.section	.bss.Xi_,"aw",%nobits
+ 696              		.align	2
+ 699              	Xi_:
+ 700 0000 00000000 		.space	4
+ 701              		.global	Traj
+ 702              		.section	.bss.Traj,"aw",%nobits
+ 703              		.align	2
+ 706              	Traj:
+ 707 0000 00000000 		.space	24
+ 707      00000000 
+ 707      00000000 
+ 707      00000000 
+ 707      00000000 
+ 708              		.text
+ 709              	.Letext0:
+ 710              		.file 2 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/trapTraj.h"
+ 711              		.file 3 "/usr/include/newlib/math.h"
+ARM GAS  /tmp/ccNJePQ6.s 			page 18
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 trapTraj.c
+     /tmp/ccNJePQ6.s:21     .text.sign_hard:00000000 $t
+     /tmp/ccNJePQ6.s:28     .text.sign_hard:00000000 sign_hard
+     /tmp/ccNJePQ6.s:66     .text.TRAJ_plan:00000000 $t
+     /tmp/ccNJePQ6.s:73     .text.TRAJ_plan:00000000 TRAJ_plan
+     /tmp/ccNJePQ6.s:422    .text.TRAJ_plan:000001f8 $d
+     /tmp/ccNJePQ6.s:681    .bss.Ar_:00000000 Ar_
+     /tmp/ccNJePQ6.s:669    .bss.Dr_:00000000 Dr_
+     /tmp/ccNJePQ6.s:675    .bss.Vr_:00000000 Vr_
+     /tmp/ccNJePQ6.s:663    .bss.Ta_:00000000 Ta_
+     /tmp/ccNJePQ6.s:651    .bss.Td_:00000000 Td_
+     /tmp/ccNJePQ6.s:706    .bss.Traj:00000000 Traj
+     /tmp/ccNJePQ6.s:699    .bss.Xi_:00000000 Xi_
+     /tmp/ccNJePQ6.s:693    .bss.Xf_:00000000 Xf_
+     /tmp/ccNJePQ6.s:687    .bss.Vi_:00000000 Vi_
+     /tmp/ccNJePQ6.s:657    .bss.Tv_:00000000 Tv_
+     /tmp/ccNJePQ6.s:645    .bss.yAccel_:00000000 yAccel_
+     /tmp/ccNJePQ6.s:440    .text.TRAJ_eval:00000000 $t
+     /tmp/ccNJePQ6.s:447    .text.TRAJ_eval:00000000 TRAJ_eval
+     /tmp/ccNJePQ6.s:628    .text.TRAJ_eval:000000f0 $d
+     /tmp/ccNJePQ6.s:642    .bss.yAccel_:00000000 $d
+     /tmp/ccNJePQ6.s:648    .bss.Td_:00000000 $d
+     /tmp/ccNJePQ6.s:654    .bss.Tv_:00000000 $d
+     /tmp/ccNJePQ6.s:660    .bss.Ta_:00000000 $d
+     /tmp/ccNJePQ6.s:666    .bss.Dr_:00000000 $d
+     /tmp/ccNJePQ6.s:672    .bss.Vr_:00000000 $d
+     /tmp/ccNJePQ6.s:678    .bss.Ar_:00000000 $d
+     /tmp/ccNJePQ6.s:684    .bss.Vi_:00000000 $d
+     /tmp/ccNJePQ6.s:690    .bss.Xf_:00000000 $d
+     /tmp/ccNJePQ6.s:696    .bss.Xi_:00000000 $d
+     /tmp/ccNJePQ6.s:703    .bss.Traj:00000000 $d
+
+UNDEFINED SYMBOLS
+__aeabi_f2d
+__aeabi_d2f
+fmax
+sqrtf

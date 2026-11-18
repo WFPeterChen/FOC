@@ -1,0 +1,363 @@
+ARM GAS  /tmp/cctEdCOo.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"gpio.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c"
+  20              		.section	.text.MX_GPIO_Init,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	MX_GPIO_Init
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	MX_GPIO_Init:
+  29              	.LFB329:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** /* USER CODE BEGIN Header */
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** /**
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****  ******************************************************************************
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****  * @file    gpio.c
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****  * @brief   This file provides code for the configuration
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****  *          of all used GPIO pins.
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****  ******************************************************************************
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****  * @attention
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****  *
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****  * Copyright (c) 2024 STMicroelectronics.
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****  * All rights reserved.
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****  *
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****  * This software is licensed under terms that can be found in the LICENSE file
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****  * in the root directory of this software component.
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****  * If no LICENSE file comes with this software, it is provided AS-IS.
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****  *
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****  ******************************************************************************
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****  */
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** /* USER CODE END Header */
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** /* Includes ------------------------------------------------------------------*/
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** #include "gpio.h"
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** /* USER CODE BEGIN 0 */
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** /* USER CODE END 0 */
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** /*----------------------------------------------------------------------------*/
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** /* Configure GPIO                                                             */
+ARM GAS  /tmp/cctEdCOo.s 			page 2
+
+
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** /*----------------------------------------------------------------------------*/
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** /* USER CODE BEGIN 1 */
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** /* USER CODE END 1 */
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** /** Configure pins as
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****         * Analog
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****         * Input
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****         * Output
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****         * EVENT_OUT
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****         * EXTI
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** */
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** void MX_GPIO_Init(void)
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** {
+  30              		.loc 1 43 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 40
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   GPIO_InitTypeDef GPIO_InitStruct = {0};
+  34              		.loc 1 45 3 view .LVU1
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+  35              		.loc 1 43 1 is_stmt 0 view .LVU2
+  36 0000 70B5     		push	{r4, r5, r6, lr}
+  37              	.LCFI0:
+  38              		.cfi_def_cfa_offset 16
+  39              		.cfi_offset 4, -16
+  40              		.cfi_offset 5, -12
+  41              		.cfi_offset 6, -8
+  42              		.cfi_offset 14, -4
+  43              		.loc 1 45 20 view .LVU3
+  44 0002 0024     		movs	r4, #0
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+  45              		.loc 1 43 1 view .LVU4
+  46 0004 8AB0     		sub	sp, sp, #40
+  47              	.LCFI1:
+  48              		.cfi_def_cfa_offset 56
+  49              		.loc 1 45 20 view .LVU5
+  50 0006 CDE90444 		strd	r4, r4, [sp, #16]
+  51 000a CDE90644 		strd	r4, r4, [sp, #24]
+  52              	.LBB2:
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   /* GPIO Ports Clock Enable */
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   __HAL_RCC_GPIOC_CLK_ENABLE();
+  53              		.loc 1 48 3 view .LVU6
+  54 000e 2D4B     		ldr	r3, .L4
+  55              	.LBE2:
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+  56              		.loc 1 45 20 view .LVU7
+  57 0010 0894     		str	r4, [sp, #32]
+  58              		.loc 1 48 3 is_stmt 1 view .LVU8
+  59              	.LBB3:
+  60              		.loc 1 48 3 view .LVU9
+  61              		.loc 1 48 3 view .LVU10
+  62 0012 DA6C     		ldr	r2, [r3, #76]
+  63              	.LBE3:
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   __HAL_RCC_GPIOF_CLK_ENABLE();
+ARM GAS  /tmp/cctEdCOo.s 			page 3
+
+
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   __HAL_RCC_GPIOA_CLK_ENABLE();
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   __HAL_RCC_GPIOB_CLK_ENABLE();
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   /*Configure GPIO pin Output Level */
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   HAL_GPIO_WritePin(GPIOC, LED1_Pin|SPI1_CS_Pin, GPIO_PIN_RESET);
+  64              		.loc 1 54 3 is_stmt 0 view .LVU11
+  65 0014 2C4D     		ldr	r5, .L4+4
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   /*Configure GPIO pin Output Level */
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   HAL_GPIO_WritePin(SPI3_CS_GPIO_Port, SPI3_CS_Pin, GPIO_PIN_RESET);
+  66              		.loc 1 57 3 view .LVU12
+  67 0016 2D4E     		ldr	r6, .L4+8
+  68              	.LBB4:
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   __HAL_RCC_GPIOF_CLK_ENABLE();
+  69              		.loc 1 48 3 view .LVU13
+  70 0018 42F00402 		orr	r2, r2, #4
+  71 001c DA64     		str	r2, [r3, #76]
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   __HAL_RCC_GPIOF_CLK_ENABLE();
+  72              		.loc 1 48 3 is_stmt 1 view .LVU14
+  73 001e DA6C     		ldr	r2, [r3, #76]
+  74 0020 02F00402 		and	r2, r2, #4
+  75 0024 0092     		str	r2, [sp]
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   __HAL_RCC_GPIOF_CLK_ENABLE();
+  76              		.loc 1 48 3 view .LVU15
+  77 0026 009A     		ldr	r2, [sp]
+  78              	.LBE4:
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   __HAL_RCC_GPIOF_CLK_ENABLE();
+  79              		.loc 1 48 3 view .LVU16
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   __HAL_RCC_GPIOF_CLK_ENABLE();
+  80              		.loc 1 49 3 view .LVU17
+  81              	.LBB5:
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   __HAL_RCC_GPIOF_CLK_ENABLE();
+  82              		.loc 1 49 3 view .LVU18
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   __HAL_RCC_GPIOF_CLK_ENABLE();
+  83              		.loc 1 49 3 view .LVU19
+  84 0028 DA6C     		ldr	r2, [r3, #76]
+  85 002a 42F02002 		orr	r2, r2, #32
+  86 002e DA64     		str	r2, [r3, #76]
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   __HAL_RCC_GPIOF_CLK_ENABLE();
+  87              		.loc 1 49 3 view .LVU20
+  88 0030 DA6C     		ldr	r2, [r3, #76]
+  89 0032 02F02002 		and	r2, r2, #32
+  90 0036 0192     		str	r2, [sp, #4]
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   __HAL_RCC_GPIOF_CLK_ENABLE();
+  91              		.loc 1 49 3 view .LVU21
+  92 0038 019A     		ldr	r2, [sp, #4]
+  93              	.LBE5:
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   __HAL_RCC_GPIOF_CLK_ENABLE();
+  94              		.loc 1 49 3 view .LVU22
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   __HAL_RCC_GPIOB_CLK_ENABLE();
+  95              		.loc 1 50 3 view .LVU23
+  96              	.LBB6:
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   __HAL_RCC_GPIOB_CLK_ENABLE();
+  97              		.loc 1 50 3 view .LVU24
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   __HAL_RCC_GPIOB_CLK_ENABLE();
+  98              		.loc 1 50 3 view .LVU25
+  99 003a DA6C     		ldr	r2, [r3, #76]
+ARM GAS  /tmp/cctEdCOo.s 			page 4
+
+
+ 100 003c 42F00102 		orr	r2, r2, #1
+ 101 0040 DA64     		str	r2, [r3, #76]
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   __HAL_RCC_GPIOB_CLK_ENABLE();
+ 102              		.loc 1 50 3 view .LVU26
+ 103 0042 DA6C     		ldr	r2, [r3, #76]
+ 104 0044 02F00102 		and	r2, r2, #1
+ 105 0048 0292     		str	r2, [sp, #8]
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   __HAL_RCC_GPIOB_CLK_ENABLE();
+ 106              		.loc 1 50 3 view .LVU27
+ 107 004a 029A     		ldr	r2, [sp, #8]
+ 108              	.LBE6:
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   __HAL_RCC_GPIOB_CLK_ENABLE();
+ 109              		.loc 1 50 3 view .LVU28
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+ 110              		.loc 1 51 3 view .LVU29
+ 111              	.LBB7:
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+ 112              		.loc 1 51 3 view .LVU30
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+ 113              		.loc 1 51 3 view .LVU31
+ 114 004c DA6C     		ldr	r2, [r3, #76]
+ 115 004e 42F00202 		orr	r2, r2, #2
+ 116 0052 DA64     		str	r2, [r3, #76]
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+ 117              		.loc 1 51 3 view .LVU32
+ 118 0054 DB6C     		ldr	r3, [r3, #76]
+ 119 0056 03F00203 		and	r3, r3, #2
+ 120 005a 0393     		str	r3, [sp, #12]
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+ 121              		.loc 1 51 3 view .LVU33
+ 122              	.LBE7:
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+ 123              		.loc 1 54 3 is_stmt 0 view .LVU34
+ 124 005c 2246     		mov	r2, r4
+ 125 005e 2846     		mov	r0, r5
+ 126 0060 42F21001 		movw	r1, #8208
+ 127              	.LBB8:
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+ 128              		.loc 1 51 3 view .LVU35
+ 129 0064 039B     		ldr	r3, [sp, #12]
+ 130              	.LBE8:
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+ 131              		.loc 1 51 3 is_stmt 1 view .LVU36
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+ 132              		.loc 1 54 3 view .LVU37
+ 133 0066 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 134              	.LVL0:
+ 135              		.loc 1 57 3 view .LVU38
+ 136 006a 2246     		mov	r2, r4
+ 137 006c 3046     		mov	r0, r6
+ 138 006e 4FF48051 		mov	r1, #4096
+ 139 0072 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 140              	.LVL1:
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   /*Configure GPIO pin : PtPin */
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   GPIO_InitStruct.Pin = LED1_Pin;
+ 141              		.loc 1 60 3 view .LVU39
+ARM GAS  /tmp/cctEdCOo.s 			page 5
+
+
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 142              		.loc 1 61 3 view .LVU40
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 143              		.loc 1 62 3 view .LVU41
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 144              		.loc 1 63 3 view .LVU42
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 145              		.loc 1 60 23 is_stmt 0 view .LVU43
+ 146 0076 4FF40052 		mov	r2, #8192
+ 147 007a 0123     		movs	r3, #1
+ 148 007c CDE90423 		strd	r2, [sp, #16]
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   HAL_GPIO_Init(LED1_GPIO_Port, &GPIO_InitStruct);
+ 149              		.loc 1 64 3 view .LVU44
+ 150 0080 04A9     		add	r1, sp, #16
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 151              		.loc 1 60 23 view .LVU45
+ 152 0082 0022     		movs	r2, #0
+ 153 0084 0023     		movs	r3, #0
+ 154              		.loc 1 64 3 view .LVU46
+ 155 0086 2846     		mov	r0, r5
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 156              		.loc 1 60 23 view .LVU47
+ 157 0088 CDE90623 		strd	r2, [sp, #24]
+ 158              		.loc 1 64 3 is_stmt 1 view .LVU48
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   /*Configure GPIO pin : PtPin */
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   GPIO_InitStruct.Pin = SPI1_CS_Pin;
+ 159              		.loc 1 67 23 is_stmt 0 view .LVU49
+ 160 008c 0024     		movs	r4, #0
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   HAL_GPIO_Init(LED1_GPIO_Port, &GPIO_InitStruct);
+ 161              		.loc 1 64 3 view .LVU50
+ 162 008e FFF7FEFF 		bl	HAL_GPIO_Init
+ 163              	.LVL2:
+ 164              		.loc 1 67 3 is_stmt 1 view .LVU51
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 165              		.loc 1 68 3 view .LVU52
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 166              		.loc 1 69 3 view .LVU53
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 167              		.loc 1 70 3 view .LVU54
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 168              		.loc 1 67 23 is_stmt 0 view .LVU55
+ 169 0092 1022     		movs	r2, #16
+ 170 0094 0123     		movs	r3, #1
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   HAL_GPIO_Init(SPI1_CS_GPIO_Port, &GPIO_InitStruct);
+ 171              		.loc 1 71 3 view .LVU56
+ 172 0096 2846     		mov	r0, r5
+ 173 0098 04A9     		add	r1, sp, #16
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 174              		.loc 1 67 23 view .LVU57
+ 175 009a 0325     		movs	r5, #3
+ 176 009c CDE90423 		strd	r2, [sp, #16]
+ 177 00a0 CDE90645 		strd	r4, [sp, #24]
+ 178              		.loc 1 71 3 is_stmt 1 view .LVU58
+ 179 00a4 FFF7FEFF 		bl	HAL_GPIO_Init
+ 180              	.LVL3:
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+ARM GAS  /tmp/cctEdCOo.s 			page 6
+
+
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   /*Configure GPIO pin : PtPin */
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   GPIO_InitStruct.Pin = SPI3_CS_Pin;
+ 181              		.loc 1 74 3 view .LVU59
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 182              		.loc 1 75 3 view .LVU60
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 183              		.loc 1 76 3 view .LVU61
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 184              		.loc 1 77 3 view .LVU62
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 185              		.loc 1 74 23 is_stmt 0 view .LVU63
+ 186 00a8 4FF48052 		mov	r2, #4096
+ 187 00ac 0123     		movs	r3, #1
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   HAL_GPIO_Init(SPI3_CS_GPIO_Port, &GPIO_InitStruct);
+ 188              		.loc 1 78 3 view .LVU64
+ 189 00ae 04A9     		add	r1, sp, #16
+ 190 00b0 3046     		mov	r0, r6
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 191              		.loc 1 74 23 view .LVU65
+ 192 00b2 CDE90645 		strd	r4, [sp, #24]
+ 193              		.loc 1 78 3 is_stmt 1 view .LVU66
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 194              		.loc 1 74 23 is_stmt 0 view .LVU67
+ 195 00b6 CDE90423 		strd	r2, [sp, #16]
+ 196              		.loc 1 78 3 view .LVU68
+ 197 00ba FFF7FEFF 		bl	HAL_GPIO_Init
+ 198              	.LVL4:
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** 
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/gpio.c **** }
+ 199              		.loc 1 80 1 view .LVU69
+ 200 00be 0AB0     		add	sp, sp, #40
+ 201              	.LCFI2:
+ 202              		.cfi_def_cfa_offset 16
+ 203              		@ sp needed
+ 204 00c0 70BD     		pop	{r4, r5, r6, pc}
+ 205              	.L5:
+ 206 00c2 00BF     		.align	2
+ 207              	.L4:
+ 208 00c4 00100240 		.word	1073876992
+ 209 00c8 00080048 		.word	1207961600
+ 210 00cc 00040048 		.word	1207960576
+ 211              		.cfi_endproc
+ 212              	.LFE329:
+ 214              		.text
+ 215              	.Letext0:
+ 216              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 217              		.file 3 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 218              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ARM GAS  /tmp/cctEdCOo.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 gpio.c
+     /tmp/cctEdCOo.s:21     .text.MX_GPIO_Init:00000000 $t
+     /tmp/cctEdCOo.s:28     .text.MX_GPIO_Init:00000000 MX_GPIO_Init
+     /tmp/cctEdCOo.s:208    .text.MX_GPIO_Init:000000c4 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_WritePin
+HAL_GPIO_Init

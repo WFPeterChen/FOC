@@ -1,0 +1,388 @@
+ARM GAS  /tmp/ccrydPK4.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"rng.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c"
+  20              		.section	.text.MX_RNG_Init,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	MX_RNG_Init
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	MX_RNG_Init:
+  29              	.LFB329:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** /* USER CODE BEGIN Header */
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** /**
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   ******************************************************************************
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   * @file    rng.c
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   * @brief   This file provides code for the configuration
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   *          of the RNG instances.
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   ******************************************************************************
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   * @attention
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   *
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   * Copyright (c) 2025 STMicroelectronics.
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   * All rights reserved.
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   *
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   * in the root directory of this software component.
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   *
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   ******************************************************************************
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   */
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** /* USER CODE END Header */
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** /* Includes ------------------------------------------------------------------*/
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** #include "rng.h"
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** /* USER CODE BEGIN 0 */
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** /* USER CODE END 0 */
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** RNG_HandleTypeDef hrng;
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** /* RNG init function */
+ARM GAS  /tmp/ccrydPK4.s 			page 2
+
+
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** void MX_RNG_Init(void)
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** {
+  30              		.loc 1 31 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /* USER CODE BEGIN RNG_Init 0 */
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /* USER CODE END RNG_Init 0 */
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /* USER CODE BEGIN RNG_Init 1 */
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /* USER CODE END RNG_Init 1 */
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   hrng.Instance = RNG;
+  34              		.loc 1 40 3 view .LVU1
+  35              		.loc 1 40 17 is_stmt 0 view .LVU2
+  36 0000 0648     		ldr	r0, .L6
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   hrng.Init.ClockErrorDetection = RNG_CED_ENABLE;
+  37              		.loc 1 41 33 view .LVU3
+  38 0002 074A     		ldr	r2, .L6+4
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  39              		.loc 1 31 1 view .LVU4
+  40 0004 08B5     		push	{r3, lr}
+  41              	.LCFI0:
+  42              		.cfi_def_cfa_offset 8
+  43              		.cfi_offset 3, -8
+  44              		.cfi_offset 14, -4
+  45              		.loc 1 41 33 view .LVU5
+  46 0006 0023     		movs	r3, #0
+  47 0008 C0E90023 		strd	r2, r3, [r0]
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   if (HAL_RNG_Init(&hrng) != HAL_OK)
+  48              		.loc 1 42 3 is_stmt 1 view .LVU6
+  49              		.loc 1 42 7 is_stmt 0 view .LVU7
+  50 000c FFF7FEFF 		bl	HAL_RNG_Init
+  51              	.LVL0:
+  52              		.loc 1 42 6 discriminator 1 view .LVU8
+  53 0010 00B9     		cbnz	r0, .L5
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   {
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****     Error_Handler();
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   }
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /* USER CODE BEGIN RNG_Init 2 */
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /* USER CODE END RNG_Init 2 */
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** }
+  54              		.loc 1 50 1 view .LVU9
+  55 0012 08BD     		pop	{r3, pc}
+  56              	.L5:
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   }
+  57              		.loc 1 44 5 is_stmt 1 view .LVU10
+  58              		.loc 1 50 1 is_stmt 0 view .LVU11
+  59 0014 BDE80840 		pop	{r3, lr}
+  60              	.LCFI1:
+  61              		.cfi_restore 14
+  62              		.cfi_restore 3
+  63              		.cfi_def_cfa_offset 0
+ARM GAS  /tmp/ccrydPK4.s 			page 3
+
+
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   }
+  64              		.loc 1 44 5 view .LVU12
+  65 0018 FFF7FEBF 		b	Error_Handler
+  66              	.LVL1:
+  67              	.L7:
+  68              		.align	2
+  69              	.L6:
+  70 001c 00000000 		.word	hrng
+  71 0020 00080650 		.word	1342572544
+  72              		.cfi_endproc
+  73              	.LFE329:
+  75              		.section	.text.HAL_RNG_MspInit,"ax",%progbits
+  76              		.align	1
+  77              		.p2align 2,,3
+  78              		.global	HAL_RNG_MspInit
+  79              		.syntax unified
+  80              		.thumb
+  81              		.thumb_func
+  83              	HAL_RNG_MspInit:
+  84              	.LVL2:
+  85              	.LFB330:
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** void HAL_RNG_MspInit(RNG_HandleTypeDef* rngHandle)
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** {
+  86              		.loc 1 53 1 is_stmt 1 view -0
+  87              		.cfi_startproc
+  88              		@ args = 0, pretend = 0, frame = 72
+  89              		@ frame_needed = 0, uses_anonymous_args = 0
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
+  90              		.loc 1 55 3 view .LVU14
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  91              		.loc 1 53 1 is_stmt 0 view .LVU15
+  92 0000 10B5     		push	{r4, lr}
+  93              	.LCFI2:
+  94              		.cfi_def_cfa_offset 8
+  95              		.cfi_offset 4, -8
+  96              		.cfi_offset 14, -4
+  97 0002 0446     		mov	r4, r0
+  98 0004 92B0     		sub	sp, sp, #72
+  99              	.LCFI3:
+ 100              		.cfi_def_cfa_offset 80
+ 101              		.loc 1 55 28 view .LVU16
+ 102 0006 4422     		movs	r2, #68
+ 103 0008 0021     		movs	r1, #0
+ 104 000a 01A8     		add	r0, sp, #4
+ 105              	.LVL3:
+ 106              		.loc 1 55 28 view .LVU17
+ 107 000c FFF7FEFF 		bl	memset
+ 108              	.LVL4:
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   if(rngHandle->Instance==RNG)
+ 109              		.loc 1 56 3 is_stmt 1 view .LVU18
+ 110              		.loc 1 56 5 is_stmt 0 view .LVU19
+ 111 0010 0D4B     		ldr	r3, .L17
+ 112 0012 2268     		ldr	r2, [r4]
+ 113 0014 9A42     		cmp	r2, r3
+ 114 0016 01D0     		beq	.L15
+ARM GAS  /tmp/ccrydPK4.s 			page 4
+
+
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   {
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /* USER CODE BEGIN RNG_MspInit 0 */
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /* USER CODE END RNG_MspInit 0 */
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /** Initializes the peripherals clocks
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   */
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_RNG;
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****     PeriphClkInit.RngClockSelection = RCC_RNGCLKSOURCE_HSI48;
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****     {
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****       Error_Handler();
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****     }
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****     /* RNG clock enable */
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****     __HAL_RCC_RNG_CLK_ENABLE();
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /* USER CODE BEGIN RNG_MspInit 1 */
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /* USER CODE END RNG_MspInit 1 */
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   }
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** }
+ 115              		.loc 1 77 1 view .LVU20
+ 116 0018 12B0     		add	sp, sp, #72
+ 117              	.LCFI4:
+ 118              		.cfi_remember_state
+ 119              		.cfi_def_cfa_offset 8
+ 120              		@ sp needed
+ 121 001a 10BD     		pop	{r4, pc}
+ 122              	.LVL5:
+ 123              	.L15:
+ 124              	.LCFI5:
+ 125              		.cfi_restore_state
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****     PeriphClkInit.RngClockSelection = RCC_RNGCLKSOURCE_HSI48;
+ 126              		.loc 1 64 5 is_stmt 1 view .LVU21
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****     PeriphClkInit.RngClockSelection = RCC_RNGCLKSOURCE_HSI48;
+ 127              		.loc 1 64 40 is_stmt 0 view .LVU22
+ 128 001c 4FF48043 		mov	r3, #16384
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****     {
+ 129              		.loc 1 66 9 view .LVU23
+ 130 0020 01A8     		add	r0, sp, #4
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****     PeriphClkInit.RngClockSelection = RCC_RNGCLKSOURCE_HSI48;
+ 131              		.loc 1 64 40 view .LVU24
+ 132 0022 0193     		str	r3, [sp, #4]
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+ 133              		.loc 1 65 5 is_stmt 1 view .LVU25
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****     {
+ 134              		.loc 1 66 5 view .LVU26
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****     {
+ 135              		.loc 1 66 9 is_stmt 0 view .LVU27
+ 136 0024 FFF7FEFF 		bl	HAL_RCCEx_PeriphCLKConfig
+ 137              	.LVL6:
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****     {
+ 138              		.loc 1 66 8 discriminator 1 view .LVU28
+ 139 0028 58B9     		cbnz	r0, .L16
+ 140              	.L10:
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /* USER CODE BEGIN RNG_MspInit 1 */
+ 141              		.loc 1 72 5 is_stmt 1 view .LVU29
+ARM GAS  /tmp/ccrydPK4.s 			page 5
+
+
+ 142              	.LBB2:
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /* USER CODE BEGIN RNG_MspInit 1 */
+ 143              		.loc 1 72 5 view .LVU30
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /* USER CODE BEGIN RNG_MspInit 1 */
+ 144              		.loc 1 72 5 view .LVU31
+ 145 002a 084B     		ldr	r3, .L17+4
+ 146 002c DA6C     		ldr	r2, [r3, #76]
+ 147 002e 42F08062 		orr	r2, r2, #67108864
+ 148 0032 DA64     		str	r2, [r3, #76]
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /* USER CODE BEGIN RNG_MspInit 1 */
+ 149              		.loc 1 72 5 view .LVU32
+ 150 0034 DB6C     		ldr	r3, [r3, #76]
+ 151 0036 03F08063 		and	r3, r3, #67108864
+ 152 003a 0093     		str	r3, [sp]
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /* USER CODE BEGIN RNG_MspInit 1 */
+ 153              		.loc 1 72 5 view .LVU33
+ 154 003c 009B     		ldr	r3, [sp]
+ 155              	.LBE2:
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /* USER CODE BEGIN RNG_MspInit 1 */
+ 156              		.loc 1 72 5 discriminator 1 view .LVU34
+ 157              		.loc 1 77 1 is_stmt 0 view .LVU35
+ 158 003e 12B0     		add	sp, sp, #72
+ 159              	.LCFI6:
+ 160              		.cfi_remember_state
+ 161              		.cfi_def_cfa_offset 8
+ 162              		@ sp needed
+ 163 0040 10BD     		pop	{r4, pc}
+ 164              	.LVL7:
+ 165              	.L16:
+ 166              	.LCFI7:
+ 167              		.cfi_restore_state
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****     }
+ 168              		.loc 1 68 7 is_stmt 1 view .LVU36
+ 169 0042 FFF7FEFF 		bl	Error_Handler
+ 170              	.LVL8:
+ 171 0046 F0E7     		b	.L10
+ 172              	.L18:
+ 173              		.align	2
+ 174              	.L17:
+ 175 0048 00080650 		.word	1342572544
+ 176 004c 00100240 		.word	1073876992
+ 177              		.cfi_endproc
+ 178              	.LFE330:
+ 180              		.section	.text.HAL_RNG_MspDeInit,"ax",%progbits
+ 181              		.align	1
+ 182              		.p2align 2,,3
+ 183              		.global	HAL_RNG_MspDeInit
+ 184              		.syntax unified
+ 185              		.thumb
+ 186              		.thumb_func
+ 188              	HAL_RNG_MspDeInit:
+ 189              	.LVL9:
+ 190              	.LFB331:
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** void HAL_RNG_MspDeInit(RNG_HandleTypeDef* rngHandle)
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** {
+ 191              		.loc 1 80 1 view -0
+ARM GAS  /tmp/ccrydPK4.s 			page 6
+
+
+ 192              		.cfi_startproc
+ 193              		@ args = 0, pretend = 0, frame = 0
+ 194              		@ frame_needed = 0, uses_anonymous_args = 0
+ 195              		@ link register save eliminated.
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   if(rngHandle->Instance==RNG)
+ 196              		.loc 1 82 3 view .LVU38
+ 197              		.loc 1 82 5 is_stmt 0 view .LVU39
+ 198 0000 054B     		ldr	r3, .L22
+ 199 0002 0268     		ldr	r2, [r0]
+ 200 0004 9A42     		cmp	r2, r3
+ 201 0006 00D0     		beq	.L21
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   {
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /* USER CODE BEGIN RNG_MspDeInit 0 */
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /* USER CODE END RNG_MspDeInit 0 */
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****     /* Peripheral clock disable */
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****     __HAL_RCC_RNG_CLK_DISABLE();
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /* USER CODE BEGIN RNG_MspDeInit 1 */
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** 
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /* USER CODE END RNG_MspDeInit 1 */
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   }
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c **** }
+ 202              		.loc 1 93 1 view .LVU40
+ 203 0008 7047     		bx	lr
+ 204              	.L21:
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/rng.c ****   /* USER CODE BEGIN RNG_MspDeInit 1 */
+ 205              		.loc 1 88 5 is_stmt 1 view .LVU41
+ 206 000a 044A     		ldr	r2, .L22+4
+ 207 000c D36C     		ldr	r3, [r2, #76]
+ 208 000e 23F08063 		bic	r3, r3, #67108864
+ 209 0012 D364     		str	r3, [r2, #76]
+ 210              		.loc 1 93 1 is_stmt 0 view .LVU42
+ 211 0014 7047     		bx	lr
+ 212              	.L23:
+ 213 0016 00BF     		.align	2
+ 214              	.L22:
+ 215 0018 00080650 		.word	1342572544
+ 216 001c 00100240 		.word	1073876992
+ 217              		.cfi_endproc
+ 218              	.LFE331:
+ 220              		.global	hrng
+ 221              		.section	.bss.hrng,"aw",%nobits
+ 222              		.align	2
+ 225              	hrng:
+ 226 0000 00000000 		.space	20
+ 226      00000000 
+ 226      00000000 
+ 226      00000000 
+ 226      00000000 
+ 227              		.text
+ 228              	.Letext0:
+ 229              		.file 2 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 230              		.file 3 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 231              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 232              		.file 5 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 233              		.file 6 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ARM GAS  /tmp/ccrydPK4.s 			page 7
+
+
+ 234              		.file 7 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/rng.h"
+ 235              		.file 8 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/main.h"
+ 236              		.file 9 "<built-in>"
+ARM GAS  /tmp/ccrydPK4.s 			page 8
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 rng.c
+     /tmp/ccrydPK4.s:21     .text.MX_RNG_Init:00000000 $t
+     /tmp/ccrydPK4.s:28     .text.MX_RNG_Init:00000000 MX_RNG_Init
+     /tmp/ccrydPK4.s:70     .text.MX_RNG_Init:0000001c $d
+     /tmp/ccrydPK4.s:225    .bss.hrng:00000000 hrng
+     /tmp/ccrydPK4.s:76     .text.HAL_RNG_MspInit:00000000 $t
+     /tmp/ccrydPK4.s:83     .text.HAL_RNG_MspInit:00000000 HAL_RNG_MspInit
+     /tmp/ccrydPK4.s:175    .text.HAL_RNG_MspInit:00000048 $d
+     /tmp/ccrydPK4.s:181    .text.HAL_RNG_MspDeInit:00000000 $t
+     /tmp/ccrydPK4.s:188    .text.HAL_RNG_MspDeInit:00000000 HAL_RNG_MspDeInit
+     /tmp/ccrydPK4.s:215    .text.HAL_RNG_MspDeInit:00000018 $d
+     /tmp/ccrydPK4.s:222    .bss.hrng:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_RNG_Init
+Error_Handler
+memset
+HAL_RCCEx_PeriphCLKConfig

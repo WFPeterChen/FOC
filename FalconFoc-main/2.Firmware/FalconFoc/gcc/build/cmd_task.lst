@@ -1,0 +1,101 @@
+ARM GAS  /tmp/ccl5ZkFs.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"cmd_task.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c"
+  20              		.section	.text.RobotCMDInit,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	RobotCMDInit
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	RobotCMDInit:
+  29              	.LFB0:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c **** /********************************************************************************
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c ****  * @file        : cmd_task.c
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c ****  * @brief       : CAN 命令任务 —— 已切换为达妙(DM)电机协议
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c ****  *
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c ****  * @details:
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c ****  *  - 原自定义 HEADER+CRC8+TAIL 多帧协议(can_driver) 已替换为 DM 协议(dm_can)。
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c ****  *  - DM 收发在 CAN RX 回调(ISR)里完成：解包三种控制帧/特殊命令 + 每帧回反�
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c ****  *  - 规格见 MODULES/can_comm/DM_CAN_PROTOCOL.md。
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c ****  ********************************************************************************/
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c **** 
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c **** #include "cmd_task.h"
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c **** #include "dm_can.h"
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c **** 
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c **** void RobotCMDInit(void)
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c **** {
+  30              		.loc 1 15 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c ****     DM_CanInit(); // 注册 DM 的 3 个 RX ID(MIT/位速/速度) + 反馈
+  35              		.loc 1 16 5 view .LVU1
+  36 0000 FFF7FEBF 		b	DM_CanInit
+  37              	.LVL0:
+  38              		.cfi_endproc
+  39              	.LFE0:
+  41              		.section	.text.RobotCMDTask,"ax",%progbits
+  42              		.align	1
+  43              		.p2align 2,,3
+ARM GAS  /tmp/ccl5ZkFs.s 			page 2
+
+
+  44              		.global	RobotCMDTask
+  45              		.syntax unified
+  46              		.thumb
+  47              		.thumb_func
+  49              	RobotCMDTask:
+  50              	.LFB1:
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c **** }
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c **** 
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c **** void RobotCMDTask(void)
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c **** {
+  51              		.loc 1 20 1 view -0
+  52              		.cfi_startproc
+  53              		@ args = 0, pretend = 0, frame = 0
+  54              		@ frame_needed = 0, uses_anonymous_args = 0
+  55              		@ link register save eliminated.
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c ****     // DM 协议是请求-应答式，收发都在 dm_can 的 CAN RX 回调里完成，此处无需
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/cmd_task/cmd_task.c ****     DM_CanHealthCheck(); // #2 FDCAN bus-off 自恢复(内部节流 20ms, 正常时近零开销)
+  56              		.loc 1 22 5 view .LVU3
+  57 0000 FFF7FEBF 		b	DM_CanHealthCheck
+  58              	.LVL1:
+  59              		.cfi_endproc
+  60              	.LFE1:
+  62              		.text
+  63              	.Letext0:
+  64              		.file 2 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/can_comm/dm_can.h"
+ARM GAS  /tmp/ccl5ZkFs.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 cmd_task.c
+     /tmp/ccl5ZkFs.s:21     .text.RobotCMDInit:00000000 $t
+     /tmp/ccl5ZkFs.s:28     .text.RobotCMDInit:00000000 RobotCMDInit
+     /tmp/ccl5ZkFs.s:42     .text.RobotCMDTask:00000000 $t
+     /tmp/ccl5ZkFs.s:49     .text.RobotCMDTask:00000000 RobotCMDTask
+
+UNDEFINED SYMBOLS
+DM_CanInit
+DM_CanHealthCheck

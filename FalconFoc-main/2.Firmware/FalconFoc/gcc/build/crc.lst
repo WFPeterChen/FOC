@@ -1,0 +1,333 @@
+ARM GAS  /tmp/ccjubkMw.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"crc.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c"
+  20              		.section	.text.MX_CRC_Init,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	MX_CRC_Init
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	MX_CRC_Init:
+  29              	.LFB329:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** /* USER CODE BEGIN Header */
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** /**
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   ******************************************************************************
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   * @file    crc.c
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   * @brief   This file provides code for the configuration
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   *          of the CRC instances.
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   ******************************************************************************
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   * @attention
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   *
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   * Copyright (c) 2025 STMicroelectronics.
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   * All rights reserved.
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   *
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   * in the root directory of this software component.
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   *
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   ******************************************************************************
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   */
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** /* USER CODE END Header */
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** /* Includes ------------------------------------------------------------------*/
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** #include "crc.h"
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** 
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** /* USER CODE BEGIN 0 */
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** 
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** /* USER CODE END 0 */
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** 
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** CRC_HandleTypeDef hcrc;
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** 
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** /* CRC init function */
+ARM GAS  /tmp/ccjubkMw.s 			page 2
+
+
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** void MX_CRC_Init(void)
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** {
+  30              		.loc 1 31 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** 
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   /* USER CODE BEGIN CRC_Init 0 */
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** 
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   /* USER CODE END CRC_Init 0 */
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** 
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   /* USER CODE BEGIN CRC_Init 1 */
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** 
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   /* USER CODE END CRC_Init 1 */
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   hcrc.Instance = CRC;
+  34              		.loc 1 40 3 view .LVU1
+  35              		.loc 1 40 17 is_stmt 0 view .LVU2
+  36 0000 0848     		ldr	r0, .L6
+  37 0002 0949     		ldr	r1, .L6+4
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** 
+  38              		.loc 1 31 1 view .LVU3
+  39 0004 08B5     		push	{r3, lr}
+  40              	.LCFI0:
+  41              		.cfi_def_cfa_offset 8
+  42              		.cfi_offset 3, -8
+  43              		.cfi_offset 14, -4
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   hcrc.Init.DefaultPolynomialUse = DEFAULT_POLYNOMIAL_ENABLE;
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   hcrc.Init.DefaultInitValueUse = DEFAULT_INIT_VALUE_ENABLE;
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   hcrc.Init.InputDataInversionMode = CRC_INPUTDATA_INVERSION_NONE;
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   hcrc.Init.OutputDataInversionMode = CRC_OUTPUTDATA_INVERSION_DISABLE;
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   hcrc.InputDataFormat = CRC_INPUTDATA_FORMAT_BYTES;
+  44              		.loc 1 45 24 view .LVU4
+  45 0006 0122     		movs	r2, #1
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   hcrc.Init.DefaultPolynomialUse = DEFAULT_POLYNOMIAL_ENABLE;
+  46              		.loc 1 41 34 view .LVU5
+  47 0008 0023     		movs	r3, #0
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   hcrc.InputDataFormat = CRC_INPUTDATA_FORMAT_BYTES;
+  48              		.loc 1 44 37 view .LVU6
+  49 000a C0E90533 		strd	r3, r3, [r0, #20]
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   hcrc.Init.DefaultPolynomialUse = DEFAULT_POLYNOMIAL_ENABLE;
+  50              		.loc 1 40 17 view .LVU7
+  51 000e 0160     		str	r1, [r0]
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   hcrc.Init.DefaultPolynomialUse = DEFAULT_POLYNOMIAL_ENABLE;
+  52              		.loc 1 41 3 is_stmt 1 view .LVU8
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   hcrc.Init.InputDataInversionMode = CRC_INPUTDATA_INVERSION_NONE;
+  53              		.loc 1 42 3 view .LVU9
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   hcrc.Init.DefaultInitValueUse = DEFAULT_INIT_VALUE_ENABLE;
+  54              		.loc 1 41 34 is_stmt 0 view .LVU10
+  55 0010 8380     		strh	r3, [r0, #4]	@ movhi
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   hcrc.Init.OutputDataInversionMode = CRC_OUTPUTDATA_INVERSION_DISABLE;
+  56              		.loc 1 43 3 is_stmt 1 view .LVU11
+  57              		.loc 1 45 3 view .LVU12
+  58              		.loc 1 45 24 is_stmt 0 view .LVU13
+  59 0012 0262     		str	r2, [r0, #32]
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   if (HAL_CRC_Init(&hcrc) != HAL_OK)
+  60              		.loc 1 46 3 is_stmt 1 view .LVU14
+  61              		.loc 1 46 7 is_stmt 0 view .LVU15
+ARM GAS  /tmp/ccjubkMw.s 			page 3
+
+
+  62 0014 FFF7FEFF 		bl	HAL_CRC_Init
+  63              	.LVL0:
+  64              		.loc 1 46 6 discriminator 1 view .LVU16
+  65 0018 00B9     		cbnz	r0, .L5
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   {
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****     Error_Handler();
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   }
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   /* USER CODE BEGIN CRC_Init 2 */
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** 
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   /* USER CODE END CRC_Init 2 */
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** 
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** }
+  66              		.loc 1 54 1 view .LVU17
+  67 001a 08BD     		pop	{r3, pc}
+  68              	.L5:
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   }
+  69              		.loc 1 48 5 is_stmt 1 view .LVU18
+  70              		.loc 1 54 1 is_stmt 0 view .LVU19
+  71 001c BDE80840 		pop	{r3, lr}
+  72              	.LCFI1:
+  73              		.cfi_restore 14
+  74              		.cfi_restore 3
+  75              		.cfi_def_cfa_offset 0
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   }
+  76              		.loc 1 48 5 view .LVU20
+  77 0020 FFF7FEBF 		b	Error_Handler
+  78              	.LVL1:
+  79              	.L7:
+  80              		.align	2
+  81              	.L6:
+  82 0024 00000000 		.word	hcrc
+  83 0028 00300240 		.word	1073885184
+  84              		.cfi_endproc
+  85              	.LFE329:
+  87              		.section	.text.HAL_CRC_MspInit,"ax",%progbits
+  88              		.align	1
+  89              		.p2align 2,,3
+  90              		.global	HAL_CRC_MspInit
+  91              		.syntax unified
+  92              		.thumb
+  93              		.thumb_func
+  95              	HAL_CRC_MspInit:
+  96              	.LVL2:
+  97              	.LFB330:
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** 
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** void HAL_CRC_MspInit(CRC_HandleTypeDef* crcHandle)
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** {
+  98              		.loc 1 57 1 is_stmt 1 view -0
+  99              		.cfi_startproc
+ 100              		@ args = 0, pretend = 0, frame = 8
+ 101              		@ frame_needed = 0, uses_anonymous_args = 0
+ 102              		@ link register save eliminated.
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** 
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   if(crcHandle->Instance==CRC)
+ 103              		.loc 1 59 3 view .LVU22
+ 104              		.loc 1 59 5 is_stmt 0 view .LVU23
+ 105 0000 094B     		ldr	r3, .L15
+ARM GAS  /tmp/ccjubkMw.s 			page 4
+
+
+ 106 0002 0268     		ldr	r2, [r0]
+ 107 0004 9A42     		cmp	r2, r3
+ 108 0006 00D0     		beq	.L14
+ 109 0008 7047     		bx	lr
+ 110              	.L14:
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   {
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   /* USER CODE BEGIN CRC_MspInit 0 */
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** 
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   /* USER CODE END CRC_MspInit 0 */
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****     /* CRC clock enable */
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****     __HAL_RCC_CRC_CLK_ENABLE();
+ 111              		.loc 1 65 5 is_stmt 1 view .LVU24
+ 112              	.LBB2:
+ 113              		.loc 1 65 5 view .LVU25
+ 114              		.loc 1 65 5 view .LVU26
+ 115 000a A3F50053 		sub	r3, r3, #8192
+ 116              	.LBE2:
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** 
+ 117              		.loc 1 57 1 is_stmt 0 view .LVU27
+ 118 000e 82B0     		sub	sp, sp, #8
+ 119              	.LCFI2:
+ 120              		.cfi_def_cfa_offset 8
+ 121              	.LBB3:
+ 122              		.loc 1 65 5 view .LVU28
+ 123 0010 9A6C     		ldr	r2, [r3, #72]
+ 124 0012 42F48052 		orr	r2, r2, #4096
+ 125 0016 9A64     		str	r2, [r3, #72]
+ 126              		.loc 1 65 5 is_stmt 1 view .LVU29
+ 127 0018 9B6C     		ldr	r3, [r3, #72]
+ 128 001a 03F48053 		and	r3, r3, #4096
+ 129 001e 0193     		str	r3, [sp, #4]
+ 130              		.loc 1 65 5 view .LVU30
+ 131 0020 019B     		ldr	r3, [sp, #4]
+ 132              	.LBE3:
+ 133              		.loc 1 65 5 discriminator 1 view .LVU31
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   /* USER CODE BEGIN CRC_MspInit 1 */
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** 
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   /* USER CODE END CRC_MspInit 1 */
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   }
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** }
+ 134              		.loc 1 70 1 is_stmt 0 view .LVU32
+ 135 0022 02B0     		add	sp, sp, #8
+ 136              	.LCFI3:
+ 137              		.cfi_def_cfa_offset 0
+ 138              		@ sp needed
+ 139 0024 7047     		bx	lr
+ 140              	.L16:
+ 141 0026 00BF     		.align	2
+ 142              	.L15:
+ 143 0028 00300240 		.word	1073885184
+ 144              		.cfi_endproc
+ 145              	.LFE330:
+ 147              		.section	.text.HAL_CRC_MspDeInit,"ax",%progbits
+ 148              		.align	1
+ 149              		.p2align 2,,3
+ 150              		.global	HAL_CRC_MspDeInit
+ 151              		.syntax unified
+ARM GAS  /tmp/ccjubkMw.s 			page 5
+
+
+ 152              		.thumb
+ 153              		.thumb_func
+ 155              	HAL_CRC_MspDeInit:
+ 156              	.LVL3:
+ 157              	.LFB331:
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** 
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** void HAL_CRC_MspDeInit(CRC_HandleTypeDef* crcHandle)
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** {
+ 158              		.loc 1 73 1 is_stmt 1 view -0
+ 159              		.cfi_startproc
+ 160              		@ args = 0, pretend = 0, frame = 0
+ 161              		@ frame_needed = 0, uses_anonymous_args = 0
+ 162              		@ link register save eliminated.
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** 
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   if(crcHandle->Instance==CRC)
+ 163              		.loc 1 75 3 view .LVU34
+ 164              		.loc 1 75 5 is_stmt 0 view .LVU35
+ 165 0000 054B     		ldr	r3, .L20
+ 166 0002 0268     		ldr	r2, [r0]
+ 167 0004 9A42     		cmp	r2, r3
+ 168 0006 00D0     		beq	.L19
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   {
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   /* USER CODE BEGIN CRC_MspDeInit 0 */
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** 
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   /* USER CODE END CRC_MspDeInit 0 */
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****     /* Peripheral clock disable */
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****     __HAL_RCC_CRC_CLK_DISABLE();
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   /* USER CODE BEGIN CRC_MspDeInit 1 */
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** 
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   /* USER CODE END CRC_MspDeInit 1 */
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   }
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c **** }
+ 169              		.loc 1 86 1 view .LVU36
+ 170 0008 7047     		bx	lr
+ 171              	.L19:
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/crc.c ****   /* USER CODE BEGIN CRC_MspDeInit 1 */
+ 172              		.loc 1 81 5 is_stmt 1 view .LVU37
+ 173 000a 044A     		ldr	r2, .L20+4
+ 174 000c 936C     		ldr	r3, [r2, #72]
+ 175 000e 23F48053 		bic	r3, r3, #4096
+ 176 0012 9364     		str	r3, [r2, #72]
+ 177              		.loc 1 86 1 is_stmt 0 view .LVU38
+ 178 0014 7047     		bx	lr
+ 179              	.L21:
+ 180 0016 00BF     		.align	2
+ 181              	.L20:
+ 182 0018 00300240 		.word	1073885184
+ 183 001c 00100240 		.word	1073876992
+ 184              		.cfi_endproc
+ 185              	.LFE331:
+ 187              		.global	hcrc
+ 188              		.section	.bss.hcrc,"aw",%nobits
+ 189              		.align	2
+ 192              	hcrc:
+ 193 0000 00000000 		.space	36
+ 193      00000000 
+ 193      00000000 
+ARM GAS  /tmp/ccjubkMw.s 			page 6
+
+
+ 193      00000000 
+ 193      00000000 
+ 194              		.text
+ 195              	.Letext0:
+ 196              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 197              		.file 3 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 198              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 199              		.file 5 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 200              		.file 6 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/crc.h"
+ 201              		.file 7 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/main.h"
+ARM GAS  /tmp/ccjubkMw.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 crc.c
+     /tmp/ccjubkMw.s:21     .text.MX_CRC_Init:00000000 $t
+     /tmp/ccjubkMw.s:28     .text.MX_CRC_Init:00000000 MX_CRC_Init
+     /tmp/ccjubkMw.s:82     .text.MX_CRC_Init:00000024 $d
+     /tmp/ccjubkMw.s:192    .bss.hcrc:00000000 hcrc
+     /tmp/ccjubkMw.s:88     .text.HAL_CRC_MspInit:00000000 $t
+     /tmp/ccjubkMw.s:95     .text.HAL_CRC_MspInit:00000000 HAL_CRC_MspInit
+     /tmp/ccjubkMw.s:143    .text.HAL_CRC_MspInit:00000028 $d
+     /tmp/ccjubkMw.s:148    .text.HAL_CRC_MspDeInit:00000000 $t
+     /tmp/ccjubkMw.s:155    .text.HAL_CRC_MspDeInit:00000000 HAL_CRC_MspDeInit
+     /tmp/ccjubkMw.s:182    .text.HAL_CRC_MspDeInit:00000018 $d
+     /tmp/ccjubkMw.s:189    .bss.hcrc:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_CRC_Init
+Error_Handler

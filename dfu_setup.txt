@@ -1,0 +1,19 @@
+# ========================================================
+# FalconFOC —— 安装 dfu-util + 给 DFU 设备加权限
+# 在另一个终端依次执行（需要 sudo 密码）
+# ========================================================
+
+# 1) 安装 dfu-util
+sudo apt install -y dfu-util
+
+# 2) 给 STM32 DFU 设备(0483:df11)加读写权限
+echo 'SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", MODE="0666"' | sudo tee /etc/udev/rules.d/50-stm32-dfu.rules
+
+# 3) 重新加载 udev 规则
+sudo udevadm control --reload-rules && sudo udevadm trigger
+
+# 4) 把板子的 USB 线拔下再插上（让权限规则对当前 DFU 设备生效）
+
+# ========================================================
+# 做完后回到 Claude 这边，它会执行 dfu-util -l 验证
+# ========================================================

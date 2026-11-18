@@ -1,0 +1,753 @@
+ARM GAS  /tmp/cc34P3Hu.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"usbd_cdc_if.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c"
+  20              		.section	.text.CDC_DeInit_FS,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	CDC_DeInit_FS:
+  28              	.LFB394:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* USER CODE BEGIN Header */
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /**
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****  ******************************************************************************
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****  * @file           : usbd_cdc_if.c
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****  * @version        : v3.0_Cube
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****  * @brief          : Usb device for Virtual Com Port.
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****  ******************************************************************************
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****  * @attention
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****  *
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****  * Copyright (c) 2024 STMicroelectronics.
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****  * All rights reserved.
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****  *
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****  * This software is licensed under terms that can be found in the LICENSE file
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****  * in the root directory of this software component.
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****  * If no LICENSE file comes with this software, it is provided AS-IS.
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****  *
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****  ******************************************************************************
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****  */
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* USER CODE END Header */
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* Includes ------------------------------------------------------------------*/
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** #include "usbd_cdc_if.h"
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* USER CODE BEGIN INCLUDE */
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** #include "vofa.h"
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* USER CODE END INCLUDE */
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* Private typedef -----------------------------------------------------------*/
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* Private define ------------------------------------------------------------*/
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* Private macro -------------------------------------------------------------*/
+ARM GAS  /tmp/cc34P3Hu.s 			page 2
+
+
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* USER CODE BEGIN PV */
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* Private variables ---------------------------------------------------------*/
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* USER CODE END PV */
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @brief Usb device library.
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @{
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   */
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /** @addtogroup USBD_CDC_IF
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @{
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   */
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /** @defgroup USBD_CDC_IF_Private_TypesDefinitions USBD_CDC_IF_Private_TypesDefinitions
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @brief Private types.
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @{
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   */
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* USER CODE BEGIN PRIVATE_TYPES */
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* USER CODE END PRIVATE_TYPES */
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /**
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @}
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   */
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /** @defgroup USBD_CDC_IF_Private_Defines USBD_CDC_IF_Private_Defines
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @brief Private defines.
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @{
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   */
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* USER CODE BEGIN PRIVATE_DEFINES */
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* USER CODE END PRIVATE_DEFINES */
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /**
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @}
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   */
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /** @defgroup USBD_CDC_IF_Private_Macros USBD_CDC_IF_Private_Macros
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @brief Private macros.
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @{
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   */
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* USER CODE BEGIN PRIVATE_MACRO */
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* USER CODE END PRIVATE_MACRO */
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /**
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @}
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   */
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /** @defgroup USBD_CDC_IF_Private_Variables USBD_CDC_IF_Private_Variables
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @brief Private variables.
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @{
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   */
+ARM GAS  /tmp/cc34P3Hu.s 			page 3
+
+
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* Create buffer for reception and transmission           */
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* It's up to user to redefine and/or remove those define */
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /** Received data over USB are stored in this buffer      */
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** uint8_t UserRxBufferFS[APP_RX_DATA_SIZE];
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /** Data to send over USB CDC are stored in this buffer   */
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** uint8_t UserTxBufferFS[APP_TX_DATA_SIZE];
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* USER CODE BEGIN PRIVATE_VARIABLES */
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* USER CODE END PRIVATE_VARIABLES */
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /**
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @}
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   */
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /** @defgroup USBD_CDC_IF_Exported_Variables USBD_CDC_IF_Exported_Variables
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @brief Public variables.
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @{
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   */
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** extern USBD_HandleTypeDef hUsbDeviceFS;
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* USER CODE BEGIN EXPORTED_VARIABLES */
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* USER CODE END EXPORTED_VARIABLES */
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /**
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @}
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   */
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /** @defgroup USBD_CDC_IF_Private_FunctionPrototypes USBD_CDC_IF_Private_FunctionPrototypes
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @brief Private functions declaration.
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @{
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   */
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** static int8_t CDC_Init_FS(void);
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** static int8_t CDC_DeInit_FS(void);
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length);
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** static int8_t CDC_Receive_FS(uint8_t* pbuf, uint32_t *Len);
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** static int8_t CDC_TransmitCplt_FS(uint8_t *pbuf, uint32_t *Len, uint8_t epnum);
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* USER CODE BEGIN PRIVATE_FUNCTIONS_DECLARATION */
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* USER CODE END PRIVATE_FUNCTIONS_DECLARATION */
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 134:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /**
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @}
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   */
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** USBD_CDC_ItfTypeDef USBD_Interface_fops_FS =
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** {
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   CDC_Init_FS,
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   CDC_DeInit_FS,
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   CDC_Control_FS,
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   CDC_Receive_FS,
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   CDC_TransmitCplt_FS
+ARM GAS  /tmp/cc34P3Hu.s 			page 4
+
+
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** };
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /* Private functions ---------------------------------------------------------*/
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /**
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @brief  Initializes the CDC media low layer over the FS USB IP
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @retval USBD_OK if all operations are OK else USBD_FAIL
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   */
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** static int8_t CDC_Init_FS(void)
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** {
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE BEGIN 3 */
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* Set Application Buffers */
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   USBD_CDC_SetTxBuffer(&hUsbDeviceFS, UserTxBufferFS, 0);
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, UserRxBufferFS);
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   return (USBD_OK);
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE END 3 */
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** }
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /**
+ 163:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @brief  DeInitializes the CDC media low layer
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @retval USBD_OK if all operations are OK else USBD_FAIL
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   */
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** static int8_t CDC_DeInit_FS(void)
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** {
+  29              		.loc 1 167 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE BEGIN 4 */
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   return (USBD_OK);
+  34              		.loc 1 169 3 view .LVU1
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE END 4 */
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** }
+  35              		.loc 1 171 1 is_stmt 0 view .LVU2
+  36 0000 0020     		movs	r0, #0
+  37 0002 7047     		bx	lr
+  38              		.cfi_endproc
+  39              	.LFE394:
+  41              		.section	.text.CDC_Control_FS,"ax",%progbits
+  42              		.align	1
+  43              		.p2align 2,,3
+  44              		.syntax unified
+  45              		.thumb
+  46              		.thumb_func
+  48              	CDC_Control_FS:
+  49              	.LVL0:
+  50              	.LFB395:
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /**
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @brief  Manage the CDC class requests
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @param  cmd: Command code
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @param  pbuf: Buffer containing command data (request parameters)
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @param  length: Number of data to be sent (in bytes)
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @retval Result of the operation: USBD_OK if all operations are OK else USBD_FAIL
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   */
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
+ 181:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** {
+ARM GAS  /tmp/cc34P3Hu.s 			page 5
+
+
+  51              		.loc 1 181 1 is_stmt 1 view -0
+  52              		.cfi_startproc
+  53              		@ args = 0, pretend = 0, frame = 0
+  54              		@ frame_needed = 0, uses_anonymous_args = 0
+  55              		@ link register save eliminated.
+ 182:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE BEGIN 5 */
+ 183:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   switch (cmd)
+  56              		.loc 1 183 3 view .LVU4
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   {
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   case CDC_SEND_ENCAPSULATED_COMMAND:
+ 186:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 187:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     break;
+ 188:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 189:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   case CDC_GET_ENCAPSULATED_RESPONSE:
+ 190:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 191:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     break;
+ 192:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 193:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   case CDC_SET_COMM_FEATURE:
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     break;
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 197:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   case CDC_GET_COMM_FEATURE:
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     break;
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 201:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   case CDC_CLEAR_COMM_FEATURE:
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 203:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     break;
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 205:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     /*******************************************************************************/
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     /* Line Coding Structure                                                       */
+ 207:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     /*-----------------------------------------------------------------------------*/
+ 208:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     /* Offset | Field       | Size | Value  | Description                          */
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     /* 0      | dwDTERate   |   4  | Number |Data terminal rate, in bits per second*/
+ 210:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     /* 4      | bCharFormat |   1  | Number | Stop bits                            */
+ 211:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     /*                                        0 - 1 Stop bit                       */
+ 212:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     /*                                        1 - 1.5 Stop bits                    */
+ 213:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     /*                                        2 - 2 Stop bits                      */
+ 214:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     /* 5      | bParityType |  1   | Number | Parity                               */
+ 215:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     /*                                        0 - None                             */
+ 216:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     /*                                        1 - Odd                              */
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     /*                                        2 - Even                             */
+ 218:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     /*                                        3 - Mark                             */
+ 219:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     /*                                        4 - Space                            */
+ 220:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     /* 6      | bDataBits  |   1   | Number Data bits (5, 6, 7, 8 or 16).          */
+ 221:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     /*******************************************************************************/
+ 222:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   case CDC_SET_LINE_CODING:
+ 223:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 224:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     break;
+ 225:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 226:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   case CDC_GET_LINE_CODING:
+ 227:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 228:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     break;
+ 229:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 230:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   case CDC_SET_CONTROL_LINE_STATE:
+ 231:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 232:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     break;
+ARM GAS  /tmp/cc34P3Hu.s 			page 6
+
+
+ 233:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 234:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   case CDC_SEND_BREAK:
+ 235:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 236:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     break;
+ 237:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 238:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   default:
+ 239:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     break;
+  57              		.loc 1 239 5 view .LVU5
+ 240:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   }
+ 241:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 242:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   return (USBD_OK);
+  58              		.loc 1 242 3 view .LVU6
+ 243:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE END 5 */
+ 244:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** }
+  59              		.loc 1 244 1 is_stmt 0 view .LVU7
+  60 0000 0020     		movs	r0, #0
+  61              	.LVL1:
+  62              		.loc 1 244 1 view .LVU8
+  63 0002 7047     		bx	lr
+  64              		.cfi_endproc
+  65              	.LFE395:
+  67              		.section	.text.CDC_TransmitCplt_FS,"ax",%progbits
+  68              		.align	1
+  69              		.p2align 2,,3
+  70              		.syntax unified
+  71              		.thumb
+  72              		.thumb_func
+  74              	CDC_TransmitCplt_FS:
+  75              	.LVL2:
+  76              	.LFB398:
+ 245:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 246:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /**
+ 247:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @brief  Data received over USB OUT endpoint are sent over CDC interface
+ 248:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   *         through this function.
+ 249:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   *
+ 250:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   *         @note
+ 251:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   *         This function will issue a NAK packet on any OUT packet received on
+ 252:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   *         USB endpoint until exiting this function. If you exit this function
+ 253:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   *         before transfer is complete on CDC interface (ie. using DMA controller)
+ 254:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   *         it will result in receiving more data while previous ones are still
+ 255:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   *         not sent.
+ 256:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   *
+ 257:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @param  Buf: Buffer of data to be received
+ 258:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @param  Len: Number of data received (in bytes)
+ 259:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @retval Result of the operation: USBD_OK if all operations are OK else USBD_FAIL
+ 260:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   */
+ 261:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
+ 262:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** {
+ 263:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE BEGIN 6 */
+ 264:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
+ 265:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
+ 266:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   // Ensure the buffer is not empty
+ 267:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   if (*Len != 0 && *Buf != 0)
+ 268:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   {
+ 269:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     // Convert uint32_t to uint16_t and pass it to vofa_Receive
+ 270:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     uint16_t len16 = (*Len > UINT16_MAX) ? UINT16_MAX : (uint16_t)*Len;
+ 271:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     vofa_Receive(Buf, len16);
+ARM GAS  /tmp/cc34P3Hu.s 			page 7
+
+
+ 272:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   }
+ 273:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 274:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   return (USBD_OK);
+ 275:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE END 6 */
+ 276:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** }
+ 277:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 278:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /**
+ 279:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @brief  CDC_Transmit_FS
+ 280:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   *         Data to send over USB IN endpoint are sent over CDC interface
+ 281:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   *         through this function.
+ 282:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   *         @note
+ 283:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   *
+ 284:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   *
+ 285:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @param  Buf: Buffer of data to be sent
+ 286:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @param  Len: Number of data to be sent (in bytes)
+ 287:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @retval USBD_OK if all operations are OK else USBD_FAIL or USBD_BUSY
+ 288:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   */
+ 289:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)
+ 290:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** {
+ 291:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   uint8_t result = USBD_OK;
+ 292:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE BEGIN 7 */
+ 293:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef *)hUsbDeviceFS.pClassData;
+ 294:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   if (hcdc->TxState != 0)
+ 295:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   {
+ 296:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     return USBD_BUSY;
+ 297:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   }
+ 298:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   USBD_CDC_SetTxBuffer(&hUsbDeviceFS, Buf, Len);
+ 299:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   result = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
+ 300:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE END 7 */
+ 301:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   return result;
+ 302:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** }
+ 303:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 304:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** /**
+ 305:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @brief  CDC_TransmitCplt_FS
+ 306:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   *         Data transmitted callback
+ 307:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   *
+ 308:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   *         @note
+ 309:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   *         This function is IN transfer complete callback used to inform user that
+ 310:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   *         the submitted Data is successfully sent over USB.
+ 311:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   *
+ 312:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @param  Buf: Buffer of data to be received
+ 313:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @param  Len: Number of data received (in bytes)
+ 314:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   * @retval Result of the operation: USBD_OK if all operations are OK else USBD_FAIL
+ 315:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   */
+ 316:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** static int8_t CDC_TransmitCplt_FS(uint8_t *Buf, uint32_t *Len, uint8_t epnum)
+ 317:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** {
+  77              		.loc 1 317 1 is_stmt 1 view -0
+  78              		.cfi_startproc
+  79              		@ args = 0, pretend = 0, frame = 0
+  80              		@ frame_needed = 0, uses_anonymous_args = 0
+  81              		@ link register save eliminated.
+ 318:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   uint8_t result = USBD_OK;
+  82              		.loc 1 318 3 view .LVU10
+ 319:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE BEGIN 13 */
+ 320:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   UNUSED(Buf);
+  83              		.loc 1 320 3 view .LVU11
+ 321:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   UNUSED(Len);
+ARM GAS  /tmp/cc34P3Hu.s 			page 8
+
+
+  84              		.loc 1 321 3 view .LVU12
+ 322:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   UNUSED(epnum);
+  85              		.loc 1 322 3 view .LVU13
+ 323:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE END 13 */
+ 324:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   return result;
+  86              		.loc 1 324 3 view .LVU14
+ 325:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** }
+  87              		.loc 1 325 1 is_stmt 0 view .LVU15
+  88 0000 0020     		movs	r0, #0
+  89              	.LVL3:
+  90              		.loc 1 325 1 view .LVU16
+  91 0002 7047     		bx	lr
+  92              		.cfi_endproc
+  93              	.LFE398:
+  95              		.section	.text.CDC_Receive_FS,"ax",%progbits
+  96              		.align	1
+  97              		.p2align 2,,3
+  98              		.syntax unified
+  99              		.thumb
+ 100              		.thumb_func
+ 102              	CDC_Receive_FS:
+ 103              	.LVL4:
+ 104              	.LFB396:
+ 262:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE BEGIN 6 */
+ 105              		.loc 1 262 1 is_stmt 1 view -0
+ 106              		.cfi_startproc
+ 107              		@ args = 0, pretend = 0, frame = 0
+ 108              		@ frame_needed = 0, uses_anonymous_args = 0
+ 264:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
+ 109              		.loc 1 264 3 view .LVU18
+ 262:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE BEGIN 6 */
+ 110              		.loc 1 262 1 is_stmt 0 view .LVU19
+ 111 0000 38B5     		push	{r3, r4, r5, lr}
+ 112              	.LCFI0:
+ 113              		.cfi_def_cfa_offset 16
+ 114              		.cfi_offset 3, -16
+ 115              		.cfi_offset 4, -12
+ 116              		.cfi_offset 5, -8
+ 117              		.cfi_offset 14, -4
+ 262:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE BEGIN 6 */
+ 118              		.loc 1 262 1 view .LVU20
+ 119 0002 0446     		mov	r4, r0
+ 120 0004 0D46     		mov	r5, r1
+ 264:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
+ 121              		.loc 1 264 3 view .LVU21
+ 122 0006 0C48     		ldr	r0, .L15
+ 123              	.LVL5:
+ 264:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
+ 124              		.loc 1 264 3 view .LVU22
+ 125 0008 2146     		mov	r1, r4
+ 126              	.LVL6:
+ 264:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
+ 127              		.loc 1 264 3 view .LVU23
+ 128 000a FFF7FEFF 		bl	USBD_CDC_SetRxBuffer
+ 129              	.LVL7:
+ 265:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   // Ensure the buffer is not empty
+ 130              		.loc 1 265 3 is_stmt 1 view .LVU24
+ARM GAS  /tmp/cc34P3Hu.s 			page 9
+
+
+ 131 000e 0A48     		ldr	r0, .L15
+ 132 0010 FFF7FEFF 		bl	USBD_CDC_ReceivePacket
+ 133              	.LVL8:
+ 267:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   {
+ 134              		.loc 1 267 3 view .LVU25
+ 267:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   {
+ 135              		.loc 1 267 7 is_stmt 0 view .LVU26
+ 136 0014 2B68     		ldr	r3, [r5]
+ 267:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   {
+ 137              		.loc 1 267 6 view .LVU27
+ 138 0016 0BB1     		cbz	r3, .L6
+ 267:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   {
+ 139              		.loc 1 267 17 discriminator 1 view .LVU28
+ 140 0018 2278     		ldrb	r2, [r4]	@ zero_extendqisi2
+ 141 001a 0AB9     		cbnz	r2, .L14
+ 142              	.L6:
+ 274:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE END 6 */
+ 143              		.loc 1 274 3 is_stmt 1 view .LVU29
+ 276:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 144              		.loc 1 276 1 is_stmt 0 view .LVU30
+ 145 001c 0020     		movs	r0, #0
+ 146 001e 38BD     		pop	{r3, r4, r5, pc}
+ 147              	.LVL9:
+ 148              	.L14:
+ 149              	.LBB2:
+ 270:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     vofa_Receive(Buf, len16);
+ 150              		.loc 1 270 5 is_stmt 1 view .LVU31
+ 271:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   }
+ 151              		.loc 1 271 5 view .LVU32
+ 270:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****     vofa_Receive(Buf, len16);
+ 152              		.loc 1 270 14 is_stmt 0 view .LVU33
+ 153 0020 4FF6FF71 		movw	r1, #65535
+ 154 0024 9942     		cmp	r1, r3
+ 155 0026 28BF     		it	cs
+ 156 0028 1946     		movcs	r1, r3
+ 271:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   }
+ 157              		.loc 1 271 5 view .LVU34
+ 158 002a 2046     		mov	r0, r4
+ 159 002c 89B2     		uxth	r1, r1
+ 160 002e FFF7FEFF 		bl	vofa_Receive
+ 161              	.LVL10:
+ 271:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   }
+ 162              		.loc 1 271 5 view .LVU35
+ 163              	.LBE2:
+ 274:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE END 6 */
+ 164              		.loc 1 274 3 is_stmt 1 view .LVU36
+ 276:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 165              		.loc 1 276 1 is_stmt 0 view .LVU37
+ 166 0032 0020     		movs	r0, #0
+ 167 0034 38BD     		pop	{r3, r4, r5, pc}
+ 168              	.LVL11:
+ 169              	.L16:
+ 276:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 170              		.loc 1 276 1 view .LVU38
+ 171 0036 00BF     		.align	2
+ 172              	.L15:
+ 173 0038 00000000 		.word	hUsbDeviceFS
+ARM GAS  /tmp/cc34P3Hu.s 			page 10
+
+
+ 174              		.cfi_endproc
+ 175              	.LFE396:
+ 177              		.section	.text.CDC_Init_FS,"ax",%progbits
+ 178              		.align	1
+ 179              		.p2align 2,,3
+ 180              		.syntax unified
+ 181              		.thumb
+ 182              		.thumb_func
+ 184              	CDC_Init_FS:
+ 185              	.LFB393:
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE BEGIN 3 */
+ 186              		.loc 1 153 1 is_stmt 1 view -0
+ 187              		.cfi_startproc
+ 188              		@ args = 0, pretend = 0, frame = 0
+ 189              		@ frame_needed = 0, uses_anonymous_args = 0
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, UserRxBufferFS);
+ 190              		.loc 1 156 3 view .LVU40
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE BEGIN 3 */
+ 191              		.loc 1 153 1 is_stmt 0 view .LVU41
+ 192 0000 10B5     		push	{r4, lr}
+ 193              	.LCFI1:
+ 194              		.cfi_def_cfa_offset 8
+ 195              		.cfi_offset 4, -8
+ 196              		.cfi_offset 14, -4
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, UserRxBufferFS);
+ 197              		.loc 1 156 3 view .LVU42
+ 198 0002 064C     		ldr	r4, .L19
+ 199 0004 0649     		ldr	r1, .L19+4
+ 200 0006 0022     		movs	r2, #0
+ 201 0008 2046     		mov	r0, r4
+ 202 000a FFF7FEFF 		bl	USBD_CDC_SetTxBuffer
+ 203              	.LVL12:
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   return (USBD_OK);
+ 204              		.loc 1 157 3 is_stmt 1 view .LVU43
+ 205 000e 0549     		ldr	r1, .L19+8
+ 206 0010 2046     		mov	r0, r4
+ 207 0012 FFF7FEFF 		bl	USBD_CDC_SetRxBuffer
+ 208              	.LVL13:
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE END 3 */
+ 209              		.loc 1 158 3 view .LVU44
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 210              		.loc 1 160 1 is_stmt 0 view .LVU45
+ 211 0016 0020     		movs	r0, #0
+ 212 0018 10BD     		pop	{r4, pc}
+ 213              	.L20:
+ 214 001a 00BF     		.align	2
+ 215              	.L19:
+ 216 001c 00000000 		.word	hUsbDeviceFS
+ 217 0020 00000000 		.word	UserTxBufferFS
+ 218 0024 00000000 		.word	UserRxBufferFS
+ 219              		.cfi_endproc
+ 220              	.LFE393:
+ 222              		.section	.text.CDC_Transmit_FS,"ax",%progbits
+ 223              		.align	1
+ 224              		.p2align 2,,3
+ 225              		.global	CDC_Transmit_FS
+ 226              		.syntax unified
+ARM GAS  /tmp/cc34P3Hu.s 			page 11
+
+
+ 227              		.thumb
+ 228              		.thumb_func
+ 230              	CDC_Transmit_FS:
+ 231              	.LVL14:
+ 232              	.LFB397:
+ 290:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   uint8_t result = USBD_OK;
+ 233              		.loc 1 290 1 is_stmt 1 view -0
+ 234              		.cfi_startproc
+ 235              		@ args = 0, pretend = 0, frame = 0
+ 236              		@ frame_needed = 0, uses_anonymous_args = 0
+ 291:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE BEGIN 7 */
+ 237              		.loc 1 291 3 view .LVU47
+ 293:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   if (hcdc->TxState != 0)
+ 238              		.loc 1 293 3 view .LVU48
+ 290:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   uint8_t result = USBD_OK;
+ 239              		.loc 1 290 1 is_stmt 0 view .LVU49
+ 240 0000 10B5     		push	{r4, lr}
+ 241              	.LCFI2:
+ 242              		.cfi_def_cfa_offset 8
+ 243              		.cfi_offset 4, -8
+ 244              		.cfi_offset 14, -4
+ 293:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   if (hcdc->TxState != 0)
+ 245              		.loc 1 293 27 view .LVU50
+ 246 0002 094C     		ldr	r4, .L25
+ 247 0004 D4F8BC32 		ldr	r3, [r4, #700]
+ 248              	.LVL15:
+ 294:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   {
+ 249              		.loc 1 294 3 is_stmt 1 view .LVU51
+ 294:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   {
+ 250              		.loc 1 294 11 is_stmt 0 view .LVU52
+ 251 0008 D3F81432 		ldr	r3, [r3, #532]
+ 252              	.LVL16:
+ 294:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   {
+ 253              		.loc 1 294 6 view .LVU53
+ 254 000c 0BB1     		cbz	r3, .L24
+ 302:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 255              		.loc 1 302 1 view .LVU54
+ 256 000e 0120     		movs	r0, #1
+ 257              	.LVL17:
+ 302:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 258              		.loc 1 302 1 view .LVU55
+ 259 0010 10BD     		pop	{r4, pc}
+ 260              	.LVL18:
+ 261              	.L24:
+ 298:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   result = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
+ 262              		.loc 1 298 3 is_stmt 1 view .LVU56
+ 263 0012 0A46     		mov	r2, r1
+ 264 0014 0146     		mov	r1, r0
+ 265              	.LVL19:
+ 298:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   result = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
+ 266              		.loc 1 298 3 is_stmt 0 view .LVU57
+ 267 0016 2046     		mov	r0, r4
+ 268              	.LVL20:
+ 298:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   result = USBD_CDC_TransmitPacket(&hUsbDeviceFS);
+ 269              		.loc 1 298 3 view .LVU58
+ 270 0018 FFF7FEFF 		bl	USBD_CDC_SetTxBuffer
+ 271              	.LVL21:
+ARM GAS  /tmp/cc34P3Hu.s 			page 12
+
+
+ 299:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE END 7 */
+ 272              		.loc 1 299 3 is_stmt 1 view .LVU59
+ 299:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE END 7 */
+ 273              		.loc 1 299 12 is_stmt 0 view .LVU60
+ 274 001c 2046     		mov	r0, r4
+ 302:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c **** 
+ 275              		.loc 1 302 1 view .LVU61
+ 276 001e BDE81040 		pop	{r4, lr}
+ 277              	.LCFI3:
+ 278              		.cfi_restore 14
+ 279              		.cfi_restore 4
+ 280              		.cfi_def_cfa_offset 0
+ 299:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.c ****   /* USER CODE END 7 */
+ 281              		.loc 1 299 12 view .LVU62
+ 282 0022 FFF7FEBF 		b	USBD_CDC_TransmitPacket
+ 283              	.LVL22:
+ 284              	.L26:
+ 285 0026 00BF     		.align	2
+ 286              	.L25:
+ 287 0028 00000000 		.word	hUsbDeviceFS
+ 288              		.cfi_endproc
+ 289              	.LFE397:
+ 291              		.global	USBD_Interface_fops_FS
+ 292              		.section	.data.USBD_Interface_fops_FS,"aw"
+ 293              		.align	2
+ 296              	USBD_Interface_fops_FS:
+ 297 0000 00000000 		.word	CDC_Init_FS
+ 298 0004 00000000 		.word	CDC_DeInit_FS
+ 299 0008 00000000 		.word	CDC_Control_FS
+ 300 000c 00000000 		.word	CDC_Receive_FS
+ 301 0010 00000000 		.word	CDC_TransmitCplt_FS
+ 302              		.global	UserTxBufferFS
+ 303              		.section	.bss.UserTxBufferFS,"aw",%nobits
+ 304              		.align	2
+ 307              	UserTxBufferFS:
+ 308 0000 00000000 		.space	1024
+ 308      00000000 
+ 308      00000000 
+ 308      00000000 
+ 308      00000000 
+ 309              		.global	UserRxBufferFS
+ 310              		.section	.bss.UserRxBufferFS,"aw",%nobits
+ 311              		.align	2
+ 314              	UserRxBufferFS:
+ 315 0000 00000000 		.space	1024
+ 315      00000000 
+ 315      00000000 
+ 315      00000000 
+ 315      00000000 
+ 316              		.text
+ 317              	.Letext0:
+ 318              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 319              		.file 3 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Libra
+ 320              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Middlewares/ST/STM32_USB_Device_Libra
+ 321              		.file 5 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/USB_Device/App/usbd_cdc_if.h"
+ 322              		.file 6 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/vofa/vofa.h"
+ARM GAS  /tmp/cc34P3Hu.s 			page 13
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 usbd_cdc_if.c
+     /tmp/cc34P3Hu.s:21     .text.CDC_DeInit_FS:00000000 $t
+     /tmp/cc34P3Hu.s:27     .text.CDC_DeInit_FS:00000000 CDC_DeInit_FS
+     /tmp/cc34P3Hu.s:42     .text.CDC_Control_FS:00000000 $t
+     /tmp/cc34P3Hu.s:48     .text.CDC_Control_FS:00000000 CDC_Control_FS
+     /tmp/cc34P3Hu.s:68     .text.CDC_TransmitCplt_FS:00000000 $t
+     /tmp/cc34P3Hu.s:74     .text.CDC_TransmitCplt_FS:00000000 CDC_TransmitCplt_FS
+     /tmp/cc34P3Hu.s:96     .text.CDC_Receive_FS:00000000 $t
+     /tmp/cc34P3Hu.s:102    .text.CDC_Receive_FS:00000000 CDC_Receive_FS
+     /tmp/cc34P3Hu.s:173    .text.CDC_Receive_FS:00000038 $d
+     /tmp/cc34P3Hu.s:178    .text.CDC_Init_FS:00000000 $t
+     /tmp/cc34P3Hu.s:184    .text.CDC_Init_FS:00000000 CDC_Init_FS
+     /tmp/cc34P3Hu.s:216    .text.CDC_Init_FS:0000001c $d
+     /tmp/cc34P3Hu.s:307    .bss.UserTxBufferFS:00000000 UserTxBufferFS
+     /tmp/cc34P3Hu.s:314    .bss.UserRxBufferFS:00000000 UserRxBufferFS
+     /tmp/cc34P3Hu.s:223    .text.CDC_Transmit_FS:00000000 $t
+     /tmp/cc34P3Hu.s:230    .text.CDC_Transmit_FS:00000000 CDC_Transmit_FS
+     /tmp/cc34P3Hu.s:287    .text.CDC_Transmit_FS:00000028 $d
+     /tmp/cc34P3Hu.s:296    .data.USBD_Interface_fops_FS:00000000 USBD_Interface_fops_FS
+     /tmp/cc34P3Hu.s:293    .data.USBD_Interface_fops_FS:00000000 $d
+     /tmp/cc34P3Hu.s:304    .bss.UserTxBufferFS:00000000 $d
+     /tmp/cc34P3Hu.s:311    .bss.UserRxBufferFS:00000000 $d
+
+UNDEFINED SYMBOLS
+USBD_CDC_SetRxBuffer
+USBD_CDC_ReceivePacket
+vofa_Receive
+hUsbDeviceFS
+USBD_CDC_SetTxBuffer
+USBD_CDC_TransmitPacket

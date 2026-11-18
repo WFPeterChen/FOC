@@ -1,0 +1,2422 @@
+ARM GAS  /tmp/ccATWWaz.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"stm32g4xx_hal.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm3
+  20              		.section	.text.HAL_MspInit,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.weak	HAL_MspInit
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	HAL_MspInit:
+  29              	.LFB331:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   ******************************************************************************
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @file    stm32g4xx_hal.c
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @author  MCD Application Team
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief   HAL module driver.
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *          This is the common part of the HAL initialization
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   ******************************************************************************
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @attention
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * Copyright (c) 2019 STMicroelectronics.
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * All rights reserved.
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * in the root directory of this software component.
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   ******************************************************************************
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   @verbatim
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   ==============================================================================
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****                      ##### How to use this driver #####
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   ==============================================================================
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     [..]
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     The common HAL driver contains a set of generic and common APIs that can be
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     used by the PPP peripheral drivers and the user to start using the HAL.
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     [..]
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     The HAL contains two APIs' categories:
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****          (+) Common HAL APIs
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****          (+) Services HAL APIs
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ARM GAS  /tmp/ccATWWaz.s 			page 2
+
+
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   @endverbatim
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   ******************************************************************************
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /* Includes ------------------------------------------------------------------*/
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #include "stm32g4xx_hal.h"
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /** @addtogroup STM32G4xx_HAL_Driver
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @{
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /** @defgroup HAL HAL
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief HAL module driver
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @{
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #ifdef HAL_MODULE_ENABLED
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /* Private typedef -----------------------------------------------------------*/
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /* Private define ------------------------------------------------------------*/
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief STM32G4xx HAL Driver version number V1.2.3
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #define __STM32G4xx_HAL_VERSION_MAIN   (0x01U) /*!< [31:24] main version */
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #define __STM32G4xx_HAL_VERSION_SUB1   (0x02U) /*!< [23:16] sub1 version */
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #define __STM32G4xx_HAL_VERSION_SUB2   (0x03U) /*!< [15:8]  sub2 version */
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #define __STM32G4xx_HAL_VERSION_RC     (0x00U) /*!< [7:0]  release candidate */
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #define __STM32G4xx_HAL_VERSION         ((__STM32G4xx_HAL_VERSION_MAIN << 24U)\
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****                                          |(__STM32G4xx_HAL_VERSION_SUB1 << 16U)\
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****                                          |(__STM32G4xx_HAL_VERSION_SUB2 << 8U )\
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****                                          |(__STM32G4xx_HAL_VERSION_RC))
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #if defined(VREFBUF)
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #define VREFBUF_TIMEOUT_VALUE     10U   /* 10 ms */
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #endif /* VREFBUF */
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /* ------------ SYSCFG registers bit address in the alias region ------------ */
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #define SYSCFG_OFFSET             (SYSCFG_BASE - PERIPH_BASE)
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /* ---  MEMRMP Register ---*/
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /* Alias word address of FB_MODE bit */
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #define MEMRMP_OFFSET           SYSCFG_OFFSET
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #define FB_MODE_BitNumber       ((uint8_t)0x8)
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #define FB_MODE_BB              (PERIPH_BB_BASE + (MEMRMP_OFFSET * 32) + (FB_MODE_BitNumber * 4))
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /* --- GPC Register ---*/
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /* Alias word address of CCMER bit */
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #define SCSR_OFFSET             (SYSCFG_OFFSET + 0x18)
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #define CCMER_BitNumber         ((uint8_t)0x0)
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #define SCSR_CCMER_BB           (PERIPH_BB_BASE + (SCSR_OFFSET * 32) + (CCMER_BitNumber * 4))
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /* Private macro -------------------------------------------------------------*/
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /* Exported variables ---------------------------------------------------------*/
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /** @defgroup HAL_Exported_Variables HAL Exported Variables
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @{
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** __IO uint32_t uwTick;
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** uint32_t uwTickPrio = (1UL << __NVIC_PRIO_BITS); /* Invalid PRIO */
+ARM GAS  /tmp/ccATWWaz.s 			page 3
+
+
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** uint32_t uwTickFreq = HAL_TICK_FREQ_DEFAULT;  /* 1KHz */
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @}
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /* Private function prototypes -----------------------------------------------*/
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /* Exported functions --------------------------------------------------------*/
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /** @defgroup HAL_Exported_Functions HAL Exported Functions
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @{
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /** @defgroup HAL_Exported_Functions_Group1 Initialization and de-initialization Functions
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *  @brief    HAL Initialization and de-initialization functions
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** @verbatim
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****  ===============================================================================
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****               ##### Initialization and Configuration functions #####
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****  ===============================================================================
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     [..]  This section provides functions allowing to:
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       (+) Initialize the Flash interface the NVIC allocation and initial time base
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****           clock configuration.
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       (+) De-Initialize common part of the HAL.
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       (+) Configure the time base source to have 1ms time base with a dedicated
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****           Tick interrupt priority.
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****         (++) SysTick timer is used by default as source of time base, but user
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****              can eventually implement his proper time base source (a general purpose
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****              timer for example or other time source), keeping in mind that Time base
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****              duration should be kept 1ms since PPP_TIMEOUT_VALUEs are defined and
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****              handled in milliseconds basis.
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****         (++) Time base configuration function (HAL_InitTick ()) is called automatically
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****              at the beginning of the program after reset by HAL_Init() or at any time
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****              when clock is configured, by HAL_RCC_ClockConfig().
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****         (++) Source of time base is configured  to generate interrupts at regular
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****              time intervals. Care must be taken if HAL_Delay() is called from a
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****              peripheral ISR process, the Tick interrupt line must have higher priority
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****             (numerically lower) than the peripheral interrupt. Otherwise the caller
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****             ISR process will be blocked.
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****        (++) functions affecting time base configurations are declared as __weak
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****              to make  override possible  in case of other  implementations in user file.
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** @endverbatim
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @{
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  This function is used to configure the Flash prefetch, the Instruction and Data caches,
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *         the time base source, NVIC and any required global low level hardware
+ 134:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *         by calling the HAL_MspInit() callback function to be optionally defined in user file
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *         stm32g4xx_hal_msp.c.
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @note   HAL_Init() function is called at the beginning of program after reset and before
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *         the clock configuration.
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @note   In the default implementation the System Timer (Systick) is used as source of time base
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *         The Systick configuration is based on HSI clock, as HSI is the clock
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *         used after a system Reset and the NVIC configuration is set to Priority group 4.
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *         Once done, time base tick starts incrementing: the tick variable counter is incremented
+ARM GAS  /tmp/ccATWWaz.s 			page 4
+
+
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *         each 1ms in the SysTick_Handler() interrupt handler.
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval HAL status
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** HAL_StatusTypeDef HAL_Init(void)
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   HAL_StatusTypeDef  status = HAL_OK;
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* Configure Flash prefetch, Instruction cache, Data cache */
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* Default configuration at reset is:                      */
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* - Prefetch disabled                                     */
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* - Instruction cache enabled                             */
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* - Data cache enabled                                    */
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #if (INSTRUCTION_CACHE_ENABLE == 0U)
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   __HAL_FLASH_INSTRUCTION_CACHE_DISABLE();
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #endif /* INSTRUCTION_CACHE_ENABLE */
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #if (DATA_CACHE_ENABLE == 0U)
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   __HAL_FLASH_DATA_CACHE_DISABLE();
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #endif /* DATA_CACHE_ENABLE */
+ 163:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #if (PREFETCH_ENABLE != 0U)
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   __HAL_FLASH_PREFETCH_BUFFER_ENABLE();
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #endif /* PREFETCH_ENABLE */
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* Set Interrupt Group Priority */
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* Use SysTick as time base source and configure 1ms tick (default clock after Reset is HSI) */
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   if (HAL_InitTick(TICK_INT_PRIORITY) != HAL_OK)
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   {
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     status = HAL_ERROR;
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   }
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   else
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   {
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     /* Init the low level hardware */
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     HAL_MspInit();
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   }
+ 181:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 182:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* Return function status */
+ 183:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   return status;
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 186:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 187:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 188:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  This function de-initializes common part of the HAL and stops the source of time base.
+ 189:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @note   This function is optional.
+ 190:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval HAL status
+ 191:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 192:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** HAL_StatusTypeDef HAL_DeInit(void)
+ 193:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* Reset of all peripherals */
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   __HAL_RCC_APB1_FORCE_RESET();
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   __HAL_RCC_APB1_RELEASE_RESET();
+ 197:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   __HAL_RCC_APB2_FORCE_RESET();
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   __HAL_RCC_APB2_RELEASE_RESET();
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ARM GAS  /tmp/ccATWWaz.s 			page 5
+
+
+ 201:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   __HAL_RCC_AHB1_FORCE_RESET();
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   __HAL_RCC_AHB1_RELEASE_RESET();
+ 203:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   __HAL_RCC_AHB2_FORCE_RESET();
+ 205:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   __HAL_RCC_AHB2_RELEASE_RESET();
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 207:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   __HAL_RCC_AHB3_FORCE_RESET();
+ 208:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   __HAL_RCC_AHB3_RELEASE_RESET();
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 210:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* De-Init the low level hardware */
+ 211:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   HAL_MspDeInit();
+ 212:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 213:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* Return function status */
+ 214:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   return HAL_OK;
+ 215:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 216:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 218:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Initialize the MSP.
+ 219:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 220:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 221:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** __weak void HAL_MspInit(void)
+ 222:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+  30              		.loc 1 222 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+ 223:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* NOTE : This function should not be modified, when the callback is needed,
+ 224:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****             the HAL_MspInit could be implemented in the user file
+ 225:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****    */
+ 226:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+  35              		.loc 1 226 1 view .LVU1
+  36 0000 7047     		bx	lr
+  37              		.cfi_endproc
+  38              	.LFE331:
+  40 0002 00BF     		.section	.text.HAL_MspDeInit,"ax",%progbits
+  41              		.align	1
+  42              		.p2align 2,,3
+  43              		.weak	HAL_MspDeInit
+  44              		.syntax unified
+  45              		.thumb
+  46              		.thumb_func
+  48              	HAL_MspDeInit:
+  49              	.LFB369:
+  50              		.cfi_startproc
+ 227:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 228:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 229:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  DeInitializes the MSP.
+ 230:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 231:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 232:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** __weak void HAL_MspDeInit(void)
+  51              		.loc 1 232 13 view -0
+  52              		@ args = 0, pretend = 0, frame = 0
+  53              		@ frame_needed = 0, uses_anonymous_args = 0
+  54              		@ link register save eliminated.
+  55 0000 7047     		bx	lr
+  56              		.cfi_endproc
+ARM GAS  /tmp/ccATWWaz.s 			page 6
+
+
+  57              	.LFE369:
+  59 0002 00BF     		.section	.text.HAL_DeInit,"ax",%progbits
+  60              		.align	1
+  61              		.p2align 2,,3
+  62              		.global	HAL_DeInit
+  63              		.syntax unified
+  64              		.thumb
+  65              		.thumb_func
+  67              	HAL_DeInit:
+  68              	.LFB330:
+ 193:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* Reset of all peripherals */
+  69              		.loc 1 193 1 view -0
+  70              		.cfi_startproc
+  71              		@ args = 0, pretend = 0, frame = 0
+  72              		@ frame_needed = 0, uses_anonymous_args = 0
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   __HAL_RCC_APB1_RELEASE_RESET();
+  73              		.loc 1 195 3 view .LVU4
+ 193:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* Reset of all peripherals */
+  74              		.loc 1 193 1 is_stmt 0 view .LVU5
+  75 0000 10B5     		push	{r4, lr}
+  76              	.LCFI0:
+  77              		.cfi_def_cfa_offset 8
+  78              		.cfi_offset 4, -8
+  79              		.cfi_offset 14, -4
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   __HAL_RCC_APB1_RELEASE_RESET();
+  80              		.loc 1 195 3 view .LVU6
+  81 0002 094B     		ldr	r3, .L6
+  82 0004 4FF0FF32 		mov	r2, #-1
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+  83              		.loc 1 196 3 view .LVU7
+  84 0008 0024     		movs	r4, #0
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   __HAL_RCC_APB1_RELEASE_RESET();
+  85              		.loc 1 195 3 view .LVU8
+  86 000a 9A63     		str	r2, [r3, #56]
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+  87              		.loc 1 196 3 is_stmt 1 view .LVU9
+  88 000c 9C63     		str	r4, [r3, #56]
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   __HAL_RCC_APB2_RELEASE_RESET();
+  89              		.loc 1 198 3 view .LVU10
+  90 000e 1A64     		str	r2, [r3, #64]
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+  91              		.loc 1 199 3 view .LVU11
+  92 0010 1C64     		str	r4, [r3, #64]
+ 201:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   __HAL_RCC_AHB1_RELEASE_RESET();
+  93              		.loc 1 201 3 view .LVU12
+  94 0012 9A62     		str	r2, [r3, #40]
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+  95              		.loc 1 202 3 view .LVU13
+  96 0014 9C62     		str	r4, [r3, #40]
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   __HAL_RCC_AHB2_RELEASE_RESET();
+  97              		.loc 1 204 3 view .LVU14
+  98 0016 DA62     		str	r2, [r3, #44]
+ 205:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+  99              		.loc 1 205 3 view .LVU15
+ 100 0018 DC62     		str	r4, [r3, #44]
+ 207:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   __HAL_RCC_AHB3_RELEASE_RESET();
+ 101              		.loc 1 207 3 view .LVU16
+ARM GAS  /tmp/ccATWWaz.s 			page 7
+
+
+ 102 001a 1A63     		str	r2, [r3, #48]
+ 208:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 103              		.loc 1 208 3 view .LVU17
+ 104 001c 1C63     		str	r4, [r3, #48]
+ 211:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 105              		.loc 1 211 3 view .LVU18
+ 106 001e FFF7FEFF 		bl	HAL_MspDeInit
+ 107              	.LVL0:
+ 214:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 108              		.loc 1 214 3 view .LVU19
+ 215:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 109              		.loc 1 215 1 is_stmt 0 view .LVU20
+ 110 0022 2046     		mov	r0, r4
+ 111 0024 10BD     		pop	{r4, pc}
+ 112              	.L7:
+ 113 0026 00BF     		.align	2
+ 114              	.L6:
+ 115 0028 00100240 		.word	1073876992
+ 116              		.cfi_endproc
+ 117              	.LFE330:
+ 119              		.section	.text.HAL_InitTick,"ax",%progbits
+ 120              		.align	1
+ 121              		.p2align 2,,3
+ 122              		.weak	HAL_InitTick
+ 123              		.syntax unified
+ 124              		.thumb
+ 125              		.thumb_func
+ 127              	HAL_InitTick:
+ 128              	.LVL1:
+ 129              	.LFB333:
+ 233:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 234:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* NOTE : This function should not be modified, when the callback is needed,
+ 235:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****             the HAL_MspDeInit could be implemented in the user file
+ 236:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****    */
+ 237:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 238:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 239:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 240:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief This function configures the source of the time base:
+ 241:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *        The time source is configured to have 1ms time base with a dedicated
+ 242:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *        Tick interrupt priority.
+ 243:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @note This function is called  automatically at the beginning of program after
+ 244:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *       reset by HAL_Init() or at any time when clock is reconfigured  by HAL_RCC_ClockConfig().
+ 245:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @note In the default implementation, SysTick timer is the source of time base.
+ 246:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *       It is used to generate interrupts at regular time intervals.
+ 247:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *       Care must be taken if HAL_Delay() is called from a peripheral ISR process,
+ 248:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *       The SysTick interrupt must have higher priority (numerically lower)
+ 249:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *       than the peripheral interrupt. Otherwise the caller ISR process will be blocked.
+ 250:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *       The function is declared as __weak  to be overwritten  in case of other
+ 251:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *       implementation  in user file.
+ 252:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @param TickPriority: Tick interrupt priority.
+ 253:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval HAL status
+ 254:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 255:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** __weak HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
+ 256:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 130              		.loc 1 256 1 is_stmt 1 view -0
+ 131              		.cfi_startproc
+ 132              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /tmp/ccATWWaz.s 			page 8
+
+
+ 133              		@ frame_needed = 0, uses_anonymous_args = 0
+ 257:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   HAL_StatusTypeDef  status = HAL_OK;
+ 134              		.loc 1 257 3 view .LVU22
+ 258:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 259:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   if (uwTickFreq != 0U)
+ 135              		.loc 1 259 3 view .LVU23
+ 256:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   HAL_StatusTypeDef  status = HAL_OK;
+ 136              		.loc 1 256 1 is_stmt 0 view .LVU24
+ 137 0000 38B5     		push	{r3, r4, r5, lr}
+ 138              	.LCFI1:
+ 139              		.cfi_def_cfa_offset 16
+ 140              		.cfi_offset 3, -16
+ 141              		.cfi_offset 4, -12
+ 142              		.cfi_offset 5, -8
+ 143              		.cfi_offset 14, -4
+ 144              		.loc 1 259 18 view .LVU25
+ 145 0002 0F4B     		ldr	r3, .L13
+ 146 0004 1B68     		ldr	r3, [r3]
+ 147              		.loc 1 259 6 view .LVU26
+ 148 0006 0BB9     		cbnz	r3, .L9
+ 149              	.LVL2:
+ 150              	.L11:
+ 260:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   {
+ 261:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     /* Configure the SysTick to have interrupt in 1ms time basis*/
+ 262:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     if (HAL_SYSTICK_Config(SystemCoreClock / (1000U / uwTickFreq)) == 0U)
+ 263:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     {
+ 264:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       /* Configure the SysTick IRQ priority */
+ 265:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       if (TickPriority < (1UL << __NVIC_PRIO_BITS))
+ 266:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       {
+ 267:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****         HAL_NVIC_SetPriority(SysTick_IRQn, TickPriority, 0U);
+ 268:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****         uwTickPrio = TickPriority;
+ 269:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       }
+ 270:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       else
+ 271:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       {
+ 272:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****         status = HAL_ERROR;
+ 273:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       }
+ 274:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     }
+ 275:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     else
+ 276:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     {
+ 277:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       status = HAL_ERROR;
+ 151              		.loc 1 277 14 view .LVU27
+ 152 0008 0120     		movs	r0, #1
+ 153              	.LVL3:
+ 278:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     }
+ 279:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   }
+ 280:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   else
+ 281:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   {
+ 282:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     status = HAL_ERROR;
+ 283:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   }
+ 284:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 285:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* Return function status */
+ 286:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   return status;
+ 154              		.loc 1 286 3 is_stmt 1 view .LVU28
+ 287:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 155              		.loc 1 287 1 is_stmt 0 view .LVU29
+ 156 000a 38BD     		pop	{r3, r4, r5, pc}
+ 157              	.LVL4:
+ARM GAS  /tmp/ccATWWaz.s 			page 9
+
+
+ 158              	.L9:
+ 262:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     {
+ 159              		.loc 1 262 5 is_stmt 1 view .LVU30
+ 262:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     {
+ 160              		.loc 1 262 9 is_stmt 0 view .LVU31
+ 161 000c 0D49     		ldr	r1, .L13+4
+ 262:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     {
+ 162              		.loc 1 262 53 view .LVU32
+ 163 000e 4FF47A72 		mov	r2, #1000
+ 164 0012 0546     		mov	r5, r0
+ 165 0014 B2FBF3F3 		udiv	r3, r2, r3
+ 262:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     {
+ 166              		.loc 1 262 9 view .LVU33
+ 167 0018 0868     		ldr	r0, [r1]
+ 168              	.LVL5:
+ 262:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     {
+ 169              		.loc 1 262 9 view .LVU34
+ 170 001a B0FBF3F0 		udiv	r0, r0, r3
+ 171 001e FFF7FEFF 		bl	HAL_SYSTICK_Config
+ 172              	.LVL6:
+ 262:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     {
+ 173              		.loc 1 262 8 discriminator 1 view .LVU35
+ 174 0022 0446     		mov	r4, r0
+ 175 0024 0028     		cmp	r0, #0
+ 176 0026 EFD1     		bne	.L11
+ 265:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       {
+ 177              		.loc 1 265 7 is_stmt 1 view .LVU36
+ 265:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       {
+ 178              		.loc 1 265 10 is_stmt 0 view .LVU37
+ 179 0028 0F2D     		cmp	r5, #15
+ 180 002a EDD8     		bhi	.L11
+ 181              	.LVL7:
+ 182              	.LBB4:
+ 183              	.LBI4:
+ 255:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 184              		.loc 1 255 26 is_stmt 1 view .LVU38
+ 185              	.LBB5:
+ 267:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****         uwTickPrio = TickPriority;
+ 186              		.loc 1 267 9 view .LVU39
+ 187 002c 0246     		mov	r2, r0
+ 188 002e 2946     		mov	r1, r5
+ 189 0030 4FF0FF30 		mov	r0, #-1
+ 190 0034 FFF7FEFF 		bl	HAL_NVIC_SetPriority
+ 191              	.LVL8:
+ 268:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       }
+ 192              		.loc 1 268 9 view .LVU40
+ 268:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       }
+ 193              		.loc 1 268 20 is_stmt 0 view .LVU41
+ 194 0038 034B     		ldr	r3, .L13+8
+ 195 003a 2046     		mov	r0, r4
+ 196 003c 1D60     		str	r5, [r3]
+ 197              	.LVL9:
+ 286:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 198              		.loc 1 286 3 is_stmt 1 view .LVU42
+ 286:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 199              		.loc 1 286 3 is_stmt 0 view .LVU43
+ 200              	.LBE5:
+ARM GAS  /tmp/ccATWWaz.s 			page 10
+
+
+ 201              	.LBE4:
+ 286:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 202              		.loc 1 286 3 is_stmt 1 view .LVU44
+ 203              		.loc 1 287 1 is_stmt 0 view .LVU45
+ 204 003e 38BD     		pop	{r3, r4, r5, pc}
+ 205              	.LVL10:
+ 206              	.L14:
+ 207              		.loc 1 287 1 view .LVU46
+ 208              		.align	2
+ 209              	.L13:
+ 210 0040 00000000 		.word	uwTickFreq
+ 211 0044 00000000 		.word	SystemCoreClock
+ 212 0048 00000000 		.word	uwTickPrio
+ 213              		.cfi_endproc
+ 214              	.LFE333:
+ 216              		.section	.text.HAL_Init,"ax",%progbits
+ 217              		.align	1
+ 218              		.p2align 2,,3
+ 219              		.global	HAL_Init
+ 220              		.syntax unified
+ 221              		.thumb
+ 222              		.thumb_func
+ 224              	HAL_Init:
+ 225              	.LFB329:
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   HAL_StatusTypeDef  status = HAL_OK;
+ 226              		.loc 1 149 1 is_stmt 1 view -0
+ 227              		.cfi_startproc
+ 228              		@ args = 0, pretend = 0, frame = 0
+ 229              		@ frame_needed = 0, uses_anonymous_args = 0
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* Configure Flash prefetch, Instruction cache, Data cache */
+ 230              		.loc 1 150 3 view .LVU48
+ 231              	.LVL11:
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 232              		.loc 1 169 3 view .LVU49
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   HAL_StatusTypeDef  status = HAL_OK;
+ 233              		.loc 1 149 1 is_stmt 0 view .LVU50
+ 234 0000 10B5     		push	{r4, lr}
+ 235              	.LCFI2:
+ 236              		.cfi_def_cfa_offset 8
+ 237              		.cfi_offset 4, -8
+ 238              		.cfi_offset 14, -4
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 239              		.loc 1 169 3 view .LVU51
+ 240 0002 0320     		movs	r0, #3
+ 241 0004 FFF7FEFF 		bl	HAL_NVIC_SetPriorityGrouping
+ 242              	.LVL12:
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   {
+ 243              		.loc 1 172 3 is_stmt 1 view .LVU52
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   {
+ 244              		.loc 1 172 7 is_stmt 0 view .LVU53
+ 245 0008 0420     		movs	r0, #4
+ 246 000a FFF7FEFF 		bl	HAL_InitTick
+ 247              	.LVL13:
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   {
+ 248              		.loc 1 172 6 discriminator 1 view .LVU54
+ 249 000e 10B1     		cbz	r0, .L19
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   }
+ARM GAS  /tmp/ccATWWaz.s 			page 11
+
+
+ 250              		.loc 1 174 12 view .LVU55
+ 251 0010 0124     		movs	r4, #1
+ 252              	.LVL14:
+ 183:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 253              		.loc 1 183 3 is_stmt 1 view .LVU56
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 254              		.loc 1 185 1 is_stmt 0 view .LVU57
+ 255 0012 2046     		mov	r0, r4
+ 256 0014 10BD     		pop	{r4, pc}
+ 257              	.LVL15:
+ 258              	.L19:
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 259              		.loc 1 185 1 view .LVU58
+ 260 0016 0446     		mov	r4, r0
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   }
+ 261              		.loc 1 179 5 is_stmt 1 view .LVU59
+ 262 0018 FFF7FEFF 		bl	HAL_MspInit
+ 263              	.LVL16:
+ 183:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 264              		.loc 1 183 3 view .LVU60
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 265              		.loc 1 185 1 is_stmt 0 view .LVU61
+ 266 001c 2046     		mov	r0, r4
+ 267 001e 10BD     		pop	{r4, pc}
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 268              		.loc 1 185 1 view .LVU62
+ 269              		.cfi_endproc
+ 270              	.LFE329:
+ 272              		.section	.text.HAL_IncTick,"ax",%progbits
+ 273              		.align	1
+ 274              		.p2align 2,,3
+ 275              		.weak	HAL_IncTick
+ 276              		.syntax unified
+ 277              		.thumb
+ 278              		.thumb_func
+ 280              	HAL_IncTick:
+ 281              	.LFB334:
+ 288:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 289:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 290:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @}
+ 291:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 292:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 293:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /** @defgroup HAL_Exported_Functions_Group2 HAL Control functions
+ 294:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *  @brief    HAL Control functions
+ 295:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *
+ 296:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** @verbatim
+ 297:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****  ===============================================================================
+ 298:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****                       ##### HAL Control functions #####
+ 299:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****  ===============================================================================
+ 300:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     [..]  This section provides functions allowing to:
+ 301:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       (+) Provide a tick value in millisecond
+ 302:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       (+) Provide a blocking delay in millisecond
+ 303:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       (+) Suspend the time base source interrupt
+ 304:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       (+) Resume the time base source interrupt
+ 305:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       (+) Get the HAL API driver version
+ 306:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       (+) Get the device identifier
+ 307:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       (+) Get the device revision identifier
+ARM GAS  /tmp/ccATWWaz.s 			page 12
+
+
+ 308:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 309:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** @endverbatim
+ 310:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @{
+ 311:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 312:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 313:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 314:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief This function is called to increment a global variable "uwTick"
+ 315:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *        used as application time base.
+ 316:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @note In the default implementation, this variable is incremented each 1ms
+ 317:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *       in SysTick ISR.
+ 318:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @note This function is declared as __weak to be overwritten in case of other
+ 319:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *      implementations in user file.
+ 320:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 321:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 322:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** __weak void HAL_IncTick(void)
+ 323:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 282              		.loc 1 323 1 is_stmt 1 view -0
+ 283              		.cfi_startproc
+ 284              		@ args = 0, pretend = 0, frame = 0
+ 285              		@ frame_needed = 0, uses_anonymous_args = 0
+ 286              		@ link register save eliminated.
+ 324:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   uwTick += uwTickFreq;
+ 287              		.loc 1 324 3 view .LVU64
+ 288              		.loc 1 324 10 is_stmt 0 view .LVU65
+ 289 0000 034A     		ldr	r2, .L21
+ 290 0002 0449     		ldr	r1, .L21+4
+ 291 0004 1368     		ldr	r3, [r2]
+ 292 0006 0968     		ldr	r1, [r1]
+ 293 0008 0B44     		add	r3, r3, r1
+ 294 000a 1360     		str	r3, [r2]
+ 325:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 295              		.loc 1 325 1 view .LVU66
+ 296 000c 7047     		bx	lr
+ 297              	.L22:
+ 298 000e 00BF     		.align	2
+ 299              	.L21:
+ 300 0010 00000000 		.word	uwTick
+ 301 0014 00000000 		.word	uwTickFreq
+ 302              		.cfi_endproc
+ 303              	.LFE334:
+ 305              		.section	.text.HAL_GetTick,"ax",%progbits
+ 306              		.align	1
+ 307              		.p2align 2,,3
+ 308              		.weak	HAL_GetTick
+ 309              		.syntax unified
+ 310              		.thumb
+ 311              		.thumb_func
+ 313              	HAL_GetTick:
+ 314              	.LFB335:
+ 326:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 327:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 328:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief Provides a tick value in millisecond.
+ 329:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @note This function is declared as __weak to be overwritten in case of other
+ 330:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *       implementations in user file.
+ 331:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval tick value
+ 332:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 333:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** __weak uint32_t HAL_GetTick(void)
+ARM GAS  /tmp/ccATWWaz.s 			page 13
+
+
+ 334:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 315              		.loc 1 334 1 is_stmt 1 view -0
+ 316              		.cfi_startproc
+ 317              		@ args = 0, pretend = 0, frame = 0
+ 318              		@ frame_needed = 0, uses_anonymous_args = 0
+ 319              		@ link register save eliminated.
+ 335:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   return uwTick;
+ 320              		.loc 1 335 3 view .LVU68
+ 321              		.loc 1 335 10 is_stmt 0 view .LVU69
+ 322 0000 014B     		ldr	r3, .L24
+ 323 0002 1868     		ldr	r0, [r3]
+ 336:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 324              		.loc 1 336 1 view .LVU70
+ 325 0004 7047     		bx	lr
+ 326              	.L25:
+ 327 0006 00BF     		.align	2
+ 328              	.L24:
+ 329 0008 00000000 		.word	uwTick
+ 330              		.cfi_endproc
+ 331              	.LFE335:
+ 333              		.section	.text.HAL_GetTickPrio,"ax",%progbits
+ 334              		.align	1
+ 335              		.p2align 2,,3
+ 336              		.global	HAL_GetTickPrio
+ 337              		.syntax unified
+ 338              		.thumb
+ 339              		.thumb_func
+ 341              	HAL_GetTickPrio:
+ 342              	.LFB336:
+ 337:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 338:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 339:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief This function returns a tick priority.
+ 340:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval tick priority
+ 341:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 342:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** uint32_t HAL_GetTickPrio(void)
+ 343:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 343              		.loc 1 343 1 is_stmt 1 view -0
+ 344              		.cfi_startproc
+ 345              		@ args = 0, pretend = 0, frame = 0
+ 346              		@ frame_needed = 0, uses_anonymous_args = 0
+ 347              		@ link register save eliminated.
+ 344:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   return uwTickPrio;
+ 348              		.loc 1 344 3 view .LVU72
+ 349              		.loc 1 344 10 is_stmt 0 view .LVU73
+ 350 0000 014B     		ldr	r3, .L27
+ 345:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 351              		.loc 1 345 1 view .LVU74
+ 352 0002 1868     		ldr	r0, [r3]
+ 353 0004 7047     		bx	lr
+ 354              	.L28:
+ 355 0006 00BF     		.align	2
+ 356              	.L27:
+ 357 0008 00000000 		.word	uwTickPrio
+ 358              		.cfi_endproc
+ 359              	.LFE336:
+ 361              		.section	.text.HAL_SetTickFreq,"ax",%progbits
+ 362              		.align	1
+ARM GAS  /tmp/ccATWWaz.s 			page 14
+
+
+ 363              		.p2align 2,,3
+ 364              		.global	HAL_SetTickFreq
+ 365              		.syntax unified
+ 366              		.thumb
+ 367              		.thumb_func
+ 369              	HAL_SetTickFreq:
+ 370              	.LVL17:
+ 371              	.LFB337:
+ 346:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 347:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 348:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief Set new tick Freq.
+ 349:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval status
+ 350:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 351:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** HAL_StatusTypeDef HAL_SetTickFreq(uint32_t Freq)
+ 352:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 372              		.loc 1 352 1 is_stmt 1 view -0
+ 373              		.cfi_startproc
+ 374              		@ args = 0, pretend = 0, frame = 0
+ 375              		@ frame_needed = 0, uses_anonymous_args = 0
+ 353:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   HAL_StatusTypeDef status  = HAL_OK;
+ 376              		.loc 1 353 3 view .LVU76
+ 354:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   uint32_t prevTickFreq;
+ 377              		.loc 1 354 3 view .LVU77
+ 355:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 356:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   assert_param(IS_TICKFREQ(Freq));
+ 378              		.loc 1 356 3 view .LVU78
+ 357:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 358:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   if (uwTickFreq != Freq)
+ 379              		.loc 1 358 3 view .LVU79
+ 352:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   HAL_StatusTypeDef status  = HAL_OK;
+ 380              		.loc 1 352 1 is_stmt 0 view .LVU80
+ 381 0000 38B5     		push	{r3, r4, r5, lr}
+ 382              	.LCFI3:
+ 383              		.cfi_def_cfa_offset 16
+ 384              		.cfi_offset 3, -16
+ 385              		.cfi_offset 4, -12
+ 386              		.cfi_offset 5, -8
+ 387              		.cfi_offset 14, -4
+ 388              		.loc 1 358 18 view .LVU81
+ 389 0002 074C     		ldr	r4, .L36
+ 390 0004 2568     		ldr	r5, [r4]
+ 391              		.loc 1 358 6 view .LVU82
+ 392 0006 8542     		cmp	r5, r0
+ 393 0008 01D1     		bne	.L35
+ 353:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   uint32_t prevTickFreq;
+ 394              		.loc 1 353 21 view .LVU83
+ 395 000a 0020     		movs	r0, #0
+ 396              	.LVL18:
+ 397              	.L30:
+ 359:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   {
+ 360:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     /* Back up uwTickFreq frequency */
+ 361:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     prevTickFreq = uwTickFreq;
+ 362:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 363:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     /* Update uwTickFreq global variable used by HAL_InitTick() */
+ 364:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     uwTickFreq = Freq;
+ 365:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 366:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     /* Apply the new tick Freq  */
+ARM GAS  /tmp/ccATWWaz.s 			page 15
+
+
+ 367:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     status = HAL_InitTick(uwTickPrio);
+ 368:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 369:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     if (status != HAL_OK)
+ 370:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     {
+ 371:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       /* Restore previous tick frequency */
+ 372:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       uwTickFreq = prevTickFreq;
+ 373:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     }
+ 374:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   }
+ 375:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 376:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   return status;
+ 398              		.loc 1 376 3 is_stmt 1 view .LVU84
+ 377:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 399              		.loc 1 377 1 is_stmt 0 view .LVU85
+ 400 000c 38BD     		pop	{r3, r4, r5, pc}
+ 401              	.LVL19:
+ 402              	.L35:
+ 361:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 403              		.loc 1 361 5 is_stmt 1 view .LVU86
+ 364:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 404              		.loc 1 364 5 view .LVU87
+ 367:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 405              		.loc 1 367 14 is_stmt 0 view .LVU88
+ 406 000e 054B     		ldr	r3, .L36+4
+ 364:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 407              		.loc 1 364 16 view .LVU89
+ 408 0010 2060     		str	r0, [r4]
+ 367:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 409              		.loc 1 367 5 is_stmt 1 view .LVU90
+ 367:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 410              		.loc 1 367 14 is_stmt 0 view .LVU91
+ 411 0012 1868     		ldr	r0, [r3]
+ 412              	.LVL20:
+ 367:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 413              		.loc 1 367 14 view .LVU92
+ 414 0014 FFF7FEFF 		bl	HAL_InitTick
+ 415              	.LVL21:
+ 369:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     {
+ 416              		.loc 1 369 5 is_stmt 1 view .LVU93
+ 369:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     {
+ 417              		.loc 1 369 8 is_stmt 0 view .LVU94
+ 418 0018 0028     		cmp	r0, #0
+ 419 001a F7D0     		beq	.L30
+ 372:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     }
+ 420              		.loc 1 372 7 is_stmt 1 view .LVU95
+ 372:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     }
+ 421              		.loc 1 372 18 is_stmt 0 view .LVU96
+ 422 001c 2560     		str	r5, [r4]
+ 376:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 423              		.loc 1 376 3 is_stmt 1 view .LVU97
+ 424              		.loc 1 377 1 is_stmt 0 view .LVU98
+ 425 001e 38BD     		pop	{r3, r4, r5, pc}
+ 426              	.LVL22:
+ 427              	.L37:
+ 428              		.loc 1 377 1 view .LVU99
+ 429              		.align	2
+ 430              	.L36:
+ 431 0020 00000000 		.word	uwTickFreq
+ARM GAS  /tmp/ccATWWaz.s 			page 16
+
+
+ 432 0024 00000000 		.word	uwTickPrio
+ 433              		.cfi_endproc
+ 434              	.LFE337:
+ 436              		.section	.text.HAL_GetTickFreq,"ax",%progbits
+ 437              		.align	1
+ 438              		.p2align 2,,3
+ 439              		.global	HAL_GetTickFreq
+ 440              		.syntax unified
+ 441              		.thumb
+ 442              		.thumb_func
+ 444              	HAL_GetTickFreq:
+ 445              	.LFB338:
+ 378:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 379:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 380:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief Returns tick frequency.
+ 381:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval Tick frequency.
+ 382:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *         Value of @ref HAL_TickFreqTypeDef.
+ 383:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 384:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** uint32_t HAL_GetTickFreq(void)
+ 385:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 446              		.loc 1 385 1 is_stmt 1 view -0
+ 447              		.cfi_startproc
+ 448              		@ args = 0, pretend = 0, frame = 0
+ 449              		@ frame_needed = 0, uses_anonymous_args = 0
+ 450              		@ link register save eliminated.
+ 386:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   return uwTickFreq;
+ 451              		.loc 1 386 3 view .LVU101
+ 452              		.loc 1 386 10 is_stmt 0 view .LVU102
+ 453 0000 014B     		ldr	r3, .L39
+ 387:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 454              		.loc 1 387 1 view .LVU103
+ 455 0002 1868     		ldr	r0, [r3]
+ 456 0004 7047     		bx	lr
+ 457              	.L40:
+ 458 0006 00BF     		.align	2
+ 459              	.L39:
+ 460 0008 00000000 		.word	uwTickFreq
+ 461              		.cfi_endproc
+ 462              	.LFE338:
+ 464              		.section	.text.HAL_Delay,"ax",%progbits
+ 465              		.align	1
+ 466              		.p2align 2,,3
+ 467              		.weak	HAL_Delay
+ 468              		.syntax unified
+ 469              		.thumb
+ 470              		.thumb_func
+ 472              	HAL_Delay:
+ 473              	.LVL23:
+ 474              	.LFB339:
+ 388:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 389:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 390:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief This function provides minimum delay (in milliseconds) based
+ 391:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *        on variable incremented.
+ 392:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @note In the default implementation , SysTick timer is the source of time base.
+ 393:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *       It is used to generate interrupts at regular time intervals where uwTick
+ 394:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *       is incremented.
+ 395:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @note This function is declared as __weak to be overwritten in case of other
+ARM GAS  /tmp/ccATWWaz.s 			page 17
+
+
+ 396:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *       implementations in user file.
+ 397:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @param Delay specifies the delay time length, in milliseconds.
+ 398:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 399:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 400:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** __weak void HAL_Delay(uint32_t Delay)
+ 401:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 475              		.loc 1 401 1 is_stmt 1 view -0
+ 476              		.cfi_startproc
+ 477              		@ args = 0, pretend = 0, frame = 0
+ 478              		@ frame_needed = 0, uses_anonymous_args = 0
+ 402:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   uint32_t tickstart = HAL_GetTick();
+ 479              		.loc 1 402 3 view .LVU105
+ 401:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   uint32_t tickstart = HAL_GetTick();
+ 480              		.loc 1 401 1 is_stmt 0 view .LVU106
+ 481 0000 38B5     		push	{r3, r4, r5, lr}
+ 482              	.LCFI4:
+ 483              		.cfi_def_cfa_offset 16
+ 484              		.cfi_offset 3, -16
+ 485              		.cfi_offset 4, -12
+ 486              		.cfi_offset 5, -8
+ 487              		.cfi_offset 14, -4
+ 401:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   uint32_t tickstart = HAL_GetTick();
+ 488              		.loc 1 401 1 view .LVU107
+ 489 0002 0446     		mov	r4, r0
+ 490              		.loc 1 402 24 view .LVU108
+ 491 0004 FFF7FEFF 		bl	HAL_GetTick
+ 492              	.LVL24:
+ 403:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   uint32_t wait = Delay;
+ 404:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 405:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* Add a freq to guarantee minimum wait */
+ 406:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   if (wait < HAL_MAX_DELAY)
+ 493              		.loc 1 406 6 view .LVU109
+ 494 0008 631C     		adds	r3, r4, #1
+ 402:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   uint32_t wait = Delay;
+ 495              		.loc 1 402 24 view .LVU110
+ 496 000a 0546     		mov	r5, r0
+ 497              	.LVL25:
+ 403:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   uint32_t wait = Delay;
+ 498              		.loc 1 403 3 is_stmt 1 view .LVU111
+ 499              		.loc 1 406 3 view .LVU112
+ 500              		.loc 1 406 6 is_stmt 0 view .LVU113
+ 501 000c 02D0     		beq	.L43
+ 407:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   {
+ 408:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     wait += (uint32_t)(uwTickFreq);
+ 502              		.loc 1 408 5 is_stmt 1 view .LVU114
+ 503              		.loc 1 408 13 is_stmt 0 view .LVU115
+ 504 000e 044B     		ldr	r3, .L49
+ 505              		.loc 1 408 10 view .LVU116
+ 506 0010 1B68     		ldr	r3, [r3]
+ 507 0012 1C44     		add	r4, r4, r3
+ 508              	.LVL26:
+ 509              	.L43:
+ 409:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   }
+ 410:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 411:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   while ((HAL_GetTick() - tickstart) < wait)
+ 412:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   {
+ 413:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   }
+ARM GAS  /tmp/ccATWWaz.s 			page 18
+
+
+ 510              		.loc 1 413 3 is_stmt 1 view .LVU117
+ 411:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   {
+ 511              		.loc 1 411 38 discriminator 1 view .LVU118
+ 411:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   {
+ 512              		.loc 1 411 11 is_stmt 0 discriminator 1 view .LVU119
+ 513 0014 FFF7FEFF 		bl	HAL_GetTick
+ 514              	.LVL27:
+ 411:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   {
+ 515              		.loc 1 411 25 discriminator 1 view .LVU120
+ 516 0018 401B     		subs	r0, r0, r5
+ 411:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   {
+ 517              		.loc 1 411 38 discriminator 1 view .LVU121
+ 518 001a A042     		cmp	r0, r4
+ 519 001c FAD3     		bcc	.L43
+ 414:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 520              		.loc 1 414 1 view .LVU122
+ 521 001e 38BD     		pop	{r3, r4, r5, pc}
+ 522              	.LVL28:
+ 523              	.L50:
+ 524              		.loc 1 414 1 view .LVU123
+ 525              		.align	2
+ 526              	.L49:
+ 527 0020 00000000 		.word	uwTickFreq
+ 528              		.cfi_endproc
+ 529              	.LFE339:
+ 531              		.section	.text.HAL_SuspendTick,"ax",%progbits
+ 532              		.align	1
+ 533              		.p2align 2,,3
+ 534              		.weak	HAL_SuspendTick
+ 535              		.syntax unified
+ 536              		.thumb
+ 537              		.thumb_func
+ 539              	HAL_SuspendTick:
+ 540              	.LFB340:
+ 415:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 416:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 417:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief Suspends Tick increment.
+ 418:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @note In the default implementation , SysTick timer is the source of time base. It is
+ 419:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *       used to generate interrupts at regular time intervals. Once HAL_SuspendTick()
+ 420:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *       is called, the SysTick interrupt will be disabled and so Tick increment
+ 421:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *       is suspended.
+ 422:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @note This function is declared as __weak to be overwritten in case of other
+ 423:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *       implementations in user file.
+ 424:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 425:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 426:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** __weak void HAL_SuspendTick(void)
+ 427:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 541              		.loc 1 427 1 is_stmt 1 view -0
+ 542              		.cfi_startproc
+ 543              		@ args = 0, pretend = 0, frame = 0
+ 544              		@ frame_needed = 0, uses_anonymous_args = 0
+ 545              		@ link register save eliminated.
+ 428:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* Disable SysTick Interrupt */
+ 429:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   CLEAR_BIT(SysTick->CTRL, SysTick_CTRL_TICKINT_Msk);
+ 546              		.loc 1 429 3 view .LVU125
+ 547 0000 4FF0E022 		mov	r2, #-536813568
+ 548 0004 1369     		ldr	r3, [r2, #16]
+ARM GAS  /tmp/ccATWWaz.s 			page 19
+
+
+ 549 0006 23F00203 		bic	r3, r3, #2
+ 550 000a 1361     		str	r3, [r2, #16]
+ 430:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 551              		.loc 1 430 1 is_stmt 0 view .LVU126
+ 552 000c 7047     		bx	lr
+ 553              		.cfi_endproc
+ 554              	.LFE340:
+ 556              		.section	.text.HAL_ResumeTick,"ax",%progbits
+ 557              		.align	1
+ 558              		.p2align 2,,3
+ 559              		.weak	HAL_ResumeTick
+ 560              		.syntax unified
+ 561              		.thumb
+ 562              		.thumb_func
+ 564              	HAL_ResumeTick:
+ 565              	.LFB341:
+ 431:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 432:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 433:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief Resume Tick increment.
+ 434:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @note In the default implementation , SysTick timer is the source of time base. It is
+ 435:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *       used to generate interrupts at regular time intervals. Once HAL_ResumeTick()
+ 436:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *       is called, the SysTick interrupt will be enabled and so Tick increment
+ 437:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *       is resumed.
+ 438:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @note This function is declared as __weak to be overwritten in case of other
+ 439:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *       implementations in user file.
+ 440:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 441:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 442:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** __weak void HAL_ResumeTick(void)
+ 443:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 566              		.loc 1 443 1 is_stmt 1 view -0
+ 567              		.cfi_startproc
+ 568              		@ args = 0, pretend = 0, frame = 0
+ 569              		@ frame_needed = 0, uses_anonymous_args = 0
+ 570              		@ link register save eliminated.
+ 444:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* Enable SysTick Interrupt */
+ 445:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   SET_BIT(SysTick->CTRL, SysTick_CTRL_TICKINT_Msk);
+ 571              		.loc 1 445 3 view .LVU128
+ 572 0000 4FF0E022 		mov	r2, #-536813568
+ 573 0004 1369     		ldr	r3, [r2, #16]
+ 574 0006 43F00203 		orr	r3, r3, #2
+ 575 000a 1361     		str	r3, [r2, #16]
+ 446:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 576              		.loc 1 446 1 is_stmt 0 view .LVU129
+ 577 000c 7047     		bx	lr
+ 578              		.cfi_endproc
+ 579              	.LFE341:
+ 581              		.section	.text.HAL_GetHalVersion,"ax",%progbits
+ 582              		.align	1
+ 583              		.p2align 2,,3
+ 584              		.global	HAL_GetHalVersion
+ 585              		.syntax unified
+ 586              		.thumb
+ 587              		.thumb_func
+ 589              	HAL_GetHalVersion:
+ 590              	.LFB342:
+ 447:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 448:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ARM GAS  /tmp/ccATWWaz.s 			page 20
+
+
+ 449:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Returns the HAL revision.
+ 450:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval version : 0xXYZR (8bits for each decimal, R for RC)
+ 451:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 452:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** uint32_t HAL_GetHalVersion(void)
+ 453:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 591              		.loc 1 453 1 is_stmt 1 view -0
+ 592              		.cfi_startproc
+ 593              		@ args = 0, pretend = 0, frame = 0
+ 594              		@ frame_needed = 0, uses_anonymous_args = 0
+ 595              		@ link register save eliminated.
+ 454:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   return __STM32G4xx_HAL_VERSION;
+ 596              		.loc 1 454 3 view .LVU131
+ 455:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 597              		.loc 1 455 1 is_stmt 0 view .LVU132
+ 598 0000 0048     		ldr	r0, .L54
+ 599 0002 7047     		bx	lr
+ 600              	.L55:
+ 601              		.align	2
+ 602              	.L54:
+ 603 0004 00030201 		.word	16909056
+ 604              		.cfi_endproc
+ 605              	.LFE342:
+ 607              		.section	.text.HAL_GetREVID,"ax",%progbits
+ 608              		.align	1
+ 609              		.p2align 2,,3
+ 610              		.global	HAL_GetREVID
+ 611              		.syntax unified
+ 612              		.thumb
+ 613              		.thumb_func
+ 615              	HAL_GetREVID:
+ 616              	.LFB343:
+ 456:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 457:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 458:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Returns the device revision identifier.
+ 459:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval Device revision identifier
+ 460:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 461:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** uint32_t HAL_GetREVID(void)
+ 462:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 617              		.loc 1 462 1 is_stmt 1 view -0
+ 618              		.cfi_startproc
+ 619              		@ args = 0, pretend = 0, frame = 0
+ 620              		@ frame_needed = 0, uses_anonymous_args = 0
+ 621              		@ link register save eliminated.
+ 463:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   return ((DBGMCU->IDCODE & DBGMCU_IDCODE_REV_ID) >> 16U);
+ 622              		.loc 1 463 3 view .LVU134
+ 623              		.loc 1 463 18 is_stmt 0 view .LVU135
+ 624 0000 014B     		ldr	r3, .L57
+ 625 0002 1868     		ldr	r0, [r3]
+ 464:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 626              		.loc 1 464 1 view .LVU136
+ 627 0004 000C     		lsrs	r0, r0, #16
+ 628 0006 7047     		bx	lr
+ 629              	.L58:
+ 630              		.align	2
+ 631              	.L57:
+ 632 0008 002004E0 		.word	-536600576
+ 633              		.cfi_endproc
+ARM GAS  /tmp/ccATWWaz.s 			page 21
+
+
+ 634              	.LFE343:
+ 636              		.section	.text.HAL_GetDEVID,"ax",%progbits
+ 637              		.align	1
+ 638              		.p2align 2,,3
+ 639              		.global	HAL_GetDEVID
+ 640              		.syntax unified
+ 641              		.thumb
+ 642              		.thumb_func
+ 644              	HAL_GetDEVID:
+ 645              	.LFB344:
+ 465:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 466:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 467:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Returns the device identifier.
+ 468:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval Device identifier
+ 469:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 470:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** uint32_t HAL_GetDEVID(void)
+ 471:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 646              		.loc 1 471 1 is_stmt 1 view -0
+ 647              		.cfi_startproc
+ 648              		@ args = 0, pretend = 0, frame = 0
+ 649              		@ frame_needed = 0, uses_anonymous_args = 0
+ 650              		@ link register save eliminated.
+ 472:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   return (DBGMCU->IDCODE & DBGMCU_IDCODE_DEV_ID);
+ 651              		.loc 1 472 3 view .LVU138
+ 652              		.loc 1 472 17 is_stmt 0 view .LVU139
+ 653 0000 024B     		ldr	r3, .L60
+ 654 0002 1868     		ldr	r0, [r3]
+ 473:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 655              		.loc 1 473 1 view .LVU140
+ 656 0004 C0F30B00 		ubfx	r0, r0, #0, #12
+ 657 0008 7047     		bx	lr
+ 658              	.L61:
+ 659 000a 00BF     		.align	2
+ 660              	.L60:
+ 661 000c 002004E0 		.word	-536600576
+ 662              		.cfi_endproc
+ 663              	.LFE344:
+ 665              		.section	.text.HAL_GetUIDw0,"ax",%progbits
+ 666              		.align	1
+ 667              		.p2align 2,,3
+ 668              		.global	HAL_GetUIDw0
+ 669              		.syntax unified
+ 670              		.thumb
+ 671              		.thumb_func
+ 673              	HAL_GetUIDw0:
+ 674              	.LFB345:
+ 474:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 475:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 476:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Return the first word of the unique device identifier (UID based on 96 bits)
+ 477:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval Device identifier
+ 478:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 479:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** uint32_t HAL_GetUIDw0(void)
+ 480:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 675              		.loc 1 480 1 is_stmt 1 view -0
+ 676              		.cfi_startproc
+ 677              		@ args = 0, pretend = 0, frame = 0
+ 678              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/ccATWWaz.s 			page 22
+
+
+ 679              		@ link register save eliminated.
+ 481:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   return (READ_REG(*((uint32_t *)UID_BASE)));
+ 680              		.loc 1 481 3 view .LVU142
+ 681              		.loc 1 481 11 is_stmt 0 view .LVU143
+ 682 0000 014B     		ldr	r3, .L63
+ 482:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 683              		.loc 1 482 1 view .LVU144
+ 684 0002 D3F89005 		ldr	r0, [r3, #1424]
+ 685 0006 7047     		bx	lr
+ 686              	.L64:
+ 687              		.align	2
+ 688              	.L63:
+ 689 0008 0070FF1F 		.word	536834048
+ 690              		.cfi_endproc
+ 691              	.LFE345:
+ 693              		.section	.text.HAL_GetUIDw1,"ax",%progbits
+ 694              		.align	1
+ 695              		.p2align 2,,3
+ 696              		.global	HAL_GetUIDw1
+ 697              		.syntax unified
+ 698              		.thumb
+ 699              		.thumb_func
+ 701              	HAL_GetUIDw1:
+ 702              	.LFB346:
+ 483:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 484:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 485:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Return the second word of the unique device identifier (UID based on 96 bits)
+ 486:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval Device identifier
+ 487:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 488:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** uint32_t HAL_GetUIDw1(void)
+ 489:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 703              		.loc 1 489 1 is_stmt 1 view -0
+ 704              		.cfi_startproc
+ 705              		@ args = 0, pretend = 0, frame = 0
+ 706              		@ frame_needed = 0, uses_anonymous_args = 0
+ 707              		@ link register save eliminated.
+ 490:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   return (READ_REG(*((uint32_t *)(UID_BASE + 4U))));
+ 708              		.loc 1 490 3 view .LVU146
+ 709              		.loc 1 490 11 is_stmt 0 view .LVU147
+ 710 0000 014B     		ldr	r3, .L66
+ 491:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 711              		.loc 1 491 1 view .LVU148
+ 712 0002 D3F89405 		ldr	r0, [r3, #1428]
+ 713 0006 7047     		bx	lr
+ 714              	.L67:
+ 715              		.align	2
+ 716              	.L66:
+ 717 0008 0070FF1F 		.word	536834048
+ 718              		.cfi_endproc
+ 719              	.LFE346:
+ 721              		.section	.text.HAL_GetUIDw2,"ax",%progbits
+ 722              		.align	1
+ 723              		.p2align 2,,3
+ 724              		.global	HAL_GetUIDw2
+ 725              		.syntax unified
+ 726              		.thumb
+ 727              		.thumb_func
+ARM GAS  /tmp/ccATWWaz.s 			page 23
+
+
+ 729              	HAL_GetUIDw2:
+ 730              	.LFB347:
+ 492:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 493:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 494:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Return the third word of the unique device identifier (UID based on 96 bits)
+ 495:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval Device identifier
+ 496:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 497:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** uint32_t HAL_GetUIDw2(void)
+ 498:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 731              		.loc 1 498 1 is_stmt 1 view -0
+ 732              		.cfi_startproc
+ 733              		@ args = 0, pretend = 0, frame = 0
+ 734              		@ frame_needed = 0, uses_anonymous_args = 0
+ 735              		@ link register save eliminated.
+ 499:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   return (READ_REG(*((uint32_t *)(UID_BASE + 8U))));
+ 736              		.loc 1 499 3 view .LVU150
+ 737              		.loc 1 499 11 is_stmt 0 view .LVU151
+ 738 0000 014B     		ldr	r3, .L69
+ 500:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 739              		.loc 1 500 1 view .LVU152
+ 740 0002 D3F89805 		ldr	r0, [r3, #1432]
+ 741 0006 7047     		bx	lr
+ 742              	.L70:
+ 743              		.align	2
+ 744              	.L69:
+ 745 0008 0070FF1F 		.word	536834048
+ 746              		.cfi_endproc
+ 747              	.LFE347:
+ 749              		.section	.text.HAL_DBGMCU_EnableDBGSleepMode,"ax",%progbits
+ 750              		.align	1
+ 751              		.p2align 2,,3
+ 752              		.global	HAL_DBGMCU_EnableDBGSleepMode
+ 753              		.syntax unified
+ 754              		.thumb
+ 755              		.thumb_func
+ 757              	HAL_DBGMCU_EnableDBGSleepMode:
+ 758              	.LFB348:
+ 501:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 502:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 503:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @}
+ 504:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 505:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 506:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /** @defgroup HAL_Exported_Functions_Group3 HAL Debug functions
+ 507:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *  @brief    HAL Debug functions
+ 508:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *
+ 509:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** @verbatim
+ 510:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****  ===============================================================================
+ 511:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****                       ##### HAL Debug functions #####
+ 512:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****  ===============================================================================
+ 513:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     [..]  This section provides functions allowing to:
+ 514:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       (+) Enable/Disable Debug module during SLEEP mode
+ 515:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       (+) Enable/Disable Debug module during STOP0/STOP1/STOP2 modes
+ 516:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       (+) Enable/Disable Debug module during STANDBY mode
+ 517:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 518:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** @endverbatim
+ 519:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @{
+ 520:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ARM GAS  /tmp/ccATWWaz.s 			page 24
+
+
+ 521:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 522:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 523:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Enable the Debug Module during SLEEP mode.
+ 524:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 525:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 526:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** void HAL_DBGMCU_EnableDBGSleepMode(void)
+ 527:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 759              		.loc 1 527 1 is_stmt 1 view -0
+ 760              		.cfi_startproc
+ 761              		@ args = 0, pretend = 0, frame = 0
+ 762              		@ frame_needed = 0, uses_anonymous_args = 0
+ 763              		@ link register save eliminated.
+ 528:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_SLEEP);
+ 764              		.loc 1 528 3 view .LVU154
+ 765 0000 024A     		ldr	r2, .L72
+ 766 0002 5368     		ldr	r3, [r2, #4]
+ 767 0004 43F00103 		orr	r3, r3, #1
+ 768 0008 5360     		str	r3, [r2, #4]
+ 529:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 769              		.loc 1 529 1 is_stmt 0 view .LVU155
+ 770 000a 7047     		bx	lr
+ 771              	.L73:
+ 772              		.align	2
+ 773              	.L72:
+ 774 000c 002004E0 		.word	-536600576
+ 775              		.cfi_endproc
+ 776              	.LFE348:
+ 778              		.section	.text.HAL_DBGMCU_DisableDBGSleepMode,"ax",%progbits
+ 779              		.align	1
+ 780              		.p2align 2,,3
+ 781              		.global	HAL_DBGMCU_DisableDBGSleepMode
+ 782              		.syntax unified
+ 783              		.thumb
+ 784              		.thumb_func
+ 786              	HAL_DBGMCU_DisableDBGSleepMode:
+ 787              	.LFB349:
+ 530:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 531:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 532:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Disable the Debug Module during SLEEP mode.
+ 533:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 534:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 535:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** void HAL_DBGMCU_DisableDBGSleepMode(void)
+ 536:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 788              		.loc 1 536 1 is_stmt 1 view -0
+ 789              		.cfi_startproc
+ 790              		@ args = 0, pretend = 0, frame = 0
+ 791              		@ frame_needed = 0, uses_anonymous_args = 0
+ 792              		@ link register save eliminated.
+ 537:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_SLEEP);
+ 793              		.loc 1 537 3 view .LVU157
+ 794 0000 024A     		ldr	r2, .L75
+ 795 0002 5368     		ldr	r3, [r2, #4]
+ 796 0004 23F00103 		bic	r3, r3, #1
+ 797 0008 5360     		str	r3, [r2, #4]
+ 538:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 798              		.loc 1 538 1 is_stmt 0 view .LVU158
+ 799 000a 7047     		bx	lr
+ARM GAS  /tmp/ccATWWaz.s 			page 25
+
+
+ 800              	.L76:
+ 801              		.align	2
+ 802              	.L75:
+ 803 000c 002004E0 		.word	-536600576
+ 804              		.cfi_endproc
+ 805              	.LFE349:
+ 807              		.section	.text.HAL_DBGMCU_EnableDBGStopMode,"ax",%progbits
+ 808              		.align	1
+ 809              		.p2align 2,,3
+ 810              		.global	HAL_DBGMCU_EnableDBGStopMode
+ 811              		.syntax unified
+ 812              		.thumb
+ 813              		.thumb_func
+ 815              	HAL_DBGMCU_EnableDBGStopMode:
+ 816              	.LFB350:
+ 539:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 540:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 541:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Enable the Debug Module during STOP0/STOP1/STOP2 modes.
+ 542:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 543:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 544:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** void HAL_DBGMCU_EnableDBGStopMode(void)
+ 545:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 817              		.loc 1 545 1 is_stmt 1 view -0
+ 818              		.cfi_startproc
+ 819              		@ args = 0, pretend = 0, frame = 0
+ 820              		@ frame_needed = 0, uses_anonymous_args = 0
+ 821              		@ link register save eliminated.
+ 546:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOP);
+ 822              		.loc 1 546 3 view .LVU160
+ 823 0000 024A     		ldr	r2, .L78
+ 824 0002 5368     		ldr	r3, [r2, #4]
+ 825 0004 43F00203 		orr	r3, r3, #2
+ 826 0008 5360     		str	r3, [r2, #4]
+ 547:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 827              		.loc 1 547 1 is_stmt 0 view .LVU161
+ 828 000a 7047     		bx	lr
+ 829              	.L79:
+ 830              		.align	2
+ 831              	.L78:
+ 832 000c 002004E0 		.word	-536600576
+ 833              		.cfi_endproc
+ 834              	.LFE350:
+ 836              		.section	.text.HAL_DBGMCU_DisableDBGStopMode,"ax",%progbits
+ 837              		.align	1
+ 838              		.p2align 2,,3
+ 839              		.global	HAL_DBGMCU_DisableDBGStopMode
+ 840              		.syntax unified
+ 841              		.thumb
+ 842              		.thumb_func
+ 844              	HAL_DBGMCU_DisableDBGStopMode:
+ 845              	.LFB351:
+ 548:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 549:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 550:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Disable the Debug Module during STOP0/STOP1/STOP2 modes.
+ 551:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 552:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 553:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** void HAL_DBGMCU_DisableDBGStopMode(void)
+ARM GAS  /tmp/ccATWWaz.s 			page 26
+
+
+ 554:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 846              		.loc 1 554 1 is_stmt 1 view -0
+ 847              		.cfi_startproc
+ 848              		@ args = 0, pretend = 0, frame = 0
+ 849              		@ frame_needed = 0, uses_anonymous_args = 0
+ 850              		@ link register save eliminated.
+ 555:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STOP);
+ 851              		.loc 1 555 3 view .LVU163
+ 852 0000 024A     		ldr	r2, .L81
+ 853 0002 5368     		ldr	r3, [r2, #4]
+ 854 0004 23F00203 		bic	r3, r3, #2
+ 855 0008 5360     		str	r3, [r2, #4]
+ 556:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 856              		.loc 1 556 1 is_stmt 0 view .LVU164
+ 857 000a 7047     		bx	lr
+ 858              	.L82:
+ 859              		.align	2
+ 860              	.L81:
+ 861 000c 002004E0 		.word	-536600576
+ 862              		.cfi_endproc
+ 863              	.LFE351:
+ 865              		.section	.text.HAL_DBGMCU_EnableDBGStandbyMode,"ax",%progbits
+ 866              		.align	1
+ 867              		.p2align 2,,3
+ 868              		.global	HAL_DBGMCU_EnableDBGStandbyMode
+ 869              		.syntax unified
+ 870              		.thumb
+ 871              		.thumb_func
+ 873              	HAL_DBGMCU_EnableDBGStandbyMode:
+ 874              	.LFB352:
+ 557:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 558:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 559:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Enable the Debug Module during STANDBY mode.
+ 560:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 561:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 562:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** void HAL_DBGMCU_EnableDBGStandbyMode(void)
+ 563:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 875              		.loc 1 563 1 is_stmt 1 view -0
+ 876              		.cfi_startproc
+ 877              		@ args = 0, pretend = 0, frame = 0
+ 878              		@ frame_needed = 0, uses_anonymous_args = 0
+ 879              		@ link register save eliminated.
+ 564:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   SET_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBY);
+ 880              		.loc 1 564 3 view .LVU166
+ 881 0000 024A     		ldr	r2, .L84
+ 882 0002 5368     		ldr	r3, [r2, #4]
+ 883 0004 43F00403 		orr	r3, r3, #4
+ 884 0008 5360     		str	r3, [r2, #4]
+ 565:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 885              		.loc 1 565 1 is_stmt 0 view .LVU167
+ 886 000a 7047     		bx	lr
+ 887              	.L85:
+ 888              		.align	2
+ 889              	.L84:
+ 890 000c 002004E0 		.word	-536600576
+ 891              		.cfi_endproc
+ 892              	.LFE352:
+ARM GAS  /tmp/ccATWWaz.s 			page 27
+
+
+ 894              		.section	.text.HAL_DBGMCU_DisableDBGStandbyMode,"ax",%progbits
+ 895              		.align	1
+ 896              		.p2align 2,,3
+ 897              		.global	HAL_DBGMCU_DisableDBGStandbyMode
+ 898              		.syntax unified
+ 899              		.thumb
+ 900              		.thumb_func
+ 902              	HAL_DBGMCU_DisableDBGStandbyMode:
+ 903              	.LFB353:
+ 566:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 567:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 568:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Disable the Debug Module during STANDBY mode.
+ 569:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 570:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 571:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** void HAL_DBGMCU_DisableDBGStandbyMode(void)
+ 572:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 904              		.loc 1 572 1 is_stmt 1 view -0
+ 905              		.cfi_startproc
+ 906              		@ args = 0, pretend = 0, frame = 0
+ 907              		@ frame_needed = 0, uses_anonymous_args = 0
+ 908              		@ link register save eliminated.
+ 573:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   CLEAR_BIT(DBGMCU->CR, DBGMCU_CR_DBG_STANDBY);
+ 909              		.loc 1 573 3 view .LVU169
+ 910 0000 024A     		ldr	r2, .L87
+ 911 0002 5368     		ldr	r3, [r2, #4]
+ 912 0004 23F00403 		bic	r3, r3, #4
+ 913 0008 5360     		str	r3, [r2, #4]
+ 574:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 914              		.loc 1 574 1 is_stmt 0 view .LVU170
+ 915 000a 7047     		bx	lr
+ 916              	.L88:
+ 917              		.align	2
+ 918              	.L87:
+ 919 000c 002004E0 		.word	-536600576
+ 920              		.cfi_endproc
+ 921              	.LFE353:
+ 923              		.section	.text.HAL_SYSCFG_CCMSRAMErase,"ax",%progbits
+ 924              		.align	1
+ 925              		.p2align 2,,3
+ 926              		.global	HAL_SYSCFG_CCMSRAMErase
+ 927              		.syntax unified
+ 928              		.thumb
+ 929              		.thumb_func
+ 931              	HAL_SYSCFG_CCMSRAMErase:
+ 932              	.LFB354:
+ 575:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 576:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 577:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @}
+ 578:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 579:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 580:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /** @defgroup HAL_Exported_Functions_Group4 HAL SYSCFG configuration functions
+ 581:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *  @brief    HAL SYSCFG configuration functions
+ 582:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *
+ 583:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** @verbatim
+ 584:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****  ===============================================================================
+ 585:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****                       ##### HAL SYSCFG configuration functions #####
+ 586:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****  ===============================================================================
+ARM GAS  /tmp/ccATWWaz.s 			page 28
+
+
+ 587:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     [..]  This section provides functions allowing to:
+ 588:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       (+) Start a hardware CCMSRAM erase operation
+ 589:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       (+) Enable/Disable the Internal FLASH Bank Swapping
+ 590:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       (+) Configure the Voltage reference buffer
+ 591:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       (+) Enable/Disable the Voltage reference buffer
+ 592:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       (+) Enable/Disable the I/O analog switch voltage booster
+ 593:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 594:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** @endverbatim
+ 595:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @{
+ 596:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 597:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 598:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 599:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Start a hardware CCMSRAM erase operation.
+ 600:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @note   As long as CCMSRAM is not erased the CCMER bit will be set.
+ 601:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *         This bit is automatically reset at the end of the CCMSRAM erase operation.
+ 602:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 603:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 604:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** void HAL_SYSCFG_CCMSRAMErase(void)
+ 605:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 933              		.loc 1 605 1 is_stmt 1 view -0
+ 934              		.cfi_startproc
+ 935              		@ args = 0, pretend = 0, frame = 0
+ 936              		@ frame_needed = 0, uses_anonymous_args = 0
+ 937              		@ link register save eliminated.
+ 606:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* unlock the write protection of the CCMER bit */
+ 607:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   SYSCFG->SKR = 0xCA;
+ 938              		.loc 1 607 3 view .LVU172
+ 939              		.loc 1 607 15 is_stmt 0 view .LVU173
+ 940 0000 044B     		ldr	r3, .L90
+ 608:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   SYSCFG->SKR = 0x53;
+ 941              		.loc 1 608 15 view .LVU174
+ 942 0002 5322     		movs	r2, #83
+ 607:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   SYSCFG->SKR = 0x53;
+ 943              		.loc 1 607 15 view .LVU175
+ 944 0004 CA21     		movs	r1, #202
+ 945 0006 5962     		str	r1, [r3, #36]
+ 946              		.loc 1 608 3 is_stmt 1 view .LVU176
+ 947              		.loc 1 608 15 is_stmt 0 view .LVU177
+ 948 0008 5A62     		str	r2, [r3, #36]
+ 609:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* Starts a hardware CCMSRAM erase operation*/
+ 610:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   SET_BIT(SYSCFG->SCSR, SYSCFG_SCSR_CCMER);
+ 949              		.loc 1 610 3 is_stmt 1 view .LVU178
+ 950 000a 9A69     		ldr	r2, [r3, #24]
+ 951 000c 42F00102 		orr	r2, r2, #1
+ 952 0010 9A61     		str	r2, [r3, #24]
+ 611:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 953              		.loc 1 611 1 is_stmt 0 view .LVU179
+ 954 0012 7047     		bx	lr
+ 955              	.L91:
+ 956              		.align	2
+ 957              	.L90:
+ 958 0014 00000140 		.word	1073807360
+ 959              		.cfi_endproc
+ 960              	.LFE354:
+ 962              		.section	.text.HAL_SYSCFG_EnableMemorySwappingBank,"ax",%progbits
+ 963              		.align	1
+ 964              		.p2align 2,,3
+ARM GAS  /tmp/ccATWWaz.s 			page 29
+
+
+ 965              		.global	HAL_SYSCFG_EnableMemorySwappingBank
+ 966              		.syntax unified
+ 967              		.thumb
+ 968              		.thumb_func
+ 970              	HAL_SYSCFG_EnableMemorySwappingBank:
+ 971              	.LFB355:
+ 612:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 613:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 614:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Enable the Internal FLASH Bank Swapping.
+ 615:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *
+ 616:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @note   This function can be used only for STM32G4xx devices.
+ 617:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *
+ 618:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @note   Flash Bank2 mapped at 0x08000000 (and aliased @0x00000000)
+ 619:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *         and Flash Bank1 mapped at 0x08040000 (and aliased at 0x00040000)
+ 620:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *
+ 621:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 622:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 623:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** void HAL_SYSCFG_EnableMemorySwappingBank(void)
+ 624:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 972              		.loc 1 624 1 is_stmt 1 view -0
+ 973              		.cfi_startproc
+ 974              		@ args = 0, pretend = 0, frame = 0
+ 975              		@ frame_needed = 0, uses_anonymous_args = 0
+ 976              		@ link register save eliminated.
+ 625:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   SET_BIT(SYSCFG->MEMRMP, SYSCFG_MEMRMP_FB_MODE);
+ 977              		.loc 1 625 3 view .LVU181
+ 978 0000 024A     		ldr	r2, .L93
+ 979 0002 1368     		ldr	r3, [r2]
+ 980 0004 43F48073 		orr	r3, r3, #256
+ 981 0008 1360     		str	r3, [r2]
+ 626:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 982              		.loc 1 626 1 is_stmt 0 view .LVU182
+ 983 000a 7047     		bx	lr
+ 984              	.L94:
+ 985              		.align	2
+ 986              	.L93:
+ 987 000c 00000140 		.word	1073807360
+ 988              		.cfi_endproc
+ 989              	.LFE355:
+ 991              		.section	.text.HAL_SYSCFG_DisableMemorySwappingBank,"ax",%progbits
+ 992              		.align	1
+ 993              		.p2align 2,,3
+ 994              		.global	HAL_SYSCFG_DisableMemorySwappingBank
+ 995              		.syntax unified
+ 996              		.thumb
+ 997              		.thumb_func
+ 999              	HAL_SYSCFG_DisableMemorySwappingBank:
+ 1000              	.LFB356:
+ 627:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 628:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 629:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Disable the Internal FLASH Bank Swapping.
+ 630:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *
+ 631:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @note   This function can be used only for STM32G4xx devices.
+ 632:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *
+ 633:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @note   The default state : Flash Bank1 mapped at 0x08000000 (and aliased @0x0000 0000)
+ 634:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *         and Flash Bank2 mapped at 0x08040000 (and aliased at 0x00040000)
+ 635:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *
+ARM GAS  /tmp/ccATWWaz.s 			page 30
+
+
+ 636:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 637:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 638:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** void HAL_SYSCFG_DisableMemorySwappingBank(void)
+ 639:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 1001              		.loc 1 639 1 is_stmt 1 view -0
+ 1002              		.cfi_startproc
+ 1003              		@ args = 0, pretend = 0, frame = 0
+ 1004              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1005              		@ link register save eliminated.
+ 640:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   CLEAR_BIT(SYSCFG->MEMRMP, SYSCFG_MEMRMP_FB_MODE);
+ 1006              		.loc 1 640 3 view .LVU184
+ 1007 0000 024A     		ldr	r2, .L96
+ 1008 0002 1368     		ldr	r3, [r2]
+ 1009 0004 23F48073 		bic	r3, r3, #256
+ 1010 0008 1360     		str	r3, [r2]
+ 641:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 1011              		.loc 1 641 1 is_stmt 0 view .LVU185
+ 1012 000a 7047     		bx	lr
+ 1013              	.L97:
+ 1014              		.align	2
+ 1015              	.L96:
+ 1016 000c 00000140 		.word	1073807360
+ 1017              		.cfi_endproc
+ 1018              	.LFE356:
+ 1020              		.section	.text.HAL_SYSCFG_VREFBUF_VoltageScalingConfig,"ax",%progbits
+ 1021              		.align	1
+ 1022              		.p2align 2,,3
+ 1023              		.global	HAL_SYSCFG_VREFBUF_VoltageScalingConfig
+ 1024              		.syntax unified
+ 1025              		.thumb
+ 1026              		.thumb_func
+ 1028              	HAL_SYSCFG_VREFBUF_VoltageScalingConfig:
+ 1029              	.LVL29:
+ 1030              	.LFB357:
+ 642:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 643:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #if defined(VREFBUF)
+ 644:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 645:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief Configure the internal voltage reference buffer voltage scale.
+ 646:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @param  VoltageScaling: specifies the output voltage to achieve
+ 647:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *          This parameter can be one of the following values:
+ 648:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *            @arg SYSCFG_VREFBUF_VOLTAGE_SCALE0: VREFBUF_OUT around 2.048 V.
+ 649:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *                                                This requires VDDA equal to or higher than 2.4 V
+ 650:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *            @arg SYSCFG_VREFBUF_VOLTAGE_SCALE1: VREFBUF_OUT around 2.5 V.
+ 651:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *                                                This requires VDDA equal to or higher than 2.8 V
+ 652:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *            @arg SYSCFG_VREFBUF_VOLTAGE_SCALE2: VREFBUF_OUT around 2.9 V.
+ 653:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *                                                This requires VDDA equal to or higher than 3.15 
+ 654:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 655:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 656:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** void HAL_SYSCFG_VREFBUF_VoltageScalingConfig(uint32_t VoltageScaling)
+ 657:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 1031              		.loc 1 657 1 is_stmt 1 view -0
+ 1032              		.cfi_startproc
+ 1033              		@ args = 0, pretend = 0, frame = 0
+ 1034              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1035              		@ link register save eliminated.
+ 658:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* Check the parameters */
+ 659:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   assert_param(IS_SYSCFG_VREFBUF_VOLTAGE_SCALE(VoltageScaling));
+ARM GAS  /tmp/ccATWWaz.s 			page 31
+
+
+ 1036              		.loc 1 659 3 view .LVU187
+ 660:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 661:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   MODIFY_REG(VREFBUF->CSR, VREFBUF_CSR_VRS, VoltageScaling);
+ 1037              		.loc 1 661 3 view .LVU188
+ 1038 0000 034A     		ldr	r2, .L99
+ 1039 0002 136B     		ldr	r3, [r2, #48]
+ 1040 0004 23F03003 		bic	r3, r3, #48
+ 1041 0008 0343     		orrs	r3, r3, r0
+ 1042 000a 1363     		str	r3, [r2, #48]
+ 662:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 1043              		.loc 1 662 1 is_stmt 0 view .LVU189
+ 1044 000c 7047     		bx	lr
+ 1045              	.L100:
+ 1046 000e 00BF     		.align	2
+ 1047              	.L99:
+ 1048 0010 00000140 		.word	1073807360
+ 1049              		.cfi_endproc
+ 1050              	.LFE357:
+ 1052              		.section	.text.HAL_SYSCFG_VREFBUF_HighImpedanceConfig,"ax",%progbits
+ 1053              		.align	1
+ 1054              		.p2align 2,,3
+ 1055              		.global	HAL_SYSCFG_VREFBUF_HighImpedanceConfig
+ 1056              		.syntax unified
+ 1057              		.thumb
+ 1058              		.thumb_func
+ 1060              	HAL_SYSCFG_VREFBUF_HighImpedanceConfig:
+ 1061              	.LVL30:
+ 1062              	.LFB358:
+ 663:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 664:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 665:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief Configure the internal voltage reference buffer high impedance mode.
+ 666:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @param  Mode: specifies the high impedance mode
+ 667:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *          This parameter can be one of the following values:
+ 668:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *            @arg SYSCFG_VREFBUF_HIGH_IMPEDANCE_DISABLE: VREF+ pin is internally connect to VREFI
+ 669:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *            @arg SYSCFG_VREFBUF_HIGH_IMPEDANCE_ENABLE: VREF+ pin is high impedance.
+ 670:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 671:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 672:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** void HAL_SYSCFG_VREFBUF_HighImpedanceConfig(uint32_t Mode)
+ 673:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 1063              		.loc 1 673 1 is_stmt 1 view -0
+ 1064              		.cfi_startproc
+ 1065              		@ args = 0, pretend = 0, frame = 0
+ 1066              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1067              		@ link register save eliminated.
+ 674:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* Check the parameters */
+ 675:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   assert_param(IS_SYSCFG_VREFBUF_HIGH_IMPEDANCE(Mode));
+ 1068              		.loc 1 675 3 view .LVU191
+ 676:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 677:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   MODIFY_REG(VREFBUF->CSR, VREFBUF_CSR_HIZ, Mode);
+ 1069              		.loc 1 677 3 view .LVU192
+ 1070 0000 034A     		ldr	r2, .L102
+ 1071 0002 136B     		ldr	r3, [r2, #48]
+ 1072 0004 23F00203 		bic	r3, r3, #2
+ 1073 0008 0343     		orrs	r3, r3, r0
+ 1074 000a 1363     		str	r3, [r2, #48]
+ 678:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 1075              		.loc 1 678 1 is_stmt 0 view .LVU193
+ARM GAS  /tmp/ccATWWaz.s 			page 32
+
+
+ 1076 000c 7047     		bx	lr
+ 1077              	.L103:
+ 1078 000e 00BF     		.align	2
+ 1079              	.L102:
+ 1080 0010 00000140 		.word	1073807360
+ 1081              		.cfi_endproc
+ 1082              	.LFE358:
+ 1084              		.section	.text.HAL_SYSCFG_VREFBUF_TrimmingConfig,"ax",%progbits
+ 1085              		.align	1
+ 1086              		.p2align 2,,3
+ 1087              		.global	HAL_SYSCFG_VREFBUF_TrimmingConfig
+ 1088              		.syntax unified
+ 1089              		.thumb
+ 1090              		.thumb_func
+ 1092              	HAL_SYSCFG_VREFBUF_TrimmingConfig:
+ 1093              	.LVL31:
+ 1094              	.LFB359:
+ 679:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 680:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 681:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief Tune the Internal Voltage Reference buffer (VREFBUF).
+ 682:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @param TrimmingValue specifies trimming code for VREFBUF calibration
+ 683:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *        This parameter can be a number between Min_Data = 0x00 and Max_Data = 0x3F
+ 684:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 685:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 686:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** void HAL_SYSCFG_VREFBUF_TrimmingConfig(uint32_t TrimmingValue)
+ 687:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 1095              		.loc 1 687 1 is_stmt 1 view -0
+ 1096              		.cfi_startproc
+ 1097              		@ args = 0, pretend = 0, frame = 0
+ 1098              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1099              		@ link register save eliminated.
+ 688:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* Check the parameters */
+ 689:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   assert_param(IS_SYSCFG_VREFBUF_TRIMMING(TrimmingValue));
+ 1100              		.loc 1 689 3 view .LVU195
+ 690:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 691:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   MODIFY_REG(VREFBUF->CCR, VREFBUF_CCR_TRIM, TrimmingValue);
+ 1101              		.loc 1 691 3 view .LVU196
+ 1102 0000 034A     		ldr	r2, .L105
+ 1103 0002 536B     		ldr	r3, [r2, #52]
+ 1104 0004 23F03F03 		bic	r3, r3, #63
+ 1105 0008 0343     		orrs	r3, r3, r0
+ 1106 000a 5363     		str	r3, [r2, #52]
+ 692:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 1107              		.loc 1 692 1 is_stmt 0 view .LVU197
+ 1108 000c 7047     		bx	lr
+ 1109              	.L106:
+ 1110 000e 00BF     		.align	2
+ 1111              	.L105:
+ 1112 0010 00000140 		.word	1073807360
+ 1113              		.cfi_endproc
+ 1114              	.LFE359:
+ 1116              		.section	.text.HAL_SYSCFG_EnableVREFBUF,"ax",%progbits
+ 1117              		.align	1
+ 1118              		.p2align 2,,3
+ 1119              		.global	HAL_SYSCFG_EnableVREFBUF
+ 1120              		.syntax unified
+ 1121              		.thumb
+ARM GAS  /tmp/ccATWWaz.s 			page 33
+
+
+ 1122              		.thumb_func
+ 1124              	HAL_SYSCFG_EnableVREFBUF:
+ 1125              	.LFB360:
+ 693:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 694:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 695:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Enable the Internal Voltage Reference buffer (VREFBUF).
+ 696:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval HAL_OK/HAL_TIMEOUT
+ 697:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 698:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** HAL_StatusTypeDef HAL_SYSCFG_EnableVREFBUF(void)
+ 699:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 1126              		.loc 1 699 1 is_stmt 1 view -0
+ 1127              		.cfi_startproc
+ 1128              		@ args = 0, pretend = 0, frame = 0
+ 1129              		@ frame_needed = 0, uses_anonymous_args = 0
+ 700:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   uint32_t tickstart;
+ 1130              		.loc 1 700 3 view .LVU199
+ 701:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 702:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   SET_BIT(VREFBUF->CSR, VREFBUF_CSR_ENVR);
+ 1131              		.loc 1 702 3 view .LVU200
+ 699:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   uint32_t tickstart;
+ 1132              		.loc 1 699 1 is_stmt 0 view .LVU201
+ 1133 0000 38B5     		push	{r3, r4, r5, lr}
+ 1134              	.LCFI5:
+ 1135              		.cfi_def_cfa_offset 16
+ 1136              		.cfi_offset 3, -16
+ 1137              		.cfi_offset 4, -12
+ 1138              		.cfi_offset 5, -8
+ 1139              		.cfi_offset 14, -4
+ 1140              		.loc 1 702 3 view .LVU202
+ 1141 0002 0A4C     		ldr	r4, .L113
+ 1142 0004 236B     		ldr	r3, [r4, #48]
+ 1143 0006 43F00103 		orr	r3, r3, #1
+ 1144 000a 2363     		str	r3, [r4, #48]
+ 703:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 704:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* Get Start Tick*/
+ 705:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   tickstart = HAL_GetTick();
+ 1145              		.loc 1 705 3 is_stmt 1 view .LVU203
+ 1146              		.loc 1 705 15 is_stmt 0 view .LVU204
+ 1147 000c FFF7FEFF 		bl	HAL_GetTick
+ 1148              	.LVL32:
+ 1149 0010 0546     		mov	r5, r0
+ 1150              	.LVL33:
+ 706:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 707:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   /* Wait for VRR bit  */
+ 708:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   while (READ_BIT(VREFBUF->CSR, VREFBUF_CSR_VRR) == 0x00U)
+ 1151              		.loc 1 708 3 is_stmt 1 view .LVU205
+ 1152              		.loc 1 708 9 is_stmt 0 view .LVU206
+ 1153 0012 04E0     		b	.L108
+ 1154              	.LVL34:
+ 1155              	.L110:
+ 709:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   {
+ 710:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     if ((HAL_GetTick() - tickstart) > VREFBUF_TIMEOUT_VALUE)
+ 1156              		.loc 1 710 10 view .LVU207
+ 1157 0014 FFF7FEFF 		bl	HAL_GetTick
+ 1158              	.LVL35:
+ 1159              		.loc 1 710 24 discriminator 1 view .LVU208
+ 1160 0018 401B     		subs	r0, r0, r5
+ARM GAS  /tmp/ccATWWaz.s 			page 34
+
+
+ 1161              		.loc 1 710 8 discriminator 1 view .LVU209
+ 1162 001a 0A28     		cmp	r0, #10
+ 1163 001c 04D8     		bhi	.L111
+ 1164              	.L108:
+ 1165              		.loc 1 710 5 is_stmt 1 view .LVU210
+ 708:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   {
+ 1166              		.loc 1 708 50 view .LVU211
+ 708:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   {
+ 1167              		.loc 1 708 10 is_stmt 0 view .LVU212
+ 1168 001e 236B     		ldr	r3, [r4, #48]
+ 708:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   {
+ 1169              		.loc 1 708 50 view .LVU213
+ 1170 0020 1B07     		lsls	r3, r3, #28
+ 1171 0022 F7D5     		bpl	.L110
+ 711:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     {
+ 712:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****       return HAL_TIMEOUT;
+ 713:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     }
+ 714:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   }
+ 715:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 716:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   return HAL_OK;
+ 1172              		.loc 1 716 10 view .LVU214
+ 1173 0024 0020     		movs	r0, #0
+ 717:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 1174              		.loc 1 717 1 view .LVU215
+ 1175 0026 38BD     		pop	{r3, r4, r5, pc}
+ 1176              	.LVL36:
+ 1177              	.L111:
+ 712:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****     }
+ 1178              		.loc 1 712 14 view .LVU216
+ 1179 0028 0320     		movs	r0, #3
+ 1180              		.loc 1 717 1 view .LVU217
+ 1181 002a 38BD     		pop	{r3, r4, r5, pc}
+ 1182              	.LVL37:
+ 1183              	.L114:
+ 1184              		.loc 1 717 1 view .LVU218
+ 1185              		.align	2
+ 1186              	.L113:
+ 1187 002c 00000140 		.word	1073807360
+ 1188              		.cfi_endproc
+ 1189              	.LFE360:
+ 1191              		.section	.text.HAL_SYSCFG_DisableVREFBUF,"ax",%progbits
+ 1192              		.align	1
+ 1193              		.p2align 2,,3
+ 1194              		.global	HAL_SYSCFG_DisableVREFBUF
+ 1195              		.syntax unified
+ 1196              		.thumb
+ 1197              		.thumb_func
+ 1199              	HAL_SYSCFG_DisableVREFBUF:
+ 1200              	.LFB361:
+ 718:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 719:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 720:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Disable the Internal Voltage Reference buffer (VREFBUF).
+ 721:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *
+ 722:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 723:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 724:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** void HAL_SYSCFG_DisableVREFBUF(void)
+ 725:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ARM GAS  /tmp/ccATWWaz.s 			page 35
+
+
+ 1201              		.loc 1 725 1 is_stmt 1 view -0
+ 1202              		.cfi_startproc
+ 1203              		@ args = 0, pretend = 0, frame = 0
+ 1204              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1205              		@ link register save eliminated.
+ 726:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   CLEAR_BIT(VREFBUF->CSR, VREFBUF_CSR_ENVR);
+ 1206              		.loc 1 726 3 view .LVU220
+ 1207 0000 024A     		ldr	r2, .L116
+ 1208 0002 136B     		ldr	r3, [r2, #48]
+ 1209 0004 23F00103 		bic	r3, r3, #1
+ 1210 0008 1363     		str	r3, [r2, #48]
+ 727:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 1211              		.loc 1 727 1 is_stmt 0 view .LVU221
+ 1212 000a 7047     		bx	lr
+ 1213              	.L117:
+ 1214              		.align	2
+ 1215              	.L116:
+ 1216 000c 00000140 		.word	1073807360
+ 1217              		.cfi_endproc
+ 1218              	.LFE361:
+ 1220              		.section	.text.HAL_SYSCFG_EnableIOSwitchBooster,"ax",%progbits
+ 1221              		.align	1
+ 1222              		.p2align 2,,3
+ 1223              		.global	HAL_SYSCFG_EnableIOSwitchBooster
+ 1224              		.syntax unified
+ 1225              		.thumb
+ 1226              		.thumb_func
+ 1228              	HAL_SYSCFG_EnableIOSwitchBooster:
+ 1229              	.LFB362:
+ 728:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** #endif /* VREFBUF */
+ 729:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 730:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 731:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Enable the I/O analog switch voltage booster
+ 732:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *
+ 733:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 734:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 735:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** void HAL_SYSCFG_EnableIOSwitchBooster(void)
+ 736:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 1230              		.loc 1 736 1 is_stmt 1 view -0
+ 1231              		.cfi_startproc
+ 1232              		@ args = 0, pretend = 0, frame = 0
+ 1233              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1234              		@ link register save eliminated.
+ 737:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   SET_BIT(SYSCFG->CFGR1, SYSCFG_CFGR1_BOOSTEN);
+ 1235              		.loc 1 737 3 view .LVU223
+ 1236 0000 024A     		ldr	r2, .L119
+ 1237 0002 5368     		ldr	r3, [r2, #4]
+ 1238 0004 43F48073 		orr	r3, r3, #256
+ 1239 0008 5360     		str	r3, [r2, #4]
+ 738:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 1240              		.loc 1 738 1 is_stmt 0 view .LVU224
+ 1241 000a 7047     		bx	lr
+ 1242              	.L120:
+ 1243              		.align	2
+ 1244              	.L119:
+ 1245 000c 00000140 		.word	1073807360
+ 1246              		.cfi_endproc
+ARM GAS  /tmp/ccATWWaz.s 			page 36
+
+
+ 1247              	.LFE362:
+ 1249              		.section	.text.HAL_SYSCFG_DisableIOSwitchBooster,"ax",%progbits
+ 1250              		.align	1
+ 1251              		.p2align 2,,3
+ 1252              		.global	HAL_SYSCFG_DisableIOSwitchBooster
+ 1253              		.syntax unified
+ 1254              		.thumb
+ 1255              		.thumb_func
+ 1257              	HAL_SYSCFG_DisableIOSwitchBooster:
+ 1258              	.LFB363:
+ 739:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 740:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 741:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Disable the I/O analog switch voltage booster
+ 742:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *
+ 743:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 744:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 745:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** void HAL_SYSCFG_DisableIOSwitchBooster(void)
+ 746:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 1259              		.loc 1 746 1 is_stmt 1 view -0
+ 1260              		.cfi_startproc
+ 1261              		@ args = 0, pretend = 0, frame = 0
+ 1262              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1263              		@ link register save eliminated.
+ 747:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   CLEAR_BIT(SYSCFG->CFGR1, SYSCFG_CFGR1_BOOSTEN);
+ 1264              		.loc 1 747 3 view .LVU226
+ 1265 0000 024A     		ldr	r2, .L122
+ 1266 0002 5368     		ldr	r3, [r2, #4]
+ 1267 0004 23F48073 		bic	r3, r3, #256
+ 1268 0008 5360     		str	r3, [r2, #4]
+ 748:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 1269              		.loc 1 748 1 is_stmt 0 view .LVU227
+ 1270 000a 7047     		bx	lr
+ 1271              	.L123:
+ 1272              		.align	2
+ 1273              	.L122:
+ 1274 000c 00000140 		.word	1073807360
+ 1275              		.cfi_endproc
+ 1276              	.LFE363:
+ 1278              		.section	.text.HAL_SYSCFG_EnableIOSwitchVDD,"ax",%progbits
+ 1279              		.align	1
+ 1280              		.p2align 2,,3
+ 1281              		.global	HAL_SYSCFG_EnableIOSwitchVDD
+ 1282              		.syntax unified
+ 1283              		.thumb
+ 1284              		.thumb_func
+ 1286              	HAL_SYSCFG_EnableIOSwitchVDD:
+ 1287              	.LFB364:
+ 749:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 750:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 751:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Enable the I/O analog switch voltage by VDD
+ 752:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *
+ 753:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 754:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 755:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** void HAL_SYSCFG_EnableIOSwitchVDD(void)
+ 756:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 1288              		.loc 1 756 1 is_stmt 1 view -0
+ 1289              		.cfi_startproc
+ARM GAS  /tmp/ccATWWaz.s 			page 37
+
+
+ 1290              		@ args = 0, pretend = 0, frame = 0
+ 1291              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1292              		@ link register save eliminated.
+ 757:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   SET_BIT(SYSCFG->CFGR1, SYSCFG_CFGR1_ANASWVDD);
+ 1293              		.loc 1 757 3 view .LVU229
+ 1294 0000 024A     		ldr	r2, .L125
+ 1295 0002 5368     		ldr	r3, [r2, #4]
+ 1296 0004 43F40073 		orr	r3, r3, #512
+ 1297 0008 5360     		str	r3, [r2, #4]
+ 758:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 1298              		.loc 1 758 1 is_stmt 0 view .LVU230
+ 1299 000a 7047     		bx	lr
+ 1300              	.L126:
+ 1301              		.align	2
+ 1302              	.L125:
+ 1303 000c 00000140 		.word	1073807360
+ 1304              		.cfi_endproc
+ 1305              	.LFE364:
+ 1307              		.section	.text.HAL_SYSCFG_DisableIOSwitchVDD,"ax",%progbits
+ 1308              		.align	1
+ 1309              		.p2align 2,,3
+ 1310              		.global	HAL_SYSCFG_DisableIOSwitchVDD
+ 1311              		.syntax unified
+ 1312              		.thumb
+ 1313              		.thumb_func
+ 1315              	HAL_SYSCFG_DisableIOSwitchVDD:
+ 1316              	.LFB365:
+ 759:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 760:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /**
+ 761:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @brief  Disable the I/O analog switch voltage by VDD
+ 762:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   *
+ 763:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 764:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 765:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** void HAL_SYSCFG_DisableIOSwitchVDD(void)
+ 766:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 1317              		.loc 1 766 1 is_stmt 1 view -0
+ 1318              		.cfi_startproc
+ 1319              		@ args = 0, pretend = 0, frame = 0
+ 1320              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1321              		@ link register save eliminated.
+ 767:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   CLEAR_BIT(SYSCFG->CFGR1, SYSCFG_CFGR1_ANASWVDD);
+ 1322              		.loc 1 767 3 view .LVU232
+ 1323 0000 024A     		ldr	r2, .L128
+ 1324 0002 5368     		ldr	r3, [r2, #4]
+ 1325 0004 23F40073 		bic	r3, r3, #512
+ 1326 0008 5360     		str	r3, [r2, #4]
+ 768:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 1327              		.loc 1 768 1 is_stmt 0 view .LVU233
+ 1328 000a 7047     		bx	lr
+ 1329              	.L129:
+ 1330              		.align	2
+ 1331              	.L128:
+ 1332 000c 00000140 		.word	1073807360
+ 1333              		.cfi_endproc
+ 1334              	.LFE365:
+ 1336              		.section	.text.HAL_SYSCFG_CCMSRAM_WriteProtectionEnable,"ax",%progbits
+ 1337              		.align	1
+ARM GAS  /tmp/ccATWWaz.s 			page 38
+
+
+ 1338              		.p2align 2,,3
+ 1339              		.global	HAL_SYSCFG_CCMSRAM_WriteProtectionEnable
+ 1340              		.syntax unified
+ 1341              		.thumb
+ 1342              		.thumb_func
+ 1344              	HAL_SYSCFG_CCMSRAM_WriteProtectionEnable:
+ 1345              	.LVL38:
+ 1346              	.LFB366:
+ 769:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 770:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 771:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** /** @brief  CCMSRAM page write protection enable
+ 772:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @param Page: This parameter is a long 32bit value and can be a value of @ref SYSCFG_CCMSRAMWRP
+ 773:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @note   write protection can only be disabled by a system reset
+ 774:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   * @retval None
+ 775:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   */
+ 776:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** void HAL_SYSCFG_CCMSRAM_WriteProtectionEnable(uint32_t Page)
+ 777:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** {
+ 1347              		.loc 1 777 1 is_stmt 1 view -0
+ 1348              		.cfi_startproc
+ 1349              		@ args = 0, pretend = 0, frame = 0
+ 1350              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1351              		@ link register save eliminated.
+ 778:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   assert_param(IS_SYSCFG_CCMSRAMWRP_PAGE(Page));
+ 1352              		.loc 1 778 3 view .LVU235
+ 779:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** 
+ 780:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c ****   SET_BIT(SYSCFG->SWPR, (uint32_t)(Page));
+ 1353              		.loc 1 780 3 view .LVU236
+ 1354 0000 024A     		ldr	r2, .L131
+ 1355 0002 136A     		ldr	r3, [r2, #32]
+ 1356 0004 0343     		orrs	r3, r3, r0
+ 1357 0006 1362     		str	r3, [r2, #32]
+ 781:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c **** }
+ 1358              		.loc 1 781 1 is_stmt 0 view .LVU237
+ 1359 0008 7047     		bx	lr
+ 1360              	.L132:
+ 1361 000a 00BF     		.align	2
+ 1362              	.L131:
+ 1363 000c 00000140 		.word	1073807360
+ 1364              		.cfi_endproc
+ 1365              	.LFE366:
+ 1367              		.global	uwTickFreq
+ 1368              		.section	.data.uwTickFreq,"aw"
+ 1369              		.align	2
+ 1372              	uwTickFreq:
+ 1373 0000 01000000 		.word	1
+ 1374              		.global	uwTickPrio
+ 1375              		.section	.data.uwTickPrio,"aw"
+ 1376              		.align	2
+ 1379              	uwTickPrio:
+ 1380 0000 10000000 		.word	16
+ 1381              		.global	uwTick
+ 1382              		.section	.bss.uwTick,"aw",%nobits
+ 1383              		.align	2
+ 1386              	uwTick:
+ 1387 0000 00000000 		.space	4
+ 1388              		.text
+ 1389              	.Letext0:
+ARM GAS  /tmp/ccATWWaz.s 			page 39
+
+
+ 1390              		.file 2 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 1391              		.file 3 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 1392              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/core_cm4.h"
+ 1393              		.file 5 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 1394              		.file 6 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 1395              		.file 7 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 1396              		.file 8 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ARM GAS  /tmp/ccATWWaz.s 			page 40
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32g4xx_hal.c
+     /tmp/ccATWWaz.s:21     .text.HAL_MspInit:00000000 $t
+     /tmp/ccATWWaz.s:28     .text.HAL_MspInit:00000000 HAL_MspInit
+     /tmp/ccATWWaz.s:41     .text.HAL_MspDeInit:00000000 $t
+     /tmp/ccATWWaz.s:48     .text.HAL_MspDeInit:00000000 HAL_MspDeInit
+     /tmp/ccATWWaz.s:60     .text.HAL_DeInit:00000000 $t
+     /tmp/ccATWWaz.s:67     .text.HAL_DeInit:00000000 HAL_DeInit
+     /tmp/ccATWWaz.s:115    .text.HAL_DeInit:00000028 $d
+     /tmp/ccATWWaz.s:120    .text.HAL_InitTick:00000000 $t
+     /tmp/ccATWWaz.s:127    .text.HAL_InitTick:00000000 HAL_InitTick
+     /tmp/ccATWWaz.s:210    .text.HAL_InitTick:00000040 $d
+     /tmp/ccATWWaz.s:1372   .data.uwTickFreq:00000000 uwTickFreq
+     /tmp/ccATWWaz.s:1379   .data.uwTickPrio:00000000 uwTickPrio
+     /tmp/ccATWWaz.s:217    .text.HAL_Init:00000000 $t
+     /tmp/ccATWWaz.s:224    .text.HAL_Init:00000000 HAL_Init
+     /tmp/ccATWWaz.s:273    .text.HAL_IncTick:00000000 $t
+     /tmp/ccATWWaz.s:280    .text.HAL_IncTick:00000000 HAL_IncTick
+     /tmp/ccATWWaz.s:300    .text.HAL_IncTick:00000010 $d
+     /tmp/ccATWWaz.s:1386   .bss.uwTick:00000000 uwTick
+     /tmp/ccATWWaz.s:306    .text.HAL_GetTick:00000000 $t
+     /tmp/ccATWWaz.s:313    .text.HAL_GetTick:00000000 HAL_GetTick
+     /tmp/ccATWWaz.s:329    .text.HAL_GetTick:00000008 $d
+     /tmp/ccATWWaz.s:334    .text.HAL_GetTickPrio:00000000 $t
+     /tmp/ccATWWaz.s:341    .text.HAL_GetTickPrio:00000000 HAL_GetTickPrio
+     /tmp/ccATWWaz.s:357    .text.HAL_GetTickPrio:00000008 $d
+     /tmp/ccATWWaz.s:362    .text.HAL_SetTickFreq:00000000 $t
+     /tmp/ccATWWaz.s:369    .text.HAL_SetTickFreq:00000000 HAL_SetTickFreq
+     /tmp/ccATWWaz.s:431    .text.HAL_SetTickFreq:00000020 $d
+     /tmp/ccATWWaz.s:437    .text.HAL_GetTickFreq:00000000 $t
+     /tmp/ccATWWaz.s:444    .text.HAL_GetTickFreq:00000000 HAL_GetTickFreq
+     /tmp/ccATWWaz.s:460    .text.HAL_GetTickFreq:00000008 $d
+     /tmp/ccATWWaz.s:465    .text.HAL_Delay:00000000 $t
+     /tmp/ccATWWaz.s:472    .text.HAL_Delay:00000000 HAL_Delay
+     /tmp/ccATWWaz.s:527    .text.HAL_Delay:00000020 $d
+     /tmp/ccATWWaz.s:532    .text.HAL_SuspendTick:00000000 $t
+     /tmp/ccATWWaz.s:539    .text.HAL_SuspendTick:00000000 HAL_SuspendTick
+     /tmp/ccATWWaz.s:557    .text.HAL_ResumeTick:00000000 $t
+     /tmp/ccATWWaz.s:564    .text.HAL_ResumeTick:00000000 HAL_ResumeTick
+     /tmp/ccATWWaz.s:582    .text.HAL_GetHalVersion:00000000 $t
+     /tmp/ccATWWaz.s:589    .text.HAL_GetHalVersion:00000000 HAL_GetHalVersion
+     /tmp/ccATWWaz.s:603    .text.HAL_GetHalVersion:00000004 $d
+     /tmp/ccATWWaz.s:608    .text.HAL_GetREVID:00000000 $t
+     /tmp/ccATWWaz.s:615    .text.HAL_GetREVID:00000000 HAL_GetREVID
+     /tmp/ccATWWaz.s:632    .text.HAL_GetREVID:00000008 $d
+     /tmp/ccATWWaz.s:637    .text.HAL_GetDEVID:00000000 $t
+     /tmp/ccATWWaz.s:644    .text.HAL_GetDEVID:00000000 HAL_GetDEVID
+     /tmp/ccATWWaz.s:661    .text.HAL_GetDEVID:0000000c $d
+     /tmp/ccATWWaz.s:666    .text.HAL_GetUIDw0:00000000 $t
+     /tmp/ccATWWaz.s:673    .text.HAL_GetUIDw0:00000000 HAL_GetUIDw0
+     /tmp/ccATWWaz.s:689    .text.HAL_GetUIDw0:00000008 $d
+     /tmp/ccATWWaz.s:694    .text.HAL_GetUIDw1:00000000 $t
+     /tmp/ccATWWaz.s:701    .text.HAL_GetUIDw1:00000000 HAL_GetUIDw1
+     /tmp/ccATWWaz.s:717    .text.HAL_GetUIDw1:00000008 $d
+     /tmp/ccATWWaz.s:722    .text.HAL_GetUIDw2:00000000 $t
+     /tmp/ccATWWaz.s:729    .text.HAL_GetUIDw2:00000000 HAL_GetUIDw2
+     /tmp/ccATWWaz.s:745    .text.HAL_GetUIDw2:00000008 $d
+ARM GAS  /tmp/ccATWWaz.s 			page 41
+
+
+     /tmp/ccATWWaz.s:750    .text.HAL_DBGMCU_EnableDBGSleepMode:00000000 $t
+     /tmp/ccATWWaz.s:757    .text.HAL_DBGMCU_EnableDBGSleepMode:00000000 HAL_DBGMCU_EnableDBGSleepMode
+     /tmp/ccATWWaz.s:774    .text.HAL_DBGMCU_EnableDBGSleepMode:0000000c $d
+     /tmp/ccATWWaz.s:779    .text.HAL_DBGMCU_DisableDBGSleepMode:00000000 $t
+     /tmp/ccATWWaz.s:786    .text.HAL_DBGMCU_DisableDBGSleepMode:00000000 HAL_DBGMCU_DisableDBGSleepMode
+     /tmp/ccATWWaz.s:803    .text.HAL_DBGMCU_DisableDBGSleepMode:0000000c $d
+     /tmp/ccATWWaz.s:808    .text.HAL_DBGMCU_EnableDBGStopMode:00000000 $t
+     /tmp/ccATWWaz.s:815    .text.HAL_DBGMCU_EnableDBGStopMode:00000000 HAL_DBGMCU_EnableDBGStopMode
+     /tmp/ccATWWaz.s:832    .text.HAL_DBGMCU_EnableDBGStopMode:0000000c $d
+     /tmp/ccATWWaz.s:837    .text.HAL_DBGMCU_DisableDBGStopMode:00000000 $t
+     /tmp/ccATWWaz.s:844    .text.HAL_DBGMCU_DisableDBGStopMode:00000000 HAL_DBGMCU_DisableDBGStopMode
+     /tmp/ccATWWaz.s:861    .text.HAL_DBGMCU_DisableDBGStopMode:0000000c $d
+     /tmp/ccATWWaz.s:866    .text.HAL_DBGMCU_EnableDBGStandbyMode:00000000 $t
+     /tmp/ccATWWaz.s:873    .text.HAL_DBGMCU_EnableDBGStandbyMode:00000000 HAL_DBGMCU_EnableDBGStandbyMode
+     /tmp/ccATWWaz.s:890    .text.HAL_DBGMCU_EnableDBGStandbyMode:0000000c $d
+     /tmp/ccATWWaz.s:895    .text.HAL_DBGMCU_DisableDBGStandbyMode:00000000 $t
+     /tmp/ccATWWaz.s:902    .text.HAL_DBGMCU_DisableDBGStandbyMode:00000000 HAL_DBGMCU_DisableDBGStandbyMode
+     /tmp/ccATWWaz.s:919    .text.HAL_DBGMCU_DisableDBGStandbyMode:0000000c $d
+     /tmp/ccATWWaz.s:924    .text.HAL_SYSCFG_CCMSRAMErase:00000000 $t
+     /tmp/ccATWWaz.s:931    .text.HAL_SYSCFG_CCMSRAMErase:00000000 HAL_SYSCFG_CCMSRAMErase
+     /tmp/ccATWWaz.s:958    .text.HAL_SYSCFG_CCMSRAMErase:00000014 $d
+     /tmp/ccATWWaz.s:963    .text.HAL_SYSCFG_EnableMemorySwappingBank:00000000 $t
+     /tmp/ccATWWaz.s:970    .text.HAL_SYSCFG_EnableMemorySwappingBank:00000000 HAL_SYSCFG_EnableMemorySwappingBank
+     /tmp/ccATWWaz.s:987    .text.HAL_SYSCFG_EnableMemorySwappingBank:0000000c $d
+     /tmp/ccATWWaz.s:992    .text.HAL_SYSCFG_DisableMemorySwappingBank:00000000 $t
+     /tmp/ccATWWaz.s:999    .text.HAL_SYSCFG_DisableMemorySwappingBank:00000000 HAL_SYSCFG_DisableMemorySwappingBank
+     /tmp/ccATWWaz.s:1016   .text.HAL_SYSCFG_DisableMemorySwappingBank:0000000c $d
+     /tmp/ccATWWaz.s:1021   .text.HAL_SYSCFG_VREFBUF_VoltageScalingConfig:00000000 $t
+     /tmp/ccATWWaz.s:1028   .text.HAL_SYSCFG_VREFBUF_VoltageScalingConfig:00000000 HAL_SYSCFG_VREFBUF_VoltageScalingConfig
+     /tmp/ccATWWaz.s:1048   .text.HAL_SYSCFG_VREFBUF_VoltageScalingConfig:00000010 $d
+     /tmp/ccATWWaz.s:1053   .text.HAL_SYSCFG_VREFBUF_HighImpedanceConfig:00000000 $t
+     /tmp/ccATWWaz.s:1060   .text.HAL_SYSCFG_VREFBUF_HighImpedanceConfig:00000000 HAL_SYSCFG_VREFBUF_HighImpedanceConfig
+     /tmp/ccATWWaz.s:1080   .text.HAL_SYSCFG_VREFBUF_HighImpedanceConfig:00000010 $d
+     /tmp/ccATWWaz.s:1085   .text.HAL_SYSCFG_VREFBUF_TrimmingConfig:00000000 $t
+     /tmp/ccATWWaz.s:1092   .text.HAL_SYSCFG_VREFBUF_TrimmingConfig:00000000 HAL_SYSCFG_VREFBUF_TrimmingConfig
+     /tmp/ccATWWaz.s:1112   .text.HAL_SYSCFG_VREFBUF_TrimmingConfig:00000010 $d
+     /tmp/ccATWWaz.s:1117   .text.HAL_SYSCFG_EnableVREFBUF:00000000 $t
+     /tmp/ccATWWaz.s:1124   .text.HAL_SYSCFG_EnableVREFBUF:00000000 HAL_SYSCFG_EnableVREFBUF
+     /tmp/ccATWWaz.s:1187   .text.HAL_SYSCFG_EnableVREFBUF:0000002c $d
+     /tmp/ccATWWaz.s:1192   .text.HAL_SYSCFG_DisableVREFBUF:00000000 $t
+     /tmp/ccATWWaz.s:1199   .text.HAL_SYSCFG_DisableVREFBUF:00000000 HAL_SYSCFG_DisableVREFBUF
+     /tmp/ccATWWaz.s:1216   .text.HAL_SYSCFG_DisableVREFBUF:0000000c $d
+     /tmp/ccATWWaz.s:1221   .text.HAL_SYSCFG_EnableIOSwitchBooster:00000000 $t
+     /tmp/ccATWWaz.s:1228   .text.HAL_SYSCFG_EnableIOSwitchBooster:00000000 HAL_SYSCFG_EnableIOSwitchBooster
+     /tmp/ccATWWaz.s:1245   .text.HAL_SYSCFG_EnableIOSwitchBooster:0000000c $d
+     /tmp/ccATWWaz.s:1250   .text.HAL_SYSCFG_DisableIOSwitchBooster:00000000 $t
+     /tmp/ccATWWaz.s:1257   .text.HAL_SYSCFG_DisableIOSwitchBooster:00000000 HAL_SYSCFG_DisableIOSwitchBooster
+     /tmp/ccATWWaz.s:1274   .text.HAL_SYSCFG_DisableIOSwitchBooster:0000000c $d
+     /tmp/ccATWWaz.s:1279   .text.HAL_SYSCFG_EnableIOSwitchVDD:00000000 $t
+     /tmp/ccATWWaz.s:1286   .text.HAL_SYSCFG_EnableIOSwitchVDD:00000000 HAL_SYSCFG_EnableIOSwitchVDD
+     /tmp/ccATWWaz.s:1303   .text.HAL_SYSCFG_EnableIOSwitchVDD:0000000c $d
+     /tmp/ccATWWaz.s:1308   .text.HAL_SYSCFG_DisableIOSwitchVDD:00000000 $t
+     /tmp/ccATWWaz.s:1315   .text.HAL_SYSCFG_DisableIOSwitchVDD:00000000 HAL_SYSCFG_DisableIOSwitchVDD
+     /tmp/ccATWWaz.s:1332   .text.HAL_SYSCFG_DisableIOSwitchVDD:0000000c $d
+     /tmp/ccATWWaz.s:1337   .text.HAL_SYSCFG_CCMSRAM_WriteProtectionEnable:00000000 $t
+     /tmp/ccATWWaz.s:1344   .text.HAL_SYSCFG_CCMSRAM_WriteProtectionEnable:00000000 HAL_SYSCFG_CCMSRAM_WriteProtectionEnable
+     /tmp/ccATWWaz.s:1363   .text.HAL_SYSCFG_CCMSRAM_WriteProtectionEnable:0000000c $d
+ARM GAS  /tmp/ccATWWaz.s 			page 42
+
+
+     /tmp/ccATWWaz.s:1369   .data.uwTickFreq:00000000 $d
+     /tmp/ccATWWaz.s:1376   .data.uwTickPrio:00000000 $d
+     /tmp/ccATWWaz.s:1383   .bss.uwTick:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_SYSTICK_Config
+HAL_NVIC_SetPriority
+SystemCoreClock
+HAL_NVIC_SetPriorityGrouping

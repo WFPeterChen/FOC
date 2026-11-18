@@ -1,0 +1,380 @@
+ARM GAS  /tmp/ccB31XUo.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"motor_task.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c"
+  20              		.section	.text.FocDbgPin_Init,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	FocDbgPin_Init
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	FocDbgPin_Init:
+  29              	.LFB392:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** #include "motor_task.h"
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** 
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** #define ADJUST_EN 0 // ����ʹ��
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** 
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** // 诊断: 测 FOC ISR(20kHz)执行周期数, 排查是否超时(50us=8400cyc@168MHz)饿死 FDCAN R
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** volatile uint32_t g_foc_cyc = 0, g_foc_cyc_max = 0, g_foc_over_cnt = 0;
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** 
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** // ADC采样点/ISR时序调试脚: PA7 (GH1.25座 SPI1_MOSI 脚, SPI1 无人用, 2026-07-11)
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** // 20kHz ISR 入口置高/出口置低 → 示波器上: 上升沿≈注入转换完成时刻(真�
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** // 高电平宽度=FOC ISR 耗时。常开: 每拍只多 2 次寄存器写(ns级)。
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** void FocDbgPin_Init(void)
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** {
+  30              		.loc 1 12 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 32
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     GPIO_InitTypeDef g = {0};
+  34              		.loc 1 13 5 view .LVU1
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     GPIO_InitTypeDef g = {0};
+  35              		.loc 1 12 1 is_stmt 0 view .LVU2
+  36 0000 00B5     		push	{lr}
+  37              	.LCFI0:
+  38              		.cfi_def_cfa_offset 4
+  39              		.cfi_offset 14, -4
+  40              		.loc 1 13 22 view .LVU3
+  41 0002 0022     		movs	r2, #0
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     GPIO_InitTypeDef g = {0};
+  42              		.loc 1 12 1 view .LVU4
+  43 0004 89B0     		sub	sp, sp, #36
+ARM GAS  /tmp/ccB31XUo.s 			page 2
+
+
+  44              	.LCFI1:
+  45              		.cfi_def_cfa_offset 40
+  46              		.loc 1 13 22 view .LVU5
+  47 0006 CDE90422 		strd	r2, r2, [sp, #16]
+  48              	.LBB2:
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     __HAL_RCC_GPIOA_CLK_ENABLE();
+  49              		.loc 1 14 5 view .LVU6
+  50 000a 114B     		ldr	r3, .L4+8
+  51              	.LBE2:
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     GPIO_InitTypeDef g = {0};
+  52              		.loc 1 13 22 view .LVU7
+  53 000c 0692     		str	r2, [sp, #24]
+  54              		.loc 1 14 5 is_stmt 1 view .LVU8
+  55              	.LBB3:
+  56              		.loc 1 14 5 view .LVU9
+  57              		.loc 1 14 5 view .LVU10
+  58 000e DA6C     		ldr	r2, [r3, #76]
+  59 0010 42F00102 		orr	r2, r2, #1
+  60 0014 DA64     		str	r2, [r3, #76]
+  61              		.loc 1 14 5 view .LVU11
+  62 0016 DB6C     		ldr	r3, [r3, #76]
+  63              	.LBE3:
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     g.Pin   = GPIO_PIN_7;
+  64              		.loc 1 15 13 is_stmt 0 view .LVU12
+  65 0018 9FED0B7B 		vldr.64	d7, .L4	@ int
+  66              	.LBB4:
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     __HAL_RCC_GPIOA_CLK_ENABLE();
+  67              		.loc 1 14 5 view .LVU13
+  68 001c 03F00103 		and	r3, r3, #1
+  69              	.LBE4:
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     g.Mode  = GPIO_MODE_OUTPUT_PP;
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     g.Pull  = GPIO_NOPULL;
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     g.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  70              		.loc 1 18 13 view .LVU14
+  71 0020 0322     		movs	r2, #3
+  72              	.LBB5:
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     g.Pin   = GPIO_PIN_7;
+  73              		.loc 1 14 5 view .LVU15
+  74 0022 0193     		str	r3, [sp, #4]
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     g.Pin   = GPIO_PIN_7;
+  75              		.loc 1 14 5 is_stmt 1 view .LVU16
+  76              	.LBE5:
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     HAL_GPIO_Init(GPIOA, &g);
+  77              		.loc 1 19 5 is_stmt 0 view .LVU17
+  78 0024 02A9     		add	r1, sp, #8
+  79 0026 4FF09040 		mov	r0, #1207959552
+  80              	.LBB6:
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     g.Pin   = GPIO_PIN_7;
+  81              		.loc 1 14 5 view .LVU18
+  82 002a 019B     		ldr	r3, [sp, #4]
+  83              	.LBE6:
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     g.Pin   = GPIO_PIN_7;
+  84              		.loc 1 14 5 is_stmt 1 view .LVU19
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     g.Mode  = GPIO_MODE_OUTPUT_PP;
+  85              		.loc 1 15 5 view .LVU20
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     g.Pull  = GPIO_NOPULL;
+  86              		.loc 1 16 5 view .LVU21
+ARM GAS  /tmp/ccB31XUo.s 			page 3
+
+
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     g.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  87              		.loc 1 17 5 view .LVU22
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     HAL_GPIO_Init(GPIOA, &g);
+  88              		.loc 1 18 5 view .LVU23
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     HAL_GPIO_Init(GPIOA, &g);
+  89              		.loc 1 18 13 is_stmt 0 view .LVU24
+  90 002c 0592     		str	r2, [sp, #20]
+  91              		.loc 1 19 5 is_stmt 1 view .LVU25
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     g.Mode  = GPIO_MODE_OUTPUT_PP;
+  92              		.loc 1 15 13 is_stmt 0 view .LVU26
+  93 002e 8DED027B 		vstr.64	d7, [sp, #8]	@ int
+  94              		.loc 1 19 5 view .LVU27
+  95 0032 FFF7FEFF 		bl	HAL_GPIO_Init
+  96              	.LVL0:
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     GPIOA->BRR = GPIO_PIN_7;
+  97              		.loc 1 20 5 is_stmt 1 view .LVU28
+  98              		.loc 1 20 16 is_stmt 0 view .LVU29
+  99 0036 4FF09043 		mov	r3, #1207959552
+ 100 003a 8022     		movs	r2, #128
+ 101 003c 9A62     		str	r2, [r3, #40]
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** }
+ 102              		.loc 1 21 1 view .LVU30
+ 103 003e 09B0     		add	sp, sp, #36
+ 104              	.LCFI2:
+ 105              		.cfi_def_cfa_offset 4
+ 106              		@ sp needed
+ 107 0040 5DF804FB 		ldr	pc, [sp], #4
+ 108              	.L5:
+ 109 0044 AFF30080 		.align	3
+ 110              	.L4:
+ 111 0048 80000000 		.word	128
+ 112 004c 01000000 		.word	1
+ 113 0050 00100240 		.word	1073876992
+ 114              		.cfi_endproc
+ 115              	.LFE392:
+ 117              		.section	.text.HAL_ADCEx_InjectedConvCpltCallback,"ax",%progbits
+ 118              		.align	1
+ 119              		.p2align 2,,3
+ 120              		.global	HAL_ADCEx_InjectedConvCpltCallback
+ 121              		.syntax unified
+ 122              		.thumb
+ 123              		.thumb_func
+ 125              	HAL_ADCEx_InjectedConvCpltCallback:
+ 126              	.LVL1:
+ 127              	.LFB393:
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** 
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** /**
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****  * @brief ADC1 ����������ɻص�����
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****  *
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****  * ��������Ƶ��20khz
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****  *
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****  * @param hadc ����� ADC1
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****  */
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc)
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** {
+ 128              		.loc 1 31 1 is_stmt 1 view -0
+ 129              		.cfi_startproc
+ARM GAS  /tmp/ccB31XUo.s 			page 4
+
+
+ 130              		@ args = 0, pretend = 0, frame = 0
+ 131              		@ frame_needed = 0, uses_anonymous_args = 0
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     // �����¼�������
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     UNUSED(motor_data.components.current->hadc);
+ 132              		.loc 1 33 5 view .LVU32
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     // ������ת���� ADC �Ƿ�Ϊ ADC1
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     if (hadc == &ADC_HSPI)
+ 133              		.loc 1 35 5 view .LVU33
+ 134              		.loc 1 35 8 is_stmt 0 view .LVU34
+ 135 0000 164B     		ldr	r3, .L15
+ 136 0002 8342     		cmp	r3, r0
+ 137 0004 00D0     		beq	.L14
+ 138 0006 7047     		bx	lr
+ 139              	.L14:
+ 140              	.LBB7:
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     {
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****         GPIOA->BSRR = GPIO_PIN_7; // 调试脚PA7↑: 注入转换完成/ISR开始
+ 141              		.loc 1 37 9 is_stmt 1 view .LVU35
+ 142              	.LBE7:
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     // �����¼�������
+ 143              		.loc 1 31 1 is_stmt 0 view .LVU36
+ 144 0008 70B5     		push	{r4, r5, r6, lr}
+ 145              	.LCFI3:
+ 146              		.cfi_def_cfa_offset 16
+ 147              		.cfi_offset 4, -16
+ 148              		.cfi_offset 5, -12
+ 149              		.cfi_offset 6, -8
+ 150              		.cfi_offset 14, -4
+ 151              	.LBB8:
+ 152              		.loc 1 37 21 view .LVU37
+ 153 000a 4FF09043 		mov	r3, #1207959552
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** #if ADJUST_EN
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****         GetMotorADC1PhaseCurrent(&motor_data);
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****         GetMotor_Angle(motor_data.components.encoder);
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** #else
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****         uint32_t _c0 = DWT->CYCCNT;
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****         GetMotorADC1PhaseCurrent(&motor_data);
+ 154              		.loc 1 43 9 view .LVU38
+ 155 000e 144C     		ldr	r4, .L15+4
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****         GetMotorADC1PhaseCurrent(&motor_data);
+ 156              		.loc 1 42 18 view .LVU39
+ 157 0010 144D     		ldr	r5, .L15+8
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** #if ADJUST_EN
+ 158              		.loc 1 37 21 view .LVU40
+ 159 0012 8022     		movs	r2, #128
+ 160 0014 9A61     		str	r2, [r3, #24]
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****         GetMotorADC1PhaseCurrent(&motor_data);
+ 161              		.loc 1 42 9 is_stmt 1 view .LVU41
+ 162              		.loc 1 43 9 is_stmt 0 view .LVU42
+ 163 0016 2046     		mov	r0, r4
+ 164              	.LVL2:
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****         GetMotorADC1PhaseCurrent(&motor_data);
+ 165              		.loc 1 42 18 view .LVU43
+ 166 0018 6E68     		ldr	r6, [r5, #4]
+ 167              	.LVL3:
+ 168              		.loc 1 43 9 is_stmt 1 view .LVU44
+ 169 001a FFF7FEFF 		bl	GetMotorADC1PhaseCurrent
+ARM GAS  /tmp/ccB31XUo.s 			page 5
+
+
+ 170              	.LVL4:
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****         GetMotor_Angle(motor_data.components.encoder);
+ 171              		.loc 1 44 9 view .LVU45
+ 172 001e 6068     		ldr	r0, [r4, #4]
+ 173 0020 FFF7FEFF 		bl	GetMotor_Angle
+ 174              	.LVL5:
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****         MotorStateTask(&motor_data);
+ 175              		.loc 1 45 9 view .LVU46
+ 176 0024 2046     		mov	r0, r4
+ 177 0026 FFF7FEFF 		bl	MotorStateTask
+ 178              	.LVL6:
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****         g_foc_cyc = DWT->CYCCNT - _c0;
+ 179              		.loc 1 46 9 view .LVU47
+ 180              		.loc 1 46 24 is_stmt 0 view .LVU48
+ 181 002a 6A68     		ldr	r2, [r5, #4]
+ 182              		.loc 1 46 19 view .LVU49
+ 183 002c 0E4B     		ldr	r3, .L15+12
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****         if (g_foc_cyc > g_foc_cyc_max) g_foc_cyc_max = g_foc_cyc;
+ 184              		.loc 1 47 23 view .LVU50
+ 185 002e 0F49     		ldr	r1, .L15+16
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****         g_foc_cyc = DWT->CYCCNT - _c0;
+ 186              		.loc 1 46 33 view .LVU51
+ 187 0030 921B     		subs	r2, r2, r6
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****         g_foc_cyc = DWT->CYCCNT - _c0;
+ 188              		.loc 1 46 19 view .LVU52
+ 189 0032 1A60     		str	r2, [r3]
+ 190              		.loc 1 47 9 is_stmt 1 view .LVU53
+ 191              		.loc 1 47 23 is_stmt 0 view .LVU54
+ 192 0034 1868     		ldr	r0, [r3]
+ 193 0036 0A68     		ldr	r2, [r1]
+ 194              		.loc 1 47 12 view .LVU55
+ 195 0038 9042     		cmp	r0, r2
+ 196              		.loc 1 47 40 is_stmt 1 discriminator 1 view .LVU56
+ 197              		.loc 1 47 54 is_stmt 0 discriminator 1 view .LVU57
+ 198 003a 84BF     		itt	hi
+ 199 003c 1A68     		ldrhi	r2, [r3]
+ 200 003e 0A60     		strhi	r2, [r1]
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****         if (g_foc_cyc > 8400u) g_foc_over_cnt++; // 超过 50us 周期 = 超时
+ 201              		.loc 1 48 9 is_stmt 1 view .LVU58
+ 202              		.loc 1 48 23 is_stmt 0 view .LVU59
+ 203 0040 1A68     		ldr	r2, [r3]
+ 204              		.loc 1 48 12 view .LVU60
+ 205 0042 42F2D003 		movw	r3, #8400
+ 206 0046 9A42     		cmp	r2, r3
+ 207 0048 03D9     		bls	.L9
+ 208              		.loc 1 48 32 is_stmt 1 discriminator 1 view .LVU61
+ 209              		.loc 1 48 46 is_stmt 0 discriminator 1 view .LVU62
+ 210 004a 094A     		ldr	r2, .L15+20
+ 211 004c 1368     		ldr	r3, [r2]
+ 212 004e 0133     		adds	r3, r3, #1
+ 213 0050 1360     		str	r3, [r2]
+ 214              	.L9:
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** #endif
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****         GPIOA->BRR = GPIO_PIN_7; // 调试脚PA7↓: ISR结束
+ 215              		.loc 1 50 9 is_stmt 1 view .LVU63
+ 216              		.loc 1 50 20 is_stmt 0 view .LVU64
+ 217 0052 4FF09043 		mov	r3, #1207959552
+ARM GAS  /tmp/ccB31XUo.s 			page 6
+
+
+ 218 0056 8022     		movs	r2, #128
+ 219 0058 9A62     		str	r2, [r3, #40]
+ 220              	.LBE8:
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c ****     }
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/APP/motor_task/motor_task.c **** }
+ 221              		.loc 1 52 1 view .LVU65
+ 222 005a 70BD     		pop	{r4, r5, r6, pc}
+ 223              	.LVL7:
+ 224              	.L16:
+ 225              		.loc 1 52 1 view .LVU66
+ 226              		.align	2
+ 227              	.L15:
+ 228 005c 00000000 		.word	hadc1
+ 229 0060 00000000 		.word	motor_data
+ 230 0064 001000E0 		.word	-536866816
+ 231 0068 00000000 		.word	g_foc_cyc
+ 232 006c 00000000 		.word	g_foc_cyc_max
+ 233 0070 00000000 		.word	g_foc_over_cnt
+ 234              		.cfi_endproc
+ 235              	.LFE393:
+ 237              		.global	g_foc_over_cnt
+ 238              		.section	.bss.g_foc_over_cnt,"aw",%nobits
+ 239              		.align	2
+ 242              	g_foc_over_cnt:
+ 243 0000 00000000 		.space	4
+ 244              		.global	g_foc_cyc_max
+ 245              		.section	.bss.g_foc_cyc_max,"aw",%nobits
+ 246              		.align	2
+ 249              	g_foc_cyc_max:
+ 250 0000 00000000 		.space	4
+ 251              		.global	g_foc_cyc
+ 252              		.section	.bss.g_foc_cyc,"aw",%nobits
+ 253              		.align	2
+ 256              	g_foc_cyc:
+ 257 0000 00000000 		.space	4
+ 258              		.text
+ 259              	.Letext0:
+ 260              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 261              		.file 3 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Include/core_cm4.h"
+ 262              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 263              		.file 5 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 264              		.file 6 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 265              		.file 7 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 266              		.file 8 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 267              		.file 9 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 268              		.file 10 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm
+ 269              		.file 11 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.h"
+ 270              		.file 12 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/encoder/MT6816/mt6816_encode
+ 271              		.file 13 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/BLDCMotor.h"
+ 272              		.file 14 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.h"
+ 273              		.file 15 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/FOCMotor.h"
+ 274              		.file 16 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/adc.h"
+ARM GAS  /tmp/ccB31XUo.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 motor_task.c
+     /tmp/ccB31XUo.s:21     .text.FocDbgPin_Init:00000000 $t
+     /tmp/ccB31XUo.s:28     .text.FocDbgPin_Init:00000000 FocDbgPin_Init
+     /tmp/ccB31XUo.s:111    .text.FocDbgPin_Init:00000048 $d
+     /tmp/ccB31XUo.s:118    .text.HAL_ADCEx_InjectedConvCpltCallback:00000000 $t
+     /tmp/ccB31XUo.s:125    .text.HAL_ADCEx_InjectedConvCpltCallback:00000000 HAL_ADCEx_InjectedConvCpltCallback
+     /tmp/ccB31XUo.s:228    .text.HAL_ADCEx_InjectedConvCpltCallback:0000005c $d
+     /tmp/ccB31XUo.s:256    .bss.g_foc_cyc:00000000 g_foc_cyc
+     /tmp/ccB31XUo.s:249    .bss.g_foc_cyc_max:00000000 g_foc_cyc_max
+     /tmp/ccB31XUo.s:242    .bss.g_foc_over_cnt:00000000 g_foc_over_cnt
+     /tmp/ccB31XUo.s:239    .bss.g_foc_over_cnt:00000000 $d
+     /tmp/ccB31XUo.s:246    .bss.g_foc_cyc_max:00000000 $d
+     /tmp/ccB31XUo.s:253    .bss.g_foc_cyc:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_Init
+GetMotorADC1PhaseCurrent
+GetMotor_Angle
+MotorStateTask
+hadc1
+motor_data

@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "defaultMode": "bypassPermissions",
+    "allow": [
+      "Bash(iconv -f GBK -t UTF-8 attention.txt)",
+      "Bash(iconv -f GB18030 -t UTF-8 attention.txt)",
+      "Bash(pdfinfo SCH_Schematic1_4_2026-06-21.pdf)",
+      "Bash(python3 -c \"import PyPDF2;print\\(len\\(PyPDF2.PdfReader\\('SCH_Schematic1_4_2026-06-21.pdf'\\).pages\\)\\)\")",
+      "Skill(update-config)",
+      "Bash(ls -la .claude)",
+      "Bash(cat .claude/settings.local.json)",
+      "Bash(cat .claude/settings.json)"
+    ]
+  }
+}

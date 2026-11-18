@@ -1,0 +1,2470 @@
+ARM GAS  /tmp/cciesFVL.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"cogging.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c"
+  20              		.section	.text.cogcal_next,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	cogcal_next:
+  28              	.LVL0:
+  29              	.LFB400:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** /********************************************************************************
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****  * cogging.c —— 齿槽转矩标定与前馈补偿 (开环寄生版)
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****  * 寄生在编码器标定(CS_ENCODER)的开环电压匀速旋转上记录 iq vs 机械角:
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****  *   CW 一圈累加到 cogging_map, CCW 一圈累加到 friction_map(临时复用)。
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****  *   完成: cogging_map=(cw+ccw)/2(齿槽前馈电流), friction_map=(cw-ccw)/2(摩擦)。
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****  * 开环旋转无 PID 振荡, 故 iq 干净反映负载=齿槽+摩擦。
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****  * 补偿: 控制环 iq_set += cogging_map[raw>>SHIFT]。
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****  ********************************************************************************/
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** #include "cogging.h"
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** #include "general_def.h"
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** #include "motor_calib.h" // 标定结束写flash
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** #include "string.h"
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** // 标定期间 cogging_map 累加CW, friction_map 累加CCW, 完成时就地算出最终值(省RAM
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** float   cogging_map[COGGING_N] __attribute__((aligned(8))); // 8字节对齐: flash双字写要求
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** float   friction_map[COGGING_N];
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** uint8_t cogging_valid = 0;
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** static uint16_t cw_cnt[COGGING_N], ccw_cnt[COGGING_N];
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** void Cogging_Reset(void)
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** {
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(cogging_map, 0, sizeof(cogging_map));
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(friction_map, 0, sizeof(friction_map));
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(cw_cnt, 0, sizeof(cw_cnt));
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(ccw_cnt, 0, sizeof(ccw_cnt));
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogging_valid = 0;
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+ARM GAS  /tmp/cciesFVL.s 			page 2
+
+
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** // 编码器标定 CW 循环里每周期调用: 累加 iq 到当前机械角 bin
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** void Cogging_RecordCW(MOTOR_DATA *m)
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** {
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     uint16_t b = m->components.encoder->raw >> COGGING_SHIFT;
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogging_map[b] += m->components.foc->i_q;
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cw_cnt[b]++;
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** void Cogging_RecordCCW(MOTOR_DATA *m)
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** {
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     uint16_t b = m->components.encoder->raw >> COGGING_SHIFT;
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     friction_map[b] += m->components.foc->i_q;
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     ccw_cnt[b]++;
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** // 编码器标定结束时调用: 就地算出 cogging(前馈) 和 friction
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** void Cogging_Compute(void)
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** {
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     for (int i = 0; i < COGGING_N; i++)
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     {
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float cw  = cw_cnt[i] ? cogging_map[i] / cw_cnt[i] : 0.0f;
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float ccw = ccw_cnt[i] ? friction_map[i] / ccw_cnt[i] : 0.0f;
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cogging_map[i]  = 0.5f * (cw + ccw); // 位置相关 = 齿槽前馈电流
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         friction_map[i] = 0.5f * (cw - ccw); // 方向性 = 摩擦
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     }
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogging_valid = 1;
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** float Cogging_FF(uint16_t raw)
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** {
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (!cogging_valid) return 0.0f;
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     // 线性插值(原为最近邻零阶保持→512个bin边界每转跳变, 实测相邻台阶�
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     // 像编码器 offset_lut 那样在相邻 bin 间插值, FF 电流连续无台阶。COGGING_N=
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     uint16_t i = raw >> COGGING_SHIFT;                  // bin 索引 0..N-1
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     uint16_t f = raw & ((1u << COGGING_SHIFT) - 1u);    // bin 内小数 0..(2^SHIFT-1)
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     float a = cogging_map[i];
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     float b = cogging_map[(i + 1u) & (COGGING_N - 1u)]; // 下一 bin, 圆周回绕
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     return a + (b - a) * ((float)f * (1.0f / (float)(1u << COGGING_SHIFT)));
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** /********************************************************************************
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****  * 闭环逐点静态保持标定 —— 零速保持电流 = 纯齿槽扰动(无环路相位滞后
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****  * 位置环把转子*停*在一系列离散角度, 每点等速度≈0后取保持电流均值入 
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****  *   零速时 Kt·i_hold = -T_cog(θ) ⇒ i_hold = -T_cog/Kt = 纯齿槽补偿电流
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****  *   (不像匀速扫那样记的是"速度环带相位滞后的反应", 那个当 FF 反而使纹�
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****  *   CW(从+approach)入 cw_resid, CCW(从-approach)入 friction_map ⇒ (cw+ccw)/2抵消静摩擦�
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****  * 前提: 电流环稳定(早先 hunting 是 flash 里 Ls 坏致电流环增益20×, 已修)。
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****  * 触发: g_cog_cal_trigger=2 清零重测, =1 在现有 map 上迭代。每控制拍调 Update。
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****  ********************************************************************************/
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** // 极限质量版(2026-06-27): 每点收敛到目标+静止后保持1s, 取1s(2万样)电流均值
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** // 收不进死区的点用"静止期间均值"兜底; 两向都无样的空洞圆周线性插值; 
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** #define COGCAL_SETTLE_VEL    0.03f  // turn/s, |vel|低于此视为已静止(编码器<0.006turn/s�
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** #define COGCAL_POS_THR  (0.50f / (float)COGGING_N) // turn, |目标-实际|<0.5bin算收敛(0.1bin<
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** #define COGCAL_SETTLE_TICKS  20000u // 收敛后再保持1s墙钟(@20kHz)→取该窗内静止样�
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** #define COGCAL_TIMEOUT_TICKS 60000u // 单点最长3s(给积分蠕动到位; 超时用静止期间�
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** #define COGCAL_VEL_CLAMP     0.5f   // 位置环 vel_set 钳位(点间移动限速)
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+ARM GAS  /tmp/cciesFVL.s 			page 3
+
+
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** typedef enum { COGCAL_IDLE = 0, COGCAL_CW, COGCAL_CCW, COGCAL_FINISH } cogcal_phase_t;
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** // 进度量(非static, 便于SWD观察): phase 0空闲/1正扫/2反扫/3收尾, step 0..COGGING_N(
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** volatile uint8_t  g_cogcal_phase = COGCAL_IDLE;
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** volatile uint16_t g_cogcal_step  = 0;
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** volatile uint16_t g_cogcal_holes = 0; // 两向都无样的bin数(插值前); /512=空洞率, SWD�
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** static float    cw_resid[COGGING_N]; // CW 保持电流累加(friction_map 作 CCW 累加)
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** static float    cogcal_base;         // 本向扫描起点位置(turn, 多圈连续)
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** static uint32_t cogcal_settle;       // 连续"收敛+静止"拍计数(达1s→取样)
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** static uint32_t cogcal_timer;        // 本点总拍计数(超时保护)
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** static double   cogcal_iq_acc;       // 静止期间 iq 累加(2万样, double防精度损失)
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** static uint32_t cogcal_iq_n;         // 累加样本数
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** #define COG_FF_SIGN (+1.0f) // 物理推导符号(静态测量无环路滞后, iq_set+=map 抵消�
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** // 把保持电流 iq 记入当前 raw 所在 bin(收敛后 raw≈目标, 落点正确)
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** static void cogcal_record(MOTOR_DATA *m, float iq)
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** {
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     uint16_t bin = (uint16_t)m->components.encoder->raw >> COGGING_SHIFT;
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (g_cogcal_phase == COGCAL_CW) { cw_resid[bin]    += iq; cw_cnt[bin]++;  }
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     else                             { friction_map[bin] += iq; ccw_cnt[bin]++; }
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** // 结束: 每bin算均值→齿槽/摩擦; 空洞圆周插值; 去直流; 累加进 map; 存 flash
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** static void cogcal_finish(MOTOR_DATA *m)
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** {
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     for (int i = 0; i < COGGING_N; i++) // 1) 每bin均值 → 齿槽(暂存cw_resid)/摩擦(fricti
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     {
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float cw  = cw_cnt[i]  ? cw_resid[i]     / cw_cnt[i]  : 0.0f;
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float ccw = ccw_cnt[i] ? friction_map[i] / ccw_cnt[i] : 0.0f;
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cw_resid[i]     = 0.5f * (cw + ccw);
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         friction_map[i] = 0.5f * (cw - ccw);
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     }
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     uint16_t holes = 0; // 2) 空洞(两向都无样)圆周线性插值
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     for (int i = 0; i < COGGING_N; i++) if (!cw_cnt[i] && !ccw_cnt[i]) holes++;
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_holes = holes;
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (holes && holes < COGGING_N)
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         for (int i = 0; i < COGGING_N; i++)
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         {
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             if (cw_cnt[i] || ccw_cnt[i]) continue;          // 有样, 跳过
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             int dl, dr, l = i, r = i;
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             for (dl = 1; dl < COGGING_N; dl++) { int j = (i - dl + COGGING_N) % COGGING_N; if (cw_c
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             for (dr = 1; dr < COGGING_N; dr++) { int j = (i + dr) % COGGING_N;             if (cw_c
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             float t = (float)dl / (float)(dl + dr);
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             cw_resid[i]     = cw_resid[l]     + t * (cw_resid[r]     - cw_resid[l]);
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             friction_map[i] = friction_map[l] + t * (friction_map[r] - friction_map[l]);
+ 134:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         }
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     float sum = 0.0f; // 3) 去直流(电流采样偏置, 齿槽应零均值) + 累加进 map
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     for (int i = 0; i < COGGING_N; i++) sum += cw_resid[i];
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     float mean = sum / (float)COGGING_N;
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     for (int i = 0; i < COGGING_N; i++)
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cogging_map[i] += COG_FF_SIGN * (cw_resid[i] - mean);
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogging_valid = 1;
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     Foc_Pwm_LowSides();        // 关PWM再写flash(擦写停CPU~40ms)
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     MotorCalib_SaveToFlash(m); // 连同calib持久化到 page62/63
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->state.State_Mode = STATE_MODE_GUARD;
+ARM GAS  /tmp/cciesFVL.s 			page 4
+
+
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_phase      = COGCAL_IDLE;
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** void Cogging_CalStart(MOTOR_DATA *m, bool reset_map)
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** {
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (!m->components.encoder->calib_valid) return; // 需先有offset_lut/电流环增益/极对�
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (reset_map) { memset(cogging_map, 0, sizeof(cogging_map)); cogging_valid = 0; } // 首遍: F
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(cw_resid, 0, sizeof(cw_resid));
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(friction_map, 0, sizeof(friction_map)); // 复用作 CCW 累加
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(cw_cnt, 0, sizeof(cw_cnt));
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(ccw_cnt, 0, sizeof(ccw_cnt));
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_base   = m->components.encoder->pos_estimate_;
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_settle = 0; cogcal_timer = 0; cogcal_iq_acc = 0.0; cogcal_iq_n = 0;
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_step = 0; g_cogcal_holes = 0;
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->components.foc->id_set    = 0.0f;
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->state.Control_Mode        = CONTROL_MODE_POSITION;
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->state.State_Mode          = STATE_MODE_RUNNING;
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_phase               = COGCAL_CW;
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 163:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** // 推进到下一点; 一向扫完则掉头/收尾
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** static void cogcal_next(MOTOR_DATA *m)
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** {
+  30              		.loc 1 166 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_settle = 0; cogcal_timer = 0; cogcal_iq_acc = 0.0; cogcal_iq_n = 0;
+  35              		.loc 1 167 5 view .LVU1
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (++g_cogcal_step >= COGGING_N)
+  36              		.loc 1 168 9 is_stmt 0 view .LVU2
+  37 0000 1549     		ldr	r1, .L7+8
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_settle = 0; cogcal_timer = 0; cogcal_iq_acc = 0.0; cogcal_iq_n = 0;
+  38              		.loc 1 167 56 view .LVU3
+  39 0002 164A     		ldr	r2, .L7+12
+  40              		.loc 1 168 9 view .LVU4
+  41 0004 0B88     		ldrh	r3, [r1]
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_settle = 0; cogcal_timer = 0; cogcal_iq_acc = 0.0; cogcal_iq_n = 0;
+  42              		.loc 1 167 56 view .LVU5
+  43 0006 9FED127B 		vldr.64	d7, .L7
+  44              		.loc 1 168 9 view .LVU6
+  45 000a 0133     		adds	r3, r3, #1
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_settle = 0; cogcal_timer = 0; cogcal_iq_acc = 0.0; cogcal_iq_n = 0;
+  46              		.loc 1 166 1 view .LVU7
+  47 000c 70B4     		push	{r4, r5, r6}
+  48              	.LCFI0:
+  49              		.cfi_def_cfa_offset 12
+  50              		.cfi_offset 4, -12
+  51              		.cfi_offset 5, -8
+  52              		.cfi_offset 6, -4
+  53              		.loc 1 168 9 view .LVU8
+  54 000e 9BB2     		uxth	r3, r3
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_settle = 0; cogcal_timer = 0; cogcal_iq_acc = 0.0; cogcal_iq_n = 0;
+  55              		.loc 1 167 19 view .LVU9
+  56 0010 134E     		ldr	r6, .L7+16
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_settle = 0; cogcal_timer = 0; cogcal_iq_acc = 0.0; cogcal_iq_n = 0;
+ARM GAS  /tmp/cciesFVL.s 			page 5
+
+
+  57              		.loc 1 167 37 view .LVU10
+  58 0012 144D     		ldr	r5, .L7+20
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_settle = 0; cogcal_timer = 0; cogcal_iq_acc = 0.0; cogcal_iq_n = 0;
+  59              		.loc 1 167 75 view .LVU11
+  60 0014 144C     		ldr	r4, .L7+24
+  61              		.loc 1 168 8 view .LVU12
+  62 0016 0B80     		strh	r3, [r1]	@ movhi
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_settle = 0; cogcal_timer = 0; cogcal_iq_acc = 0.0; cogcal_iq_n = 0;
+  63              		.loc 1 167 56 view .LVU13
+  64 0018 82ED007B 		vstr.64	d7, [r2]
+  65              		.loc 1 168 8 view .LVU14
+  66 001c B3F5007F 		cmp	r3, #512
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_settle = 0; cogcal_timer = 0; cogcal_iq_acc = 0.0; cogcal_iq_n = 0;
+  67              		.loc 1 167 19 view .LVU15
+  68 0020 4FF00002 		mov	r2, #0
+  69 0024 3260     		str	r2, [r6]
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_settle = 0; cogcal_timer = 0; cogcal_iq_acc = 0.0; cogcal_iq_n = 0;
+  70              		.loc 1 167 24 is_stmt 1 view .LVU16
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_settle = 0; cogcal_timer = 0; cogcal_iq_acc = 0.0; cogcal_iq_n = 0;
+  71              		.loc 1 167 37 is_stmt 0 view .LVU17
+  72 0026 2A60     		str	r2, [r5]
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_settle = 0; cogcal_timer = 0; cogcal_iq_acc = 0.0; cogcal_iq_n = 0;
+  73              		.loc 1 167 42 is_stmt 1 view .LVU18
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_settle = 0; cogcal_timer = 0; cogcal_iq_acc = 0.0; cogcal_iq_n = 0;
+  74              		.loc 1 167 63 view .LVU19
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_settle = 0; cogcal_timer = 0; cogcal_iq_acc = 0.0; cogcal_iq_n = 0;
+  75              		.loc 1 167 75 is_stmt 0 view .LVU20
+  76 0028 2260     		str	r2, [r4]
+  77              		.loc 1 168 5 is_stmt 1 view .LVU21
+  78              		.loc 1 168 8 is_stmt 0 view .LVU22
+  79 002a 06D3     		bcc	.L1
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     {
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         g_cogcal_step = 0;
+  80              		.loc 1 170 9 is_stmt 1 view .LVU23
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         if (g_cogcal_phase == COGCAL_CW) { g_cogcal_phase = COGCAL_CCW; cogcal_base = m->components
+  81              		.loc 1 171 28 is_stmt 0 view .LVU24
+  82 002c 0F4B     		ldr	r3, .L7+28
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         if (g_cogcal_phase == COGCAL_CW) { g_cogcal_phase = COGCAL_CCW; cogcal_base = m->components
+  83              		.loc 1 170 23 view .LVU25
+  84 002e 0A80     		strh	r2, [r1]	@ movhi
+  85              		.loc 1 171 9 is_stmt 1 view .LVU26
+  86              		.loc 1 171 28 is_stmt 0 view .LVU27
+  87 0030 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+  88              		.loc 1 171 12 view .LVU28
+  89 0032 012A     		cmp	r2, #1
+  90 0034 03D0     		beq	.L6
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else                             { g_cogcal_phase = COGCAL_FINISH; }
+  91              		.loc 1 172 44 is_stmt 1 view .LVU29
+  92              		.loc 1 172 59 is_stmt 0 view .LVU30
+  93 0036 0322     		movs	r2, #3
+  94 0038 1A70     		strb	r2, [r3]
+  95              	.L1:
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     }
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+  96              		.loc 1 174 1 view .LVU31
+  97 003a 70BC     		pop	{r4, r5, r6}
+  98              	.LCFI1:
+ARM GAS  /tmp/cciesFVL.s 			page 6
+
+
+  99              		.cfi_remember_state
+ 100              		.cfi_restore 6
+ 101              		.cfi_restore 5
+ 102              		.cfi_restore 4
+ 103              		.cfi_def_cfa_offset 0
+ 104 003c 7047     		bx	lr
+ 105              	.L6:
+ 106              	.LCFI2:
+ 107              		.cfi_restore_state
+ 108              	.LVL1:
+ 109              	.LBB4:
+ 110              	.LBI4:
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** {
+ 111              		.loc 1 165 13 is_stmt 1 view .LVU32
+ 112              	.LBB5:
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else                             { g_cogcal_phase = COGCAL_FINISH; }
+ 113              		.loc 1 171 44 discriminator 1 view .LVU33
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else                             { g_cogcal_phase = COGCAL_FINISH; }
+ 114              		.loc 1 171 108 is_stmt 0 discriminator 1 view .LVU34
+ 115 003e 4168     		ldr	r1, [r0, #4]
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else                             { g_cogcal_phase = COGCAL_FINISH; }
+ 116              		.loc 1 171 85 discriminator 1 view .LVU35
+ 117 0040 0B4A     		ldr	r2, .L7+32
+ 118 0042 D1F84812 		ldr	r1, [r1, #584]	@ float
+ 119 0046 1160     		str	r1, [r2]	@ float
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else                             { g_cogcal_phase = COGCAL_FINISH; }
+ 120              		.loc 1 171 59 discriminator 1 view .LVU36
+ 121 0048 0220     		movs	r0, #2
+ 122              	.LVL2:
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else                             { g_cogcal_phase = COGCAL_FINISH; }
+ 123              		.loc 1 171 59 discriminator 1 view .LVU37
+ 124 004a 1870     		strb	r0, [r3]
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else                             { g_cogcal_phase = COGCAL_FINISH; }
+ 125              		.loc 1 171 73 is_stmt 1 discriminator 1 view .LVU38
+ 126              	.LVL3:
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else                             { g_cogcal_phase = COGCAL_FINISH; }
+ 127              		.loc 1 171 73 is_stmt 0 discriminator 1 view .LVU39
+ 128              	.LBE5:
+ 129              	.LBE4:
+ 130              		.loc 1 174 1 view .LVU40
+ 131 004c 70BC     		pop	{r4, r5, r6}
+ 132              	.LCFI3:
+ 133              		.cfi_restore 6
+ 134              		.cfi_restore 5
+ 135              		.cfi_restore 4
+ 136              		.cfi_def_cfa_offset 0
+ 137 004e 7047     		bx	lr
+ 138              	.L8:
+ 139              		.align	3
+ 140              	.L7:
+ 141 0050 00000000 		.word	0
+ 142 0054 00000000 		.word	0
+ 143 0058 00000000 		.word	g_cogcal_step
+ 144 005c 00000000 		.word	cogcal_iq_acc
+ 145 0060 00000000 		.word	cogcal_settle
+ 146 0064 00000000 		.word	cogcal_timer
+ 147 0068 00000000 		.word	cogcal_iq_n
+ARM GAS  /tmp/cciesFVL.s 			page 7
+
+
+ 148 006c 00000000 		.word	g_cogcal_phase
+ 149 0070 00000000 		.word	cogcal_base
+ 150              		.cfi_endproc
+ 151              	.LFE400:
+ 153              		.section	.text.cogcal_record.constprop.0,"ax",%progbits
+ 154              		.align	1
+ 155              		.p2align 2,,3
+ 156              		.syntax unified
+ 157              		.thumb
+ 158              		.thumb_func
+ 160              	cogcal_record.constprop.0:
+ 161              	.LVL4:
+ 162              	.LFB403:
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** {
+ 163              		.loc 1 104 13 is_stmt 1 view -0
+ 164              		.cfi_startproc
+ 165              		@ args = 0, pretend = 0, frame = 0
+ 166              		@ frame_needed = 0, uses_anonymous_args = 0
+ 167              		@ link register save eliminated.
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (g_cogcal_phase == COGCAL_CW) { cw_resid[bin]    += iq; cw_cnt[bin]++;  }
+ 168              		.loc 1 106 5 view .LVU42
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     else                             { friction_map[bin] += iq; ccw_cnt[bin]++; }
+ 169              		.loc 1 107 5 view .LVU43
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     else                             { friction_map[bin] += iq; ccw_cnt[bin]++; }
+ 170              		.loc 1 107 40 discriminator 1 view .LVU44
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 171              		.loc 1 108 40 view .LVU45
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     else                             { friction_map[bin] += iq; ccw_cnt[bin]++; }
+ 172              		.loc 1 107 24 is_stmt 0 view .LVU46
+ 173 0000 0C4A     		ldr	r2, .L13
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (g_cogcal_phase == COGCAL_CW) { cw_resid[bin]    += iq; cw_cnt[bin]++;  }
+ 174              		.loc 1 106 51 view .LVU47
+ 175 0002 4368     		ldr	r3, [r0, #4]
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     else                             { friction_map[bin] += iq; ccw_cnt[bin]++; }
+ 176              		.loc 1 107 24 view .LVU48
+ 177 0004 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (g_cogcal_phase == COGCAL_CW) { cw_resid[bin]    += iq; cw_cnt[bin]++;  }
+ 178              		.loc 1 106 14 view .LVU49
+ 179 0006 B3F82032 		ldrh	r3, [r3, #544]
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     else                             { friction_map[bin] += iq; ccw_cnt[bin]++; }
+ 180              		.loc 1 107 8 view .LVU50
+ 181 000a 012A     		cmp	r2, #1
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     else                             { friction_map[bin] += iq; ccw_cnt[bin]++; }
+ 182              		.loc 1 107 57 discriminator 1 view .LVU51
+ 183 000c 0BBF     		itete	eq
+ 184 000e 0A4A     		ldreq	r2, .L13+4
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 185              		.loc 1 108 58 view .LVU52
+ 186 0010 0A4A     		ldrne	r2, .L13+8
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     else                             { friction_map[bin] += iq; ccw_cnt[bin]++; }
+ 187              		.loc 1 107 75 discriminator 1 view .LVU53
+ 188 0012 0B48     		ldreq	r0, .L13+12
+ 189              	.LVL5:
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 190              		.loc 1 108 77 view .LVU54
+ 191 0014 0B48     		ldrne	r0, .L13+16
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     else                             { friction_map[bin] += iq; ccw_cnt[bin]++; }
+ARM GAS  /tmp/cciesFVL.s 			page 8
+
+
+ 192              		.loc 1 107 48 discriminator 1 view .LVU55
+ 193 0016 5B09     		lsrs	r3, r3, #5
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 194              		.loc 1 108 58 view .LVU56
+ 195 0018 02EB8302 		add	r2, r2, r3, lsl #2
+ 196 001c D2ED007A 		vldr.32	s15, [r2]
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 197              		.loc 1 108 77 view .LVU57
+ 198 0020 30F81310 		ldrh	r1, [r0, r3, lsl #1]
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 199              		.loc 1 108 58 view .LVU58
+ 200 0024 77EE807A 		vadd.f32	s15, s15, s0
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 201              		.loc 1 108 77 view .LVU59
+ 202 0028 0131     		adds	r1, r1, #1
+ 203 002a 20F81310 		strh	r1, [r0, r3, lsl #1]	@ movhi
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 204              		.loc 1 108 58 view .LVU60
+ 205 002e C2ED007A 		vstr.32	s15, [r2]
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 206              		.loc 1 108 65 is_stmt 1 view .LVU61
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+ 207              		.loc 1 109 1 is_stmt 0 view .LVU62
+ 208 0032 7047     		bx	lr
+ 209              	.L14:
+ 210              		.align	2
+ 211              	.L13:
+ 212 0034 00000000 		.word	g_cogcal_phase
+ 213 0038 00000000 		.word	cw_resid
+ 214 003c 00000000 		.word	friction_map
+ 215 0040 00000000 		.word	cw_cnt
+ 216 0044 00000000 		.word	ccw_cnt
+ 217              		.cfi_endproc
+ 218              	.LFE403:
+ 220              		.section	.text.Cogging_Reset,"ax",%progbits
+ 221              		.align	1
+ 222              		.p2align 2,,3
+ 223              		.global	Cogging_Reset
+ 224              		.syntax unified
+ 225              		.thumb
+ 226              		.thumb_func
+ 228              	Cogging_Reset:
+ 229              	.LFB392:
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(cogging_map, 0, sizeof(cogging_map));
+ 230              		.loc 1 22 1 is_stmt 1 view -0
+ 231              		.cfi_startproc
+ 232              		@ args = 0, pretend = 0, frame = 0
+ 233              		@ frame_needed = 0, uses_anonymous_args = 0
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(friction_map, 0, sizeof(friction_map));
+ 234              		.loc 1 23 5 view .LVU64
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(cogging_map, 0, sizeof(cogging_map));
+ 235              		.loc 1 22 1 is_stmt 0 view .LVU65
+ 236 0000 10B5     		push	{r4, lr}
+ 237              	.LCFI4:
+ 238              		.cfi_def_cfa_offset 8
+ 239              		.cfi_offset 4, -8
+ 240              		.cfi_offset 14, -4
+ARM GAS  /tmp/cciesFVL.s 			page 9
+
+
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(friction_map, 0, sizeof(friction_map));
+ 241              		.loc 1 23 5 view .LVU66
+ 242 0002 4FF40064 		mov	r4, #2048
+ 243 0006 2246     		mov	r2, r4
+ 244 0008 0021     		movs	r1, #0
+ 245 000a 0C48     		ldr	r0, .L17
+ 246 000c FFF7FEFF 		bl	memset
+ 247              	.LVL6:
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(cw_cnt, 0, sizeof(cw_cnt));
+ 248              		.loc 1 24 5 is_stmt 1 view .LVU67
+ 249 0010 2246     		mov	r2, r4
+ 250 0012 0021     		movs	r1, #0
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(ccw_cnt, 0, sizeof(ccw_cnt));
+ 251              		.loc 1 25 5 is_stmt 0 view .LVU68
+ 252 0014 4FF48064 		mov	r4, #1024
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(cw_cnt, 0, sizeof(cw_cnt));
+ 253              		.loc 1 24 5 view .LVU69
+ 254 0018 0948     		ldr	r0, .L17+4
+ 255 001a FFF7FEFF 		bl	memset
+ 256              	.LVL7:
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(ccw_cnt, 0, sizeof(ccw_cnt));
+ 257              		.loc 1 25 5 is_stmt 1 view .LVU70
+ 258 001e 2246     		mov	r2, r4
+ 259 0020 0021     		movs	r1, #0
+ 260 0022 0848     		ldr	r0, .L17+8
+ 261 0024 FFF7FEFF 		bl	memset
+ 262              	.LVL8:
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogging_valid = 0;
+ 263              		.loc 1 26 5 view .LVU71
+ 264 0028 2246     		mov	r2, r4
+ 265 002a 0748     		ldr	r0, .L17+12
+ 266 002c 0021     		movs	r1, #0
+ 267 002e FFF7FEFF 		bl	memset
+ 268              	.LVL9:
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 269              		.loc 1 27 5 view .LVU72
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 270              		.loc 1 27 19 is_stmt 0 view .LVU73
+ 271 0032 064B     		ldr	r3, .L17+16
+ 272 0034 0022     		movs	r2, #0
+ 273 0036 1A70     		strb	r2, [r3]
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+ 274              		.loc 1 28 1 view .LVU74
+ 275 0038 10BD     		pop	{r4, pc}
+ 276              	.L18:
+ 277 003a 00BF     		.align	2
+ 278              	.L17:
+ 279 003c 00000000 		.word	cogging_map
+ 280 0040 00000000 		.word	friction_map
+ 281 0044 00000000 		.word	cw_cnt
+ 282 0048 00000000 		.word	ccw_cnt
+ 283 004c 00000000 		.word	cogging_valid
+ 284              		.cfi_endproc
+ 285              	.LFE392:
+ 287              		.section	.text.Cogging_RecordCW,"ax",%progbits
+ 288              		.align	1
+ 289              		.p2align 2,,3
+ARM GAS  /tmp/cciesFVL.s 			page 10
+
+
+ 290              		.global	Cogging_RecordCW
+ 291              		.syntax unified
+ 292              		.thumb
+ 293              		.thumb_func
+ 295              	Cogging_RecordCW:
+ 296              	.LVL10:
+ 297              	.LFB393:
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     uint16_t b = m->components.encoder->raw >> COGGING_SHIFT;
+ 298              		.loc 1 32 1 is_stmt 1 view -0
+ 299              		.cfi_startproc
+ 300              		@ args = 0, pretend = 0, frame = 0
+ 301              		@ frame_needed = 0, uses_anonymous_args = 0
+ 302              		@ link register save eliminated.
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogging_map[b] += m->components.foc->i_q;
+ 303              		.loc 1 33 5 view .LVU76
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cw_cnt[b]++;
+ 304              		.loc 1 34 5 view .LVU77
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cw_cnt[b]++;
+ 305              		.loc 1 34 40 is_stmt 0 view .LVU78
+ 306 0000 D0E90013 		ldrd	r1, r3, [r0]
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogging_map[b] += m->components.foc->i_q;
+ 307              		.loc 1 33 45 view .LVU79
+ 308 0004 D3F82032 		ldr	r3, [r3, #544]
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cw_cnt[b]++;
+ 309              		.loc 1 34 20 view .LVU80
+ 310 0008 0A4A     		ldr	r2, .L20
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cw_cnt[b]++;
+ 311              		.loc 1 34 40 view .LVU81
+ 312 000a D1F850C0 		ldr	ip, [r1, #80]	@ unaligned
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 313              		.loc 1 35 14 view .LVU82
+ 314 000e 0A48     		ldr	r0, .L20+4
+ 315              	.LVL11:
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 316              		.loc 1 35 14 view .LVU83
+ 317 0010 C3F34F13 		ubfx	r3, r3, #5, #16
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cw_cnt[b]++;
+ 318              		.loc 1 34 20 view .LVU84
+ 319 0014 02EB8302 		add	r2, r2, r3, lsl #2
+ 320 0018 D2ED007A 		vldr.32	s15, [r2]
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 321              		.loc 1 35 14 view .LVU85
+ 322 001c 30F81310 		ldrh	r1, [r0, r3, lsl #1]
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cw_cnt[b]++;
+ 323              		.loc 1 34 20 view .LVU86
+ 324 0020 07EE10CA 		vmov	s14, ip
+ 325 0024 77EE877A 		vadd.f32	s15, s15, s14
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 326              		.loc 1 35 14 view .LVU87
+ 327 0028 0131     		adds	r1, r1, #1
+ 328 002a 20F81310 		strh	r1, [r0, r3, lsl #1]	@ movhi
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cw_cnt[b]++;
+ 329              		.loc 1 34 20 view .LVU88
+ 330 002e C2ED007A 		vstr.32	s15, [r2]
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 331              		.loc 1 35 5 is_stmt 1 view .LVU89
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+ARM GAS  /tmp/cciesFVL.s 			page 11
+
+
+ 332              		.loc 1 36 1 is_stmt 0 view .LVU90
+ 333 0032 7047     		bx	lr
+ 334              	.L21:
+ 335              		.align	2
+ 336              	.L20:
+ 337 0034 00000000 		.word	cogging_map
+ 338 0038 00000000 		.word	cw_cnt
+ 339              		.cfi_endproc
+ 340              	.LFE393:
+ 342              		.section	.text.Cogging_RecordCCW,"ax",%progbits
+ 343              		.align	1
+ 344              		.p2align 2,,3
+ 345              		.global	Cogging_RecordCCW
+ 346              		.syntax unified
+ 347              		.thumb
+ 348              		.thumb_func
+ 350              	Cogging_RecordCCW:
+ 351              	.LVL12:
+ 352              	.LFB394:
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     uint16_t b = m->components.encoder->raw >> COGGING_SHIFT;
+ 353              		.loc 1 39 1 is_stmt 1 view -0
+ 354              		.cfi_startproc
+ 355              		@ args = 0, pretend = 0, frame = 0
+ 356              		@ frame_needed = 0, uses_anonymous_args = 0
+ 357              		@ link register save eliminated.
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     friction_map[b] += m->components.foc->i_q;
+ 358              		.loc 1 40 5 view .LVU92
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     ccw_cnt[b]++;
+ 359              		.loc 1 41 5 view .LVU93
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     ccw_cnt[b]++;
+ 360              		.loc 1 41 41 is_stmt 0 view .LVU94
+ 361 0000 D0E90013 		ldrd	r1, r3, [r0]
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     friction_map[b] += m->components.foc->i_q;
+ 362              		.loc 1 40 45 view .LVU95
+ 363 0004 D3F82032 		ldr	r3, [r3, #544]
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     ccw_cnt[b]++;
+ 364              		.loc 1 41 21 view .LVU96
+ 365 0008 0A4A     		ldr	r2, .L23
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     ccw_cnt[b]++;
+ 366              		.loc 1 41 41 view .LVU97
+ 367 000a D1F850C0 		ldr	ip, [r1, #80]	@ unaligned
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 368              		.loc 1 42 15 view .LVU98
+ 369 000e 0A48     		ldr	r0, .L23+4
+ 370              	.LVL13:
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 371              		.loc 1 42 15 view .LVU99
+ 372 0010 C3F34F13 		ubfx	r3, r3, #5, #16
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     ccw_cnt[b]++;
+ 373              		.loc 1 41 21 view .LVU100
+ 374 0014 02EB8302 		add	r2, r2, r3, lsl #2
+ 375 0018 D2ED007A 		vldr.32	s15, [r2]
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 376              		.loc 1 42 15 view .LVU101
+ 377 001c 30F81310 		ldrh	r1, [r0, r3, lsl #1]
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     ccw_cnt[b]++;
+ 378              		.loc 1 41 21 view .LVU102
+ARM GAS  /tmp/cciesFVL.s 			page 12
+
+
+ 379 0020 07EE10CA 		vmov	s14, ip
+ 380 0024 77EE877A 		vadd.f32	s15, s15, s14
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 381              		.loc 1 42 15 view .LVU103
+ 382 0028 0131     		adds	r1, r1, #1
+ 383 002a 20F81310 		strh	r1, [r0, r3, lsl #1]	@ movhi
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     ccw_cnt[b]++;
+ 384              		.loc 1 41 21 view .LVU104
+ 385 002e C2ED007A 		vstr.32	s15, [r2]
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 386              		.loc 1 42 5 is_stmt 1 view .LVU105
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+ 387              		.loc 1 43 1 is_stmt 0 view .LVU106
+ 388 0032 7047     		bx	lr
+ 389              	.L24:
+ 390              		.align	2
+ 391              	.L23:
+ 392 0034 00000000 		.word	friction_map
+ 393 0038 00000000 		.word	ccw_cnt
+ 394              		.cfi_endproc
+ 395              	.LFE394:
+ 397              		.section	.text.Cogging_Compute,"ax",%progbits
+ 398              		.align	1
+ 399              		.p2align 2,,3
+ 400              		.global	Cogging_Compute
+ 401              		.syntax unified
+ 402              		.thumb
+ 403              		.thumb_func
+ 405              	Cogging_Compute:
+ 406              	.LFB395:
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     for (int i = 0; i < COGGING_N; i++)
+ 407              		.loc 1 47 1 is_stmt 1 view -0
+ 408              		.cfi_startproc
+ 409              		@ args = 0, pretend = 0, frame = 0
+ 410              		@ frame_needed = 0, uses_anonymous_args = 0
+ 411              		@ link register save eliminated.
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     {
+ 412              		.loc 1 48 5 view .LVU108
+ 413              	.LBB6:
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     {
+ 414              		.loc 1 48 10 view .LVU109
+ 415              	.LVL14:
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     {
+ 416              		.loc 1 48 23 discriminator 1 view .LVU110
+ 417 0000 1E4A     		ldr	r2, .L35
+ 418 0002 1F48     		ldr	r0, .L35+4
+ 419 0004 1F49     		ldr	r1, .L35+8
+ 420              	.LBB7:
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float ccw = ccw_cnt[i] ? friction_map[i] / ccw_cnt[i] : 0.0f;
+ 421              		.loc 1 50 60 is_stmt 0 discriminator 2 view .LVU111
+ 422 0006 DFED205A 		vldr.32	s11, .L35+12
+ 423              	.LBE7:
+ 424              	.LBE6:
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     for (int i = 0; i < COGGING_N; i++)
+ 425              		.loc 1 47 1 view .LVU112
+ 426 000a 10B4     		push	{r4}
+ 427              	.LCFI5:
+ARM GAS  /tmp/cciesFVL.s 			page 13
+
+
+ 428              		.cfi_def_cfa_offset 4
+ 429              		.cfi_offset 4, -4
+ 430 000c 02F5806C 		add	ip, r2, #1024
+ 431 0010 1E4C     		ldr	r4, .L35+16
+ 432              	.LBB11:
+ 433              	.LBB8:
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         friction_map[i] = 0.5f * (cw - ccw); // 方向性 = 摩擦
+ 434              		.loc 1 52 32 view .LVU113
+ 435 0012 B6EE006A 		vmov.f32	s12, #5.0e-1
+ 436 0016 15E0     		b	.L28
+ 437              	.LVL15:
+ 438              	.L34:
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cogging_map[i]  = 0.5f * (cw + ccw); // 位置相关 = 齿槽前馈电流
+ 439              		.loc 1 51 50 discriminator 1 view .LVU114
+ 440 0018 07EE103A 		vmov	s14, r3	@ int
+ 441              	.LVL16:
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cogging_map[i]  = 0.5f * (cw + ccw); // 位置相关 = 齿槽前馈电流
+ 442              		.loc 1 51 63 discriminator 1 view .LVU115
+ 443 001c 91ED005A 		vldr.32	s10, [r1]
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cogging_map[i]  = 0.5f * (cw + ccw); // 位置相关 = 齿槽前馈电流
+ 444              		.loc 1 51 50 discriminator 1 view .LVU116
+ 445 0020 B8EEC77A 		vcvt.f32.s32	s14, s14
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cogging_map[i]  = 0.5f * (cw + ccw); // 位置相关 = 齿槽前馈电流
+ 446              		.loc 1 51 63 discriminator 1 view .LVU117
+ 447 0024 C5EE076A 		vdiv.f32	s13, s10, s14
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     }
+ 448              		.loc 1 53 38 view .LVU118
+ 449 0028 37EEE67A 		vsub.f32	s14, s15, s13
+ 450              	.L27:
+ 451              	.LVL17:
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         friction_map[i] = 0.5f * (cw - ccw); // 方向性 = 摩擦
+ 452              		.loc 1 52 9 is_stmt 1 view .LVU119
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         friction_map[i] = 0.5f * (cw - ccw); // 方向性 = 摩擦
+ 453              		.loc 1 52 38 is_stmt 0 view .LVU120
+ 454 002c 77EEA67A 		vadd.f32	s15, s15, s13
+ 455              	.LVL18:
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     }
+ 456              		.loc 1 53 32 view .LVU121
+ 457 0030 27EE067A 		vmul.f32	s14, s14, s12
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         friction_map[i] = 0.5f * (cw - ccw); // 方向性 = 摩擦
+ 458              		.loc 1 52 32 view .LVU122
+ 459 0034 67EE867A 		vmul.f32	s15, s15, s12
+ 460              	.LBE8:
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     {
+ 461              		.loc 1 48 23 discriminator 1 view .LVU123
+ 462 0038 6245     		cmp	r2, ip
+ 463              	.LBB9:
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     }
+ 464              		.loc 1 53 25 view .LVU124
+ 465 003a A1EC017A 		vstmia.32	r1!, {s14}
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         friction_map[i] = 0.5f * (cw - ccw); // 方向性 = 摩擦
+ 466              		.loc 1 52 25 view .LVU125
+ 467 003e E0EC017A 		vstmia.32	r0!, {s15}
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     }
+ 468              		.loc 1 53 9 is_stmt 1 view .LVU126
+ 469              	.LBE9:
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     {
+ARM GAS  /tmp/cciesFVL.s 			page 14
+
+
+ 470              		.loc 1 48 37 discriminator 2 view .LVU127
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     {
+ 471              		.loc 1 48 23 discriminator 1 view .LVU128
+ 472 0042 15D0     		beq	.L33
+ 473              	.LVL19:
+ 474              	.L28:
+ 475              	.LBB10:
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float ccw = ccw_cnt[i] ? friction_map[i] / ccw_cnt[i] : 0.0f;
+ 476              		.loc 1 50 9 view .LVU129
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float ccw = ccw_cnt[i] ? friction_map[i] / ccw_cnt[i] : 0.0f;
+ 477              		.loc 1 50 27 is_stmt 0 view .LVU130
+ 478 0044 32F8023F 		ldrh	r3, [r2, #2]!
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float ccw = ccw_cnt[i] ? friction_map[i] / ccw_cnt[i] : 0.0f;
+ 479              		.loc 1 50 60 discriminator 2 view .LVU131
+ 480 0048 F0EE657A 		vmov.f32	s15, s11
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float ccw = ccw_cnt[i] ? friction_map[i] / ccw_cnt[i] : 0.0f;
+ 481              		.loc 1 50 60 view .LVU132
+ 482 004c 3BB1     		cbz	r3, .L26
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float ccw = ccw_cnt[i] ? friction_map[i] / ccw_cnt[i] : 0.0f;
+ 483              		.loc 1 50 48 discriminator 1 view .LVU133
+ 484 004e 07EE903A 		vmov	s15, r3	@ int
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float ccw = ccw_cnt[i] ? friction_map[i] / ccw_cnt[i] : 0.0f;
+ 485              		.loc 1 50 60 discriminator 1 view .LVU134
+ 486 0052 D0ED006A 		vldr.32	s13, [r0]
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float ccw = ccw_cnt[i] ? friction_map[i] / ccw_cnt[i] : 0.0f;
+ 487              		.loc 1 50 48 discriminator 1 view .LVU135
+ 488 0056 B8EEE77A 		vcvt.f32.s32	s14, s15
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float ccw = ccw_cnt[i] ? friction_map[i] / ccw_cnt[i] : 0.0f;
+ 489              		.loc 1 50 60 discriminator 1 view .LVU136
+ 490 005a C6EE877A 		vdiv.f32	s15, s13, s14
+ 491              	.L26:
+ 492              	.LVL20:
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cogging_map[i]  = 0.5f * (cw + ccw); // 位置相关 = 齿槽前馈电流
+ 493              		.loc 1 51 9 is_stmt 1 view .LVU137
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cogging_map[i]  = 0.5f * (cw + ccw); // 位置相关 = 齿槽前馈电流
+ 494              		.loc 1 51 28 is_stmt 0 view .LVU138
+ 495 005e 34F8023F 		ldrh	r3, [r4, #2]!
+ 496 0062 B0EE677A 		vmov.f32	s14, s15
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cogging_map[i]  = 0.5f * (cw + ccw); // 位置相关 = 齿槽前馈电流
+ 497              		.loc 1 51 63 view .LVU139
+ 498 0066 002B     		cmp	r3, #0
+ 499 0068 D6D1     		bne	.L34
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cogging_map[i]  = 0.5f * (cw + ccw); // 位置相关 = 齿槽前馈电流
+ 500              		.loc 1 51 63 discriminator 2 view .LVU140
+ 501 006a F0EE656A 		vmov.f32	s13, s11
+ 502 006e DDE7     		b	.L27
+ 503              	.LVL21:
+ 504              	.L33:
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cogging_map[i]  = 0.5f * (cw + ccw); // 位置相关 = 齿槽前馈电流
+ 505              		.loc 1 51 63 discriminator 2 view .LVU141
+ 506              	.LBE10:
+ 507              	.LBE11:
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 508              		.loc 1 55 5 is_stmt 1 view .LVU142
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 509              		.loc 1 55 19 is_stmt 0 view .LVU143
+ 510 0070 074B     		ldr	r3, .L35+20
+ARM GAS  /tmp/cciesFVL.s 			page 15
+
+
+ 511 0072 0122     		movs	r2, #1
+ 512 0074 1A70     		strb	r2, [r3]
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+ 513              		.loc 1 56 1 view .LVU144
+ 514 0076 5DF8044B 		ldr	r4, [sp], #4
+ 515              	.LCFI6:
+ 516              		.cfi_restore 4
+ 517              		.cfi_def_cfa_offset 0
+ 518 007a 7047     		bx	lr
+ 519              	.L36:
+ 520              		.align	2
+ 521              	.L35:
+ 522 007c FEFFFFFF 		.word	cw_cnt-2
+ 523 0080 00000000 		.word	cogging_map
+ 524 0084 00000000 		.word	friction_map
+ 525 0088 00000000 		.word	0
+ 526 008c FEFFFFFF 		.word	ccw_cnt-2
+ 527 0090 00000000 		.word	cogging_valid
+ 528              		.cfi_endproc
+ 529              	.LFE395:
+ 531              		.section	.text.Cogging_FF,"ax",%progbits
+ 532              		.align	1
+ 533              		.p2align 2,,3
+ 534              		.global	Cogging_FF
+ 535              		.syntax unified
+ 536              		.thumb
+ 537              		.thumb_func
+ 539              	Cogging_FF:
+ 540              	.LVL22:
+ 541              	.LFB396:
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (!cogging_valid) return 0.0f;
+ 542              		.loc 1 59 1 is_stmt 1 view -0
+ 543              		.cfi_startproc
+ 544              		@ args = 0, pretend = 0, frame = 0
+ 545              		@ frame_needed = 0, uses_anonymous_args = 0
+ 546              		@ link register save eliminated.
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     // 线性插值(原为最近邻零阶保持→512个bin边界每转跳变, 实测相邻台阶�
+ 547              		.loc 1 60 5 view .LVU146
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     // 线性插值(原为最近邻零阶保持→512个bin边界每转跳变, 实测相邻台阶�
+ 548              		.loc 1 60 9 is_stmt 0 view .LVU147
+ 549 0000 0E4B     		ldr	r3, .L40
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     // 线性插值(原为最近邻零阶保持→512个bin边界每转跳变, 实测相邻台阶�
+ 550              		.loc 1 60 8 view .LVU148
+ 551 0002 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 552 0004 BBB1     		cbz	r3, .L39
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     uint16_t f = raw & ((1u << COGGING_SHIFT) - 1u);    // bin 内小数 0..(2^SHIFT-1)
+ 553              		.loc 1 63 5 is_stmt 1 view .LVU149
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     uint16_t f = raw & ((1u << COGGING_SHIFT) - 1u);    // bin 内小数 0..(2^SHIFT-1)
+ 554              		.loc 1 63 14 is_stmt 0 view .LVU150
+ 555 0006 4209     		lsrs	r2, r0, #5
+ 556              	.LVL23:
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     float a = cogging_map[i];
+ 557              		.loc 1 64 5 is_stmt 1 view .LVU151
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     float b = cogging_map[(i + 1u) & (COGGING_N - 1u)]; // 下一 bin, 圆周回绕
+ 558              		.loc 1 65 5 view .LVU152
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     float b = cogging_map[(i + 1u) & (COGGING_N - 1u)]; // 下一 bin, 圆周回绕
+ 559              		.loc 1 65 11 is_stmt 0 view .LVU153
+ARM GAS  /tmp/cciesFVL.s 			page 16
+
+
+ 560 0008 0D4B     		ldr	r3, .L40+4
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     return a + (b - a) * ((float)f * (1.0f / (float)(1u << COGGING_SHIFT)));
+ 561              		.loc 1 66 36 view .LVU154
+ 562 000a 511C     		adds	r1, r2, #1
+ 563 000c C1F30801 		ubfx	r1, r1, #0, #9
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     float b = cogging_map[(i + 1u) & (COGGING_N - 1u)]; // 下一 bin, 圆周回绕
+ 564              		.loc 1 65 11 view .LVU155
+ 565 0010 03EB8202 		add	r2, r3, r2, lsl #2
+ 566              	.LVL24:
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 567              		.loc 1 67 27 view .LVU156
+ 568 0014 00F01F00 		and	r0, r0, #31
+ 569              	.LVL25:
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     return a + (b - a) * ((float)f * (1.0f / (float)(1u << COGGING_SHIFT)));
+ 570              		.loc 1 66 11 view .LVU157
+ 571 0018 03EB8103 		add	r3, r3, r1, lsl #2
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     float b = cogging_map[(i + 1u) & (COGGING_N - 1u)]; // 下一 bin, 圆周回绕
+ 572              		.loc 1 65 11 view .LVU158
+ 573 001c 92ED000A 		vldr.32	s0, [r2]
+ 574              	.LVL26:
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     return a + (b - a) * ((float)f * (1.0f / (float)(1u << COGGING_SHIFT)));
+ 575              		.loc 1 66 5 is_stmt 1 view .LVU159
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 576              		.loc 1 67 5 view .LVU160
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 577              		.loc 1 67 19 is_stmt 0 view .LVU161
+ 578 0020 93ED007A 		vldr.32	s14, [r3]
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 579              		.loc 1 67 36 view .LVU162
+ 580 0024 07EE900A 		vmov	s15, r0	@ int
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 581              		.loc 1 67 19 view .LVU163
+ 582 0028 37EE407A 		vsub.f32	s14, s14, s0
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 583              		.loc 1 67 36 view .LVU164
+ 584 002c FBEEED7A 		vcvt.f32.u32	s15, s15, #5
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 585              		.loc 1 67 14 view .LVU165
+ 586 0030 A7EE270A 		vfma.f32	s0, s14, s15
+ 587              	.LVL27:
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 588              		.loc 1 67 14 view .LVU166
+ 589 0034 7047     		bx	lr
+ 590              	.LVL28:
+ 591              	.L39:
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     // 线性插值(原为最近邻零阶保持→512个bin边界每转跳变, 实测相邻台阶�
+ 592              		.loc 1 60 32 discriminator 1 view .LVU167
+ 593 0036 9FED030A 		vldr.32	s0, .L40+8
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+ 594              		.loc 1 68 1 view .LVU168
+ 595 003a 7047     		bx	lr
+ 596              	.L41:
+ 597              		.align	2
+ 598              	.L40:
+ 599 003c 00000000 		.word	cogging_valid
+ 600 0040 00000000 		.word	cogging_map
+ 601 0044 00000000 		.word	0
+ARM GAS  /tmp/cciesFVL.s 			page 17
+
+
+ 602              		.cfi_endproc
+ 603              	.LFE396:
+ 605              		.section	.text.Cogging_CalStart,"ax",%progbits
+ 606              		.align	1
+ 607              		.p2align 2,,3
+ 608              		.global	Cogging_CalStart
+ 609              		.syntax unified
+ 610              		.thumb
+ 611              		.thumb_func
+ 613              	Cogging_CalStart:
+ 614              	.LVL29:
+ 615              	.LFB399:
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (!m->components.encoder->calib_valid) return; // 需先有offset_lut/电流环增益/极对�
+ 616              		.loc 1 148 1 is_stmt 1 view -0
+ 617              		.cfi_startproc
+ 618              		@ args = 0, pretend = 0, frame = 0
+ 619              		@ frame_needed = 0, uses_anonymous_args = 0
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (reset_map) { memset(cogging_map, 0, sizeof(cogging_map)); cogging_valid = 0; } // 首遍: F
+ 620              		.loc 1 149 5 view .LVU170
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (!m->components.encoder->calib_valid) return; // 需先有offset_lut/电流环增益/极对�
+ 621              		.loc 1 148 1 is_stmt 0 view .LVU171
+ 622 0000 38B5     		push	{r3, r4, r5, lr}
+ 623              	.LCFI7:
+ 624              		.cfi_def_cfa_offset 16
+ 625              		.cfi_offset 3, -16
+ 626              		.cfi_offset 4, -12
+ 627              		.cfi_offset 5, -8
+ 628              		.cfi_offset 14, -4
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (reset_map) { memset(cogging_map, 0, sizeof(cogging_map)); cogging_valid = 0; } // 首遍: F
+ 629              		.loc 1 149 31 view .LVU172
+ 630 0002 4368     		ldr	r3, [r0, #4]
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (reset_map) { memset(cogging_map, 0, sizeof(cogging_map)); cogging_valid = 0; } // 首遍: F
+ 631              		.loc 1 149 8 view .LVU173
+ 632 0004 D3F86032 		ldr	r3, [r3, #608]
+ 633 0008 002B     		cmp	r3, #0
+ 634 000a 39D0     		beq	.L42
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(cw_resid, 0, sizeof(cw_resid));
+ 635              		.loc 1 150 5 is_stmt 1 view .LVU174
+ 636 000c 0446     		mov	r4, r0
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(cw_resid, 0, sizeof(cw_resid));
+ 637              		.loc 1 150 8 is_stmt 0 view .LVU175
+ 638 000e 0029     		cmp	r1, #0
+ 639 0010 37D1     		bne	.L52
+ 640              	.LVL30:
+ 641              	.L44:
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(friction_map, 0, sizeof(friction_map)); // 复用作 CCW 累加
+ 642              		.loc 1 151 5 is_stmt 1 view .LVU176
+ 643 0012 4FF40062 		mov	r2, #2048
+ 644 0016 0021     		movs	r1, #0
+ 645 0018 1F48     		ldr	r0, .L53
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_step = 0; g_cogcal_holes = 0;
+ 646              		.loc 1 156 19 is_stmt 0 view .LVU177
+ 647 001a 204D     		ldr	r5, .L53+4
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(friction_map, 0, sizeof(friction_map)); // 复用作 CCW 累加
+ 648              		.loc 1 151 5 view .LVU178
+ 649 001c FFF7FEFF 		bl	memset
+ 650              	.LVL31:
+ARM GAS  /tmp/cciesFVL.s 			page 18
+
+
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(cw_cnt, 0, sizeof(cw_cnt));
+ 651              		.loc 1 152 5 is_stmt 1 view .LVU179
+ 652 0020 4FF40062 		mov	r2, #2048
+ 653 0024 0021     		movs	r1, #0
+ 654 0026 1E48     		ldr	r0, .L53+8
+ 655 0028 FFF7FEFF 		bl	memset
+ 656              	.LVL32:
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(ccw_cnt, 0, sizeof(ccw_cnt));
+ 657              		.loc 1 153 5 view .LVU180
+ 658 002c 4FF48062 		mov	r2, #1024
+ 659 0030 0021     		movs	r1, #0
+ 660 0032 1C48     		ldr	r0, .L53+12
+ 661 0034 FFF7FEFF 		bl	memset
+ 662              	.LVL33:
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_base   = m->components.encoder->pos_estimate_;
+ 663              		.loc 1 154 5 view .LVU181
+ 664 0038 4FF48062 		mov	r2, #1024
+ 665 003c 0021     		movs	r1, #0
+ 666 003e 1A48     		ldr	r0, .L53+16
+ 667 0040 FFF7FEFF 		bl	memset
+ 668              	.LVL34:
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_settle = 0; cogcal_timer = 0; cogcal_iq_acc = 0.0; cogcal_iq_n = 0;
+ 669              		.loc 1 155 5 view .LVU182
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_step = 0; g_cogcal_holes = 0;
+ 670              		.loc 1 156 56 is_stmt 0 view .LVU183
+ 671 0044 194A     		ldr	r2, .L53+20
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_settle = 0; cogcal_timer = 0; cogcal_iq_acc = 0.0; cogcal_iq_n = 0;
+ 672              		.loc 1 155 42 view .LVU184
+ 673 0046 6368     		ldr	r3, [r4, #4]
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_step = 0; g_cogcal_holes = 0;
+ 674              		.loc 1 156 56 view .LVU185
+ 675 0048 0020     		movs	r0, #0
+ 676 004a 0021     		movs	r1, #0
+ 677 004c C2E90001 		strd	r0, [r2]
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_settle = 0; cogcal_timer = 0; cogcal_iq_acc = 0.0; cogcal_iq_n = 0;
+ 678              		.loc 1 155 19 view .LVU186
+ 679 0050 1749     		ldr	r1, .L53+24
+ 680 0052 D3F84802 		ldr	r0, [r3, #584]	@ float
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_step = 0; g_cogcal_holes = 0;
+ 681              		.loc 1 156 37 view .LVU187
+ 682 0056 174A     		ldr	r2, .L53+28
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_settle = 0; cogcal_timer = 0; cogcal_iq_acc = 0.0; cogcal_iq_n = 0;
+ 683              		.loc 1 155 19 view .LVU188
+ 684 0058 0860     		str	r0, [r1]	@ float
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_step = 0; g_cogcal_holes = 0;
+ 685              		.loc 1 156 5 is_stmt 1 view .LVU189
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_step = 0; g_cogcal_holes = 0;
+ 686              		.loc 1 156 24 view .LVU190
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_step = 0; g_cogcal_holes = 0;
+ 687              		.loc 1 156 19 is_stmt 0 view .LVU191
+ 688 005a 0023     		movs	r3, #0
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_step = 0; g_cogcal_holes = 0;
+ 689              		.loc 1 156 75 view .LVU192
+ 690 005c 1649     		ldr	r1, .L53+32
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_step = 0; g_cogcal_holes = 0;
+ 691              		.loc 1 156 37 view .LVU193
+ 692 005e 1360     		str	r3, [r2]
+ARM GAS  /tmp/cciesFVL.s 			page 19
+
+
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_step = 0; g_cogcal_holes = 0;
+ 693              		.loc 1 156 42 is_stmt 1 view .LVU194
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_step = 0; g_cogcal_holes = 0;
+ 694              		.loc 1 156 63 view .LVU195
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->components.foc->id_set    = 0.0f;
+ 695              		.loc 1 157 19 is_stmt 0 view .LVU196
+ 696 0060 1648     		ldr	r0, .L53+36
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->components.foc->id_set    = 0.0f;
+ 697              		.loc 1 157 39 view .LVU197
+ 698 0062 174A     		ldr	r2, .L53+40
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_step = 0; g_cogcal_holes = 0;
+ 699              		.loc 1 156 75 view .LVU198
+ 700 0064 0B60     		str	r3, [r1]
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->components.foc->id_set    = 0.0f;
+ 701              		.loc 1 157 5 is_stmt 1 view .LVU199
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->components.foc->id_set    = 0.0f;
+ 702              		.loc 1 157 24 view .LVU200
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->state.Control_Mode        = CONTROL_MODE_POSITION;
+ 703              		.loc 1 158 34 is_stmt 0 view .LVU201
+ 704 0066 2168     		ldr	r1, [r4]
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->components.foc->id_set    = 0.0f;
+ 705              		.loc 1 157 19 view .LVU202
+ 706 0068 0380     		strh	r3, [r0]	@ movhi
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_step = 0; g_cogcal_holes = 0;
+ 707              		.loc 1 156 19 view .LVU203
+ 708 006a 2B60     		str	r3, [r5]
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->components.foc->id_set    = 0.0f;
+ 709              		.loc 1 157 39 view .LVU204
+ 710 006c 1380     		strh	r3, [r2]	@ movhi
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->state.Control_Mode        = CONTROL_MODE_POSITION;
+ 711              		.loc 1 158 5 is_stmt 1 view .LVU205
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->state.Control_Mode        = CONTROL_MODE_POSITION;
+ 712              		.loc 1 158 34 is_stmt 0 view .LVU206
+ 713 006e 0020     		movs	r0, #0
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_phase               = COGCAL_CW;
+ 714              		.loc 1 160 34 view .LVU207
+ 715 0070 40F20232 		movw	r2, #770
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 716              		.loc 1 161 34 view .LVU208
+ 717 0074 134B     		ldr	r3, .L53+44
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->state.Control_Mode        = CONTROL_MODE_POSITION;
+ 718              		.loc 1 158 34 view .LVU209
+ 719 0076 C1F88000 		str	r0, [r1, #128]	@ unaligned
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->state.State_Mode          = STATE_MODE_RUNNING;
+ 720              		.loc 1 159 5 is_stmt 1 view .LVU210
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_phase               = COGCAL_CW;
+ 721              		.loc 1 160 5 view .LVU211
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_phase               = COGCAL_CW;
+ 722              		.loc 1 160 34 is_stmt 0 view .LVU212
+ 723 007a A281     		strh	r2, [r4, #12]	@ movhi
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 724              		.loc 1 161 5 is_stmt 1 view .LVU213
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 725              		.loc 1 161 34 is_stmt 0 view .LVU214
+ 726 007c 0122     		movs	r2, #1
+ 727 007e 1A70     		strb	r2, [r3]
+ 728              	.LVL35:
+ARM GAS  /tmp/cciesFVL.s 			page 20
+
+
+ 729              	.L42:
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+ 730              		.loc 1 162 1 view .LVU215
+ 731 0080 38BD     		pop	{r3, r4, r5, pc}
+ 732              	.LVL36:
+ 733              	.L52:
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(cw_resid, 0, sizeof(cw_resid));
+ 734              		.loc 1 150 22 is_stmt 1 discriminator 1 view .LVU216
+ 735 0082 4FF40062 		mov	r2, #2048
+ 736 0086 1048     		ldr	r0, .L53+48
+ 737              	.LVL37:
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(cw_resid, 0, sizeof(cw_resid));
+ 738              		.loc 1 150 22 is_stmt 0 discriminator 1 view .LVU217
+ 739 0088 0021     		movs	r1, #0
+ 740              	.LVL38:
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(cw_resid, 0, sizeof(cw_resid));
+ 741              		.loc 1 150 22 discriminator 1 view .LVU218
+ 742 008a FFF7FEFF 		bl	memset
+ 743              	.LVL39:
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(cw_resid, 0, sizeof(cw_resid));
+ 744              		.loc 1 150 67 is_stmt 1 discriminator 1 view .LVU219
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     memset(cw_resid, 0, sizeof(cw_resid));
+ 745              		.loc 1 150 81 is_stmt 0 discriminator 1 view .LVU220
+ 746 008e 0F4B     		ldr	r3, .L53+52
+ 747 0090 0022     		movs	r2, #0
+ 748 0092 1A70     		strb	r2, [r3]
+ 749 0094 BDE7     		b	.L44
+ 750              	.L54:
+ 751 0096 00BF     		.align	2
+ 752              	.L53:
+ 753 0098 00000000 		.word	cw_resid
+ 754 009c 00000000 		.word	cogcal_settle
+ 755 00a0 00000000 		.word	friction_map
+ 756 00a4 00000000 		.word	cw_cnt
+ 757 00a8 00000000 		.word	ccw_cnt
+ 758 00ac 00000000 		.word	cogcal_iq_acc
+ 759 00b0 00000000 		.word	cogcal_base
+ 760 00b4 00000000 		.word	cogcal_timer
+ 761 00b8 00000000 		.word	cogcal_iq_n
+ 762 00bc 00000000 		.word	g_cogcal_step
+ 763 00c0 00000000 		.word	g_cogcal_holes
+ 764 00c4 00000000 		.word	g_cogcal_phase
+ 765 00c8 00000000 		.word	cogging_map
+ 766 00cc 00000000 		.word	cogging_valid
+ 767              		.cfi_endproc
+ 768              	.LFE399:
+ 770              		.global	__aeabi_f2d
+ 771              		.global	__aeabi_dadd
+ 772              		.global	__aeabi_ui2d
+ 773              		.global	__aeabi_ddiv
+ 774              		.global	__aeabi_d2f
+ 775              		.section	.text.Cogging_CalUpdate,"ax",%progbits
+ 776              		.align	1
+ 777              		.p2align 2,,3
+ 778              		.global	Cogging_CalUpdate
+ 779              		.syntax unified
+ 780              		.thumb
+ARM GAS  /tmp/cciesFVL.s 			page 21
+
+
+ 781              		.thumb_func
+ 783              	Cogging_CalUpdate:
+ 784              	.LVL40:
+ 785              	.LFB401:
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** // 每个控制拍(20kHz)调用; 返回true=标定进行中(已接管 input_position)
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** bool Cogging_CalUpdate(MOTOR_DATA *m)
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** {
+ 786              		.loc 1 178 1 is_stmt 1 view -0
+ 787              		.cfi_startproc
+ 788              		@ args = 0, pretend = 0, frame = 8
+ 789              		@ frame_needed = 0, uses_anonymous_args = 0
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (g_cogcal_phase == COGCAL_IDLE) return false;
+ 790              		.loc 1 179 5 view .LVU222
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (g_cogcal_phase == COGCAL_IDLE) return false;
+ 791              		.loc 1 178 1 is_stmt 0 view .LVU223
+ 792 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+ 793              	.LCFI8:
+ 794              		.cfi_def_cfa_offset 36
+ 795              		.cfi_offset 4, -36
+ 796              		.cfi_offset 5, -32
+ 797              		.cfi_offset 6, -28
+ 798              		.cfi_offset 7, -24
+ 799              		.cfi_offset 8, -20
+ 800              		.cfi_offset 9, -16
+ 801              		.cfi_offset 10, -12
+ 802              		.cfi_offset 11, -8
+ 803              		.cfi_offset 14, -4
+ 804              		.loc 1 179 24 view .LVU224
+ 805 0004 DFF84CB3 		ldr	fp, .L136+88
+ 806 0008 9BF80030 		ldrb	r3, [fp]	@ zero_extendqisi2
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (g_cogcal_phase == COGCAL_IDLE) return false;
+ 807              		.loc 1 178 1 view .LVU225
+ 808 000c 83B0     		sub	sp, sp, #12
+ 809              	.LCFI9:
+ 810              		.cfi_def_cfa_offset 48
+ 811              		.loc 1 179 8 view .LVU226
+ 812 000e 002B     		cmp	r3, #0
+ 813 0010 00F0F280 		beq	.L56
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (g_cogcal_phase == COGCAL_FINISH) { cogcal_finish(m); return false; }
+ 814              		.loc 1 180 5 is_stmt 1 view .LVU227
+ 815              		.loc 1 180 24 is_stmt 0 view .LVU228
+ 816 0014 9BF80030 		ldrb	r3, [fp]	@ zero_extendqisi2
+ 817              		.loc 1 180 8 view .LVU229
+ 818 0018 032B     		cmp	r3, #3
+ 819 001a 0646     		mov	r6, r0
+ 820 001c 00F0EE80 		beq	.L127
+ 181:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+ 182:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     // 命令当前点的离散目标位置(每点间隔 1/COGGING_N 圈)
+ 183:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     float dir = (g_cogcal_phase == COGCAL_CW) ? +1.0f : -1.0f;
+ 821              		.loc 1 183 5 is_stmt 1 view .LVU230
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->components.foc->id_set    = 0.0f;
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->Controller.input_velocity = COGCAL_VEL_CLAMP;
+ 186:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->Controller.input_position = cogcal_base + dir * ((float)g_cogcal_step / (float)COGGING_N);
+ 822              		.loc 1 186 57 is_stmt 0 view .LVU231
+ 823 0020 B64B     		ldr	r3, .L136
+ 183:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->components.foc->id_set    = 0.0f;
+ARM GAS  /tmp/cciesFVL.s 			page 22
+
+
+ 824              		.loc 1 183 33 view .LVU232
+ 825 0022 9BF80010 		ldrb	r1, [fp]	@ zero_extendqisi2
+ 826              		.loc 1 186 57 view .LVU233
+ 827 0026 1B88     		ldrh	r3, [r3]
+ 828              		.loc 1 186 48 view .LVU234
+ 829 0028 B54A     		ldr	r2, .L136+4
+ 830              		.loc 1 186 57 view .LVU235
+ 831 002a 9BB2     		uxth	r3, r3
+ 832              		.loc 1 186 78 view .LVU236
+ 833 002c 07EE103A 		vmov	s14, r3	@ int
+ 834              		.loc 1 186 48 view .LVU237
+ 835 0030 D2ED007A 		vldr.32	s15, [r2]
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->components.foc->id_set    = 0.0f;
+ 836              		.loc 1 184 18 view .LVU238
+ 837 0034 D0E90023 		ldrd	r2, r3, [r0]
+ 183:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->components.foc->id_set    = 0.0f;
+ 838              		.loc 1 183 55 discriminator 1 view .LVU239
+ 839 0038 0129     		cmp	r1, #1
+ 840              		.loc 1 186 78 view .LVU240
+ 841 003a BBEEEB7A 		vcvt.f32.u32	s14, s14, #9
+ 183:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->components.foc->id_set    = 0.0f;
+ 842              		.loc 1 183 55 discriminator 1 view .LVU241
+ 843 003e FFEE006A 		vmov.f32	s13, #-1.0e+0
+ 844 0042 B7EE006A 		vmov.f32	s12, #1.0e+0
+ 845 0046 08BF     		it	eq
+ 846 0048 F0EE466A 		vmoveq.f32	s13, s12
+ 847              	.LVL41:
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->components.foc->id_set    = 0.0f;
+ 848              		.loc 1 184 5 is_stmt 1 view .LVU242
+ 849              		.loc 1 186 48 is_stmt 0 view .LVU243
+ 850 004c E7EE267A 		vfma.f32	s15, s14, s13
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->components.foc->id_set    = 0.0f;
+ 851              		.loc 1 184 34 view .LVU244
+ 852 0050 0020     		movs	r0, #0
+ 853              	.LVL42:
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->Controller.input_position = cogcal_base + dir * ((float)g_cogcal_step / (float)COGGING_N);
+ 854              		.loc 1 185 34 view .LVU245
+ 855 0052 4FF07C51 		mov	r1, #1056964608
+ 187:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+ 188:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     bool still  = ABS(m->components.encoder->vel_estimate_) < COGCAL_SETTLE_VEL;
+ 856              		.loc 1 188 19 view .LVU246
+ 857 0056 93ED947A 		vldr.32	s14, [r3, #592]
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->Controller.input_velocity = COGCAL_VEL_CLAMP;
+ 858              		.loc 1 184 34 view .LVU247
+ 859 005a C2F88000 		str	r0, [r2, #128]	@ unaligned
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->Controller.input_position = cogcal_base + dir * ((float)g_cogcal_step / (float)COGGING_N);
+ 860              		.loc 1 185 5 is_stmt 1 view .LVU248
+ 861              		.loc 1 188 61 is_stmt 0 view .LVU249
+ 862 005e B5EEC07A 		vcmpe.f32	s14, #0
+ 863 0062 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->Controller.input_position = cogcal_base + dir * ((float)g_cogcal_step / (float)COGGING_N);
+ 864              		.loc 1 185 34 view .LVU250
+ 865 0066 F165     		str	r1, [r6, #92]	@ float
+ 186:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+ 866              		.loc 1 186 5 is_stmt 1 view .LVU251
+ 186:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+ 867              		.loc 1 186 34 is_stmt 0 view .LVU252
+ARM GAS  /tmp/cciesFVL.s 			page 23
+
+
+ 868 0068 C6ED167A 		vstr.32	s15, [r6, #88]
+ 869              		.loc 1 188 5 is_stmt 1 view .LVU253
+ 870              		.loc 1 188 61 is_stmt 0 view .LVU254
+ 871 006c 37DD     		ble	.L118
+ 872              		.loc 1 188 61 discriminator 1 view .LVU255
+ 873 006e DFEDA56A 		vldr.32	s13, .L136+8
+ 874              	.LVL43:
+ 875              		.loc 1 188 61 discriminator 1 view .LVU256
+ 876 0072 B4EEE67A 		vcmpe.f32	s14, s13
+ 877 0076 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 878 007a 4CBF     		ite	mi
+ 879 007c 0121     		movmi	r1, #1
+ 880 007e 0021     		movpl	r1, #0
+ 881              	.L77:
+ 882              	.LVL44:
+ 189:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     bool at_tgt = ABS(m->Controller.input_position - m->components.encoder->pos_estimate_) < COGCAL
+ 883              		.loc 1 189 5 is_stmt 1 view .LVU257
+ 884              		.loc 1 189 19 is_stmt 0 view .LVU258
+ 885 0080 93ED927A 		vldr.32	s14, [r3, #584]
+ 886 0084 77EEC77A 		vsub.f32	s15, s15, s14
+ 887              		.loc 1 189 92 view .LVU259
+ 888 0088 F5EEC07A 		vcmpe.f32	s15, #0
+ 889 008c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 890 0090 52DD     		ble	.L119
+ 891              		.loc 1 189 92 discriminator 1 view .LVU260
+ 892 0092 9FED9D7A 		vldr.32	s14, .L136+12
+ 893 0096 F4EEC77A 		vcmpe.f32	s15, s14
+ 894 009a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 895 009e 4CBF     		ite	mi
+ 896 00a0 0120     		movmi	r0, #1
+ 897 00a2 0020     		movpl	r0, #0
+ 898              	.L80:
+ 899              	.LVL45:
+ 190:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_timer++;
+ 900              		.loc 1 190 5 is_stmt 1 view .LVU261
+ 901              		.loc 1 190 17 is_stmt 0 view .LVU262
+ 902 00a4 994B     		ldr	r3, .L136+16
+ 191:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (cogcal_settle == 0) // 收敛前: 等"静止且到目标"(一旦到目标即开启1s平均�
+ 903              		.loc 1 191 23 view .LVU263
+ 904 00a6 9A4F     		ldr	r7, .L136+20
+ 190:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_timer++;
+ 905              		.loc 1 190 17 view .LVU264
+ 906 00a8 1C68     		ldr	r4, [r3]
+ 907              		.loc 1 191 23 view .LVU265
+ 908 00aa 3D68     		ldr	r5, [r7]
+ 190:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_timer++;
+ 909              		.loc 1 190 17 view .LVU266
+ 910 00ac 0134     		adds	r4, r4, #1
+ 911 00ae 1C60     		str	r4, [r3]
+ 912              		.loc 1 191 5 is_stmt 1 view .LVU267
+ 913              		.loc 1 191 8 is_stmt 0 view .LVU268
+ 914 00b0 FDB9     		cbnz	r5, .L81
+ 192:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     {
+ 193:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         if (still && at_tgt) { cogcal_settle = 1; cogcal_iq_acc = 0.0; cogcal_iq_n = 0; } // 收敛
+ 915              		.loc 1 193 9 is_stmt 1 view .LVU269
+ 916              		.loc 1 193 12 is_stmt 0 view .LVU270
+ 917 00b2 21B1     		cbz	r1, .L82
+ARM GAS  /tmp/cciesFVL.s 			page 24
+
+
+ 918              		.loc 1 193 19 discriminator 1 view .LVU271
+ 919 00b4 0028     		cmp	r0, #0
+ 920 00b6 00F0DD80 		beq	.L83
+ 921              		.loc 1 193 32 is_stmt 1 discriminator 2 view .LVU272
+ 922              		.loc 1 193 46 is_stmt 0 discriminator 2 view .LVU273
+ 923 00ba 0123     		movs	r3, #1
+ 924 00bc 3B60     		str	r3, [r7]
+ 925              		.loc 1 193 51 is_stmt 1 discriminator 2 view .LVU274
+ 926              		.loc 1 193 72 discriminator 2 view .LVU275
+ 927              	.L82:
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else if (still)      { cogcal_iq_acc += (double)m->components.foc->i_q; cogcal_iq_n++; }
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else                 { cogcal_iq_acc = 0.0; cogcal_iq_n = 0; }
+ 928              		.loc 1 195 46 is_stmt 0 view .LVU276
+ 929 00be 954B     		ldr	r3, .L136+24
+ 930              		.loc 1 195 65 view .LVU277
+ 931 00c0 954A     		ldr	r2, .L136+28
+ 932              		.loc 1 195 46 view .LVU278
+ 933 00c2 0021     		movs	r1, #0
+ 934              	.LVL46:
+ 935              		.loc 1 195 46 view .LVU279
+ 936 00c4 0020     		movs	r0, #0
+ 937              	.LVL47:
+ 938              		.loc 1 195 46 view .LVU280
+ 939 00c6 C3E90001 		strd	r0, [r3]
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     }
+ 197:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     else // 已收敛: 1s墙钟平均窗(容忍偶发vel抖动, 不像"连续静止"那样被打断
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     {
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         if (still) { cogcal_iq_acc += (double)m->components.foc->i_q; cogcal_iq_n++; }
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         if (++cogcal_settle >= COGCAL_SETTLE_TICKS)
+ 201:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         {
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             if (cogcal_iq_n) cogcal_record(m, (float)(cogcal_iq_acc / cogcal_iq_n));
+ 203:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             cogcal_next(m);
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             return true;
+ 205:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         }
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     }
+ 207:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (cogcal_timer >= COGCAL_TIMEOUT_TICKS) // 始终没收敛: 用累计静止均值兜底(无�
+ 940              		.loc 1 207 8 view .LVU281
+ 941 00ca 4EF65F23 		movw	r3, #59999
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     }
+ 942              		.loc 1 195 65 view .LVU282
+ 943 00ce 0021     		movs	r1, #0
+ 944              		.loc 1 207 8 view .LVU283
+ 945 00d0 9C42     		cmp	r4, r3
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     }
+ 946              		.loc 1 195 65 view .LVU284
+ 947 00d2 1160     		str	r1, [r2]
+ 948              		.loc 1 207 5 is_stmt 1 view .LVU285
+ 949              		.loc 1 207 8 is_stmt 0 view .LVU286
+ 950 00d4 2CD8     		bhi	.L87
+ 951              	.L90:
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         }
+ 952              		.loc 1 204 20 view .LVU287
+ 953 00d6 0120     		movs	r0, #1
+ 954              	.LVL48:
+ 955              	.L120:
+ 208:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     {
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         if (cogcal_iq_n) cogcal_record(m, (float)(cogcal_iq_acc / cogcal_iq_n));
+ARM GAS  /tmp/cciesFVL.s 			page 25
+
+
+ 210:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cogcal_next(m);
+ 211:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     }
+ 212:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     return true;
+ 213:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 956              		.loc 1 213 1 view .LVU288
+ 957 00d8 03B0     		add	sp, sp, #12
+ 958              	.LCFI10:
+ 959              		.cfi_remember_state
+ 960              		.cfi_def_cfa_offset 36
+ 961              		@ sp needed
+ 962 00da BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+ 963              	.LVL49:
+ 964              	.L118:
+ 965              	.LCFI11:
+ 966              		.cfi_restore_state
+ 188:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     bool at_tgt = ABS(m->Controller.input_position - m->components.encoder->pos_estimate_) < COGCAL
+ 967              		.loc 1 188 61 discriminator 2 view .LVU289
+ 968 00de DFED8F6A 		vldr.32	s13, .L136+32
+ 969              	.LVL50:
+ 188:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     bool at_tgt = ABS(m->Controller.input_position - m->components.encoder->pos_estimate_) < COGCAL
+ 970              		.loc 1 188 61 discriminator 2 view .LVU290
+ 971 00e2 B4EEE67A 		vcmpe.f32	s14, s13
+ 972 00e6 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 973 00ea CCBF     		ite	gt
+ 974 00ec 0121     		movgt	r1, #1
+ 975 00ee 0021     		movle	r1, #0
+ 976 00f0 C6E7     		b	.L77
+ 977              	.LVL51:
+ 978              	.L81:
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         if (++cogcal_settle >= COGCAL_SETTLE_TICKS)
+ 979              		.loc 1 199 9 is_stmt 1 view .LVU291
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         if (++cogcal_settle >= COGCAL_SETTLE_TICKS)
+ 980              		.loc 1 199 12 is_stmt 0 view .LVU292
+ 981 00f2 81B1     		cbz	r1, .L85
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         if (++cogcal_settle >= COGCAL_SETTLE_TICKS)
+ 982              		.loc 1 199 22 is_stmt 1 discriminator 1 view .LVU293
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         if (++cogcal_settle >= COGCAL_SETTLE_TICKS)
+ 983              		.loc 1 199 64 is_stmt 0 discriminator 1 view .LVU294
+ 984 00f4 106D     		ldr	r0, [r2, #80]	@ unaligned
+ 985              	.LVL52:
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         if (++cogcal_settle >= COGCAL_SETTLE_TICKS)
+ 986              		.loc 1 199 36 discriminator 1 view .LVU295
+ 987 00f6 DFF81C82 		ldr	r8, .L136+24
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         if (++cogcal_settle >= COGCAL_SETTLE_TICKS)
+ 988              		.loc 1 199 39 discriminator 1 view .LVU296
+ 989 00fa FFF7FEFF 		bl	__aeabi_f2d
+ 990              	.LVL53:
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         if (++cogcal_settle >= COGCAL_SETTLE_TICKS)
+ 991              		.loc 1 199 39 discriminator 1 view .LVU297
+ 992 00fe 0246     		mov	r2, r0
+ 993 0100 0B46     		mov	r3, r1
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         if (++cogcal_settle >= COGCAL_SETTLE_TICKS)
+ 994              		.loc 1 199 36 discriminator 1 view .LVU298
+ 995 0102 D8E90001 		ldrd	r0, [r8]
+ 996 0106 FFF7FEFF 		bl	__aeabi_dadd
+ 997              	.LVL54:
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         if (++cogcal_settle >= COGCAL_SETTLE_TICKS)
+ARM GAS  /tmp/cciesFVL.s 			page 26
+
+
+ 998              		.loc 1 199 82 discriminator 1 view .LVU299
+ 999 010a 834A     		ldr	r2, .L136+28
+ 1000 010c 1368     		ldr	r3, [r2]
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         if (++cogcal_settle >= COGCAL_SETTLE_TICKS)
+ 1001              		.loc 1 199 36 discriminator 1 view .LVU300
+ 1002 010e C8E90001 		strd	r0, [r8]
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         if (++cogcal_settle >= COGCAL_SETTLE_TICKS)
+ 1003              		.loc 1 199 71 is_stmt 1 discriminator 1 view .LVU301
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         if (++cogcal_settle >= COGCAL_SETTLE_TICKS)
+ 1004              		.loc 1 199 82 is_stmt 0 discriminator 1 view .LVU302
+ 1005 0112 0133     		adds	r3, r3, #1
+ 1006 0114 1360     		str	r3, [r2]
+ 1007              	.L85:
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         {
+ 1008              		.loc 1 200 9 is_stmt 1 view .LVU303
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         {
+ 1009              		.loc 1 200 13 is_stmt 0 view .LVU304
+ 1010 0116 0135     		adds	r5, r5, #1
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         {
+ 1011              		.loc 1 200 12 view .LVU305
+ 1012 0118 44F61F63 		movw	r3, #19999
+ 1013 011c 9D42     		cmp	r5, r3
+ 1014 011e 3D60     		str	r5, [r7]
+ 1015 0120 03D8     		bhi	.L126
+ 1016              	.L84:
+ 207:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     {
+ 1017              		.loc 1 207 5 is_stmt 1 view .LVU306
+ 207:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     {
+ 1018              		.loc 1 207 8 is_stmt 0 view .LVU307
+ 1019 0122 4EF65F23 		movw	r3, #59999
+ 1020 0126 9C42     		cmp	r4, r3
+ 1021 0128 D5D9     		bls	.L90
+ 1022              	.L126:
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             cogcal_next(m);
+ 1023              		.loc 1 202 13 is_stmt 1 view .LVU308
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             cogcal_next(m);
+ 1024              		.loc 1 202 17 is_stmt 0 view .LVU309
+ 1025 012a 7B4B     		ldr	r3, .L136+28
+ 1026 012c 1868     		ldr	r0, [r3]
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             cogcal_next(m);
+ 1027              		.loc 1 202 16 view .LVU310
+ 1028 012e 68B9     		cbnz	r0, .L128
+ 1029              	.L87:
+ 203:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             return true;
+ 1030              		.loc 1 203 13 is_stmt 1 view .LVU311
+ 1031 0130 3046     		mov	r0, r6
+ 1032 0132 FFF7FEFF 		bl	cogcal_next
+ 1033              	.LVL55:
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         }
+ 1034              		.loc 1 204 13 view .LVU312
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         }
+ 1035              		.loc 1 204 20 is_stmt 0 view .LVU313
+ 1036 0136 CEE7     		b	.L90
+ 1037              	.LVL56:
+ 1038              	.L119:
+ 189:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogcal_timer++;
+ 1039              		.loc 1 189 92 discriminator 2 view .LVU314
+ARM GAS  /tmp/cciesFVL.s 			page 27
+
+
+ 1040 0138 9FED797A 		vldr.32	s14, .L136+36
+ 1041 013c F4EEC77A 		vcmpe.f32	s15, s14
+ 1042 0140 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 1043 0144 CCBF     		ite	gt
+ 1044 0146 0120     		movgt	r0, #1
+ 1045 0148 0020     		movle	r0, #0
+ 1046 014a ABE7     		b	.L80
+ 1047              	.LVL57:
+ 1048              	.L128:
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             cogcal_next(m);
+ 1049              		.loc 1 202 30 is_stmt 1 discriminator 1 view .LVU315
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             cogcal_next(m);
+ 1050              		.loc 1 202 69 is_stmt 0 discriminator 1 view .LVU316
+ 1051 014c FFF7FEFF 		bl	__aeabi_ui2d
+ 1052              	.LVL58:
+ 1053 0150 704C     		ldr	r4, .L136+24
+ 1054 0152 0246     		mov	r2, r0
+ 1055 0154 0B46     		mov	r3, r1
+ 1056 0156 D4E90001 		ldrd	r0, [r4]
+ 1057 015a FFF7FEFF 		bl	__aeabi_ddiv
+ 1058              	.LVL59:
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             cogcal_next(m);
+ 1059              		.loc 1 202 30 discriminator 1 view .LVU317
+ 1060 015e FFF7FEFF 		bl	__aeabi_d2f
+ 1061              	.LVL60:
+ 1062 0162 00EE100A 		vmov	s0, r0
+ 1063 0166 3046     		mov	r0, r6
+ 1064 0168 FFF7FEFF 		bl	cogcal_record.constprop.0
+ 1065              	.LVL61:
+ 203:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             return true;
+ 1066              		.loc 1 203 13 is_stmt 1 view .LVU318
+ 1067 016c 3046     		mov	r0, r6
+ 1068 016e FFF7FEFF 		bl	cogcal_next
+ 1069              	.LVL62:
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         }
+ 1070              		.loc 1 204 13 view .LVU319
+ 1071 0172 B0E7     		b	.L90
+ 1072              	.LVL63:
+ 1073              	.L129:
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         }
+ 1074              		.loc 1 204 13 is_stmt 0 view .LVU320
+ 1075 0174 6B4C     		ldr	r4, .L136+40
+ 1076              	.LBB23:
+ 1077              	.LBB24:
+ 1078              	.LBB25:
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     {
+ 1079              		.loc 1 114 23 discriminator 1 view .LVU321
+ 1080 0176 6C4B     		ldr	r3, .L136+44
+ 1081 0178 2246     		mov	r2, r4
+ 1082              	.LBE25:
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     for (int i = 0; i < COGGING_N; i++) if (!cw_cnt[i] && !ccw_cnt[i]) holes++;
+ 1083              		.loc 1 121 14 view .LVU322
+ 1084 017a 0025     		movs	r5, #0
+ 1085              	.L62:
+ 1086              	.LVL64:
+ 1087              	.LBB30:
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_holes = holes;
+ARM GAS  /tmp/cciesFVL.s 			page 28
+
+
+ 1088              		.loc 1 122 41 is_stmt 1 discriminator 8 view .LVU323
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_holes = holes;
+ 1089              		.loc 1 122 44 is_stmt 0 discriminator 8 view .LVU324
+ 1090 017c 33F8021F 		ldrh	r1, [r3, #2]!
+ 1091 0180 29B9     		cbnz	r1, .L61
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_holes = holes;
+ 1092              		.loc 1 122 72 is_stmt 1 discriminator 4 view .LVU325
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_holes = holes;
+ 1093              		.loc 1 122 56 is_stmt 0 discriminator 2 view .LVU326
+ 1094 0182 1188     		ldrh	r1, [r2]
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_holes = holes;
+ 1095              		.loc 1 122 77 discriminator 4 view .LVU327
+ 1096 0184 05F1010C 		add	ip, r5, #1
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_holes = holes;
+ 1097              		.loc 1 122 56 discriminator 2 view .LVU328
+ 1098 0188 09B9     		cbnz	r1, .L61
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_holes = holes;
+ 1099              		.loc 1 122 77 discriminator 4 view .LVU329
+ 1100 018a 1FFA8CF5 		uxth	r5, ip
+ 1101              	.LVL65:
+ 1102              	.L61:
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_holes = holes;
+ 1103              		.loc 1 122 37 is_stmt 1 discriminator 6 view .LVU330
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_holes = holes;
+ 1104              		.loc 1 122 23 discriminator 7 view .LVU331
+ 1105 018e 9F42     		cmp	r7, r3
+ 1106 0190 02F10202 		add	r2, r2, #2
+ 1107 0194 F2D1     		bne	.L62
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_holes = holes;
+ 1108              		.loc 1 122 23 is_stmt 0 discriminator 7 view .LVU332
+ 1109              	.LBE30:
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (holes && holes < COGGING_N)
+ 1110              		.loc 1 123 5 is_stmt 1 view .LVU333
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (holes && holes < COGGING_N)
+ 1111              		.loc 1 123 20 is_stmt 0 view .LVU334
+ 1112 0196 654B     		ldr	r3, .L136+48
+ 1113 0198 1D80     		strh	r5, [r3]	@ movhi
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         for (int i = 0; i < COGGING_N; i++)
+ 1114              		.loc 1 124 5 is_stmt 1 view .LVU335
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         for (int i = 0; i < COGGING_N; i++)
+ 1115              		.loc 1 124 8 is_stmt 0 view .LVU336
+ 1116 019a 013D     		subs	r5, r5, #1
+ 1117              	.LVL66:
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         for (int i = 0; i < COGGING_N; i++)
+ 1118              		.loc 1 124 8 view .LVU337
+ 1119 019c B5F5FF7F 		cmp	r5, #510
+ 1120 01a0 79D9     		bls	.L95
+ 1121              	.LVL67:
+ 1122              	.L72:
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     for (int i = 0; i < COGGING_N; i++) sum += cw_resid[i];
+ 1123              		.loc 1 135 5 is_stmt 1 view .LVU338
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     float mean = sum / (float)COGGING_N;
+ 1124              		.loc 1 136 5 view .LVU339
+ 1125              	.LBB31:
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     float mean = sum / (float)COGGING_N;
+ 1126              		.loc 1 136 10 view .LVU340
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     float mean = sum / (float)COGGING_N;
+ARM GAS  /tmp/cciesFVL.s 			page 29
+
+
+ 1127              		.loc 1 136 23 discriminator 1 view .LVU341
+ 1128 01a2 634A     		ldr	r2, .L136+52
+ 1129              	.LBE31:
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     for (int i = 0; i < COGGING_N; i++) sum += cw_resid[i];
+ 1130              		.loc 1 135 11 is_stmt 0 view .LVU342
+ 1131 01a4 DFED637A 		vldr.32	s15, .L136+56
+ 1132              	.LBB32:
+ 1133              	.LBB33:
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             for (dl = 1; dl < COGGING_N; dl++) { int j = (i - dl + COGGING_N) % COGGING_N; if (cw_c
+ 1134              		.loc 1 128 32 view .LVU343
+ 1135 01a8 A2F50063 		sub	r3, r2, #2048
+ 1136              	.LVL68:
+ 1137              	.L64:
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             for (dl = 1; dl < COGGING_N; dl++) { int j = (i - dl + COGGING_N) % COGGING_N; if (cw_c
+ 1138              		.loc 1 128 32 view .LVU344
+ 1139              	.LBE33:
+ 1140              	.LBE32:
+ 1141              	.LBB42:
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     float mean = sum / (float)COGGING_N;
+ 1142              		.loc 1 136 41 is_stmt 1 discriminator 3 view .LVU345
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     float mean = sum / (float)COGGING_N;
+ 1143              		.loc 1 136 56 is_stmt 0 discriminator 3 view .LVU346
+ 1144 01ac B3EC017A 		vldmia.32	r3!, {s14}
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     float mean = sum / (float)COGGING_N;
+ 1145              		.loc 1 136 23 discriminator 1 view .LVU347
+ 1146 01b0 9A42     		cmp	r2, r3
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     float mean = sum / (float)COGGING_N;
+ 1147              		.loc 1 136 45 discriminator 3 view .LVU348
+ 1148 01b2 77EE877A 		vadd.f32	s15, s15, s14
+ 1149              	.LVL69:
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     float mean = sum / (float)COGGING_N;
+ 1150              		.loc 1 136 37 is_stmt 1 discriminator 3 view .LVU349
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     float mean = sum / (float)COGGING_N;
+ 1151              		.loc 1 136 23 discriminator 1 view .LVU350
+ 1152 01b6 F9D1     		bne	.L64
+ 1153              	.LBE42:
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     for (int i = 0; i < COGGING_N; i++)
+ 1154              		.loc 1 137 5 view .LVU351
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     for (int i = 0; i < COGGING_N; i++)
+ 1155              		.loc 1 137 11 is_stmt 0 view .LVU352
+ 1156 01b8 9FED5F7A 		vldr.32	s14, .L136+60
+ 1157 01bc 5F4B     		ldr	r3, .L136+64
+ 1158 01be 27EE877A 		vmul.f32	s14, s15, s14
+ 1159              	.LVL70:
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cogging_map[i] += COG_FF_SIGN * (cw_resid[i] - mean);
+ 1160              		.loc 1 138 5 is_stmt 1 view .LVU353
+ 1161              	.LBB43:
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cogging_map[i] += COG_FF_SIGN * (cw_resid[i] - mean);
+ 1162              		.loc 1 138 10 view .LVU354
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cogging_map[i] += COG_FF_SIGN * (cw_resid[i] - mean);
+ 1163              		.loc 1 138 23 discriminator 1 view .LVU355
+ 1164 01c2 03F50062 		add	r2, r3, #2048
+ 1165              	.LVL71:
+ 1166              	.L73:
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogging_valid = 1;
+ 1167              		.loc 1 139 9 view .LVU356
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogging_valid = 1;
+ARM GAS  /tmp/cciesFVL.s 			page 30
+
+
+ 1168              		.loc 1 139 50 is_stmt 0 view .LVU357
+ 1169 01c6 F0EC017A 		vldmia.32	r0!, {s15}
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogging_valid = 1;
+ 1170              		.loc 1 139 20 view .LVU358
+ 1171 01ca D3ED006A 		vldr.32	s13, [r3]
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogging_valid = 1;
+ 1172              		.loc 1 139 39 view .LVU359
+ 1173 01ce 77EEC77A 		vsub.f32	s15, s15, s14
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     cogging_valid = 1;
+ 1174              		.loc 1 139 24 view .LVU360
+ 1175 01d2 77EEA67A 		vadd.f32	s15, s15, s13
+ 1176 01d6 E3EC017A 		vstmia.32	r3!, {s15}
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cogging_map[i] += COG_FF_SIGN * (cw_resid[i] - mean);
+ 1177              		.loc 1 138 37 is_stmt 1 discriminator 3 view .LVU361
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cogging_map[i] += COG_FF_SIGN * (cw_resid[i] - mean);
+ 1178              		.loc 1 138 23 discriminator 1 view .LVU362
+ 1179 01da 9A42     		cmp	r2, r3
+ 1180 01dc F3D1     		bne	.L73
+ 1181              	.LBE43:
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     Foc_Pwm_LowSides();        // 关PWM再写flash(擦写停CPU~40ms)
+ 1182              		.loc 1 140 5 view .LVU363
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     Foc_Pwm_LowSides();        // 关PWM再写flash(擦写停CPU~40ms)
+ 1183              		.loc 1 140 19 is_stmt 0 view .LVU364
+ 1184 01de 584B     		ldr	r3, .L136+68
+ 1185 01e0 0122     		movs	r2, #1
+ 1186 01e2 1A70     		strb	r2, [r3]
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     MotorCalib_SaveToFlash(m); // 连同calib持久化到 page62/63
+ 1187              		.loc 1 141 5 is_stmt 1 view .LVU365
+ 1188 01e4 FFF7FEFF 		bl	Foc_Pwm_LowSides
+ 1189              	.LVL72:
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     m->state.State_Mode = STATE_MODE_GUARD;
+ 1190              		.loc 1 142 5 view .LVU366
+ 1191 01e8 3046     		mov	r0, r6
+ 1192 01ea FFF7FEFF 		bl	MotorCalib_SaveToFlash
+ 1193              	.LVL73:
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_phase      = COGCAL_IDLE;
+ 1194              		.loc 1 143 5 view .LVU367
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_phase      = COGCAL_IDLE;
+ 1195              		.loc 1 143 25 is_stmt 0 view .LVU368
+ 1196 01ee 0322     		movs	r2, #3
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 1197              		.loc 1 144 25 view .LVU369
+ 1198 01f0 0023     		movs	r3, #0
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     g_cogcal_phase      = COGCAL_IDLE;
+ 1199              		.loc 1 143 25 view .LVU370
+ 1200 01f2 3273     		strb	r2, [r6, #12]
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 1201              		.loc 1 144 5 is_stmt 1 view .LVU371
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 1202              		.loc 1 144 25 is_stmt 0 view .LVU372
+ 1203 01f4 8BF80030 		strb	r3, [fp]
+ 1204              	.LVL74:
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** }
+ 1205              		.loc 1 144 25 view .LVU373
+ 1206              	.LBE24:
+ 1207              	.LBE23:
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+ARM GAS  /tmp/cciesFVL.s 			page 31
+
+
+ 1208              		.loc 1 180 62 is_stmt 1 discriminator 1 view .LVU374
+ 1209              	.L56:
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (g_cogcal_phase == COGCAL_FINISH) { cogcal_finish(m); return false; }
+ 1210              		.loc 1 179 47 is_stmt 0 discriminator 1 view .LVU375
+ 1211 01f8 0020     		movs	r0, #0
+ 1212 01fa 6DE7     		b	.L120
+ 1213              	.LVL75:
+ 1214              	.L127:
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (g_cogcal_phase == COGCAL_FINISH) { cogcal_finish(m); return false; }
+ 1215              		.loc 1 179 47 discriminator 1 view .LVU376
+ 1216 01fc DFF82881 		ldr	r8, .L136+44
+ 1217 0200 5048     		ldr	r0, .L136+72
+ 1218              	.LVL76:
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     if (g_cogcal_phase == COGCAL_FINISH) { cogcal_finish(m); return false; }
+ 1219              		.loc 1 179 47 discriminator 1 view .LVU377
+ 1220 0202 DFF85491 		ldr	r9, .L136+92
+ 1221              	.LBB51:
+ 1222              	.LBB48:
+ 1223              	.LBB44:
+ 1224              	.LBB26:
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float ccw = ccw_cnt[i] ? friction_map[i] / ccw_cnt[i] : 0.0f;
+ 1225              		.loc 1 116 63 discriminator 2 view .LVU378
+ 1226 0206 DFED4B5A 		vldr.32	s11, .L136+56
+ 1227 020a 4F4D     		ldr	r5, .L136+76
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         friction_map[i] = 0.5f * (cw - ccw);
+ 1228              		.loc 1 118 32 view .LVU379
+ 1229 020c B6EE006A 		vmov.f32	s12, #5.0e-1
+ 1230 0210 08F58067 		add	r7, r8, #1024
+ 1231              	.LBE26:
+ 1232              	.LBE44:
+ 1233              	.LBE48:
+ 1234              	.LBE51:
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c **** 
+ 1235              		.loc 1 180 8 view .LVU380
+ 1236 0214 4C46     		mov	r4, r9
+ 1237 0216 0146     		mov	r1, r0
+ 1238 0218 4246     		mov	r2, r8
+ 1239 021a 15E0     		b	.L60
+ 1240              	.LVL77:
+ 1241              	.L130:
+ 1242              	.LBB52:
+ 1243              	.LBB49:
+ 1244              	.LBB45:
+ 1245              	.LBB27:
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cw_resid[i]     = 0.5f * (cw + ccw);
+ 1246              		.loc 1 117 50 discriminator 1 view .LVU381
+ 1247 021c 07EE103A 		vmov	s14, r3	@ int
+ 1248              	.LVL78:
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cw_resid[i]     = 0.5f * (cw + ccw);
+ 1249              		.loc 1 117 63 discriminator 1 view .LVU382
+ 1250 0220 94ED005A 		vldr.32	s10, [r4]
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cw_resid[i]     = 0.5f * (cw + ccw);
+ 1251              		.loc 1 117 50 discriminator 1 view .LVU383
+ 1252 0224 B8EEC77A 		vcvt.f32.s32	s14, s14
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cw_resid[i]     = 0.5f * (cw + ccw);
+ 1253              		.loc 1 117 63 discriminator 1 view .LVU384
+ 1254 0228 C5EE076A 		vdiv.f32	s13, s10, s14
+ARM GAS  /tmp/cciesFVL.s 			page 32
+
+
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     }
+ 1255              		.loc 1 119 38 view .LVU385
+ 1256 022c 37EEE67A 		vsub.f32	s14, s15, s13
+ 1257              	.L59:
+ 1258              	.LVL79:
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         friction_map[i] = 0.5f * (cw - ccw);
+ 1259              		.loc 1 118 9 is_stmt 1 view .LVU386
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         friction_map[i] = 0.5f * (cw - ccw);
+ 1260              		.loc 1 118 38 is_stmt 0 view .LVU387
+ 1261 0230 77EEA67A 		vadd.f32	s15, s15, s13
+ 1262              	.LVL80:
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     }
+ 1263              		.loc 1 119 32 view .LVU388
+ 1264 0234 27EE067A 		vmul.f32	s14, s14, s12
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         friction_map[i] = 0.5f * (cw - ccw);
+ 1265              		.loc 1 118 32 view .LVU389
+ 1266 0238 67EE867A 		vmul.f32	s15, s15, s12
+ 1267              	.LBE27:
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     {
+ 1268              		.loc 1 114 23 discriminator 1 view .LVU390
+ 1269 023c 9742     		cmp	r7, r2
+ 1270              	.LBB28:
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     }
+ 1271              		.loc 1 119 25 view .LVU391
+ 1272 023e A4EC017A 		vstmia.32	r4!, {s14}
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         friction_map[i] = 0.5f * (cw - ccw);
+ 1273              		.loc 1 118 25 view .LVU392
+ 1274 0242 E1EC017A 		vstmia.32	r1!, {s15}
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     }
+ 1275              		.loc 1 119 9 is_stmt 1 view .LVU393
+ 1276              	.LBE28:
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     {
+ 1277              		.loc 1 114 37 discriminator 2 view .LVU394
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****     {
+ 1278              		.loc 1 114 23 discriminator 1 view .LVU395
+ 1279 0246 95D0     		beq	.L129
+ 1280              	.LVL81:
+ 1281              	.L60:
+ 1282              	.LBB29:
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float ccw = ccw_cnt[i] ? friction_map[i] / ccw_cnt[i] : 0.0f;
+ 1283              		.loc 1 116 9 view .LVU396
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float ccw = ccw_cnt[i] ? friction_map[i] / ccw_cnt[i] : 0.0f;
+ 1284              		.loc 1 116 27 is_stmt 0 view .LVU397
+ 1285 0248 32F8023F 		ldrh	r3, [r2, #2]!
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float ccw = ccw_cnt[i] ? friction_map[i] / ccw_cnt[i] : 0.0f;
+ 1286              		.loc 1 116 63 discriminator 2 view .LVU398
+ 1287 024c F0EE657A 		vmov.f32	s15, s11
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float ccw = ccw_cnt[i] ? friction_map[i] / ccw_cnt[i] : 0.0f;
+ 1288              		.loc 1 116 63 view .LVU399
+ 1289 0250 3BB1     		cbz	r3, .L58
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float ccw = ccw_cnt[i] ? friction_map[i] / ccw_cnt[i] : 0.0f;
+ 1290              		.loc 1 116 50 discriminator 1 view .LVU400
+ 1291 0252 07EE903A 		vmov	s15, r3	@ int
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float ccw = ccw_cnt[i] ? friction_map[i] / ccw_cnt[i] : 0.0f;
+ 1292              		.loc 1 116 63 discriminator 1 view .LVU401
+ 1293 0256 D1ED006A 		vldr.32	s13, [r1]
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float ccw = ccw_cnt[i] ? friction_map[i] / ccw_cnt[i] : 0.0f;
+ARM GAS  /tmp/cciesFVL.s 			page 33
+
+
+ 1294              		.loc 1 116 50 discriminator 1 view .LVU402
+ 1295 025a B8EEE77A 		vcvt.f32.s32	s14, s15
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         float ccw = ccw_cnt[i] ? friction_map[i] / ccw_cnt[i] : 0.0f;
+ 1296              		.loc 1 116 63 discriminator 1 view .LVU403
+ 1297 025e C6EE877A 		vdiv.f32	s15, s13, s14
+ 1298              	.L58:
+ 1299              	.LVL82:
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cw_resid[i]     = 0.5f * (cw + ccw);
+ 1300              		.loc 1 117 9 is_stmt 1 view .LVU404
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cw_resid[i]     = 0.5f * (cw + ccw);
+ 1301              		.loc 1 117 28 is_stmt 0 view .LVU405
+ 1302 0262 35F8023F 		ldrh	r3, [r5, #2]!
+ 1303 0266 B0EE677A 		vmov.f32	s14, s15
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cw_resid[i]     = 0.5f * (cw + ccw);
+ 1304              		.loc 1 117 63 view .LVU406
+ 1305 026a 002B     		cmp	r3, #0
+ 1306 026c D6D1     		bne	.L130
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cw_resid[i]     = 0.5f * (cw + ccw);
+ 1307              		.loc 1 117 63 discriminator 2 view .LVU407
+ 1308 026e F0EE656A 		vmov.f32	s13, s11
+ 1309 0272 DDE7     		b	.L59
+ 1310              	.LVL83:
+ 1311              	.L83:
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         cw_resid[i]     = 0.5f * (cw + ccw);
+ 1312              		.loc 1 117 63 discriminator 2 view .LVU408
+ 1313              	.LBE29:
+ 1314              	.LBE45:
+ 1315              	.LBE49:
+ 1316              	.LBE52:
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else                 { cogcal_iq_acc = 0.0; cogcal_iq_n = 0; }
+ 1317              		.loc 1 194 14 is_stmt 1 view .LVU409
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else                 { cogcal_iq_acc = 0.0; cogcal_iq_n = 0; }
+ 1318              		.loc 1 194 32 discriminator 1 view .LVU410
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else                 { cogcal_iq_acc = 0.0; cogcal_iq_n = 0; }
+ 1319              		.loc 1 194 74 is_stmt 0 discriminator 1 view .LVU411
+ 1320 0274 106D     		ldr	r0, [r2, #80]	@ unaligned
+ 1321              	.LVL84:
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else                 { cogcal_iq_acc = 0.0; cogcal_iq_n = 0; }
+ 1322              		.loc 1 194 46 discriminator 1 view .LVU412
+ 1323 0276 274D     		ldr	r5, .L136+24
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else                 { cogcal_iq_acc = 0.0; cogcal_iq_n = 0; }
+ 1324              		.loc 1 194 49 discriminator 1 view .LVU413
+ 1325 0278 FFF7FEFF 		bl	__aeabi_f2d
+ 1326              	.LVL85:
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else                 { cogcal_iq_acc = 0.0; cogcal_iq_n = 0; }
+ 1327              		.loc 1 194 49 discriminator 1 view .LVU414
+ 1328 027c 0246     		mov	r2, r0
+ 1329 027e 0B46     		mov	r3, r1
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else                 { cogcal_iq_acc = 0.0; cogcal_iq_n = 0; }
+ 1330              		.loc 1 194 46 discriminator 1 view .LVU415
+ 1331 0280 D5E90001 		ldrd	r0, [r5]
+ 1332 0284 FFF7FEFF 		bl	__aeabi_dadd
+ 1333              	.LVL86:
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else                 { cogcal_iq_acc = 0.0; cogcal_iq_n = 0; }
+ 1334              		.loc 1 194 92 discriminator 1 view .LVU416
+ 1335 0288 234A     		ldr	r2, .L136+28
+ 1336 028a 1368     		ldr	r3, [r2]
+ARM GAS  /tmp/cciesFVL.s 			page 34
+
+
+ 1337 028c 0133     		adds	r3, r3, #1
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else                 { cogcal_iq_acc = 0.0; cogcal_iq_n = 0; }
+ 1338              		.loc 1 194 46 discriminator 1 view .LVU417
+ 1339 028e C5E90001 		strd	r0, [r5]
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else                 { cogcal_iq_acc = 0.0; cogcal_iq_n = 0; }
+ 1340              		.loc 1 194 81 is_stmt 1 discriminator 1 view .LVU418
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else                 { cogcal_iq_acc = 0.0; cogcal_iq_n = 0; }
+ 1341              		.loc 1 194 92 is_stmt 0 discriminator 1 view .LVU419
+ 1342 0292 1360     		str	r3, [r2]
+ 1343 0294 45E7     		b	.L84
+ 1344              	.LVL87:
+ 1345              	.L95:
+ 1346              	.LBB53:
+ 1347              	.LBB50:
+ 1348              	.LBB46:
+ 1349              	.LBB40:
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         else                 { cogcal_iq_acc = 0.0; cogcal_iq_n = 0; }
+ 1350              		.loc 1 194 92 discriminator 1 view .LVU420
+ 1351 0296 9FED2D5A 		vldr.32	s10, .L136+80
+ 1352              	.LBE40:
+ 1353              	.LBE46:
+ 1354 029a DFF8A8A0 		ldr	r10, .L136+72
+ 1355 029e 2C4D     		ldr	r5, .L136+84
+ 1356              	.LBB47:
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         {
+ 1357              		.loc 1 125 18 view .LVU421
+ 1358 02a0 0190     		str	r0, [sp, #4]
+ 1359 02a2 4FF0000E 		mov	lr, #0
+ 1360 02a6 B446     		mov	ip, r6
+ 1361 02a8 08E0     		b	.L63
+ 1362              	.LVL88:
+ 1363              	.L65:
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         {
+ 1364              		.loc 1 125 41 is_stmt 1 discriminator 2 view .LVU422
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         {
+ 1365              		.loc 1 125 27 is_stmt 0 discriminator 1 view .LVU423
+ 1366 02aa 4745     		cmp	r7, r8
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         {
+ 1367              		.loc 1 125 41 discriminator 2 view .LVU424
+ 1368 02ac 0EF1010E 		add	lr, lr, #1
+ 1369              	.LVL89:
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         {
+ 1370              		.loc 1 125 27 is_stmt 1 discriminator 1 view .LVU425
+ 1371 02b0 0AF1040A 		add	r10, r10, #4
+ 1372 02b4 09F10409 		add	r9, r9, #4
+ 1373 02b8 00F08B80 		beq	.L131
+ 1374              	.LVL90:
+ 1375              	.L63:
+ 1376              	.LBB41:
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             int dl, dr, l = i, r = i;
+ 1377              		.loc 1 127 13 view .LVU426
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             int dl, dr, l = i, r = i;
+ 1378              		.loc 1 127 16 is_stmt 0 view .LVU427
+ 1379 02bc 38F8023F 		ldrh	r3, [r8, #2]!
+ 1380 02c0 002B     		cmp	r3, #0
+ 1381 02c2 F2D1     		bne	.L65
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             int dl, dr, l = i, r = i;
+ARM GAS  /tmp/cciesFVL.s 			page 35
+
+
+ 1382              		.loc 1 127 27 discriminator 2 view .LVU428
+ 1383 02c4 34F81E30 		ldrh	r3, [r4, lr, lsl #1]
+ 1384 02c8 002B     		cmp	r3, #0
+ 1385 02ca EED1     		bne	.L65
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             for (dr = 1; dr < COGGING_N; dr++) { int j = (i + dr) % COGGING_N;             if (cw_c
+ 1386              		.loc 1 129 21 view .LVU429
+ 1387 02cc 0121     		movs	r1, #1
+ 1388 02ce 06E0     		b	.L69
+ 1389              	.LVL91:
+ 1390              	.L133:
+ 1391              	.LBB34:
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             for (dr = 1; dr < COGGING_N; dr++) { int j = (i + dr) % COGGING_N;             if (cw_c
+ 1392              		.loc 1 129 106 discriminator 3 view .LVU430
+ 1393 02d0 34F81230 		ldrh	r3, [r4, r2, lsl #1]
+ 1394 02d4 5BB9     		cbnz	r3, .L66
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             for (dr = 1; dr < COGGING_N; dr++) { int j = (i + dr) % COGGING_N;             if (cw_c
+ 1395              		.loc 1 129 106 discriminator 3 view .LVU431
+ 1396              	.LBE34:
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             for (dr = 1; dr < COGGING_N; dr++) { int j = (i + dr) % COGGING_N;             if (cw_c
+ 1397              		.loc 1 129 44 discriminator 5 view .LVU432
+ 1398 02d6 0131     		adds	r1, r1, #1
+ 1399              	.LVL92:
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             for (dr = 1; dr < COGGING_N; dr++) { int j = (i + dr) % COGGING_N;             if (cw_c
+ 1400              		.loc 1 129 29 is_stmt 1 discriminator 6 view .LVU433
+ 1401 02d8 B1F5007F 		cmp	r1, #512
+ 1402 02dc 75D0     		beq	.L132
+ 1403              	.LVL93:
+ 1404              	.L69:
+ 1405              	.LBB35:
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             for (dr = 1; dr < COGGING_N; dr++) { int j = (i + dr) % COGGING_N;             if (cw_c
+ 1406              		.loc 1 129 50 discriminator 7 view .LVU434
+ 1407              	.LBE35:
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             for (dr = 1; dr < COGGING_N; dr++) { int j = (i + dr) % COGGING_N;             if (cw_c
+ 1408              		.loc 1 129 44 discriminator 5 view .LVU435
+ 1409 02de AEEB0102 		sub	r2, lr, r1
+ 1410 02e2 C2F30802 		ubfx	r2, r2, #0, #9
+ 1411              	.LVL94:
+ 1412              	.LBB36:
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             for (dr = 1; dr < COGGING_N; dr++) { int j = (i + dr) % COGGING_N;             if (cw_c
+ 1413              		.loc 1 129 92 discriminator 7 view .LVU436
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             for (dr = 1; dr < COGGING_N; dr++) { int j = (i + dr) % COGGING_N;             if (cw_c
+ 1414              		.loc 1 129 95 is_stmt 0 discriminator 7 view .LVU437
+ 1415 02e6 35F81230 		ldrh	r3, [r5, r2, lsl #1]
+ 1416 02ea 002B     		cmp	r3, #0
+ 1417 02ec F0D0     		beq	.L133
+ 1418              	.L66:
+ 1419              	.LBE36:
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             cw_resid[i]     = cw_resid[l]     + t * (cw_resid[r]     - cw_resid[l]);
+ 1420              		.loc 1 131 23 view .LVU438
+ 1421 02ee 07EE901A 		vmov	s15, r1	@ int
+ 1422 02f2 B8EEE77A 		vcvt.f32.s32	s14, s15
+ 1423              	.LVL95:
+ 1424              	.L68:
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             float t = (float)dl / (float)(dl + dr);
+ 1425              		.loc 1 130 13 is_stmt 1 view .LVU439
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             float t = (float)dl / (float)(dl + dr);
+ 1426              		.loc 1 130 29 discriminator 6 view .LVU440
+ARM GAS  /tmp/cciesFVL.s 			page 36
+
+
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             float t = (float)dl / (float)(dl + dr);
+ 1427              		.loc 1 130 21 is_stmt 0 view .LVU441
+ 1428 02f6 0120     		movs	r0, #1
+ 1429 02f8 37E0     		b	.L71
+ 1430              	.L137:
+ 1431 02fa 00BF     		.align	2
+ 1432              	.L136:
+ 1433 02fc 00000000 		.word	g_cogcal_step
+ 1434 0300 00000000 		.word	cogcal_base
+ 1435 0304 8FC2F53C 		.word	1022739087
+ 1436 0308 0000803A 		.word	981467136
+ 1437 030c 00000000 		.word	cogcal_timer
+ 1438 0310 00000000 		.word	cogcal_settle
+ 1439 0314 00000000 		.word	cogcal_iq_acc
+ 1440 0318 00000000 		.word	cogcal_iq_n
+ 1441 031c 8FC2F5BC 		.word	-1124744561
+ 1442 0320 000080BA 		.word	-1166016512
+ 1443 0324 00000000 		.word	ccw_cnt
+ 1444 0328 FEFFFFFF 		.word	cw_cnt-2
+ 1445 032c 00000000 		.word	g_cogcal_holes
+ 1446 0330 00080000 		.word	cw_resid+2048
+ 1447 0334 00000000 		.word	0
+ 1448 0338 0000003B 		.word	989855744
+ 1449 033c 00000000 		.word	cogging_map
+ 1450 0340 00000000 		.word	cogging_valid
+ 1451 0344 00000000 		.word	cw_resid
+ 1452 0348 FEFFFFFF 		.word	ccw_cnt-2
+ 1453 034c 00000044 		.word	1140850688
+ 1454 0350 00000000 		.word	cw_cnt
+ 1455 0354 00000000 		.word	g_cogcal_phase
+ 1456 0358 00000000 		.word	friction_map
+ 1457              	.LVL96:
+ 1458              	.L135:
+ 1459              	.LBB37:
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             float t = (float)dl / (float)(dl + dr);
+ 1460              		.loc 1 130 106 discriminator 3 view .LVU442
+ 1461 035c 34F81360 		ldrh	r6, [r4, r3, lsl #1]
+ 1462 0360 5EB9     		cbnz	r6, .L70
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             float t = (float)dl / (float)(dl + dr);
+ 1463              		.loc 1 130 106 discriminator 3 view .LVU443
+ 1464              	.LBE37:
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             float t = (float)dl / (float)(dl + dr);
+ 1465              		.loc 1 130 44 discriminator 5 view .LVU444
+ 1466 0362 0130     		adds	r0, r0, #1
+ 1467              	.LVL97:
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             float t = (float)dl / (float)(dl + dr);
+ 1468              		.loc 1 130 29 is_stmt 1 discriminator 6 view .LVU445
+ 1469 0364 B0F5007F 		cmp	r0, #512
+ 1470 0368 2DD0     		beq	.L134
+ 1471              	.LVL98:
+ 1472              	.L71:
+ 1473              	.LBB38:
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             float t = (float)dl / (float)(dl + dr);
+ 1474              		.loc 1 130 50 discriminator 7 view .LVU446
+ 1475              	.LBE38:
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             float t = (float)dl / (float)(dl + dr);
+ 1476              		.loc 1 130 44 discriminator 5 view .LVU447
+ARM GAS  /tmp/cciesFVL.s 			page 37
+
+
+ 1477              	.LBB39:
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             float t = (float)dl / (float)(dl + dr);
+ 1478              		.loc 1 130 54 is_stmt 0 discriminator 7 view .LVU448
+ 1479 036a 00EB0E03 		add	r3, r0, lr
+ 1480 036e C3F30803 		ubfx	r3, r3, #0, #9
+ 1481              	.LVL99:
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             float t = (float)dl / (float)(dl + dr);
+ 1482              		.loc 1 130 92 is_stmt 1 discriminator 7 view .LVU449
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             float t = (float)dl / (float)(dl + dr);
+ 1483              		.loc 1 130 95 is_stmt 0 discriminator 7 view .LVU450
+ 1484 0372 35F81360 		ldrh	r6, [r5, r3, lsl #1]
+ 1485 0376 002E     		cmp	r6, #0
+ 1486 0378 F0D0     		beq	.L135
+ 1487              	.LVL100:
+ 1488              	.L70:
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             float t = (float)dl / (float)(dl + dr);
+ 1489              		.loc 1 130 95 discriminator 7 view .LVU451
+ 1490              	.LBE39:
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             cw_resid[i]     = cw_resid[l]     + t * (cw_resid[r]     - cw_resid[l]);
+ 1491              		.loc 1 131 13 is_stmt 1 view .LVU452
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             cw_resid[i]     = cw_resid[l]     + t * (cw_resid[r]     - cw_resid[l]);
+ 1492              		.loc 1 131 46 is_stmt 0 view .LVU453
+ 1493 037a 0144     		add	r1, r1, r0
+ 1494              	.LVL101:
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             cw_resid[i]     = cw_resid[l]     + t * (cw_resid[r]     - cw_resid[l]);
+ 1495              		.loc 1 131 35 view .LVU454
+ 1496 037c 07EE901A 		vmov	s15, r1	@ int
+ 1497 0380 F8EEE77A 		vcvt.f32.s32	s15, s15
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             friction_map[i] = friction_map[l] + t * (friction_map[r] - friction_map[l]);
+ 1498              		.loc 1 132 39 view .LVU455
+ 1499 0384 1448     		ldr	r0, .L138
+ 1500              	.LVL102:
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             cw_resid[i]     = cw_resid[l]     + t * (cw_resid[r]     - cw_resid[l]);
+ 1501              		.loc 1 131 19 view .LVU456
+ 1502 0386 C7EE275A 		vdiv.f32	s11, s14, s15
+ 1503              	.LVL103:
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             friction_map[i] = friction_map[l] + t * (friction_map[r] - friction_map[l]);
+ 1504              		.loc 1 132 13 is_stmt 1 view .LVU457
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             friction_map[i] = friction_map[l] + t * (friction_map[r] - friction_map[l]);
+ 1505              		.loc 1 132 39 is_stmt 0 view .LVU458
+ 1506 038a 00EB8201 		add	r1, r0, r2, lsl #2
+ 1507 038e 91ED007A 		vldr.32	s14, [r1]
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         }
+ 1508              		.loc 1 133 43 view .LVU459
+ 1509 0392 1249     		ldr	r1, .L138+4
+ 1510 0394 01EB8202 		add	r2, r1, r2, lsl #2
+ 1511              	.LVL104:
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         }
+ 1512              		.loc 1 133 43 view .LVU460
+ 1513 0398 D2ED007A 		vldr.32	s15, [r2]
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             friction_map[i] = friction_map[l] + t * (friction_map[r] - friction_map[l]);
+ 1514              		.loc 1 132 62 view .LVU461
+ 1515 039c 00EB8302 		add	r2, r0, r3, lsl #2
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         }
+ 1516              		.loc 1 133 66 view .LVU462
+ 1517 03a0 01EB8303 		add	r3, r1, r3, lsl #2
+ 1518              	.LVL105:
+ARM GAS  /tmp/cciesFVL.s 			page 38
+
+
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             friction_map[i] = friction_map[l] + t * (friction_map[r] - friction_map[l]);
+ 1519              		.loc 1 132 70 view .LVU463
+ 1520 03a4 92ED006A 		vldr.32	s12, [r2]
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         }
+ 1521              		.loc 1 133 70 view .LVU464
+ 1522 03a8 D3ED006A 		vldr.32	s13, [r3]
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             friction_map[i] = friction_map[l] + t * (friction_map[r] - friction_map[l]);
+ 1523              		.loc 1 132 70 view .LVU465
+ 1524 03ac 36EE476A 		vsub.f32	s12, s12, s14
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         }
+ 1525              		.loc 1 133 70 view .LVU466
+ 1526 03b0 76EEE76A 		vsub.f32	s13, s13, s15
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             friction_map[i] = friction_map[l] + t * (friction_map[r] - friction_map[l]);
+ 1527              		.loc 1 132 47 view .LVU467
+ 1528 03b4 A5EE867A 		vfma.f32	s14, s11, s12
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         }
+ 1529              		.loc 1 133 47 view .LVU468
+ 1530 03b8 E5EEA67A 		vfma.f32	s15, s11, s13
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             friction_map[i] = friction_map[l] + t * (friction_map[r] - friction_map[l]);
+ 1531              		.loc 1 132 29 view .LVU469
+ 1532 03bc 8AED007A 		vstr.32	s14, [r10]
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         }
+ 1533              		.loc 1 133 13 is_stmt 1 view .LVU470
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****         }
+ 1534              		.loc 1 133 29 is_stmt 0 view .LVU471
+ 1535 03c0 C9ED007A 		vstr.32	s15, [r9]
+ 1536 03c4 71E7     		b	.L65
+ 1537              	.LVL106:
+ 1538              	.L134:
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             for (dl = 1; dl < COGGING_N; dl++) { int j = (i - dl + COGGING_N) % COGGING_N; if (cw_c
+ 1539              		.loc 1 128 32 view .LVU472
+ 1540 03c6 7346     		mov	r3, lr
+ 1541              	.LVL107:
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             for (dl = 1; dl < COGGING_N; dl++) { int j = (i - dl + COGGING_N) % COGGING_N; if (cw_c
+ 1542              		.loc 1 128 32 view .LVU473
+ 1543 03c8 D7E7     		b	.L70
+ 1544              	.LVL108:
+ 1545              	.L132:
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             for (dl = 1; dl < COGGING_N; dl++) { int j = (i - dl + COGGING_N) % COGGING_N; if (cw_c
+ 1546              		.loc 1 128 32 view .LVU474
+ 1547 03ca B0EE457A 		vmov.f32	s14, s10
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             for (dl = 1; dl < COGGING_N; dl++) { int j = (i - dl + COGGING_N) % COGGING_N; if (cw_c
+ 1548              		.loc 1 128 25 view .LVU475
+ 1549 03ce 7246     		mov	r2, lr
+ 1550              	.LVL109:
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             for (dl = 1; dl < COGGING_N; dl++) { int j = (i - dl + COGGING_N) % COGGING_N; if (cw_c
+ 1551              		.loc 1 128 25 view .LVU476
+ 1552 03d0 91E7     		b	.L68
+ 1553              	.LVL110:
+ 1554              	.L131:
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.c ****             for (dl = 1; dl < COGGING_N; dl++) { int j = (i - dl + COGGING_N) % COGGING_N; if (cw_c
+ 1555              		.loc 1 128 25 view .LVU477
+ 1556              	.LBE41:
+ 1557 03d2 0198     		ldr	r0, [sp, #4]
+ 1558 03d4 6646     		mov	r6, ip
+ 1559 03d6 E4E6     		b	.L72
+ 1560              	.L139:
+ARM GAS  /tmp/cciesFVL.s 			page 39
+
+
+ 1561              		.align	2
+ 1562              	.L138:
+ 1563 03d8 00000000 		.word	cw_resid
+ 1564 03dc 00000000 		.word	friction_map
+ 1565              	.LBE47:
+ 1566              	.LBE50:
+ 1567              	.LBE53:
+ 1568              		.cfi_endproc
+ 1569              	.LFE401:
+ 1571              		.section	.bss.cogcal_iq_n,"aw",%nobits
+ 1572              		.align	2
+ 1575              	cogcal_iq_n:
+ 1576 0000 00000000 		.space	4
+ 1577              		.section	.bss.cogcal_iq_acc,"aw",%nobits
+ 1578              		.align	3
+ 1581              	cogcal_iq_acc:
+ 1582 0000 00000000 		.space	8
+ 1582      00000000 
+ 1583              		.section	.bss.cogcal_timer,"aw",%nobits
+ 1584              		.align	2
+ 1587              	cogcal_timer:
+ 1588 0000 00000000 		.space	4
+ 1589              		.section	.bss.cogcal_settle,"aw",%nobits
+ 1590              		.align	2
+ 1593              	cogcal_settle:
+ 1594 0000 00000000 		.space	4
+ 1595              		.section	.bss.cogcal_base,"aw",%nobits
+ 1596              		.align	2
+ 1599              	cogcal_base:
+ 1600 0000 00000000 		.space	4
+ 1601              		.section	.bss.cw_resid,"aw",%nobits
+ 1602              		.align	2
+ 1605              	cw_resid:
+ 1606 0000 00000000 		.space	2048
+ 1606      00000000 
+ 1606      00000000 
+ 1606      00000000 
+ 1606      00000000 
+ 1607              		.global	g_cogcal_holes
+ 1608              		.section	.bss.g_cogcal_holes,"aw",%nobits
+ 1609              		.align	1
+ 1612              	g_cogcal_holes:
+ 1613 0000 0000     		.space	2
+ 1614              		.global	g_cogcal_step
+ 1615              		.section	.bss.g_cogcal_step,"aw",%nobits
+ 1616              		.align	1
+ 1619              	g_cogcal_step:
+ 1620 0000 0000     		.space	2
+ 1621              		.global	g_cogcal_phase
+ 1622              		.section	.bss.g_cogcal_phase,"aw",%nobits
+ 1625              	g_cogcal_phase:
+ 1626 0000 00       		.space	1
+ 1627              		.section	.bss.ccw_cnt,"aw",%nobits
+ 1628              		.align	2
+ 1631              	ccw_cnt:
+ 1632 0000 00000000 		.space	1024
+ 1632      00000000 
+ARM GAS  /tmp/cciesFVL.s 			page 40
+
+
+ 1632      00000000 
+ 1632      00000000 
+ 1632      00000000 
+ 1633              		.section	.bss.cw_cnt,"aw",%nobits
+ 1634              		.align	2
+ 1637              	cw_cnt:
+ 1638 0000 00000000 		.space	1024
+ 1638      00000000 
+ 1638      00000000 
+ 1638      00000000 
+ 1638      00000000 
+ 1639              		.global	cogging_valid
+ 1640              		.section	.bss.cogging_valid,"aw",%nobits
+ 1643              	cogging_valid:
+ 1644 0000 00       		.space	1
+ 1645              		.global	friction_map
+ 1646              		.section	.bss.friction_map,"aw",%nobits
+ 1647              		.align	2
+ 1650              	friction_map:
+ 1651 0000 00000000 		.space	2048
+ 1651      00000000 
+ 1651      00000000 
+ 1651      00000000 
+ 1651      00000000 
+ 1652              		.global	cogging_map
+ 1653              		.section	.bss.cogging_map,"aw",%nobits
+ 1654              		.align	3
+ 1657              	cogging_map:
+ 1658 0000 00000000 		.space	2048
+ 1658      00000000 
+ 1658      00000000 
+ 1658      00000000 
+ 1658      00000000 
+ 1659              		.text
+ 1660              	.Letext0:
+ 1661              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 1662              		.file 3 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 1663              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 1664              		.file 5 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stddef.h"
+ 1665              		.file 6 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 1666              		.file 7 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 1667              		.file 8 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 1668              		.file 9 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 1669              		.file 10 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/controller/pid.h"
+ 1670              		.file 11 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/encoder/MT6816/mt6816_encode
+ 1671              		.file 12 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/BLDCMotor.h"
+ 1672              		.file 13 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/Motor_ADC.h"
+ 1673              		.file 14 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/FOCMotor.h"
+ 1674              		.file 15 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/cogging.h"
+ 1675              		.file 16 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/motor/motor_calib.h"
+ 1676              		.file 17 "/usr/include/newlib/string.h"
+ 1677              		.file 18 "<built-in>"
+ARM GAS  /tmp/cciesFVL.s 			page 41
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 cogging.c
+     /tmp/cciesFVL.s:21     .text.cogcal_next:00000000 $t
+     /tmp/cciesFVL.s:27     .text.cogcal_next:00000000 cogcal_next
+     /tmp/cciesFVL.s:141    .text.cogcal_next:00000050 $d
+     /tmp/cciesFVL.s:1619   .bss.g_cogcal_step:00000000 g_cogcal_step
+     /tmp/cciesFVL.s:1581   .bss.cogcal_iq_acc:00000000 cogcal_iq_acc
+     /tmp/cciesFVL.s:1593   .bss.cogcal_settle:00000000 cogcal_settle
+     /tmp/cciesFVL.s:1587   .bss.cogcal_timer:00000000 cogcal_timer
+     /tmp/cciesFVL.s:1575   .bss.cogcal_iq_n:00000000 cogcal_iq_n
+     /tmp/cciesFVL.s:1625   .bss.g_cogcal_phase:00000000 g_cogcal_phase
+     /tmp/cciesFVL.s:1599   .bss.cogcal_base:00000000 cogcal_base
+     /tmp/cciesFVL.s:154    .text.cogcal_record.constprop.0:00000000 $t
+     /tmp/cciesFVL.s:160    .text.cogcal_record.constprop.0:00000000 cogcal_record.constprop.0
+     /tmp/cciesFVL.s:212    .text.cogcal_record.constprop.0:00000034 $d
+     /tmp/cciesFVL.s:1605   .bss.cw_resid:00000000 cw_resid
+     /tmp/cciesFVL.s:1650   .bss.friction_map:00000000 friction_map
+     /tmp/cciesFVL.s:1637   .bss.cw_cnt:00000000 cw_cnt
+     /tmp/cciesFVL.s:1631   .bss.ccw_cnt:00000000 ccw_cnt
+     /tmp/cciesFVL.s:221    .text.Cogging_Reset:00000000 $t
+     /tmp/cciesFVL.s:228    .text.Cogging_Reset:00000000 Cogging_Reset
+     /tmp/cciesFVL.s:279    .text.Cogging_Reset:0000003c $d
+     /tmp/cciesFVL.s:1657   .bss.cogging_map:00000000 cogging_map
+     /tmp/cciesFVL.s:1643   .bss.cogging_valid:00000000 cogging_valid
+     /tmp/cciesFVL.s:288    .text.Cogging_RecordCW:00000000 $t
+     /tmp/cciesFVL.s:295    .text.Cogging_RecordCW:00000000 Cogging_RecordCW
+     /tmp/cciesFVL.s:337    .text.Cogging_RecordCW:00000034 $d
+     /tmp/cciesFVL.s:343    .text.Cogging_RecordCCW:00000000 $t
+     /tmp/cciesFVL.s:350    .text.Cogging_RecordCCW:00000000 Cogging_RecordCCW
+     /tmp/cciesFVL.s:392    .text.Cogging_RecordCCW:00000034 $d
+     /tmp/cciesFVL.s:398    .text.Cogging_Compute:00000000 $t
+     /tmp/cciesFVL.s:405    .text.Cogging_Compute:00000000 Cogging_Compute
+     /tmp/cciesFVL.s:522    .text.Cogging_Compute:0000007c $d
+     /tmp/cciesFVL.s:532    .text.Cogging_FF:00000000 $t
+     /tmp/cciesFVL.s:539    .text.Cogging_FF:00000000 Cogging_FF
+     /tmp/cciesFVL.s:599    .text.Cogging_FF:0000003c $d
+     /tmp/cciesFVL.s:606    .text.Cogging_CalStart:00000000 $t
+     /tmp/cciesFVL.s:613    .text.Cogging_CalStart:00000000 Cogging_CalStart
+     /tmp/cciesFVL.s:753    .text.Cogging_CalStart:00000098 $d
+     /tmp/cciesFVL.s:1612   .bss.g_cogcal_holes:00000000 g_cogcal_holes
+     /tmp/cciesFVL.s:776    .text.Cogging_CalUpdate:00000000 $t
+     /tmp/cciesFVL.s:783    .text.Cogging_CalUpdate:00000000 Cogging_CalUpdate
+     /tmp/cciesFVL.s:1433   .text.Cogging_CalUpdate:000002fc $d
+     /tmp/cciesFVL.s:1461   .text.Cogging_CalUpdate:0000035c $t
+     /tmp/cciesFVL.s:1563   .text.Cogging_CalUpdate:000003d8 $d
+     /tmp/cciesFVL.s:1572   .bss.cogcal_iq_n:00000000 $d
+     /tmp/cciesFVL.s:1578   .bss.cogcal_iq_acc:00000000 $d
+     /tmp/cciesFVL.s:1584   .bss.cogcal_timer:00000000 $d
+     /tmp/cciesFVL.s:1590   .bss.cogcal_settle:00000000 $d
+     /tmp/cciesFVL.s:1596   .bss.cogcal_base:00000000 $d
+     /tmp/cciesFVL.s:1602   .bss.cw_resid:00000000 $d
+     /tmp/cciesFVL.s:1609   .bss.g_cogcal_holes:00000000 $d
+     /tmp/cciesFVL.s:1616   .bss.g_cogcal_step:00000000 $d
+     /tmp/cciesFVL.s:1626   .bss.g_cogcal_phase:00000000 $d
+     /tmp/cciesFVL.s:1628   .bss.ccw_cnt:00000000 $d
+     /tmp/cciesFVL.s:1634   .bss.cw_cnt:00000000 $d
+     /tmp/cciesFVL.s:1644   .bss.cogging_valid:00000000 $d
+ARM GAS  /tmp/cciesFVL.s 			page 42
+
+
+     /tmp/cciesFVL.s:1647   .bss.friction_map:00000000 $d
+     /tmp/cciesFVL.s:1654   .bss.cogging_map:00000000 $d
+
+UNDEFINED SYMBOLS
+memset
+__aeabi_f2d
+__aeabi_dadd
+__aeabi_ui2d
+__aeabi_ddiv
+__aeabi_d2f
+Foc_Pwm_LowSides
+MotorCalib_SaveToFlash

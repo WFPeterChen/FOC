@@ -1,0 +1,303 @@
+ARM GAS  /tmp/ccFsHlbm.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"crc8.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c"
+  20              		.section	.text.crc_8,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	crc_8
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	crc_8:
+  29              	.LVL0:
+  30              	.LFB329:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c **** #include "crc8.h"
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c **** 
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c **** /*
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****  * static uint8_t sht75_crc_table[];
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****  *
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****  * The SHT75 humidity sensor is capable of calculating an 8 bit CRC checksum to
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****  * ensure data integrity. The lookup table crc_table[] is used to recalculate
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****  * the CRC.
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****  */
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c **** static uint8_t sht75_crc_table[] =
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****     {
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         0, 49, 98, 83, 196, 245, 166, 151, 185, 136, 219, 234, 125, 76, 31, 46,
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         67, 114, 33, 16, 135, 182, 229, 212, 250, 203, 152, 169, 62, 15, 92, 109,
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         134, 183, 228, 213, 66, 115, 32, 17, 63, 14, 93, 108, 251, 202, 153, 168,
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         197, 244, 167, 150, 1, 48, 99, 82, 124, 77, 30, 47, 184, 137, 218, 235,
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         61, 12, 95, 110, 249, 200, 155, 170, 132, 181, 230, 215, 64, 113, 34, 19,
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         126, 79, 28, 45, 186, 139, 216, 233, 199, 246, 165, 148, 3, 50, 97, 80,
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         187, 138, 217, 232, 127, 78, 29, 44, 2, 51, 96, 81, 198, 247, 164, 149,
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         248, 201, 154, 171, 60, 13, 94, 111, 65, 112, 35, 18, 133, 180, 231, 214,
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         122, 75, 24, 41, 190, 143, 220, 237, 195, 242, 161, 144, 7, 54, 101, 84,
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         57, 8, 91, 106, 253, 204, 159, 174, 128, 177, 226, 211, 68, 117, 38, 23,
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         252, 205, 158, 175, 56, 9, 90, 107, 69, 116, 39, 22, 129, 176, 227, 210,
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         191, 142, 221, 236, 123, 74, 25, 40, 6, 55, 100, 85, 194, 243, 160, 145,
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         71, 118, 37, 20, 131, 178, 225, 208, 254, 207, 156, 173, 58, 11, 88, 105,
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         4, 53, 102, 87, 192, 241, 162, 147, 189, 140, 223, 238, 121, 72, 27, 42,
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         193, 240, 163, 146, 5, 52, 103, 86, 120, 73, 26, 43, 188, 141, 222, 239,
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         130, 179, 224, 209, 70, 119, 36, 21, 59, 10, 89, 104, 255, 206, 157, 172};
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c **** 
+ARM GAS  /tmp/ccFsHlbm.s 			page 2
+
+
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c **** /*
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****  * uint8_t crc_8( const unsigned char *input_str, size_t num_bytes );
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****  *
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****  *函数crc_8()计算输入字符串的8位宽crc
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****  *给定长度。
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****  */
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c **** uint8_t crc_8(const uint8_t *input_str, uint16_t num_bytes)
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c **** {
+  31              		.loc 1 36 1 view -0
+  32              		.cfi_startproc
+  33              		@ args = 0, pretend = 0, frame = 0
+  34              		@ frame_needed = 0, uses_anonymous_args = 0
+  35              		@ link register save eliminated.
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****     uint16_t a;
+  36              		.loc 1 37 5 view .LVU1
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****     uint8_t crc;
+  37              		.loc 1 38 5 view .LVU2
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****     const uint8_t *ptr;
+  38              		.loc 1 39 5 view .LVU3
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c **** 
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****     crc = CRC_START_8;
+  39              		.loc 1 41 5 view .LVU4
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****     ptr = input_str;
+  40              		.loc 1 42 5 view .LVU5
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****     if (ptr != NULL)
+  41              		.loc 1 43 5 view .LVU6
+  42              		.loc 1 43 8 is_stmt 0 view .LVU7
+  43 0000 0346     		mov	r3, r0
+  44 0002 68B1     		cbz	r0, .L4
+  45              	.LVL1:
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         for (a = 0; a < num_bytes; a++)
+  46              		.loc 1 44 23 is_stmt 1 discriminator 1 view .LVU8
+  47 0004 69B1     		cbz	r1, .L5
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****     uint16_t a;
+  48              		.loc 1 36 1 is_stmt 0 view .LVU9
+  49 0006 10B4     		push	{r4}
+  50              	.LCFI0:
+  51              		.cfi_def_cfa_offset 4
+  52              		.cfi_offset 4, -4
+  53 0008 074C     		ldr	r4, .L12
+  54 000a 0144     		add	r1, r1, r0
+  55              	.LVL2:
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****     ptr = input_str;
+  56              		.loc 1 41 9 view .LVU10
+  57 000c 0020     		movs	r0, #0
+  58              	.LVL3:
+  59              	.L3:
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         {
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****             crc = sht75_crc_table[(*ptr++) ^ crc];
+  60              		.loc 1 46 13 is_stmt 1 view .LVU11
+  61              		.loc 1 46 44 is_stmt 0 view .LVU12
+  62 000e 13F8012B 		ldrb	r2, [r3], #1	@ zero_extendqisi2
+  63              	.LVL4:
+  64              		.loc 1 46 44 view .LVU13
+  65 0012 5040     		eors	r0, r0, r2
+  66              	.LVL5:
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         {
+ARM GAS  /tmp/ccFsHlbm.s 			page 3
+
+
+  67              		.loc 1 44 23 discriminator 1 view .LVU14
+  68 0014 9942     		cmp	r1, r3
+  69              		.loc 1 46 17 view .LVU15
+  70 0016 205C     		ldrb	r0, [r4, r0]	@ zero_extendqisi2
+  71              	.LVL6:
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         {
+  72              		.loc 1 44 37 is_stmt 1 discriminator 3 view .LVU16
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         {
+  73              		.loc 1 44 23 discriminator 1 view .LVU17
+  74 0018 F9D1     		bne	.L3
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****         }
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****     return crc;
+  75              		.loc 1 48 5 view .LVU18
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c **** }
+  76              		.loc 1 49 1 is_stmt 0 view .LVU19
+  77 001a 5DF8044B 		ldr	r4, [sp], #4
+  78              	.LCFI1:
+  79              		.cfi_restore 4
+  80              		.cfi_def_cfa_offset 0
+  81 001e 7047     		bx	lr
+  82              	.LVL7:
+  83              	.L4:
+  84              		.loc 1 49 1 view .LVU20
+  85 0020 7047     		bx	lr
+  86              	.LVL8:
+  87              	.L5:
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****     ptr = input_str;
+  88              		.loc 1 41 9 view .LVU21
+  89 0022 0846     		mov	r0, r1
+  90              	.LVL9:
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c **** }
+  91              		.loc 1 48 5 is_stmt 1 view .LVU22
+  92              		.loc 1 49 1 is_stmt 0 view .LVU23
+  93 0024 7047     		bx	lr
+  94              	.L13:
+  95 0026 00BF     		.align	2
+  96              	.L12:
+  97 0028 00000000 		.word	sht75_crc_table
+  98              		.cfi_endproc
+  99              	.LFE329:
+ 101              		.section	.text.update_crc_8,"ax",%progbits
+ 102              		.align	1
+ 103              		.p2align 2,,3
+ 104              		.global	update_crc_8
+ 105              		.syntax unified
+ 106              		.thumb
+ 107              		.thumb_func
+ 109              	update_crc_8:
+ 110              	.LVL10:
+ 111              	.LFB330:
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c **** 
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c **** /*
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****  * uint8_t update_crc_8( unsigned char crc, unsigned char val );
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****  *
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****  *给定一个数据字节和循环冗余校验值的前一个值
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****  *update_crc_8()计算并返回数据的新的实际crc值
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****  */
+ARM GAS  /tmp/ccFsHlbm.s 			page 4
+
+
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c **** 
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c **** uint8_t update_crc_8(uint8_t crc, uint8_t val)
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c **** {
+ 112              		.loc 1 59 1 is_stmt 1 view -0
+ 113              		.cfi_startproc
+ 114              		@ args = 0, pretend = 0, frame = 0
+ 115              		@ frame_needed = 0, uses_anonymous_args = 0
+ 116              		@ link register save eliminated.
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c ****     return sht75_crc_table[val ^ crc];
+ 117              		.loc 1 60 5 view .LVU25
+ 118              		.loc 1 60 27 is_stmt 0 view .LVU26
+ 119 0000 014B     		ldr	r3, .L15
+ 120              		.loc 1 60 32 view .LVU27
+ 121 0002 4140     		eors	r1, r1, r0
+ 122              	.LVL11:
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/MODULES/algorithm/crc/crc8.c **** }
+ 123              		.loc 1 61 1 view .LVU28
+ 124 0004 585C     		ldrb	r0, [r3, r1]	@ zero_extendqisi2
+ 125              	.LVL12:
+ 126              		.loc 1 61 1 view .LVU29
+ 127 0006 7047     		bx	lr
+ 128              	.L16:
+ 129              		.align	2
+ 130              	.L15:
+ 131 0008 00000000 		.word	sht75_crc_table
+ 132              		.cfi_endproc
+ 133              	.LFE330:
+ 135              		.section	.rodata.sht75_crc_table,"a"
+ 136              		.align	2
+ 139              	sht75_crc_table:
+ 140 0000 00316253 		.ascii	"\0001bS\304\365\246\227\271\210\333\352}L\037.Cr!\020"
+ 140      C4F5A697 
+ 140      B988DBEA 
+ 140      7D4C1F2E 
+ 140      43722110 
+ 141 0014 87B6E5D4 		.ascii	"\207\266\345\324\372\313\230\251>\017\\m\206\267\344"
+ 141      FACB98A9 
+ 141      3E0F5C6D 
+ 141      86B7E4
+ 142 0023 D5427320 		.ascii	"\325Bs \021?\016]l\373\312\231\250\305\364\247\226\001"
+ 142      113F0E5D 
+ 142      6CFBCA99 
+ 142      A8C5F4A7 
+ 142      9601
+ 143 0035 3063527C 		.ascii	"0cR|M\036/\270\211\332\353=\014_n\371\310\233\252\204"
+ 143      4D1E2FB8 
+ 143      89DAEB3D 
+ 143      0C5F6EF9 
+ 143      C89BAA84 
+ 144 0049 B5E6D740 		.ascii	"\265\346\327@q\"\023~O\034-\272\213\330\351\307\366"
+ 144      7122137E 
+ 144      4F1C2DBA 
+ 144      8BD8E9C7 
+ 144      F6
+ 145 005a A5940332 		.ascii	"\245\224\0032aP\273\212\331\350\177N\035,\0023`Q\306"
+ 145      6150BB8A 
+ 145      D9E87F4E 
+ARM GAS  /tmp/ccFsHlbm.s 			page 5
+
+
+ 145      1D2C0233 
+ 145      6051C6
+ 146 006d F7A495F8 		.ascii	"\367\244\225\370\311\232\253<\015^oAp#\022\205\264\347"
+ 146      C99AAB3C 
+ 146      0D5E6F41 
+ 146      70231285 
+ 146      B4E7
+ 147 007f D67A4B18 		.ascii	"\326zK\030)\276\217\334\355\303\362\241\220\0076eT9"
+ 147      29BE8FDC 
+ 147      EDC3F2A1 
+ 147      90073665 
+ 147      5439
+ 148 0091 085B6AFD 		.ascii	"\010[j\375\314\237\256\200\261\342\323Du&\027\374\315"
+ 148      CC9FAE80 
+ 148      B1E2D344 
+ 148      752617FC 
+ 148      CD
+ 149 00a2 9EAF3809 		.ascii	"\236\2578\011ZkEt'\026\201\260\343\322\277\216\335\354"
+ 149      5A6B4574 
+ 149      271681B0 
+ 149      E3D2BF8E 
+ 149      DDEC
+ 150 00b4 7B4A1928 		.ascii	"{J\031(\0067dU\302\363\240\221Gv%\024\203\262\341\320"
+ 150      06376455 
+ 150      C2F3A091 
+ 150      47762514 
+ 150      83B2E1D0 
+ 151 00c8 FECF9CAD 		.ascii	"\376\317\234\255:\013Xi\0045fW\300\361\242\223\275\214"
+ 151      3A0B5869 
+ 151      04356657 
+ 151      C0F1A293 
+ 151      BD8C
+ 152 00da DFEE7948 		.ascii	"\337\356yH\033*\301\360\243\222\0054gVxI\032+\274\215"
+ 152      1B2AC1F0 
+ 152      A3920534 
+ 152      67567849 
+ 152      1A2BBC8D 
+ 153 00ee DEEF82B3 		.ascii	"\336\357\202\263\340\321Fw$\025;\012Yh\377\316\235\254"
+ 153      E0D14677 
+ 153      24153B0A 
+ 153      5968FFCE 
+ 153      9DAC
+ 154              		.text
+ 155              	.Letext0:
+ 156              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ARM GAS  /tmp/ccFsHlbm.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 crc8.c
+     /tmp/ccFsHlbm.s:21     .text.crc_8:00000000 $t
+     /tmp/ccFsHlbm.s:28     .text.crc_8:00000000 crc_8
+     /tmp/ccFsHlbm.s:97     .text.crc_8:00000028 $d
+     /tmp/ccFsHlbm.s:139    .rodata.sht75_crc_table:00000000 sht75_crc_table
+     /tmp/ccFsHlbm.s:102    .text.update_crc_8:00000000 $t
+     /tmp/ccFsHlbm.s:109    .text.update_crc_8:00000000 update_crc_8
+     /tmp/ccFsHlbm.s:131    .text.update_crc_8:00000008 $d
+     /tmp/ccFsHlbm.s:136    .rodata.sht75_crc_table:00000000 $d
+
+NO UNDEFINED SYMBOLS

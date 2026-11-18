@@ -1,0 +1,1403 @@
+ARM GAS  /tmp/ccJatJoR.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"bsp_can.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c"
+  20              		.section	.text.FDCANFIFOxCallback,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	FDCANFIFOxCallback:
+  28              	.LVL0:
+  29              	.LFB353:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** #include "bsp_can.h"
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** #include "bsp_dwt.h"
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** #include "bsp_log.h"
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** #include "main.h"
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** #include "string.h"
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** #include "stdlib.h"
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** #include "stdbool.h"
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** /* can instance ptrs storage, used for recv callback */
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** // ‘⁄CAN≤˙…˙Ω” ’÷–∂œª·±È¿˙ ˝◊È,—°≥ˆhcan∫Õrxid”Î∑¢…˙÷–∂œµƒ µ¿˝œ‡Õ¨µƒƒ«∏ˆ,µ˜”√∆‰ªÿµ˜∫Ø ˝
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** // @todo: ∫Û–¯Œ™√ø∏ˆCAN◊‹œﬂµ•∂¿ÃÌº”“ª∏ˆcan_instance÷∏’Î ˝◊È,Ã·∏ﬂªÿµ˜≤È’“µƒ–‘ƒ‹
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** static FDCANInstance *fdcan_instance[FDCAN_MX_REGISTER_CNT] = {NULL};
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** static uint8_t idx; // »´æ÷CAN µ¿˝À˜“˝,√ø¥Œ”––¬µƒƒ£øÈ◊¢≤·ª·◊‘‘ˆ
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** /* ----------------two static function called by CANRegister()-------------------- */
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** /**
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  * @brief CAN¬À≤®∆˜≥ı ºªØ
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  *
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  * @param _instance can instance owned by specific module
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  */
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** static bool FDCANAddFilter(FDCANInstance *_instance)
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** {
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   HAL_StatusTypeDef result;
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   FDCAN_FilterTypeDef fdcan_filter_conf;
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   fdcan_filter_conf.IdType       = FDCAN_STANDARD_ID;       // ±Í◊ºID
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   fdcan_filter_conf.FilterIndex  = 0;                       // ¬À≤®∆˜À˜“˝
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   fdcan_filter_conf.FilterType   = FDCAN_FILTER_RANGE;      // ¬À≤®∆˜¿‡–Õ
+ARM GAS  /tmp/ccJatJoR.s 			page 2
+
+
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   fdcan_filter_conf.FilterConfig = FDCAN_FILTER_TO_RXFIFO0; // π˝¬À∆˜0πÿ¡™µΩFIFO0
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   fdcan_filter_conf.FilterID1    = 0x0000;                  // Œ™0æÕ≤ªª·π˝¬À»Œ∫Œid
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   fdcan_filter_conf.FilterID2    = 0x0000;                  // ¿Ì”…»Á…œ
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   result = HAL_FDCAN_ConfigFilter(_instance->fdcan_handle, &fdcan_filter_conf);
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   if (result != HAL_OK) // ¬À≤®∆˜≥ı ºªØ
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     return result == HAL_ERROR;
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   return result == HAL_OK;
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** }
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** /**
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  * @brief ‘⁄µ⁄“ª∏ˆFDCAN µ¿˝≥ı ºªØµƒ ±∫Úª·◊‘∂Øµ˜”√¥À∫Ø ˝,∆Ù∂ØCAN∑˛ŒÒ
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  *
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  * @note ¥À∫Ø ˝ª·∆Ù∂ØFDCAN1,ø™∆ÙFDCAN1µƒFIFO0 & FIFO1“Á≥ˆÕ®÷™
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  *
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  */
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** static bool FDCANServiceInit(void)
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** {
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   HAL_StatusTypeDef result;
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   result = HAL_FDCAN_Start(&hfdcan1);
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   result |= HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   result |= HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO1_NEW_MESSAGE, 0);
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   return result == HAL_OK;
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** }
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** /* ----------------------- two extern callable function -----------------------*/
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** FDCANInstance *FDCANRegister(FDCAN_Init_Config_s *config)
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** {
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   if (!idx)
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     FDCANServiceInit(); // µ⁄“ª¥Œ◊¢≤·,œ»Ω¯––”≤º˛≥ı ºªØ
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** //    LOGINFO("[bsp_can] CAN Service Init");
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   if (idx >= FDCAN_MX_REGISTER_CNT) // ≥¨π˝◊Ó¥Û µ¿˝ ˝
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     while (1)
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****       LOGERROR("[bsp_can] CAN instance exceeded MAX num, consider balance the load of CAN bus");
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   for (size_t i = 0; i < idx; i++)
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   { // ÷ÿ∏¥◊¢≤· | id÷ÿ∏¥
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     if (fdcan_instance[i]->rx_id == config->rx_id && fdcan_instance[i]->fdcan_handle == config->fdc
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     {
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****       while (1)
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****         LOGERROR("[}bsp_can] CAN id crash ,tx [%d] or rx [%d] already registered", &config->tx_id, 
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     }
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   FDCANInstance *instance = (FDCANInstance *)malloc(sizeof(FDCANInstance)); // ∑÷≈‰ø’º‰
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   memset(instance, 0, sizeof(FDCANInstance));                               // ∑÷≈‰µƒø’º‰Œ¥±ÿ «0,À˘
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   // Ω¯––∑¢ÀÕ±®Œƒµƒ≈‰÷√
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->txconf.Identifier          = config->tx_id;      // ∑¢ÀÕid
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->txconf.IdType              = FDCAN_STANDARD_ID;  //  π”√±Í◊ºid,¿©’πid‘Ú π”√CAN_ID_EXT(ƒ
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->txconf.TxFrameType         = FDCAN_DATA_FRAME;   // ∑¢ÀÕ ˝æ›÷°
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->txconf.DataLength          = 0x08;               // ƒ¨»œ∑¢ÀÕ≥§∂»Œ™8
+ARM GAS  /tmp/ccJatJoR.s 			page 3
+
+
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->txconf.ErrorStateIndicator = FDCAN_ESI_ACTIVE;   // ¥ÌŒÛ◊¥Ã¨÷∏ æ∆˜¥Úø™
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->txconf.BitRateSwitch       = FDCAN_BRS_OFF;      // ±»Ãÿ¬ «–ªªπÿ±’£¨≤ª  ”√”⁄æ≠µ‰CAN
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->txconf.FDFormat            = FDCAN_CLASSIC_CAN;  //  π”√æ≠µ‰CAN
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->txconf.TxEventFifoControl  = FDCAN_NO_TX_EVENTS; // ≤ª¥¢¥Ê∑¢ÀÕ ¬º˛
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->txconf.MessageMarker       = 0x0;                // œ˚œ¢±Íº«0
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   // …Ë÷√ªÿµ˜∫Ø ˝∫ÕΩ” ’∑¢ÀÕid
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->fdcan_handle               = config->fdcan_handle;
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->tx_id                      = config->tx_id;
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->rx_id                      = config->rx_id;
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->fdcan_module_callback      = config->fdcan_module_callback;
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->id                         = config->id;
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   FDCANAddFilter(instance);         // ÃÌº”CANπ˝¬À∆˜πÊ‘Ú
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   fdcan_instance[idx++] = instance; // Ω´ µ¿˝±£¥ÊµΩcan_instance÷–
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   return instance; // ∑µªÿcan µ¿˝÷∏’Î
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** }
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** /* @todo ƒø«∞À∆∫ı∑‚◊∞π˝∂»,”¶∏√ÃÌº”“ª∏ˆ÷∏œÚtx_buffµƒ÷∏’Î,tx_buff≤ª”¶∏√”…CAN instance±£¥Ê */
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** /* »Áπ˚»√CANinstance±£¥Êtxbuff,ª·‘ˆº”“ª¥Œ∏¥÷∆µƒø™œ˙ */
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** uint8_t FDCANTransmit(FDCANInstance *_instance, float timeout)
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** {
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   static uint32_t busy_count;
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   static volatile float wait_time __attribute__((unused)); // for cancel warning
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   float dwt_start = DWT_GetTimeline_ms();
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   while (HAL_FDCAN_GetTxFifoFreeLevel(_instance->fdcan_handle) == 0) // µ»¥˝” œ‰ø’œ–
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     if (DWT_GetTimeline_ms() - dwt_start > timeout) // ≥¨ ±
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     {
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****       LOGWARNING("[bsp_can] CAN MAILbox full! failed to add msg to mailbox. Cnt [%d]", busy_count);
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****       busy_count++;
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****       return 0;
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     }
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   wait_time = DWT_GetTimeline_ms() - dwt_start;
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   // tx_mailboxª·±£¥Ê µº ÃÓ»Î¡À’‚“ª÷°œ˚œ¢µƒ” œ‰,µ´ «÷™µ¿ «ƒƒ∏ˆ” œ‰∑¢µƒÀ∆∫ı“≤√ª…∂”√
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   if (HAL_FDCAN_AddMessageToTxFifoQ(_instance->fdcan_handle, &_instance->txconf, _instance->tx_buff
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     LOGWARNING("[bsp_can] CAN bus BUS! cnt:%d", busy_count);
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     busy_count++;
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     return 0;
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   return 1; // ∑¢ÀÕ≥…π¶
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** }
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** void FDCANSetDLC(FDCANInstance *_instance, uint8_t length)
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** {
+ 134:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   // ∑¢ÀÕ≥§∂»¥ÌŒÛ!ºÏ≤Èµ˜”√≤Œ ˝ «∑Ò≥ˆ¥Ì,ªÚ≥ˆœ÷“∞÷∏’Î/‘ΩΩÁ∑√Œ 
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   if (length > 8 || length == 0) // ∞≤»´ºÏ≤È
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     while (1)
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****       LOGERROR("[bsp_can] CAN DLC error! check your code or wild pointer");
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   _instance->txconf.DataLength = length;
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** }
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** /* -----------------------belows are callback definitions--------------------------*/
+ARM GAS  /tmp/ccJatJoR.s 			page 4
+
+
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** /**
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  * @brief ¥À∫Ø ˝ª·±ªœ¬√Ê¡Ω∏ˆ∫Ø ˝µ˜”√,”√”⁄¥¶¿ÌFIFO0∫ÕFIFO1“Á≥ˆ÷–∂œ(Àµ√˜ ’µΩ¡À–¬µƒ ˝æ›)
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  *        À˘”–µƒ µ¿˝∂ºª·±ª±È¿˙,’“µΩcan_handle∫Õrx_idœ‡µ»µƒ µ¿˝ ±,µ˜”√∏√ µ¿˝µƒªÿµ˜∫Ø ˝
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  *
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  * @param _hcan
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  * @param fifox passed to HAL_FDCAN_GetRxMessage() to get mesg from a specific fifo
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  */
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** static void FDCANFIFOxCallback(FDCAN_HandleTypeDef *_hcan, uint32_t fifox)
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** {
+  30              		.loc 1 153 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 8
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   static FDCAN_RxHeaderTypeDef rxconf; // Õ¨…œ
+  34              		.loc 1 154 3 view .LVU1
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   uint8_t can_rx_buff[8];
+  35              		.loc 1 155 3 view .LVU2
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   while (HAL_FDCAN_GetRxFifoFillLevel(_hcan, fifox)) // FIFO≤ªŒ™ø’,”–ø…ƒ‹‘⁄∆‰À˚÷–∂œ ±”–∂‡÷° ˝æ›Ω¯»Î
+  36              		.loc 1 156 3 view .LVU3
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   static FDCAN_RxHeaderTypeDef rxconf; // Õ¨…œ
+  37              		.loc 1 153 1 is_stmt 0 view .LVU4
+  38 0000 2DE9F043 		push	{r4, r5, r6, r7, r8, r9, lr}
+  39              	.LCFI0:
+  40              		.cfi_def_cfa_offset 28
+  41              		.cfi_offset 4, -28
+  42              		.cfi_offset 5, -24
+  43              		.cfi_offset 6, -20
+  44              		.cfi_offset 7, -16
+  45              		.cfi_offset 8, -12
+  46              		.cfi_offset 9, -8
+  47              		.cfi_offset 14, -4
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     HAL_FDCAN_GetRxMessage(_hcan, fifox, &rxconf, can_rx_buff); // ¥”FIFO÷–ªÒ»° ˝æ›
+  48              		.loc 1 158 5 view .LVU5
+  49 0004 DFF86C90 		ldr	r9, .L16
+  50              	.LBB2:
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     for (size_t i = 0; i < idx; ++i)
+  51              		.loc 1 159 26 discriminator 1 view .LVU6
+  52 0008 DFF87080 		ldr	r8, .L16+8
+  53              	.LBE2:
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   static FDCAN_RxHeaderTypeDef rxconf; // Õ¨…œ
+  54              		.loc 1 153 1 view .LVU7
+  55 000c 83B0     		sub	sp, sp, #12
+  56              	.LCFI1:
+  57              		.cfi_def_cfa_offset 40
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   static FDCAN_RxHeaderTypeDef rxconf; // Õ¨…œ
+  58              		.loc 1 153 1 view .LVU8
+  59 000e 0546     		mov	r5, r0
+  60 0010 0E46     		mov	r6, r1
+  61              	.LVL1:
+  62              	.L11:
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+  63              		.loc 1 156 10 is_stmt 1 view .LVU9
+  64 0012 3146     		mov	r1, r6
+  65 0014 2846     		mov	r0, r5
+  66 0016 FFF7FEFF 		bl	HAL_FDCAN_GetRxFifoFillLevel
+ARM GAS  /tmp/ccJatJoR.s 			page 5
+
+
+  67              	.LVL2:
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+  68              		.loc 1 156 10 is_stmt 0 discriminator 1 view .LVU10
+  69 001a 40B3     		cbz	r0, .L1
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     for (size_t i = 0; i < idx; ++i)
+  70              		.loc 1 158 5 is_stmt 1 view .LVU11
+  71 001c 154A     		ldr	r2, .L16
+  72 001e 6B46     		mov	r3, sp
+  73 0020 3146     		mov	r1, r6
+  74 0022 2846     		mov	r0, r5
+  75 0024 FFF7FEFF 		bl	HAL_FDCAN_GetRxMessage
+  76              	.LVL3:
+  77              		.loc 1 159 5 view .LVU12
+  78              	.LBB3:
+  79              		.loc 1 159 10 view .LVU13
+  80              		.loc 1 159 26 discriminator 1 view .LVU14
+  81 0028 98F80000 		ldrb	r0, [r8]	@ zero_extendqisi2
+  82 002c 0028     		cmp	r0, #0
+  83 002e F0D0     		beq	.L11
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     { // ¡Ω’ﬂœ‡µ»Àµ√˜’‚ «“™’“µƒ µ¿˝
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****       if (_hcan == fdcan_instance[i]->fdcan_handle && rxconf.Identifier == fdcan_instance[i]->rx_id
+  84              		.loc 1 161 61 is_stmt 0 discriminator 1 view .LVU15
+  85 0030 D9F80010 		ldr	r1, [r9]
+  86 0034 104A     		ldr	r2, .L16+4
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     { // ¡Ω’ﬂœ‡µ»Àµ√˜’‚ «“™’“µƒ µ¿˝
+  87              		.loc 1 159 17 view .LVU16
+  88 0036 0023     		movs	r3, #0
+  89 0038 01E0     		b	.L5
+  90              	.LVL4:
+  91              	.L3:
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     { // ¡Ω’ﬂœ‡µ»Àµ√˜’‚ «“™’“µƒ µ¿˝
+  92              		.loc 1 159 26 discriminator 1 view .LVU17
+  93 003a 8342     		cmp	r3, r0
+  94 003c E9D0     		beq	.L11
+  95              	.LVL5:
+  96              	.L5:
+  97              		.loc 1 161 7 is_stmt 1 view .LVU18
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     { // ¡Ω’ﬂœ‡µ»Àµ√˜’‚ «“™’“µƒ µ¿˝
+  98              		.loc 1 159 33 discriminator 2 view .LVU19
+  99              		.loc 1 161 34 is_stmt 0 view .LVU20
+ 100 003e 52F8044B 		ldr	r4, [r2], #4
+ 101              		.loc 1 161 10 view .LVU21
+ 102 0042 2768     		ldr	r7, [r4]
+ 103 0044 AF42     		cmp	r7, r5
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     { // ¡Ω’ﬂœ‡µ»Àµ√˜’‚ «“™’“µƒ µ¿˝
+ 104              		.loc 1 159 33 discriminator 2 view .LVU22
+ 105 0046 03F10103 		add	r3, r3, #1
+ 106              	.LVL6:
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     { // ¡Ω’ﬂœ‡µ»Àµ√˜’‚ «“™’“µƒ µ¿˝
+ 107              		.loc 1 159 26 is_stmt 1 discriminator 1 view .LVU23
+ 108              		.loc 1 161 10 is_stmt 0 view .LVU24
+ 109 004a F6D1     		bne	.L3
+ 110              		.loc 1 161 52 discriminator 1 view .LVU25
+ 111 004c 276C     		ldr	r7, [r4, #64]
+ 112 004e B942     		cmp	r1, r7
+ 113 0050 F3D1     		bne	.L3
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****       {
+ARM GAS  /tmp/ccJatJoR.s 			page 6
+
+
+ 163:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****         if (fdcan_instance[i]->fdcan_module_callback != NULL) // ªÿµ˜∫Ø ˝≤ªŒ™ø’æÕµ˜”√
+ 114              		.loc 1 163 9 is_stmt 1 view .LVU26
+ 115              		.loc 1 163 12 is_stmt 0 view .LVU27
+ 116 0052 A36C     		ldr	r3, [r4, #72]
+ 117              	.LVL7:
+ 118              		.loc 1 163 12 view .LVU28
+ 119 0054 5BB1     		cbz	r3, .L1
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****         {
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****           fdcan_instance[i]->rx_len = rxconf.DataLength;                      // ±£¥ÊΩ” ’µΩµƒ ˝æ›≥§
+ 120              		.loc 1 165 11 is_stmt 1 view .LVU29
+ 121              		.loc 1 165 45 is_stmt 0 view .LVU30
+ 122 0056 D9F80C20 		ldr	r2, [r9, #12]
+ 123              		.loc 1 165 37 view .LVU31
+ 124 005a 84F84420 		strb	r2, [r4, #68]
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****           memcpy(fdcan_instance[i]->rx_buff, can_rx_buff, rxconf.DataLength); // œ˚œ¢øΩ±¥µΩ∂‘”¶ µ¿˝
+ 125              		.loc 1 166 11 is_stmt 1 view .LVU32
+ 126 005e 6946     		mov	r1, sp
+ 127 0060 04F13800 		add	r0, r4, #56
+ 128 0064 FFF7FEFF 		bl	memcpy
+ 129              	.LVL8:
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****           fdcan_instance[i]->fdcan_module_callback(fdcan_instance[i]);        // ¥•∑¢ªÿµ˜Ω¯–– ˝æ›Ω‚
+ 130              		.loc 1 167 11 view .LVU33
+ 131 0068 A36C     		ldr	r3, [r4, #72]
+ 132 006a 2046     		mov	r0, r4
+ 133 006c 9847     		blx	r3
+ 134              	.LVL9:
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****         }
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****         return;
+ 135              		.loc 1 169 9 view .LVU34
+ 136              	.L1:
+ 137              		.loc 1 169 9 is_stmt 0 view .LVU35
+ 138              	.LBE3:
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****       }
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     }
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** }
+ 139              		.loc 1 173 1 view .LVU36
+ 140 006e 03B0     		add	sp, sp, #12
+ 141              	.LCFI2:
+ 142              		.cfi_def_cfa_offset 28
+ 143              		@ sp needed
+ 144 0070 BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ 145              	.LVL10:
+ 146              	.L17:
+ 147              		.loc 1 173 1 view .LVU37
+ 148              		.align	2
+ 149              	.L16:
+ 150 0074 00000000 		.word	rxconf.0
+ 151 0078 00000000 		.word	fdcan_instance
+ 152 007c 00000000 		.word	idx
+ 153              		.cfi_endproc
+ 154              	.LFE353:
+ 156              		.section	.rodata.FDCANRegister.str1.4,"aMS",%progbits,1
+ 157              		.align	2
+ 158              	.LC0:
+ 159 0000 2F686F6D 		.ascii	"/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc"
+ 159      652F7065 
+ARM GAS  /tmp/ccJatJoR.s 			page 7
+
+
+ 159      7465722F 
+ 159      464F432F 
+ 159      46616C63 
+ 160 0033 2F425350 		.ascii	"/BSP/can/bsp_can.c\000"
+ 160      2F63616E 
+ 160      2F627370 
+ 160      5F63616E 
+ 160      2E6300
+ 161 0046 0000     		.align	2
+ 162              	.LC1:
+ 163 0048 5B627370 		.ascii	"[bsp_can] CAN instance exceeded MAX num, consider b"
+ 163      5F63616E 
+ 163      5D204341 
+ 163      4E20696E 
+ 163      7374616E 
+ 164 007b 616C616E 		.ascii	"alance the load of CAN bus\000"
+ 164      63652074 
+ 164      6865206C 
+ 164      6F616420 
+ 164      6F662043 
+ 165 0096 0000     		.align	2
+ 166              	.LC2:
+ 167 0098 5B7D6273 		.ascii	"[}bsp_can] CAN id crash ,tx [%d] or rx [%d] already"
+ 167      705F6361 
+ 167      6E5D2043 
+ 167      414E2069 
+ 167      64206372 
+ 168 00cb 20726567 		.ascii	" registered\000"
+ 168      69737465 
+ 168      72656400 
+ 169              		.section	.text.FDCANRegister,"ax",%progbits
+ 170              		.align	1
+ 171              		.p2align 2,,3
+ 172              		.global	FDCANRegister
+ 173              		.syntax unified
+ 174              		.thumb
+ 175              		.thumb_func
+ 177              	FDCANRegister:
+ 178              	.LVL11:
+ 179              	.LFB350:
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   if (!idx)
+ 180              		.loc 1 60 1 is_stmt 1 view -0
+ 181              		.cfi_startproc
+ 182              		@ args = 0, pretend = 0, frame = 24
+ 183              		@ frame_needed = 0, uses_anonymous_args = 0
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 184              		.loc 1 61 3 view .LVU39
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   if (!idx)
+ 185              		.loc 1 60 1 is_stmt 0 view .LVU40
+ 186 0000 2DE9F043 		push	{r4, r5, r6, r7, r8, r9, lr}
+ 187              	.LCFI3:
+ 188              		.cfi_def_cfa_offset 28
+ 189              		.cfi_offset 4, -28
+ 190              		.cfi_offset 5, -24
+ 191              		.cfi_offset 6, -20
+ 192              		.cfi_offset 7, -16
+ 193              		.cfi_offset 8, -12
+ARM GAS  /tmp/ccJatJoR.s 			page 8
+
+
+ 194              		.cfi_offset 9, -8
+ 195              		.cfi_offset 14, -4
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 196              		.loc 1 61 7 view .LVU41
+ 197 0004 DFF80881 		ldr	r8, .L30+24
+ 198 0008 98F80070 		ldrb	r7, [r8]	@ zero_extendqisi2
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   if (!idx)
+ 199              		.loc 1 60 1 view .LVU42
+ 200 000c 8BB0     		sub	sp, sp, #44
+ 201              	.LCFI4:
+ 202              		.cfi_def_cfa_offset 72
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   if (!idx)
+ 203              		.loc 1 60 1 view .LVU43
+ 204 000e 0646     		mov	r6, r0
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 205              		.loc 1 61 6 view .LVU44
+ 206 0010 27B3     		cbz	r7, .L19
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 207              		.loc 1 66 3 is_stmt 1 view .LVU45
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 208              		.loc 1 66 6 is_stmt 0 view .LVU46
+ 209 0012 052F     		cmp	r7, #5
+ 210 0014 33D8     		bhi	.L20
+ 211              	.LVL12:
+ 212              	.L21:
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 213              		.loc 1 66 6 view .LVU47
+ 214 0016 384D     		ldr	r5, .L30
+ 215              	.LBB9:
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     {
+ 216              		.loc 1 73 43 view .LVU48
+ 217 0018 B268     		ldr	r2, [r6, #8]
+ 218 001a 2C46     		mov	r4, r5
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   { // ÷ÿ∏¥◊¢≤· | id÷ÿ∏¥
+ 219              		.loc 1 71 15 view .LVU49
+ 220 001c 0023     		movs	r3, #0
+ 221 001e 01E0     		b	.L27
+ 222              	.LVL13:
+ 223              	.L25:
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   { // ÷ÿ∏¥◊¢≤· | id÷ÿ∏¥
+ 224              		.loc 1 71 24 discriminator 1 view .LVU50
+ 225 0020 BB42     		cmp	r3, r7
+ 226 0022 3AD0     		beq	.L24
+ 227              	.LVL14:
+ 228              	.L27:
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     {
+ 229              		.loc 1 73 5 is_stmt 1 view .LVU51
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   { // ÷ÿ∏¥◊¢≤· | id÷ÿ∏¥
+ 230              		.loc 1 71 32 discriminator 2 view .LVU52
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     {
+ 231              		.loc 1 73 23 is_stmt 0 view .LVU53
+ 232 0024 54F8041B 		ldr	r1, [r4], #4
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     {
+ 233              		.loc 1 73 8 view .LVU54
+ 234 0028 086C     		ldr	r0, [r1, #64]
+ 235 002a 9042     		cmp	r0, r2
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   { // ÷ÿ∏¥◊¢≤· | id÷ÿ∏¥
+ARM GAS  /tmp/ccJatJoR.s 			page 9
+
+
+ 236              		.loc 1 71 32 discriminator 2 view .LVU55
+ 237 002c 03F10103 		add	r3, r3, #1
+ 238              	.LVL15:
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   { // ÷ÿ∏¥◊¢≤· | id÷ÿ∏¥
+ 239              		.loc 1 71 24 is_stmt 1 discriminator 1 view .LVU56
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     {
+ 240              		.loc 1 73 8 is_stmt 0 view .LVU57
+ 241 0030 F6D1     		bne	.L25
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     {
+ 242              		.loc 1 73 51 discriminator 1 view .LVU58
+ 243 0032 0868     		ldr	r0, [r1]
+ 244 0034 3168     		ldr	r1, [r6]
+ 245 0036 8842     		cmp	r0, r1
+ 246 0038 F2D1     		bne	.L25
+ 247 003a 304C     		ldr	r4, .L30+4
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     }
+ 248              		.loc 1 76 9 discriminator 1 view .LVU59
+ 249 003c DFF8C890 		ldr	r9, .L30+16
+ 250 0040 2F4D     		ldr	r5, .L30+8
+ 251 0042 06F10807 		add	r7, r6, #8
+ 252 0046 0436     		adds	r6, r6, #4
+ 253              	.LVL16:
+ 254              	.L26:
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****         LOGERROR("[}bsp_can] CAN id crash ,tx [%d] or rx [%d] already registered", &config->tx_id, 
+ 255              		.loc 1 75 7 is_stmt 1 view .LVU60
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     }
+ 256              		.loc 1 76 9 discriminator 1 view .LVU61
+ 257 0048 CDE90167 		strd	r6, r7, [sp, #4]
+ 258 004c 0094     		str	r4, [sp]
+ 259 004e 4C23     		movs	r3, #76
+ 260 0050 4A46     		mov	r2, r9
+ 261 0052 0321     		movs	r1, #3
+ 262 0054 2846     		mov	r0, r5
+ 263 0056 FFF7FEFF 		bl	LOG_PROTO
+ 264              	.LVL17:
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****         LOGERROR("[}bsp_can] CAN id crash ,tx [%d] or rx [%d] already registered", &config->tx_id, 
+ 265              		.loc 1 75 13 view .LVU62
+ 266 005a F5E7     		b	.L26
+ 267              	.LVL18:
+ 268              	.L19:
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****         LOGERROR("[}bsp_can] CAN id crash ,tx [%d] or rx [%d] already registered", &config->tx_id, 
+ 269              		.loc 1 75 13 is_stmt 0 view .LVU63
+ 270              	.LBE9:
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** //    LOGINFO("[bsp_can] CAN Service Init");
+ 271              		.loc 1 63 5 is_stmt 1 view .LVU64
+ 272              	.LBB10:
+ 273              	.LBI10:
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** {
+ 274              		.loc 1 48 13 view .LVU65
+ 275              	.LBB11:
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   result = HAL_FDCAN_Start(&hfdcan1);
+ 276              		.loc 1 50 3 view .LVU66
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   result |= HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
+ 277              		.loc 1 51 3 view .LVU67
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   result |= HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
+ 278              		.loc 1 51 12 is_stmt 0 view .LVU68
+ 279 005c 2948     		ldr	r0, .L30+12
+ARM GAS  /tmp/ccJatJoR.s 			page 10
+
+
+ 280              	.LVL19:
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   result |= HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
+ 281              		.loc 1 51 12 view .LVU69
+ 282 005e FFF7FEFF 		bl	HAL_FDCAN_Start
+ 283              	.LVL20:
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   result |= HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO1_NEW_MESSAGE, 0);
+ 284              		.loc 1 52 3 is_stmt 1 view .LVU70
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   result |= HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO1_NEW_MESSAGE, 0);
+ 285              		.loc 1 52 13 is_stmt 0 view .LVU71
+ 286 0062 3A46     		mov	r2, r7
+ 287 0064 0121     		movs	r1, #1
+ 288 0066 2748     		ldr	r0, .L30+12
+ 289 0068 FFF7FEFF 		bl	HAL_FDCAN_ActivateNotification
+ 290              	.LVL21:
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   return result == HAL_OK;
+ 291              		.loc 1 53 3 is_stmt 1 view .LVU72
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   return result == HAL_OK;
+ 292              		.loc 1 53 13 is_stmt 0 view .LVU73
+ 293 006c 3A46     		mov	r2, r7
+ 294 006e 2548     		ldr	r0, .L30+12
+ 295 0070 0821     		movs	r1, #8
+ 296 0072 FFF7FEFF 		bl	HAL_FDCAN_ActivateNotification
+ 297              	.LVL22:
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** }
+ 298              		.loc 1 54 3 is_stmt 1 view .LVU74
+ 299              	.LBE11:
+ 300              	.LBE10:
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 301              		.loc 1 66 11 is_stmt 0 view .LVU75
+ 302 0076 98F80070 		ldrb	r7, [r8]	@ zero_extendqisi2
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 303              		.loc 1 66 3 is_stmt 1 view .LVU76
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 304              		.loc 1 66 6 is_stmt 0 view .LVU77
+ 305 007a 052F     		cmp	r7, #5
+ 306 007c 0AD9     		bls	.L22
+ 307              	.L20:
+ 308 007e 1F4C     		ldr	r4, .L30+4
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+ 309              		.loc 1 69 7 discriminator 1 view .LVU78
+ 310 0080 214E     		ldr	r6, .L30+16
+ 311              	.LVL23:
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+ 312              		.loc 1 69 7 discriminator 1 view .LVU79
+ 313 0082 224D     		ldr	r5, .L30+20
+ 314              	.L23:
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****       LOGERROR("[bsp_can] CAN instance exceeded MAX num, consider balance the load of CAN bus");
+ 315              		.loc 1 68 5 is_stmt 1 view .LVU80
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+ 316              		.loc 1 69 7 discriminator 1 view .LVU81
+ 317 0084 0094     		str	r4, [sp]
+ 318 0086 4523     		movs	r3, #69
+ 319 0088 3246     		mov	r2, r6
+ 320 008a 0321     		movs	r1, #3
+ 321 008c 2846     		mov	r0, r5
+ 322 008e FFF7FEFF 		bl	LOG_PROTO
+ 323              	.LVL24:
+ARM GAS  /tmp/ccJatJoR.s 			page 11
+
+
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****       LOGERROR("[bsp_can] CAN instance exceeded MAX num, consider balance the load of CAN bus");
+ 324              		.loc 1 68 11 view .LVU82
+ 325 0092 F7E7     		b	.L23
+ 326              	.LVL25:
+ 327              	.L22:
+ 328              	.LBB12:
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   { // ÷ÿ∏¥◊¢≤· | id÷ÿ∏¥
+ 329              		.loc 1 71 24 discriminator 1 view .LVU83
+ 330 0094 002F     		cmp	r7, #0
+ 331 0096 BED1     		bne	.L21
+ 332 0098 174D     		ldr	r5, .L30
+ 333              	.LVL26:
+ 334              	.L24:
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   { // ÷ÿ∏¥◊¢≤· | id÷ÿ∏¥
+ 335              		.loc 1 71 24 is_stmt 0 discriminator 1 view .LVU84
+ 336              	.LBE12:
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   memset(instance, 0, sizeof(FDCANInstance));                               // ∑÷≈‰µƒø’º‰Œ¥±ÿ «0,À˘
+ 337              		.loc 1 80 3 is_stmt 1 view .LVU85
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   memset(instance, 0, sizeof(FDCANInstance));                               // ∑÷≈‰µƒø’º‰Œ¥±ÿ «0,À˘
+ 338              		.loc 1 80 46 is_stmt 0 view .LVU86
+ 339 009a 5020     		movs	r0, #80
+ 340 009c FFF7FEFF 		bl	malloc
+ 341              	.LVL27:
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   // Ω¯––∑¢ÀÕ±®Œƒµƒ≈‰÷√
+ 342              		.loc 1 81 3 view .LVU87
+ 343 00a0 4822     		movs	r2, #72
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   memset(instance, 0, sizeof(FDCANInstance));                               // ∑÷≈‰µƒø’º‰Œ¥±ÿ «0,À˘
+ 344              		.loc 1 80 46 view .LVU88
+ 345 00a2 0446     		mov	r4, r0
+ 346              	.LVL28:
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   // Ω¯––∑¢ÀÕ±®Œƒµƒ≈‰÷√
+ 347              		.loc 1 81 3 is_stmt 1 view .LVU89
+ 348 00a4 0021     		movs	r1, #0
+ 349 00a6 0830     		adds	r0, r0, #8
+ 350              	.LVL29:
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   // Ω¯––∑¢ÀÕ±®Œƒµƒ≈‰÷√
+ 351              		.loc 1 81 3 is_stmt 0 view .LVU90
+ 352 00a8 FFF7FEFF 		bl	memset
+ 353              	.LVL30:
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->txconf.IdType              = FDCAN_STANDARD_ID;  //  π”√±Í◊ºid,¿©’πid‘Ú π”√CAN_ID_EXT(ƒ
+ 354              		.loc 1 83 3 is_stmt 1 view .LVU91
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->txconf.IdType              = FDCAN_STANDARD_ID;  //  π”√±Í◊ºid,¿©’πid‘Ú π”√CAN_ID_EXT(ƒ
+ 355              		.loc 1 83 48 is_stmt 0 view .LVU92
+ 356 00ac 7368     		ldr	r3, [r6, #4]
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->txconf.IdType              = FDCAN_STANDARD_ID;  //  π”√±Í◊ºid,¿©’πid‘Ú π”√CAN_ID_EXT(ƒ
+ 357              		.loc 1 83 40 view .LVU93
+ 358 00ae 6360     		str	r3, [r4, #4]
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->txconf.TxFrameType         = FDCAN_DATA_FRAME;   // ∑¢ÀÕ ˝æ›÷°
+ 359              		.loc 1 84 3 is_stmt 1 view .LVU94
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->txconf.DataLength          = 0x08;               // ƒ¨»œ∑¢ÀÕ≥§∂»Œ™8
+ 360              		.loc 1 85 3 view .LVU95
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->txconf.ErrorStateIndicator = FDCAN_ESI_ACTIVE;   // ¥ÌŒÛ◊¥Ã¨÷∏ æ∆˜¥Úø™
+ 361              		.loc 1 86 3 view .LVU96
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->rx_id                      = config->rx_id;
+ 362              		.loc 1 94 40 is_stmt 0 view .LVU97
+ 363 00b0 A362     		str	r3, [r4, #40]
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->fdcan_module_callback      = config->fdcan_module_callback;
+ARM GAS  /tmp/ccJatJoR.s 			page 12
+
+
+ 364              		.loc 1 95 40 view .LVU98
+ 365 00b2 B368     		ldr	r3, [r6, #8]
+ 366 00b4 2364     		str	r3, [r4, #64]
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->id                         = config->id;
+ 367              		.loc 1 96 40 view .LVU99
+ 368 00b6 F368     		ldr	r3, [r6, #12]
+ 369 00b8 A364     		str	r3, [r4, #72]
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 370              		.loc 1 97 40 view .LVU100
+ 371 00ba 3369     		ldr	r3, [r6, #16]
+ 372 00bc E364     		str	r3, [r4, #76]
+ 373              	.LBB13:
+ 374              	.LBB14:
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   fdcan_filter_conf.FilterIndex  = 0;                       // ¬À≤®∆˜À˜“˝
+ 375              		.loc 1 27 34 view .LVU101
+ 376 00be 0023     		movs	r3, #0
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   fdcan_filter_conf.FilterType   = FDCAN_FILTER_RANGE;      // ¬À≤®∆˜¿‡–Õ
+ 377              		.loc 1 28 34 view .LVU102
+ 378 00c0 CDE90433 		strd	r3, r3, [sp, #16]
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   fdcan_filter_conf.FilterConfig = FDCAN_FILTER_TO_RXFIFO0; // π˝¬À∆˜0πÿ¡™µΩFIFO0
+ 379              		.loc 1 29 34 view .LVU103
+ 380 00c4 0693     		str	r3, [sp, #24]
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   fdcan_filter_conf.FilterID1    = 0x0000;                  // Œ™0æÕ≤ªª·π˝¬À»Œ∫Œid
+ 381              		.loc 1 30 34 view .LVU104
+ 382 00c6 0123     		movs	r3, #1
+ 383              	.LBE14:
+ 384              	.LBE13:
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->tx_id                      = config->tx_id;
+ 385              		.loc 1 93 48 view .LVU105
+ 386 00c8 3068     		ldr	r0, [r6]
+ 387              	.LBB18:
+ 388              	.LBB15:
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   fdcan_filter_conf.FilterID1    = 0x0000;                  // Œ™0æÕ≤ªª·π˝¬À»Œ∫Œid
+ 389              		.loc 1 30 34 view .LVU106
+ 390 00ca 0793     		str	r3, [sp, #28]
+ 391              	.LBE15:
+ 392              	.LBE18:
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->txconf.ErrorStateIndicator = FDCAN_ESI_ACTIVE;   // ¥ÌŒÛ◊¥Ã¨÷∏ æ∆˜¥Úø™
+ 393              		.loc 1 86 40 view .LVU107
+ 394 00cc 0823     		movs	r3, #8
+ 395 00ce 2361     		str	r3, [r4, #16]
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->txconf.BitRateSwitch       = FDCAN_BRS_OFF;      // ±»Ãÿ¬ «–ªªπÿ±’£¨≤ª  ”√”⁄æ≠µ‰CAN
+ 396              		.loc 1 87 3 is_stmt 1 view .LVU108
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->txconf.FDFormat            = FDCAN_CLASSIC_CAN;  //  π”√æ≠µ‰CAN
+ 397              		.loc 1 88 3 view .LVU109
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->txconf.TxEventFifoControl  = FDCAN_NO_TX_EVENTS; // ≤ª¥¢¥Ê∑¢ÀÕ ¬º˛
+ 398              		.loc 1 89 3 view .LVU110
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->txconf.MessageMarker       = 0x0;                // œ˚œ¢±Íº«0
+ 399              		.loc 1 90 3 view .LVU111
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   // …Ë÷√ªÿµ˜∫Ø ˝∫ÕΩ” ’∑¢ÀÕid
+ 400              		.loc 1 91 3 view .LVU112
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->tx_id                      = config->tx_id;
+ 401              		.loc 1 93 3 view .LVU113
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->rx_id                      = config->rx_id;
+ 402              		.loc 1 94 3 view .LVU114
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->fdcan_module_callback      = config->fdcan_module_callback;
+ 403              		.loc 1 95 3 view .LVU115
+ARM GAS  /tmp/ccJatJoR.s 			page 13
+
+
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->id                         = config->id;
+ 404              		.loc 1 96 3 view .LVU116
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 405              		.loc 1 97 3 view .LVU117
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   fdcan_instance[idx++] = instance; // Ω´ µ¿˝±£¥ÊµΩcan_instance÷–
+ 406              		.loc 1 99 3 view .LVU118
+ 407              	.LBB19:
+ 408              	.LBI13:
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** {
+ 409              		.loc 1 22 13 view .LVU119
+ 410              	.LVL31:
+ 411              	.LBB16:
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   FDCAN_FilterTypeDef fdcan_filter_conf;
+ 412              		.loc 1 24 3 view .LVU120
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 413              		.loc 1 25 3 view .LVU121
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   fdcan_filter_conf.FilterIndex  = 0;                       // ¬À≤®∆˜À˜“˝
+ 414              		.loc 1 27 3 view .LVU122
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   fdcan_filter_conf.FilterType   = FDCAN_FILTER_RANGE;      // ¬À≤®∆˜¿‡–Õ
+ 415              		.loc 1 28 3 view .LVU123
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   fdcan_filter_conf.FilterConfig = FDCAN_FILTER_TO_RXFIFO0; // π˝¬À∆˜0πÿ¡™µΩFIFO0
+ 416              		.loc 1 29 3 view .LVU124
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   fdcan_filter_conf.FilterID1    = 0x0000;                  // Œ™0æÕ≤ªª·π˝¬À»Œ∫Œid
+ 417              		.loc 1 30 3 view .LVU125
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   fdcan_filter_conf.FilterID2    = 0x0000;                  // ¿Ì”…»Á…œ
+ 418              		.loc 1 31 3 view .LVU126
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 419              		.loc 1 32 3 view .LVU127
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   fdcan_filter_conf.FilterID2    = 0x0000;                  // ¿Ì”…»Á…œ
+ 420              		.loc 1 31 34 is_stmt 0 view .LVU128
+ 421 00d0 0022     		movs	r2, #0
+ 422 00d2 0023     		movs	r3, #0
+ 423              	.LBE16:
+ 424              	.LBE19:
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   instance->tx_id                      = config->tx_id;
+ 425              		.loc 1 93 40 view .LVU129
+ 426 00d4 2060     		str	r0, [r4]
+ 427              	.LBB20:
+ 428              	.LBB17:
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   if (result != HAL_OK) // ¬À≤®∆˜≥ı ºªØ
+ 429              		.loc 1 34 12 view .LVU130
+ 430 00d6 04A9     		add	r1, sp, #16
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   fdcan_filter_conf.FilterID2    = 0x0000;                  // ¿Ì”…»Á…œ
+ 431              		.loc 1 31 34 view .LVU131
+ 432 00d8 CDE90823 		strd	r2, [sp, #32]
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   if (result != HAL_OK) // ¬À≤®∆˜≥ı ºªØ
+ 433              		.loc 1 34 3 is_stmt 1 view .LVU132
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   if (result != HAL_OK) // ¬À≤®∆˜≥ı ºªØ
+ 434              		.loc 1 34 12 is_stmt 0 view .LVU133
+ 435 00dc FFF7FEFF 		bl	HAL_FDCAN_ConfigFilter
+ 436              	.LVL32:
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 437              		.loc 1 35 3 is_stmt 1 view .LVU134
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+ 438              		.loc 1 37 5 view .LVU135
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+ 439              		.loc 1 37 5 is_stmt 0 view .LVU136
+ARM GAS  /tmp/ccJatJoR.s 			page 14
+
+
+ 440              	.LBE17:
+ 441              	.LBE20:
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 442              		.loc 1 100 3 is_stmt 1 view .LVU137
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 443              		.loc 1 100 21 is_stmt 0 view .LVU138
+ 444 00e0 98F80030 		ldrb	r3, [r8]	@ zero_extendqisi2
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 445              		.loc 1 103 1 view .LVU139
+ 446 00e4 2046     		mov	r0, r4
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 447              		.loc 1 100 21 view .LVU140
+ 448 00e6 5A1C     		adds	r2, r3, #1
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 449              		.loc 1 100 25 view .LVU141
+ 450 00e8 45F82340 		str	r4, [r5, r3, lsl #2]
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** }
+ 451              		.loc 1 102 3 is_stmt 1 view .LVU142
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 452              		.loc 1 100 21 is_stmt 0 view .LVU143
+ 453 00ec 88F80020 		strb	r2, [r8]
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 454              		.loc 1 103 1 view .LVU144
+ 455 00f0 0BB0     		add	sp, sp, #44
+ 456              	.LCFI5:
+ 457              		.cfi_def_cfa_offset 28
+ 458              		@ sp needed
+ 459 00f2 BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ 460              	.LVL33:
+ 461              	.L31:
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 462              		.loc 1 103 1 view .LVU145
+ 463 00f6 00BF     		.align	2
+ 464              	.L30:
+ 465 00f8 00000000 		.word	fdcan_instance
+ 466 00fc 00000000 		.word	__FUNCTION__.5
+ 467 0100 98000000 		.word	.LC2
+ 468 0104 00000000 		.word	hfdcan1
+ 469 0108 00000000 		.word	.LC0
+ 470 010c 48000000 		.word	.LC1
+ 471 0110 00000000 		.word	idx
+ 472              		.cfi_endproc
+ 473              	.LFE350:
+ 475              		.section	.rodata.FDCANTransmit.str1.4,"aMS",%progbits,1
+ 476              		.align	2
+ 477              	.LC3:
+ 478 0000 5B627370 		.ascii	"[bsp_can] CAN MAILbox full! failed to add msg to ma"
+ 478      5F63616E 
+ 478      5D204341 
+ 478      4E204D41 
+ 478      494C626F 
+ 479 0033 696C626F 		.ascii	"ilbox. Cnt [%d]\000"
+ 479      782E2043 
+ 479      6E74205B 
+ 479      25645D00 
+ 480 0043 00       		.align	2
+ 481              	.LC4:
+ARM GAS  /tmp/ccJatJoR.s 			page 15
+
+
+ 482 0044 5B627370 		.ascii	"[bsp_can] CAN bus BUS! cnt:%d\000"
+ 482      5F63616E 
+ 482      5D204341 
+ 482      4E206275 
+ 482      73204255 
+ 483              		.section	.text.FDCANTransmit,"ax",%progbits
+ 484              		.align	1
+ 485              		.p2align 2,,3
+ 486              		.global	FDCANTransmit
+ 487              		.syntax unified
+ 488              		.thumb
+ 489              		.thumb_func
+ 491              	FDCANTransmit:
+ 492              	.LVL34:
+ 493              	.LFB351:
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   static uint32_t busy_count;
+ 494              		.loc 1 108 1 is_stmt 1 view -0
+ 495              		.cfi_startproc
+ 496              		@ args = 0, pretend = 0, frame = 0
+ 497              		@ frame_needed = 0, uses_anonymous_args = 0
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   static volatile float wait_time __attribute__((unused)); // for cancel warning
+ 498              		.loc 1 109 3 view .LVU147
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   float dwt_start = DWT_GetTimeline_ms();
+ 499              		.loc 1 110 3 view .LVU148
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   while (HAL_FDCAN_GetTxFifoFreeLevel(_instance->fdcan_handle) == 0) // µ»¥˝” œ‰ø’œ–
+ 500              		.loc 1 111 3 view .LVU149
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   static uint32_t busy_count;
+ 501              		.loc 1 108 1 is_stmt 0 view .LVU150
+ 502 0000 10B5     		push	{r4, lr}
+ 503              	.LCFI6:
+ 504              		.cfi_def_cfa_offset 8
+ 505              		.cfi_offset 4, -8
+ 506              		.cfi_offset 14, -4
+ 507 0002 2DED028B 		vpush.64	{d8}
+ 508              	.LCFI7:
+ 509              		.cfi_def_cfa_offset 16
+ 510              		.cfi_offset 80, -16
+ 511              		.cfi_offset 81, -12
+ 512 0006 82B0     		sub	sp, sp, #8
+ 513              	.LCFI8:
+ 514              		.cfi_def_cfa_offset 24
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   static uint32_t busy_count;
+ 515              		.loc 1 108 1 view .LVU151
+ 516 0008 F0EE408A 		vmov.f32	s17, s0
+ 517 000c 0446     		mov	r4, r0
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   while (HAL_FDCAN_GetTxFifoFreeLevel(_instance->fdcan_handle) == 0) // µ»¥˝” œ‰ø’œ–
+ 518              		.loc 1 111 21 view .LVU152
+ 519 000e FFF7FEFF 		bl	DWT_GetTimeline_ms
+ 520              	.LVL35:
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   while (HAL_FDCAN_GetTxFifoFreeLevel(_instance->fdcan_handle) == 0) // µ»¥˝” œ‰ø’œ–
+ 521              		.loc 1 111 21 view .LVU153
+ 522 0012 B0EE408A 		vmov.f32	s16, s0
+ 523              	.LVL36:
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 524              		.loc 1 112 3 is_stmt 1 view .LVU154
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 525              		.loc 1 112 9 is_stmt 0 view .LVU155
+ARM GAS  /tmp/ccJatJoR.s 			page 16
+
+
+ 526 0016 08E0     		b	.L33
+ 527              	.LVL37:
+ 528              	.L36:
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     {
+ 529              		.loc 1 114 9 view .LVU156
+ 530 0018 FFF7FEFF 		bl	DWT_GetTimeline_ms
+ 531              	.LVL38:
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     {
+ 532              		.loc 1 114 30 discriminator 1 view .LVU157
+ 533 001c 30EE480A 		vsub.f32	s0, s0, s16
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     {
+ 534              		.loc 1 114 8 discriminator 1 view .LVU158
+ 535 0020 B4EEE80A 		vcmpe.f32	s0, s17
+ 536 0024 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 537 0028 18DC     		bgt	.L41
+ 538              	.L33:
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 539              		.loc 1 112 64 is_stmt 1 view .LVU159
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 540              		.loc 1 112 10 is_stmt 0 view .LVU160
+ 541 002a 2068     		ldr	r0, [r4]
+ 542 002c FFF7FEFF 		bl	HAL_FDCAN_GetTxFifoFreeLevel
+ 543              	.LVL39:
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     {
+ 544              		.loc 1 114 5 is_stmt 1 view .LVU161
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 545              		.loc 1 112 64 is_stmt 0 discriminator 1 view .LVU162
+ 546 0030 0028     		cmp	r0, #0
+ 547 0032 F1D0     		beq	.L36
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   // tx_mailboxª·±£¥Ê µº ÃÓ»Î¡À’‚“ª÷°œ˚œ¢µƒ” œ‰,µ´ «÷™µ¿ «ƒƒ∏ˆ” œ‰∑¢µƒÀ∆∫ı“≤√ª…∂”√
+ 548              		.loc 1 121 3 is_stmt 1 view .LVU163
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   // tx_mailboxª·±£¥Ê µº ÃÓ»Î¡À’‚“ª÷°œ˚œ¢µƒ” œ‰,µ´ «÷™µ¿ «ƒƒ∏ˆ” œ‰∑¢µƒÀ∆∫ı“≤√ª…∂”√
+ 549              		.loc 1 121 15 is_stmt 0 view .LVU164
+ 550 0034 FFF7FEFF 		bl	DWT_GetTimeline_ms
+ 551              	.LVL40:
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 552              		.loc 1 123 62 view .LVU165
+ 553 0038 2146     		mov	r1, r4
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   // tx_mailboxª·±£¥Ê µº ÃÓ»Î¡À’‚“ª÷°œ˚œ¢µƒ” œ‰,µ´ «÷™µ¿ «ƒƒ∏ˆ” œ‰∑¢µƒÀ∆∫ı“≤√ª…∂”√
+ 554              		.loc 1 121 13 discriminator 1 view .LVU166
+ 555 003a 194B     		ldr	r3, .L43
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 556              		.loc 1 123 7 view .LVU167
+ 557 003c 51F8040B 		ldr	r0, [r1], #4
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   // tx_mailboxª·±£¥Ê µº ÃÓ»Î¡À’‚“ª÷°œ˚œ¢µƒ” œ‰,µ´ «÷™µ¿ «ƒƒ∏ˆ” œ‰∑¢µƒÀ∆∫ı“≤√ª…∂”√
+ 558              		.loc 1 121 36 discriminator 1 view .LVU168
+ 559 0040 30EE480A 		vsub.f32	s0, s0, s16
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 560              		.loc 1 123 7 view .LVU169
+ 561 0044 04F13002 		add	r2, r4, #48
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   // tx_mailboxª·±£¥Ê µº ÃÓ»Î¡À’‚“ª÷°œ˚œ¢µƒ” œ‰,µ´ «÷™µ¿ «ƒƒ∏ˆ” œ‰∑¢µƒÀ∆∫ı“≤√ª…∂”√
+ 562              		.loc 1 121 13 discriminator 1 view .LVU170
+ 563 0048 83ED000A 		vstr.32	s0, [r3]
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 564              		.loc 1 123 3 is_stmt 1 view .LVU171
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 565              		.loc 1 123 7 is_stmt 0 view .LVU172
+ARM GAS  /tmp/ccJatJoR.s 			page 17
+
+
+ 566 004c FFF7FEFF 		bl	HAL_FDCAN_AddMessageToTxFifoQ
+ 567              	.LVL41:
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 568              		.loc 1 123 6 discriminator 1 view .LVU173
+ 569 0050 B8B9     		cbnz	r0, .L42
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** }
+ 570              		.loc 1 129 10 view .LVU174
+ 571 0052 0120     		movs	r0, #1
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 572              		.loc 1 130 1 view .LVU175
+ 573 0054 02B0     		add	sp, sp, #8
+ 574              	.LCFI9:
+ 575              		.cfi_remember_state
+ 576              		.cfi_def_cfa_offset 16
+ 577              		@ sp needed
+ 578 0056 BDEC028B 		vldm	sp!, {d8}
+ 579              	.LCFI10:
+ 580              		.cfi_restore 80
+ 581              		.cfi_restore 81
+ 582              		.cfi_def_cfa_offset 8
+ 583              	.LVL42:
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 584              		.loc 1 130 1 view .LVU176
+ 585 005a 10BD     		pop	{r4, pc}
+ 586              	.LVL43:
+ 587              	.L41:
+ 588              	.LCFI11:
+ 589              		.cfi_restore_state
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****       busy_count++;
+ 590              		.loc 1 116 7 is_stmt 1 view .LVU177
+ 591 005c 114C     		ldr	r4, .L43+4
+ 592              	.LVL44:
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****       busy_count++;
+ 593              		.loc 1 116 7 is_stmt 0 view .LVU178
+ 594 005e 124B     		ldr	r3, .L43+8
+ 595 0060 2168     		ldr	r1, [r4]
+ 596 0062 124A     		ldr	r2, .L43+12
+ 597 0064 1248     		ldr	r0, .L43+16
+ 598 0066 CDE90031 		strd	r3, r1, [sp]
+ 599 006a 7423     		movs	r3, #116
+ 600 006c 0221     		movs	r1, #2
+ 601 006e FFF7FEFF 		bl	LOG_PROTO
+ 602              	.LVL45:
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****       return 0;
+ 603              		.loc 1 117 7 is_stmt 1 view .LVU179
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****       return 0;
+ 604              		.loc 1 117 17 is_stmt 0 view .LVU180
+ 605 0072 2368     		ldr	r3, [r4]
+ 606 0074 0133     		adds	r3, r3, #1
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     }
+ 607              		.loc 1 118 7 is_stmt 1 view .LVU181
+ 608              	.L35:
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     }
+ 609              		.loc 1 118 14 is_stmt 0 view .LVU182
+ 610 0076 0020     		movs	r0, #0
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     return 0;
+ 611              		.loc 1 126 15 view .LVU183
+ARM GAS  /tmp/ccJatJoR.s 			page 18
+
+
+ 612 0078 2360     		str	r3, [r4]
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 613              		.loc 1 130 1 view .LVU184
+ 614 007a 02B0     		add	sp, sp, #8
+ 615              	.LCFI12:
+ 616              		.cfi_remember_state
+ 617              		.cfi_def_cfa_offset 16
+ 618              		@ sp needed
+ 619 007c BDEC028B 		vldm	sp!, {d8}
+ 620              	.LCFI13:
+ 621              		.cfi_restore 80
+ 622              		.cfi_restore 81
+ 623              		.cfi_def_cfa_offset 8
+ 624              	.LVL46:
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 625              		.loc 1 130 1 view .LVU185
+ 626 0080 10BD     		pop	{r4, pc}
+ 627              	.LVL47:
+ 628              	.L42:
+ 629              	.LCFI14:
+ 630              		.cfi_restore_state
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     busy_count++;
+ 631              		.loc 1 125 5 is_stmt 1 view .LVU186
+ 632 0082 084C     		ldr	r4, .L43+4
+ 633              	.LVL48:
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     busy_count++;
+ 634              		.loc 1 125 5 is_stmt 0 view .LVU187
+ 635 0084 084B     		ldr	r3, .L43+8
+ 636 0086 2168     		ldr	r1, [r4]
+ 637 0088 084A     		ldr	r2, .L43+12
+ 638 008a 0A48     		ldr	r0, .L43+20
+ 639 008c CDE90031 		strd	r3, r1, [sp]
+ 640 0090 7D23     		movs	r3, #125
+ 641 0092 0221     		movs	r1, #2
+ 642 0094 FFF7FEFF 		bl	LOG_PROTO
+ 643              	.LVL49:
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     return 0;
+ 644              		.loc 1 126 5 is_stmt 1 view .LVU188
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     return 0;
+ 645              		.loc 1 126 15 is_stmt 0 view .LVU189
+ 646 0098 2368     		ldr	r3, [r4]
+ 647 009a 0133     		adds	r3, r3, #1
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+ 648              		.loc 1 127 5 is_stmt 1 view .LVU190
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+ 649              		.loc 1 127 12 is_stmt 0 view .LVU191
+ 650 009c EBE7     		b	.L35
+ 651              	.L44:
+ 652 009e 00BF     		.align	2
+ 653              	.L43:
+ 654 00a0 00000000 		.word	wait_time.2
+ 655 00a4 00000000 		.word	busy_count.4
+ 656 00a8 00000000 		.word	__FUNCTION__.3
+ 657 00ac 00000000 		.word	.LC0
+ 658 00b0 00000000 		.word	.LC3
+ 659 00b4 44000000 		.word	.LC4
+ 660              		.cfi_endproc
+ARM GAS  /tmp/ccJatJoR.s 			page 19
+
+
+ 661              	.LFE351:
+ 663              		.section	.rodata.FDCANSetDLC.str1.4,"aMS",%progbits,1
+ 664              		.align	2
+ 665              	.LC5:
+ 666 0000 5B627370 		.ascii	"[bsp_can] CAN DLC error! check your code or wild po"
+ 666      5F63616E 
+ 666      5D204341 
+ 666      4E20444C 
+ 666      43206572 
+ 667 0033 696E7465 		.ascii	"inter\000"
+ 667      7200
+ 668              		.section	.text.FDCANSetDLC,"ax",%progbits
+ 669              		.align	1
+ 670              		.p2align 2,,3
+ 671              		.global	FDCANSetDLC
+ 672              		.syntax unified
+ 673              		.thumb
+ 674              		.thumb_func
+ 676              	FDCANSetDLC:
+ 677              	.LVL50:
+ 678              	.LFB352:
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   // ∑¢ÀÕ≥§∂»¥ÌŒÛ!ºÏ≤Èµ˜”√≤Œ ˝ «∑Ò≥ˆ¥Ì,ªÚ≥ˆœ÷“∞÷∏’Î/‘ΩΩÁ∑√Œ 
+ 679              		.loc 1 133 1 is_stmt 1 view -0
+ 680              		.cfi_startproc
+ 681              		@ args = 0, pretend = 0, frame = 0
+ 682              		@ frame_needed = 0, uses_anonymous_args = 0
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 683              		.loc 1 135 3 view .LVU193
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 684              		.loc 1 135 6 is_stmt 0 view .LVU194
+ 685 0000 4B1E     		subs	r3, r1, #1
+ 686 0002 072B     		cmp	r3, #7
+ 687 0004 0CD9     		bls	.L46
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   // ∑¢ÀÕ≥§∂»¥ÌŒÛ!ºÏ≤Èµ˜”√≤Œ ˝ «∑Ò≥ˆ¥Ì,ªÚ≥ˆœ÷“∞÷∏’Î/‘ΩΩÁ∑√Œ 
+ 688              		.loc 1 133 1 view .LVU195
+ 689 0006 70B5     		push	{r4, r5, r6, lr}
+ 690              	.LCFI15:
+ 691              		.cfi_def_cfa_offset 16
+ 692              		.cfi_offset 4, -16
+ 693              		.cfi_offset 5, -12
+ 694              		.cfi_offset 6, -8
+ 695              		.cfi_offset 14, -4
+ 696 0008 064E     		ldr	r6, .L51
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+ 697              		.loc 1 138 7 discriminator 1 view .LVU196
+ 698 000a 074D     		ldr	r5, .L51+4
+ 699 000c 074C     		ldr	r4, .L51+8
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   // ∑¢ÀÕ≥§∂»¥ÌŒÛ!ºÏ≤Èµ˜”√≤Œ ˝ «∑Ò≥ˆ¥Ì,ªÚ≥ˆœ÷“∞÷∏’Î/‘ΩΩÁ∑√Œ 
+ 700              		.loc 1 133 1 view .LVU197
+ 701 000e 82B0     		sub	sp, sp, #8
+ 702              	.LCFI16:
+ 703              		.cfi_def_cfa_offset 24
+ 704              	.LVL51:
+ 705              	.L47:
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****       LOGERROR("[bsp_can] CAN DLC error! check your code or wild pointer");
+ 706              		.loc 1 137 5 is_stmt 1 view .LVU198
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+ARM GAS  /tmp/ccJatJoR.s 			page 20
+
+
+ 707              		.loc 1 138 7 discriminator 1 view .LVU199
+ 708 0010 0096     		str	r6, [sp]
+ 709 0012 8A23     		movs	r3, #138
+ 710 0014 2A46     		mov	r2, r5
+ 711 0016 0321     		movs	r1, #3
+ 712 0018 2046     		mov	r0, r4
+ 713 001a FFF7FEFF 		bl	LOG_PROTO
+ 714              	.LVL52:
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****       LOGERROR("[bsp_can] CAN DLC error! check your code or wild pointer");
+ 715              		.loc 1 137 11 view .LVU200
+ 716 001e F7E7     		b	.L47
+ 717              	.LVL53:
+ 718              	.L46:
+ 719              	.LCFI17:
+ 720              		.cfi_def_cfa_offset 0
+ 721              		.cfi_restore 4
+ 722              		.cfi_restore 5
+ 723              		.cfi_restore 6
+ 724              		.cfi_restore 14
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** }
+ 725              		.loc 1 140 3 view .LVU201
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** }
+ 726              		.loc 1 140 32 is_stmt 0 view .LVU202
+ 727 0020 0161     		str	r1, [r0, #16]
+ 728 0022 7047     		bx	lr
+ 729              	.L52:
+ 730              		.align	2
+ 731              	.L51:
+ 732 0024 00000000 		.word	__FUNCTION__.1
+ 733 0028 00000000 		.word	.LC0
+ 734 002c 00000000 		.word	.LC5
+ 735              		.cfi_endproc
+ 736              	.LFE352:
+ 738              		.section	.text.HAL_FDCAN_RxFifo0Callback,"ax",%progbits
+ 739              		.align	1
+ 740              		.p2align 2,,3
+ 741              		.global	HAL_FDCAN_RxFifo0Callback
+ 742              		.syntax unified
+ 743              		.thumb
+ 744              		.thumb_func
+ 746              	HAL_FDCAN_RxFifo0Callback:
+ 747              	.LVL54:
+ 748              	.LFB354:
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** /**
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  * @brief ◊¢“‚,STM32µƒ¡Ω∏ˆCAN…Ë±∏π≤œÌ¡Ω∏ˆFIFO
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  * œ¬√Ê¡Ω∏ˆ∫Ø ˝ «HALø‚÷–µƒªÿµ˜∫Ø ˝,À˚√«±ªHAL…˘√˜Œ™__weak,’‚¿Ô∂‘À˚√«Ω¯––÷ÿ‘ÿ(÷ÿ–¥)
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  * µ±FIFO0ªÚFIFO1“Á≥ˆ ±ª·µ˜”√’‚¡Ω∏ˆ∫Ø ˝
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  */
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** // œ¬√Êµƒ∫Ø ˝ª·µ˜”√CANFIFOxCallback()¿¥Ω¯“ª≤Ω¥¶¿Ì¿¥◊‘Ãÿ∂®CAN…Ë±∏µƒœ˚œ¢
+ 181:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 182:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** /**
+ 183:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  * @brief rx fifo callback. Once FIFO_0 is full,this func would be called
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  *
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  * @param hfdcan CAN handle indicate which device the oddest mesg in FIFO_0 comes from
+ 186:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  */
+ 187:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
+ARM GAS  /tmp/ccJatJoR.s 			page 21
+
+
+ 188:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** {
+ 749              		.loc 1 188 1 is_stmt 1 view -0
+ 750              		.cfi_startproc
+ 751              		@ args = 0, pretend = 0, frame = 0
+ 752              		@ frame_needed = 0, uses_anonymous_args = 0
+ 753              		@ link register save eliminated.
+ 189:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   if ((RxFifo0ITs & FDCAN_IT_RX_FIFO0_NEW_MESSAGE) != RESET)
+ 754              		.loc 1 189 3 view .LVU204
+ 755              		.loc 1 189 6 is_stmt 0 view .LVU205
+ 756 0000 CB07     		lsls	r3, r1, #31
+ 757 0002 00D4     		bmi	.L55
+ 190:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 191:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     FDCANFIFOxCallback(hfdcan, FDCAN_RX_FIFO0); // µ˜”√Œ“√«◊‘º∫–¥µƒ∫Ø ˝¿¥¥¶¿Ìœ˚œ¢
+ 192:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+ 193:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** }
+ 758              		.loc 1 193 1 view .LVU206
+ 759 0004 7047     		bx	lr
+ 760              	.L55:
+ 191:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+ 761              		.loc 1 191 5 is_stmt 1 view .LVU207
+ 762 0006 4021     		movs	r1, #64
+ 763              	.LVL55:
+ 191:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+ 764              		.loc 1 191 5 is_stmt 0 view .LVU208
+ 765 0008 FFF7FEBF 		b	FDCANFIFOxCallback
+ 766              	.LVL56:
+ 191:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+ 767              		.loc 1 191 5 view .LVU209
+ 768              		.cfi_endproc
+ 769              	.LFE354:
+ 771              		.section	.text.HAL_FDCAN_RxFifo1Callback,"ax",%progbits
+ 772              		.align	1
+ 773              		.p2align 2,,3
+ 774              		.global	HAL_FDCAN_RxFifo1Callback
+ 775              		.syntax unified
+ 776              		.thumb
+ 777              		.thumb_func
+ 779              	HAL_FDCAN_RxFifo1Callback:
+ 780              	.LVL57:
+ 781              	.LFB355:
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** 
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** /**
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  * @brief rx fifo callback. Once FIFO_1 is full,this func would be called
+ 197:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  *
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  * @param hfdcan CAN handle indicate which device the oddest mesg in FIFO_1 comes from
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****  */
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** void HAL_FDCAN_RxFifo1Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo1ITs)
+ 201:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** {
+ 782              		.loc 1 201 1 is_stmt 1 view -0
+ 783              		.cfi_startproc
+ 784              		@ args = 0, pretend = 0, frame = 0
+ 785              		@ frame_needed = 0, uses_anonymous_args = 0
+ 786              		@ link register save eliminated.
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   if ((RxFifo1ITs & FDCAN_IT_RX_FIFO1_NEW_MESSAGE) != RESET)
+ 787              		.loc 1 202 3 view .LVU211
+ 788              		.loc 1 202 6 is_stmt 0 view .LVU212
+ 789 0000 0B07     		lsls	r3, r1, #28
+ARM GAS  /tmp/ccJatJoR.s 			page 22
+
+
+ 790 0002 00D4     		bmi	.L58
+ 203:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   {
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****     FDCANFIFOxCallback(hfdcan, FDCAN_RX_FIFO1); // µ˜”√Œ“√«◊‘º∫–¥µƒ∫Ø ˝¿¥¥¶¿Ìœ˚œ¢
+ 205:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c **** }
+ 791              		.loc 1 206 1 view .LVU213
+ 792 0004 7047     		bx	lr
+ 793              	.L58:
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+ 794              		.loc 1 204 5 is_stmt 1 view .LVU214
+ 795 0006 4121     		movs	r1, #65
+ 796              	.LVL58:
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+ 797              		.loc 1 204 5 is_stmt 0 view .LVU215
+ 798 0008 FFF7FEBF 		b	FDCANFIFOxCallback
+ 799              	.LVL59:
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.c ****   }
+ 800              		.loc 1 204 5 view .LVU216
+ 801              		.cfi_endproc
+ 802              	.LFE355:
+ 804              		.section	.bss.rxconf.0,"aw",%nobits
+ 805              		.align	2
+ 808              	rxconf.0:
+ 809 0000 00000000 		.space	40
+ 809      00000000 
+ 809      00000000 
+ 809      00000000 
+ 809      00000000 
+ 810              		.section	.rodata.__FUNCTION__.1,"a"
+ 811              		.align	2
+ 814              	__FUNCTION__.1:
+ 815 0000 46444341 		.ascii	"FDCANSetDLC\000"
+ 815      4E536574 
+ 815      444C4300 
+ 816              		.section	.bss.wait_time.2,"aw",%nobits
+ 817              		.align	2
+ 820              	wait_time.2:
+ 821 0000 00000000 		.space	4
+ 822              		.section	.rodata.__FUNCTION__.3,"a"
+ 823              		.align	2
+ 826              	__FUNCTION__.3:
+ 827 0000 46444341 		.ascii	"FDCANTransmit\000"
+ 827      4E547261 
+ 827      6E736D69 
+ 827      7400
+ 828              		.section	.bss.busy_count.4,"aw",%nobits
+ 829              		.align	2
+ 832              	busy_count.4:
+ 833 0000 00000000 		.space	4
+ 834              		.section	.rodata.__FUNCTION__.5,"a"
+ 835              		.align	2
+ 838              	__FUNCTION__.5:
+ 839 0000 46444341 		.ascii	"FDCANRegister\000"
+ 839      4E526567 
+ 839      69737465 
+ 839      7200
+ 840              		.section	.bss.idx,"aw",%nobits
+ARM GAS  /tmp/ccJatJoR.s 			page 23
+
+
+ 843              	idx:
+ 844 0000 00       		.space	1
+ 845              		.section	.bss.fdcan_instance,"aw",%nobits
+ 846              		.align	2
+ 849              	fdcan_instance:
+ 850 0000 00000000 		.space	24
+ 850      00000000 
+ 850      00000000 
+ 850      00000000 
+ 850      00000000 
+ 851              		.text
+ 852              	.Letext0:
+ 853              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 854              		.file 3 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 855              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 856              		.file 5 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stddef.h"
+ 857              		.file 6 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 858              		.file 7 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 859              		.file 8 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/can/bsp_can.h"
+ 860              		.file 9 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/log/bsp_log.h"
+ 861              		.file 10 "/usr/include/newlib/string.h"
+ 862              		.file 11 "/usr/include/newlib/stdlib.h"
+ 863              		.file 12 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Inc/fdcan.h"
+ 864              		.file 13 "<built-in>"
+ 865              		.file 14 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/BSP/dwt/bsp_dwt.h"
+ARM GAS  /tmp/ccJatJoR.s 			page 24
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 bsp_can.c
+     /tmp/ccJatJoR.s:21     .text.FDCANFIFOxCallback:00000000 $t
+     /tmp/ccJatJoR.s:27     .text.FDCANFIFOxCallback:00000000 FDCANFIFOxCallback
+     /tmp/ccJatJoR.s:150    .text.FDCANFIFOxCallback:00000074 $d
+     /tmp/ccJatJoR.s:808    .bss.rxconf.0:00000000 rxconf.0
+     /tmp/ccJatJoR.s:849    .bss.fdcan_instance:00000000 fdcan_instance
+     /tmp/ccJatJoR.s:843    .bss.idx:00000000 idx
+     /tmp/ccJatJoR.s:157    .rodata.FDCANRegister.str1.4:00000000 $d
+     /tmp/ccJatJoR.s:170    .text.FDCANRegister:00000000 $t
+     /tmp/ccJatJoR.s:177    .text.FDCANRegister:00000000 FDCANRegister
+     /tmp/ccJatJoR.s:465    .text.FDCANRegister:000000f8 $d
+     /tmp/ccJatJoR.s:838    .rodata.__FUNCTION__.5:00000000 __FUNCTION__.5
+     /tmp/ccJatJoR.s:476    .rodata.FDCANTransmit.str1.4:00000000 $d
+     /tmp/ccJatJoR.s:484    .text.FDCANTransmit:00000000 $t
+     /tmp/ccJatJoR.s:491    .text.FDCANTransmit:00000000 FDCANTransmit
+     /tmp/ccJatJoR.s:654    .text.FDCANTransmit:000000a0 $d
+     /tmp/ccJatJoR.s:820    .bss.wait_time.2:00000000 wait_time.2
+     /tmp/ccJatJoR.s:832    .bss.busy_count.4:00000000 busy_count.4
+     /tmp/ccJatJoR.s:826    .rodata.__FUNCTION__.3:00000000 __FUNCTION__.3
+     /tmp/ccJatJoR.s:664    .rodata.FDCANSetDLC.str1.4:00000000 $d
+     /tmp/ccJatJoR.s:669    .text.FDCANSetDLC:00000000 $t
+     /tmp/ccJatJoR.s:676    .text.FDCANSetDLC:00000000 FDCANSetDLC
+     /tmp/ccJatJoR.s:732    .text.FDCANSetDLC:00000024 $d
+     /tmp/ccJatJoR.s:814    .rodata.__FUNCTION__.1:00000000 __FUNCTION__.1
+     /tmp/ccJatJoR.s:739    .text.HAL_FDCAN_RxFifo0Callback:00000000 $t
+     /tmp/ccJatJoR.s:746    .text.HAL_FDCAN_RxFifo0Callback:00000000 HAL_FDCAN_RxFifo0Callback
+     /tmp/ccJatJoR.s:772    .text.HAL_FDCAN_RxFifo1Callback:00000000 $t
+     /tmp/ccJatJoR.s:779    .text.HAL_FDCAN_RxFifo1Callback:00000000 HAL_FDCAN_RxFifo1Callback
+     /tmp/ccJatJoR.s:805    .bss.rxconf.0:00000000 $d
+     /tmp/ccJatJoR.s:811    .rodata.__FUNCTION__.1:00000000 $d
+     /tmp/ccJatJoR.s:817    .bss.wait_time.2:00000000 $d
+     /tmp/ccJatJoR.s:823    .rodata.__FUNCTION__.3:00000000 $d
+     /tmp/ccJatJoR.s:829    .bss.busy_count.4:00000000 $d
+     /tmp/ccJatJoR.s:835    .rodata.__FUNCTION__.5:00000000 $d
+     /tmp/ccJatJoR.s:844    .bss.idx:00000000 $d
+     /tmp/ccJatJoR.s:846    .bss.fdcan_instance:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_FDCAN_GetRxFifoFillLevel
+HAL_FDCAN_GetRxMessage
+memcpy
+LOG_PROTO
+HAL_FDCAN_Start
+HAL_FDCAN_ActivateNotification
+malloc
+memset
+HAL_FDCAN_ConfigFilter
+hfdcan1
+DWT_GetTimeline_ms
+HAL_FDCAN_GetTxFifoFreeLevel
+HAL_FDCAN_AddMessageToTxFifoQ

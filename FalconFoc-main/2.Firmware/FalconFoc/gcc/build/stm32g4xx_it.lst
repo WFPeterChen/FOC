@@ -1,0 +1,997 @@
+ARM GAS  /tmp/ccPWSHIa.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 2
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"stm32g4xx_it.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c"
+  20              		.section	.text.NMI_Handler,"ax",%progbits
+  21              		.align	1
+  22              		.p2align 2,,3
+  23              		.global	NMI_Handler
+  24              		.syntax unified
+  25              		.thumb
+  26              		.thumb_func
+  28              	NMI_Handler:
+  29              	.LFB329:
+   1:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* USER CODE BEGIN Header */
+   2:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /**
+   3:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   ******************************************************************************
+   4:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * @file    stm32g4xx_it.c
+   5:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * @brief   Interrupt Service Routines.
+   6:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   ******************************************************************************
+   7:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * @attention
+   8:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   *
+   9:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * Copyright (c) 2024 STMicroelectronics.
+  10:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * All rights reserved.
+  11:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   *
+  12:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  13:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * in the root directory of this software component.
+  14:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  15:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   *
+  16:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   ******************************************************************************
+  17:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   */
+  18:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* USER CODE END Header */
+  19:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+  20:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* Includes ------------------------------------------------------------------*/
+  21:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** #include "main.h"
+  22:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** #include "stm32g4xx_it.h"
+  23:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* Private includes ----------------------------------------------------------*/
+  24:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* USER CODE BEGIN Includes */
+  25:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* USER CODE END Includes */
+  26:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+  27:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* Private typedef -----------------------------------------------------------*/
+  28:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* USER CODE BEGIN TD */
+  29:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ARM GAS  /tmp/ccPWSHIa.s 			page 2
+
+
+  30:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* USER CODE END TD */
+  31:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+  32:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* Private define ------------------------------------------------------------*/
+  33:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* USER CODE BEGIN PD */
+  34:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+  35:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* USER CODE END PD */
+  36:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+  37:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* Private macro -------------------------------------------------------------*/
+  38:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* USER CODE BEGIN PM */
+  39:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+  40:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* USER CODE END PM */
+  41:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+  42:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* Private variables ---------------------------------------------------------*/
+  43:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* USER CODE BEGIN PV */
+  44:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+  45:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* USER CODE END PV */
+  46:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+  47:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* Private function prototypes -----------------------------------------------*/
+  48:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* USER CODE BEGIN PFP */
+  49:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+  50:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* USER CODE END PFP */
+  51:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+  52:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* Private user code ---------------------------------------------------------*/
+  53:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* USER CODE BEGIN 0 */
+  54:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+  55:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* USER CODE END 0 */
+  56:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+  57:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* External variables --------------------------------------------------------*/
+  58:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** extern PCD_HandleTypeDef hpcd_USB_FS;
+  59:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** extern DMA_HandleTypeDef hdma_adc2;
+  60:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** extern ADC_HandleTypeDef hadc1;
+  61:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** extern ADC_HandleTypeDef hadc2;
+  62:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** extern FDCAN_HandleTypeDef hfdcan1;
+  63:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** extern DMA_HandleTypeDef hdma_tim3_ch2;
+  64:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** extern TIM_HandleTypeDef htim1;
+  65:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** extern DMA_HandleTypeDef hdma_usart1_rx;
+  66:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** extern DMA_HandleTypeDef hdma_usart1_tx;
+  67:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** extern UART_HandleTypeDef huart1;
+  68:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** extern TIM_HandleTypeDef htim17;
+  69:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+  70:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* USER CODE BEGIN EV */
+  71:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+  72:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* USER CODE END EV */
+  73:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+  74:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /******************************************************************************/
+  75:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /*           Cortex-M4 Processor Interruption and Exception Handlers          */
+  76:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /******************************************************************************/
+  77:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /**
+  78:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * @brief This function handles Non maskable interrupt.
+  79:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   */
+  80:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** void NMI_Handler(void)
+  81:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** {
+  30              		.loc 1 81 1 view -0
+  31              		.cfi_startproc
+  32              		@ Volatile: function does not return.
+  33              		@ args = 0, pretend = 0, frame = 0
+  34              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/ccPWSHIa.s 			page 3
+
+
+  35              		@ link register save eliminated.
+  36              	.L2:
+  82:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN NonMaskableInt_IRQn 0 */
+  83:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+  84:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END NonMaskableInt_IRQn 0 */
+  85:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****    while (1)
+  37              		.loc 1 86 4 view .LVU1
+  87:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   {
+  88:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   }
+  38              		.loc 1 88 3 view .LVU2
+  86:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   {
+  39              		.loc 1 86 10 view .LVU3
+  40 0000 FEE7     		b	.L2
+  41              		.cfi_endproc
+  42              	.LFE329:
+  44 0002 00BF     		.section	.text.HardFault_Handler,"ax",%progbits
+  45              		.align	1
+  46              		.p2align 2,,3
+  47              		.global	HardFault_Handler
+  48              		.syntax unified
+  49              		.thumb
+  50              		.thumb_func
+  52              	HardFault_Handler:
+  53              	.LFB330:
+  89:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END NonMaskableInt_IRQn 1 */
+  90:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** }
+  91:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+  92:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /**
+  93:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * @brief This function handles Hard fault interrupt.
+  94:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   */
+  95:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** void HardFault_Handler(void)
+  96:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** {
+  54              		.loc 1 96 1 view -0
+  55              		.cfi_startproc
+  56              		@ Volatile: function does not return.
+  57              		@ args = 0, pretend = 0, frame = 0
+  58              		@ frame_needed = 0, uses_anonymous_args = 0
+  59              		@ link register save eliminated.
+  97:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN HardFault_IRQn 0 */
+  98:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   TIM1->BDTR &= ~TIM_BDTR_MOE; // 安全: CPU异常立即关所有PWM输出(否则电机保持最�
+  60              		.loc 1 98 3 view .LVU5
+  61              		.loc 1 98 7 is_stmt 0 view .LVU6
+  62 0000 024A     		ldr	r2, .L6
+  63 0002 536C     		ldr	r3, [r2, #68]
+  64              		.loc 1 98 14 view .LVU7
+  65 0004 23F40043 		bic	r3, r3, #32768
+  66 0008 5364     		str	r3, [r2, #68]
+  67              	.L5:
+  99:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END HardFault_IRQn 0 */
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   while (1)
+  68              		.loc 1 100 3 is_stmt 1 view .LVU8
+ 101:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   {
+ 102:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****     /* USER CODE BEGIN W1_HardFault_IRQn 0 */
+ 103:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****     /* USER CODE END W1_HardFault_IRQn 0 */
+ 104:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   }
+  69              		.loc 1 104 3 view .LVU9
+ARM GAS  /tmp/ccPWSHIa.s 			page 4
+
+
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   {
+  70              		.loc 1 100 9 view .LVU10
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   {
+  71              		.loc 1 100 3 view .LVU11
+  72              		.loc 1 104 3 view .LVU12
+ 100:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   {
+  73              		.loc 1 100 9 view .LVU13
+  74 000a FEE7     		b	.L5
+  75              	.L7:
+  76              		.align	2
+  77              	.L6:
+  78 000c 002C0140 		.word	1073818624
+  79              		.cfi_endproc
+  80              	.LFE330:
+  82              		.section	.text.MemManage_Handler,"ax",%progbits
+  83              		.align	1
+  84              		.p2align 2,,3
+  85              		.global	MemManage_Handler
+  86              		.syntax unified
+  87              		.thumb
+  88              		.thumb_func
+  90              	MemManage_Handler:
+  91              	.LFB349:
+  92              		.cfi_startproc
+ 105:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** }
+ 106:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 107:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /**
+ 108:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * @brief This function handles Memory management fault.
+ 109:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   */
+ 110:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** void MemManage_Handler(void)
+  93              		.loc 1 110 6 view -0
+  94              		@ Volatile: function does not return.
+  95              		@ args = 0, pretend = 0, frame = 0
+  96              		@ frame_needed = 0, uses_anonymous_args = 0
+  97 0000 08B5     		push	{r3, lr}
+  98              	.LCFI0:
+  99              		.cfi_def_cfa_offset 8
+ 100              		.cfi_offset 3, -8
+ 101              		.cfi_offset 14, -4
+ 102 0002 FFF7FEFF 		bl	HardFault_Handler
+ 103              		.cfi_endproc
+ 104              	.LFE349:
+ 106 0006 00BF     		.section	.text.BusFault_Handler,"ax",%progbits
+ 107              		.align	1
+ 108              		.p2align 2,,3
+ 109              		.global	BusFault_Handler
+ 110              		.syntax unified
+ 111              		.thumb
+ 112              		.thumb_func
+ 114              	BusFault_Handler:
+ 115              	.LFB351:
+ 116              		.cfi_startproc
+ 111:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** {
+ 112:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN MemoryManagement_IRQn 0 */
+ 113:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   TIM1->BDTR &= ~TIM_BDTR_MOE; // 安全: 立即关所有PWM输出
+ 114:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END MemoryManagement_IRQn 0 */
+ 115:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   while (1)
+ARM GAS  /tmp/ccPWSHIa.s 			page 5
+
+
+ 116:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   {
+ 117:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****     /* USER CODE BEGIN W1_MemoryManagement_IRQn 0 */
+ 118:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****     /* USER CODE END W1_MemoryManagement_IRQn 0 */
+ 119:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   }
+ 120:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** }
+ 121:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 122:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /**
+ 123:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * @brief This function handles Prefetch fault, memory access fault.
+ 124:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   */
+ 125:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** void BusFault_Handler(void)
+ 117              		.loc 1 125 6 view -0
+ 118              		@ Volatile: function does not return.
+ 119              		@ args = 0, pretend = 0, frame = 0
+ 120              		@ frame_needed = 0, uses_anonymous_args = 0
+ 121 0000 08B5     		push	{r3, lr}
+ 122              	.LCFI1:
+ 123              		.cfi_def_cfa_offset 8
+ 124              		.cfi_offset 3, -8
+ 125              		.cfi_offset 14, -4
+ 126 0002 FFF7FEFF 		bl	HardFault_Handler
+ 127              		.cfi_endproc
+ 128              	.LFE351:
+ 130 0006 00BF     		.section	.text.UsageFault_Handler,"ax",%progbits
+ 131              		.align	1
+ 132              		.p2align 2,,3
+ 133              		.global	UsageFault_Handler
+ 134              		.syntax unified
+ 135              		.thumb
+ 136              		.thumb_func
+ 138              	UsageFault_Handler:
+ 139              	.LFB353:
+ 140              		.cfi_startproc
+ 126:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** {
+ 127:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN BusFault_IRQn 0 */
+ 128:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   TIM1->BDTR &= ~TIM_BDTR_MOE; // 安全: 立即关所有PWM输出
+ 129:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END BusFault_IRQn 0 */
+ 130:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   while (1)
+ 131:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   {
+ 132:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****     /* USER CODE BEGIN W1_BusFault_IRQn 0 */
+ 133:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****     /* USER CODE END W1_BusFault_IRQn 0 */
+ 134:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   }
+ 135:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** }
+ 136:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 137:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /**
+ 138:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * @brief This function handles Undefined instruction or illegal state.
+ 139:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   */
+ 140:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** void UsageFault_Handler(void)
+ 141              		.loc 1 140 6 view -0
+ 142              		@ Volatile: function does not return.
+ 143              		@ args = 0, pretend = 0, frame = 0
+ 144              		@ frame_needed = 0, uses_anonymous_args = 0
+ 145 0000 08B5     		push	{r3, lr}
+ 146              	.LCFI2:
+ 147              		.cfi_def_cfa_offset 8
+ 148              		.cfi_offset 3, -8
+ 149              		.cfi_offset 14, -4
+ 150 0002 FFF7FEFF 		bl	HardFault_Handler
+ARM GAS  /tmp/ccPWSHIa.s 			page 6
+
+
+ 151              		.cfi_endproc
+ 152              	.LFE353:
+ 154 0006 00BF     		.section	.text.DebugMon_Handler,"ax",%progbits
+ 155              		.align	1
+ 156              		.p2align 2,,3
+ 157              		.global	DebugMon_Handler
+ 158              		.syntax unified
+ 159              		.thumb
+ 160              		.thumb_func
+ 162              	DebugMon_Handler:
+ 163              	.LFB334:
+ 141:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** {
+ 142:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN UsageFault_IRQn 0 */
+ 143:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   TIM1->BDTR &= ~TIM_BDTR_MOE; // 安全: 立即关所有PWM输出
+ 144:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END UsageFault_IRQn 0 */
+ 145:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   while (1)
+ 146:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   {
+ 147:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****     /* USER CODE BEGIN W1_UsageFault_IRQn 0 */
+ 148:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****     /* USER CODE END W1_UsageFault_IRQn 0 */
+ 149:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   }
+ 150:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** }
+ 151:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 152:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /**
+ 153:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * @brief This function handles Debug monitor.
+ 154:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   */
+ 155:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** void DebugMon_Handler(void)
+ 156:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** {
+ 164              		.loc 1 156 1 view -0
+ 165              		.cfi_startproc
+ 166              		@ args = 0, pretend = 0, frame = 0
+ 167              		@ frame_needed = 0, uses_anonymous_args = 0
+ 168              		@ link register save eliminated.
+ 157:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN DebugMonitor_IRQn 0 */
+ 158:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 159:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END DebugMonitor_IRQn 0 */
+ 160:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN DebugMonitor_IRQn 1 */
+ 161:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 162:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END DebugMonitor_IRQn 1 */
+ 163:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** }
+ 169              		.loc 1 163 1 view .LVU18
+ 170 0000 7047     		bx	lr
+ 171              		.cfi_endproc
+ 172              	.LFE334:
+ 174 0002 00BF     		.section	.text.DMA1_Channel1_IRQHandler,"ax",%progbits
+ 175              		.align	1
+ 176              		.p2align 2,,3
+ 177              		.global	DMA1_Channel1_IRQHandler
+ 178              		.syntax unified
+ 179              		.thumb
+ 180              		.thumb_func
+ 182              	DMA1_Channel1_IRQHandler:
+ 183              	.LFB335:
+ 164:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 165:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /******************************************************************************/
+ 166:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* STM32G4xx Peripheral Interrupt Handlers                                    */
+ 167:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* Add here the Interrupt Handlers for the used peripherals.                  */
+ 168:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* For the available peripheral interrupt handler names,                      */
+ARM GAS  /tmp/ccPWSHIa.s 			page 7
+
+
+ 169:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* please refer to the startup file (startup_stm32g4xx.s).                    */
+ 170:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /******************************************************************************/
+ 171:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 172:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /**
+ 173:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * @brief This function handles DMA1 channel1 global interrupt.
+ 174:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   */
+ 175:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** void DMA1_Channel1_IRQHandler(void)
+ 176:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** {
+ 184              		.loc 1 176 1 view -0
+ 185              		.cfi_startproc
+ 186              		@ args = 0, pretend = 0, frame = 0
+ 187              		@ frame_needed = 0, uses_anonymous_args = 0
+ 188              		@ link register save eliminated.
+ 177:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
+ 178:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 179:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END DMA1_Channel1_IRQn 0 */
+ 180:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   HAL_DMA_IRQHandler(&hdma_tim3_ch2);
+ 189              		.loc 1 180 3 view .LVU20
+ 190 0000 0148     		ldr	r0, .L16
+ 191 0002 FFF7FEBF 		b	HAL_DMA_IRQHandler
+ 192              	.LVL0:
+ 193              	.L17:
+ 194 0006 00BF     		.align	2
+ 195              	.L16:
+ 196 0008 00000000 		.word	hdma_tim3_ch2
+ 197              		.cfi_endproc
+ 198              	.LFE335:
+ 200              		.section	.text.DMA1_Channel2_IRQHandler,"ax",%progbits
+ 201              		.align	1
+ 202              		.p2align 2,,3
+ 203              		.global	DMA1_Channel2_IRQHandler
+ 204              		.syntax unified
+ 205              		.thumb
+ 206              		.thumb_func
+ 208              	DMA1_Channel2_IRQHandler:
+ 209              	.LFB336:
+ 181:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN DMA1_Channel1_IRQn 1 */
+ 182:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 183:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END DMA1_Channel1_IRQn 1 */
+ 184:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** }
+ 185:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 186:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /**
+ 187:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * @brief This function handles DMA1 channel2 global interrupt.
+ 188:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   */
+ 189:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** void DMA1_Channel2_IRQHandler(void)
+ 190:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** {
+ 210              		.loc 1 190 1 view -0
+ 211              		.cfi_startproc
+ 212              		@ args = 0, pretend = 0, frame = 0
+ 213              		@ frame_needed = 0, uses_anonymous_args = 0
+ 214              		@ link register save eliminated.
+ 191:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN DMA1_Channel2_IRQn 0 */
+ 192:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 193:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END DMA1_Channel2_IRQn 0 */
+ 194:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   HAL_DMA_IRQHandler(&hdma_adc2);
+ 215              		.loc 1 194 3 view .LVU22
+ 216 0000 0148     		ldr	r0, .L19
+ARM GAS  /tmp/ccPWSHIa.s 			page 8
+
+
+ 217 0002 FFF7FEBF 		b	HAL_DMA_IRQHandler
+ 218              	.LVL1:
+ 219              	.L20:
+ 220 0006 00BF     		.align	2
+ 221              	.L19:
+ 222 0008 00000000 		.word	hdma_adc2
+ 223              		.cfi_endproc
+ 224              	.LFE336:
+ 226              		.section	.text.DMA1_Channel3_IRQHandler,"ax",%progbits
+ 227              		.align	1
+ 228              		.p2align 2,,3
+ 229              		.global	DMA1_Channel3_IRQHandler
+ 230              		.syntax unified
+ 231              		.thumb
+ 232              		.thumb_func
+ 234              	DMA1_Channel3_IRQHandler:
+ 235              	.LFB337:
+ 195:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN DMA1_Channel2_IRQn 1 */
+ 196:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 197:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END DMA1_Channel2_IRQn 1 */
+ 198:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** }
+ 199:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 200:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /**
+ 201:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * @brief This function handles DMA1 channel3 global interrupt.
+ 202:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   */
+ 203:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** void DMA1_Channel3_IRQHandler(void)
+ 204:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** {
+ 236              		.loc 1 204 1 view -0
+ 237              		.cfi_startproc
+ 238              		@ args = 0, pretend = 0, frame = 0
+ 239              		@ frame_needed = 0, uses_anonymous_args = 0
+ 240              		@ link register save eliminated.
+ 205:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN DMA1_Channel3_IRQn 0 */
+ 206:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 207:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END DMA1_Channel3_IRQn 0 */
+ 208:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   HAL_DMA_IRQHandler(&hdma_usart1_rx);
+ 241              		.loc 1 208 3 view .LVU24
+ 242 0000 0148     		ldr	r0, .L22
+ 243 0002 FFF7FEBF 		b	HAL_DMA_IRQHandler
+ 244              	.LVL2:
+ 245              	.L23:
+ 246 0006 00BF     		.align	2
+ 247              	.L22:
+ 248 0008 00000000 		.word	hdma_usart1_rx
+ 249              		.cfi_endproc
+ 250              	.LFE337:
+ 252              		.section	.text.DMA1_Channel4_IRQHandler,"ax",%progbits
+ 253              		.align	1
+ 254              		.p2align 2,,3
+ 255              		.global	DMA1_Channel4_IRQHandler
+ 256              		.syntax unified
+ 257              		.thumb
+ 258              		.thumb_func
+ 260              	DMA1_Channel4_IRQHandler:
+ 261              	.LFB338:
+ 209:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN DMA1_Channel3_IRQn 1 */
+ 210:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ARM GAS  /tmp/ccPWSHIa.s 			page 9
+
+
+ 211:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END DMA1_Channel3_IRQn 1 */
+ 212:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** }
+ 213:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 214:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /**
+ 215:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * @brief This function handles DMA1 channel4 global interrupt.
+ 216:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   */
+ 217:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** void DMA1_Channel4_IRQHandler(void)
+ 218:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** {
+ 262              		.loc 1 218 1 view -0
+ 263              		.cfi_startproc
+ 264              		@ args = 0, pretend = 0, frame = 0
+ 265              		@ frame_needed = 0, uses_anonymous_args = 0
+ 266              		@ link register save eliminated.
+ 219:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN DMA1_Channel4_IRQn 0 */
+ 220:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 221:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END DMA1_Channel4_IRQn 0 */
+ 222:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   HAL_DMA_IRQHandler(&hdma_usart1_tx);
+ 267              		.loc 1 222 3 view .LVU26
+ 268 0000 0148     		ldr	r0, .L25
+ 269 0002 FFF7FEBF 		b	HAL_DMA_IRQHandler
+ 270              	.LVL3:
+ 271              	.L26:
+ 272 0006 00BF     		.align	2
+ 273              	.L25:
+ 274 0008 00000000 		.word	hdma_usart1_tx
+ 275              		.cfi_endproc
+ 276              	.LFE338:
+ 278              		.section	.text.ADC1_2_IRQHandler,"ax",%progbits
+ 279              		.align	1
+ 280              		.p2align 2,,3
+ 281              		.global	ADC1_2_IRQHandler
+ 282              		.syntax unified
+ 283              		.thumb
+ 284              		.thumb_func
+ 286              	ADC1_2_IRQHandler:
+ 287              	.LFB339:
+ 223:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN DMA1_Channel4_IRQn 1 */
+ 224:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 225:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END DMA1_Channel4_IRQn 1 */
+ 226:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** }
+ 227:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 228:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /**
+ 229:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * @brief This function handles ADC1 and ADC2 global interrupt.
+ 230:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   */
+ 231:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** void ADC1_2_IRQHandler(void)
+ 232:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** {
+ 288              		.loc 1 232 1 view -0
+ 289              		.cfi_startproc
+ 290              		@ args = 0, pretend = 0, frame = 0
+ 291              		@ frame_needed = 0, uses_anonymous_args = 0
+ 233:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN ADC1_2_IRQn 0 */
+ 234:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 235:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END ADC1_2_IRQn 0 */
+ 236:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   HAL_ADC_IRQHandler(&hadc1);
+ 292              		.loc 1 236 3 view .LVU28
+ 232:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN ADC1_2_IRQn 0 */
+ 293              		.loc 1 232 1 is_stmt 0 view .LVU29
+ARM GAS  /tmp/ccPWSHIa.s 			page 10
+
+
+ 294 0000 08B5     		push	{r3, lr}
+ 295              	.LCFI3:
+ 296              		.cfi_def_cfa_offset 8
+ 297              		.cfi_offset 3, -8
+ 298              		.cfi_offset 14, -4
+ 299              		.loc 1 236 3 view .LVU30
+ 300 0002 0448     		ldr	r0, .L29
+ 301 0004 FFF7FEFF 		bl	HAL_ADC_IRQHandler
+ 302              	.LVL4:
+ 237:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   HAL_ADC_IRQHandler(&hadc2);
+ 303              		.loc 1 237 3 is_stmt 1 view .LVU31
+ 238:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN ADC1_2_IRQn 1 */
+ 239:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 240:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END ADC1_2_IRQn 1 */
+ 241:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** }
+ 304              		.loc 1 241 1 is_stmt 0 view .LVU32
+ 305 0008 BDE80840 		pop	{r3, lr}
+ 306              	.LCFI4:
+ 307              		.cfi_restore 14
+ 308              		.cfi_restore 3
+ 309              		.cfi_def_cfa_offset 0
+ 237:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   HAL_ADC_IRQHandler(&hadc2);
+ 310              		.loc 1 237 3 view .LVU33
+ 311 000c 0248     		ldr	r0, .L29+4
+ 312 000e FFF7FEBF 		b	HAL_ADC_IRQHandler
+ 313              	.LVL5:
+ 314              	.L30:
+ 315 0012 00BF     		.align	2
+ 316              	.L29:
+ 317 0014 00000000 		.word	hadc1
+ 318 0018 00000000 		.word	hadc2
+ 319              		.cfi_endproc
+ 320              	.LFE339:
+ 322              		.section	.text.USB_LP_IRQHandler,"ax",%progbits
+ 323              		.align	1
+ 324              		.p2align 2,,3
+ 325              		.global	USB_LP_IRQHandler
+ 326              		.syntax unified
+ 327              		.thumb
+ 328              		.thumb_func
+ 330              	USB_LP_IRQHandler:
+ 331              	.LFB340:
+ 242:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 243:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /**
+ 244:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * @brief This function handles USB low priority interrupt remap.
+ 245:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   */
+ 246:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** void USB_LP_IRQHandler(void)
+ 247:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** {
+ 332              		.loc 1 247 1 is_stmt 1 view -0
+ 333              		.cfi_startproc
+ 334              		@ args = 0, pretend = 0, frame = 0
+ 335              		@ frame_needed = 0, uses_anonymous_args = 0
+ 336              		@ link register save eliminated.
+ 248:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN USB_LP_IRQn 0 */
+ 249:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 250:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END USB_LP_IRQn 0 */
+ 251:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   HAL_PCD_IRQHandler(&hpcd_USB_FS);
+ARM GAS  /tmp/ccPWSHIa.s 			page 11
+
+
+ 337              		.loc 1 251 3 view .LVU35
+ 338 0000 0148     		ldr	r0, .L32
+ 339 0002 FFF7FEBF 		b	HAL_PCD_IRQHandler
+ 340              	.LVL6:
+ 341              	.L33:
+ 342 0006 00BF     		.align	2
+ 343              	.L32:
+ 344 0008 00000000 		.word	hpcd_USB_FS
+ 345              		.cfi_endproc
+ 346              	.LFE340:
+ 348              		.section	.text.FDCAN1_IT0_IRQHandler,"ax",%progbits
+ 349              		.align	1
+ 350              		.p2align 2,,3
+ 351              		.global	FDCAN1_IT0_IRQHandler
+ 352              		.syntax unified
+ 353              		.thumb
+ 354              		.thumb_func
+ 356              	FDCAN1_IT0_IRQHandler:
+ 357              	.LFB341:
+ 252:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN USB_LP_IRQn 1 */
+ 253:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 254:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END USB_LP_IRQn 1 */
+ 255:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** }
+ 256:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 257:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /**
+ 258:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * @brief This function handles FDCAN1 interrupt 0.
+ 259:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   */
+ 260:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** void FDCAN1_IT0_IRQHandler(void)
+ 261:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** {
+ 358              		.loc 1 261 1 view -0
+ 359              		.cfi_startproc
+ 360              		@ args = 0, pretend = 0, frame = 0
+ 361              		@ frame_needed = 0, uses_anonymous_args = 0
+ 362              		@ link register save eliminated.
+ 262:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN FDCAN1_IT0_IRQn 0 */
+ 263:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 264:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END FDCAN1_IT0_IRQn 0 */
+ 265:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   HAL_FDCAN_IRQHandler(&hfdcan1);
+ 363              		.loc 1 265 3 view .LVU37
+ 364 0000 0148     		ldr	r0, .L35
+ 365 0002 FFF7FEBF 		b	HAL_FDCAN_IRQHandler
+ 366              	.LVL7:
+ 367              	.L36:
+ 368 0006 00BF     		.align	2
+ 369              	.L35:
+ 370 0008 00000000 		.word	hfdcan1
+ 371              		.cfi_endproc
+ 372              	.LFE341:
+ 374              		.section	.text.FDCAN1_IT1_IRQHandler,"ax",%progbits
+ 375              		.align	1
+ 376              		.p2align 2,,3
+ 377              		.global	FDCAN1_IT1_IRQHandler
+ 378              		.syntax unified
+ 379              		.thumb
+ 380              		.thumb_func
+ 382              	FDCAN1_IT1_IRQHandler:
+ 383              	.LFB355:
+ARM GAS  /tmp/ccPWSHIa.s 			page 12
+
+
+ 384              		.cfi_startproc
+ 266:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN FDCAN1_IT0_IRQn 1 */
+ 267:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 268:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END FDCAN1_IT0_IRQn 1 */
+ 269:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** }
+ 270:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 271:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /**
+ 272:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * @brief This function handles FDCAN1 interrupt 1.
+ 273:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   */
+ 274:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** void FDCAN1_IT1_IRQHandler(void)
+ 385              		.loc 1 274 6 view -0
+ 386              		@ args = 0, pretend = 0, frame = 0
+ 387              		@ frame_needed = 0, uses_anonymous_args = 0
+ 388              		@ link register save eliminated.
+ 389 0000 0148     		ldr	r0, .L38
+ 390 0002 FFF7FEBF 		b	HAL_FDCAN_IRQHandler
+ 391              	.L39:
+ 392 0006 00BF     		.align	2
+ 393              	.L38:
+ 394 0008 00000000 		.word	hfdcan1
+ 395              		.cfi_endproc
+ 396              	.LFE355:
+ 398              		.section	.text.TIM1_TRG_COM_TIM17_IRQHandler,"ax",%progbits
+ 399              		.align	1
+ 400              		.p2align 2,,3
+ 401              		.global	TIM1_TRG_COM_TIM17_IRQHandler
+ 402              		.syntax unified
+ 403              		.thumb
+ 404              		.thumb_func
+ 406              	TIM1_TRG_COM_TIM17_IRQHandler:
+ 407              	.LFB343:
+ 275:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** {
+ 276:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN FDCAN1_IT1_IRQn 0 */
+ 277:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 278:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END FDCAN1_IT1_IRQn 0 */
+ 279:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   HAL_FDCAN_IRQHandler(&hfdcan1);
+ 280:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN FDCAN1_IT1_IRQn 1 */
+ 281:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 282:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END FDCAN1_IT1_IRQn 1 */
+ 283:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** }
+ 284:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 285:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /**
+ 286:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * @brief This function handles TIM1 trigger and commutation interrupts and TIM17 global interrupt
+ 287:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   */
+ 288:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** void TIM1_TRG_COM_TIM17_IRQHandler(void)
+ 289:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** {
+ 408              		.loc 1 289 1 view -0
+ 409              		.cfi_startproc
+ 410              		@ args = 0, pretend = 0, frame = 0
+ 411              		@ frame_needed = 0, uses_anonymous_args = 0
+ 290:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN TIM1_TRG_COM_TIM17_IRQn 0 */
+ 291:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 292:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END TIM1_TRG_COM_TIM17_IRQn 0 */
+ 293:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   if (htim1.Instance != NULL)
+ 412              		.loc 1 293 3 view .LVU40
+ 413              		.loc 1 293 12 is_stmt 0 view .LVU41
+ 414 0000 0648     		ldr	r0, .L47
+ARM GAS  /tmp/ccPWSHIa.s 			page 13
+
+
+ 289:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN TIM1_TRG_COM_TIM17_IRQn 0 */
+ 415              		.loc 1 289 1 view .LVU42
+ 416 0002 08B5     		push	{r3, lr}
+ 417              	.LCFI5:
+ 418              		.cfi_def_cfa_offset 8
+ 419              		.cfi_offset 3, -8
+ 420              		.cfi_offset 14, -4
+ 421              		.loc 1 293 6 view .LVU43
+ 422 0004 0368     		ldr	r3, [r0]
+ 423 0006 0BB1     		cbz	r3, .L41
+ 294:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   {
+ 295:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****     HAL_TIM_IRQHandler(&htim1);
+ 424              		.loc 1 295 5 is_stmt 1 view .LVU44
+ 425 0008 FFF7FEFF 		bl	HAL_TIM_IRQHandler
+ 426              	.LVL8:
+ 427              	.L41:
+ 296:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   }
+ 297:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   if (htim17.Instance != NULL)
+ 428              		.loc 1 297 3 view .LVU45
+ 429              		.loc 1 297 13 is_stmt 0 view .LVU46
+ 430 000c 0448     		ldr	r0, .L47+4
+ 431              		.loc 1 297 6 view .LVU47
+ 432 000e 0368     		ldr	r3, [r0]
+ 433 0010 1BB1     		cbz	r3, .L40
+ 298:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   {
+ 299:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****     HAL_TIM_IRQHandler(&htim17);
+ 434              		.loc 1 299 5 is_stmt 1 view .LVU48
+ 300:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   }
+ 301:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN TIM1_TRG_COM_TIM17_IRQn 1 */
+ 302:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 303:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END TIM1_TRG_COM_TIM17_IRQn 1 */
+ 304:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** }
+ 435              		.loc 1 304 1 is_stmt 0 view .LVU49
+ 436 0012 BDE80840 		pop	{r3, lr}
+ 437              	.LCFI6:
+ 438              		.cfi_remember_state
+ 439              		.cfi_restore 14
+ 440              		.cfi_restore 3
+ 441              		.cfi_def_cfa_offset 0
+ 299:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   }
+ 442              		.loc 1 299 5 view .LVU50
+ 443 0016 FFF7FEBF 		b	HAL_TIM_IRQHandler
+ 444              	.LVL9:
+ 445              	.L40:
+ 446              	.LCFI7:
+ 447              		.cfi_restore_state
+ 448              		.loc 1 304 1 view .LVU51
+ 449 001a 08BD     		pop	{r3, pc}
+ 450              	.L48:
+ 451              		.align	2
+ 452              	.L47:
+ 453 001c 00000000 		.word	htim1
+ 454 0020 00000000 		.word	htim17
+ 455              		.cfi_endproc
+ 456              	.LFE343:
+ 458              		.section	.text.USART1_IRQHandler,"ax",%progbits
+ 459              		.align	1
+ARM GAS  /tmp/ccPWSHIa.s 			page 14
+
+
+ 460              		.p2align 2,,3
+ 461              		.global	USART1_IRQHandler
+ 462              		.syntax unified
+ 463              		.thumb
+ 464              		.thumb_func
+ 466              	USART1_IRQHandler:
+ 467              	.LFB344:
+ 305:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 306:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /**
+ 307:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   * @brief This function handles USART1 global interrupt / USART1 wake-up interrupt through EXTI li
+ 308:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   */
+ 309:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** void USART1_IRQHandler(void)
+ 310:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** {
+ 468              		.loc 1 310 1 is_stmt 1 view -0
+ 469              		.cfi_startproc
+ 470              		@ args = 0, pretend = 0, frame = 0
+ 471              		@ frame_needed = 0, uses_anonymous_args = 0
+ 472              		@ link register save eliminated.
+ 311:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN USART1_IRQn 0 */
+ 312:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 313:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END USART1_IRQn 0 */
+ 314:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   HAL_UART_IRQHandler(&huart1);
+ 473              		.loc 1 314 3 view .LVU53
+ 474 0000 0148     		ldr	r0, .L50
+ 475 0002 FFF7FEBF 		b	HAL_UART_IRQHandler
+ 476              	.LVL10:
+ 477              	.L51:
+ 478 0006 00BF     		.align	2
+ 479              	.L50:
+ 480 0008 00000000 		.word	huart1
+ 481              		.cfi_endproc
+ 482              	.LFE344:
+ 484              		.section	.text.SPI3_IRQHandler,"ax",%progbits
+ 485              		.align	1
+ 486              		.p2align 2,,3
+ 487              		.global	SPI3_IRQHandler
+ 488              		.syntax unified
+ 489              		.thumb
+ 490              		.thumb_func
+ 492              	SPI3_IRQHandler:
+ 493              	.LFB345:
+ 315:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE BEGIN USART1_IRQn 1 */
+ 316:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 317:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c ****   /* USER CODE END USART1_IRQn 1 */
+ 318:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** }
+ 319:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** 
+ 320:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** /* USER CODE BEGIN 1 */
+ 321:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** extern SPI_HandleTypeDef hspi3;
+ 322:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** extern void DMA1_Channel5_MT_ISR(void);                               // MT6816 寄存器级DMA完�
+ 323:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** void SPI3_IRQHandler(void) { HAL_SPI_IRQHandler(&hspi3); }             // SPI 错误中断 (编码�
+ 494              		.loc 1 323 28 view -0
+ 495              		.cfi_startproc
+ 496              		@ args = 0, pretend = 0, frame = 0
+ 497              		@ frame_needed = 0, uses_anonymous_args = 0
+ 498              		@ link register save eliminated.
+ 499              		.loc 1 323 30 view .LVU55
+ 500 0000 0148     		ldr	r0, .L53
+ARM GAS  /tmp/ccPWSHIa.s 			page 15
+
+
+ 501 0002 FFF7FEBF 		b	HAL_SPI_IRQHandler
+ 502              	.LVL11:
+ 503              	.L54:
+ 504 0006 00BF     		.align	2
+ 505              	.L53:
+ 506 0008 00000000 		.word	hspi3
+ 507              		.cfi_endproc
+ 508              	.LFE345:
+ 510              		.section	.text.DMA1_Channel5_IRQHandler,"ax",%progbits
+ 511              		.align	1
+ 512              		.p2align 2,,3
+ 513              		.global	DMA1_Channel5_IRQHandler
+ 514              		.syntax unified
+ 515              		.thumb
+ 516              		.thumb_func
+ 518              	DMA1_Channel5_IRQHandler:
+ 519              	.LFB346:
+ 324:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** void DMA1_Channel5_IRQHandler(void) { DMA1_Channel5_MT_ISR(); }        // MT6816 编码器 DMA RX �
+ 520              		.loc 1 324 37 view -0
+ 521              		.cfi_startproc
+ 522              		@ args = 0, pretend = 0, frame = 0
+ 523              		@ frame_needed = 0, uses_anonymous_args = 0
+ 524              		@ link register save eliminated.
+ 525              		.loc 1 324 39 view .LVU57
+ 526 0000 FFF7FEBF 		b	DMA1_Channel5_MT_ISR
+ 527              	.LVL12:
+ 528              		.cfi_endproc
+ 529              	.LFE346:
+ 531              		.section	.text.DMA1_Channel6_IRQHandler,"ax",%progbits
+ 532              		.align	1
+ 533              		.p2align 2,,3
+ 534              		.global	DMA1_Channel6_IRQHandler
+ 535              		.syntax unified
+ 536              		.thumb
+ 537              		.thumb_func
+ 539              	DMA1_Channel6_IRQHandler:
+ 540              	.LFB347:
+ 325:/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Core/Src/stm32g4xx_it.c **** void DMA1_Channel6_IRQHandler(void) { DMA1->IFCR = DMA_IFCR_CGIF6; }   // TX(无TCIE, 一般不触�
+ 541              		.loc 1 325 37 view -0
+ 542              		.cfi_startproc
+ 543              		@ args = 0, pretend = 0, frame = 0
+ 544              		@ frame_needed = 0, uses_anonymous_args = 0
+ 545              		@ link register save eliminated.
+ 546              		.loc 1 325 39 view .LVU59
+ 547              		.loc 1 325 50 is_stmt 0 view .LVU60
+ 548 0000 024B     		ldr	r3, .L57
+ 549 0002 4FF48012 		mov	r2, #1048576
+ 550 0006 5A60     		str	r2, [r3, #4]
+ 551              		.loc 1 325 68 view .LVU61
+ 552 0008 7047     		bx	lr
+ 553              	.L58:
+ 554 000a 00BF     		.align	2
+ 555              	.L57:
+ 556 000c 00000240 		.word	1073872896
+ 557              		.cfi_endproc
+ 558              	.LFE347:
+ 560              		.text
+ARM GAS  /tmp/ccPWSHIa.s 			page 16
+
+
+ 561              	.Letext0:
+ 562              		.file 2 "/usr/lib/gcc/arm-none-eabi/13.2.1/include/stdint.h"
+ 563              		.file 3 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 564              		.file 4 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/CMSIS/Device/ST/STM32G4xx/Inc
+ 565              		.file 5 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 566              		.file 6 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 567              		.file 7 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 568              		.file 8 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 569              		.file 9 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm3
+ 570              		.file 10 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm
+ 571              		.file 11 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm
+ 572              		.file 12 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm
+ 573              		.file 13 "/home/peter/FOC/FalconFoc-main/2.Firmware/FalconFoc/Drivers/STM32G4xx_HAL_Driver/Inc/stm
+ARM GAS  /tmp/ccPWSHIa.s 			page 17
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32g4xx_it.c
+     /tmp/ccPWSHIa.s:21     .text.NMI_Handler:00000000 $t
+     /tmp/ccPWSHIa.s:28     .text.NMI_Handler:00000000 NMI_Handler
+     /tmp/ccPWSHIa.s:45     .text.HardFault_Handler:00000000 $t
+     /tmp/ccPWSHIa.s:52     .text.HardFault_Handler:00000000 HardFault_Handler
+     /tmp/ccPWSHIa.s:78     .text.HardFault_Handler:0000000c $d
+     /tmp/ccPWSHIa.s:83     .text.MemManage_Handler:00000000 $t
+     /tmp/ccPWSHIa.s:90     .text.MemManage_Handler:00000000 MemManage_Handler
+     /tmp/ccPWSHIa.s:107    .text.BusFault_Handler:00000000 $t
+     /tmp/ccPWSHIa.s:114    .text.BusFault_Handler:00000000 BusFault_Handler
+     /tmp/ccPWSHIa.s:131    .text.UsageFault_Handler:00000000 $t
+     /tmp/ccPWSHIa.s:138    .text.UsageFault_Handler:00000000 UsageFault_Handler
+     /tmp/ccPWSHIa.s:155    .text.DebugMon_Handler:00000000 $t
+     /tmp/ccPWSHIa.s:162    .text.DebugMon_Handler:00000000 DebugMon_Handler
+     /tmp/ccPWSHIa.s:175    .text.DMA1_Channel1_IRQHandler:00000000 $t
+     /tmp/ccPWSHIa.s:182    .text.DMA1_Channel1_IRQHandler:00000000 DMA1_Channel1_IRQHandler
+     /tmp/ccPWSHIa.s:196    .text.DMA1_Channel1_IRQHandler:00000008 $d
+     /tmp/ccPWSHIa.s:201    .text.DMA1_Channel2_IRQHandler:00000000 $t
+     /tmp/ccPWSHIa.s:208    .text.DMA1_Channel2_IRQHandler:00000000 DMA1_Channel2_IRQHandler
+     /tmp/ccPWSHIa.s:222    .text.DMA1_Channel2_IRQHandler:00000008 $d
+     /tmp/ccPWSHIa.s:227    .text.DMA1_Channel3_IRQHandler:00000000 $t
+     /tmp/ccPWSHIa.s:234    .text.DMA1_Channel3_IRQHandler:00000000 DMA1_Channel3_IRQHandler
+     /tmp/ccPWSHIa.s:248    .text.DMA1_Channel3_IRQHandler:00000008 $d
+     /tmp/ccPWSHIa.s:253    .text.DMA1_Channel4_IRQHandler:00000000 $t
+     /tmp/ccPWSHIa.s:260    .text.DMA1_Channel4_IRQHandler:00000000 DMA1_Channel4_IRQHandler
+     /tmp/ccPWSHIa.s:274    .text.DMA1_Channel4_IRQHandler:00000008 $d
+     /tmp/ccPWSHIa.s:279    .text.ADC1_2_IRQHandler:00000000 $t
+     /tmp/ccPWSHIa.s:286    .text.ADC1_2_IRQHandler:00000000 ADC1_2_IRQHandler
+     /tmp/ccPWSHIa.s:317    .text.ADC1_2_IRQHandler:00000014 $d
+     /tmp/ccPWSHIa.s:323    .text.USB_LP_IRQHandler:00000000 $t
+     /tmp/ccPWSHIa.s:330    .text.USB_LP_IRQHandler:00000000 USB_LP_IRQHandler
+     /tmp/ccPWSHIa.s:344    .text.USB_LP_IRQHandler:00000008 $d
+     /tmp/ccPWSHIa.s:349    .text.FDCAN1_IT0_IRQHandler:00000000 $t
+     /tmp/ccPWSHIa.s:356    .text.FDCAN1_IT0_IRQHandler:00000000 FDCAN1_IT0_IRQHandler
+     /tmp/ccPWSHIa.s:370    .text.FDCAN1_IT0_IRQHandler:00000008 $d
+     /tmp/ccPWSHIa.s:375    .text.FDCAN1_IT1_IRQHandler:00000000 $t
+     /tmp/ccPWSHIa.s:382    .text.FDCAN1_IT1_IRQHandler:00000000 FDCAN1_IT1_IRQHandler
+     /tmp/ccPWSHIa.s:394    .text.FDCAN1_IT1_IRQHandler:00000008 $d
+     /tmp/ccPWSHIa.s:399    .text.TIM1_TRG_COM_TIM17_IRQHandler:00000000 $t
+     /tmp/ccPWSHIa.s:406    .text.TIM1_TRG_COM_TIM17_IRQHandler:00000000 TIM1_TRG_COM_TIM17_IRQHandler
+     /tmp/ccPWSHIa.s:453    .text.TIM1_TRG_COM_TIM17_IRQHandler:0000001c $d
+     /tmp/ccPWSHIa.s:459    .text.USART1_IRQHandler:00000000 $t
+     /tmp/ccPWSHIa.s:466    .text.USART1_IRQHandler:00000000 USART1_IRQHandler
+     /tmp/ccPWSHIa.s:480    .text.USART1_IRQHandler:00000008 $d
+     /tmp/ccPWSHIa.s:485    .text.SPI3_IRQHandler:00000000 $t
+     /tmp/ccPWSHIa.s:492    .text.SPI3_IRQHandler:00000000 SPI3_IRQHandler
+     /tmp/ccPWSHIa.s:506    .text.SPI3_IRQHandler:00000008 $d
+     /tmp/ccPWSHIa.s:511    .text.DMA1_Channel5_IRQHandler:00000000 $t
+     /tmp/ccPWSHIa.s:518    .text.DMA1_Channel5_IRQHandler:00000000 DMA1_Channel5_IRQHandler
+     /tmp/ccPWSHIa.s:532    .text.DMA1_Channel6_IRQHandler:00000000 $t
+     /tmp/ccPWSHIa.s:539    .text.DMA1_Channel6_IRQHandler:00000000 DMA1_Channel6_IRQHandler
+     /tmp/ccPWSHIa.s:556    .text.DMA1_Channel6_IRQHandler:0000000c $d
+
+UNDEFINED SYMBOLS
+HAL_DMA_IRQHandler
+hdma_tim3_ch2
+ARM GAS  /tmp/ccPWSHIa.s 			page 18
+
+
+hdma_adc2
+hdma_usart1_rx
+hdma_usart1_tx
+HAL_ADC_IRQHandler
+hadc1
+hadc2
+HAL_PCD_IRQHandler
+hpcd_USB_FS
+HAL_FDCAN_IRQHandler
+hfdcan1
+HAL_TIM_IRQHandler
+htim1
+htim17
+HAL_UART_IRQHandler
+huart1
+HAL_SPI_IRQHandler
+hspi3
+DMA1_Channel5_MT_ISR
